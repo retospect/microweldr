@@ -425,9 +425,11 @@ class AnimationGenerator:
 
         f.write(f'  </g>\n')
 
-        # Scale bar - match nozzle scaling (30x scale means 1mm = 1px at base scale)
+        # Scale bar - use same scaling as actual weld dots (not the enlarged nozzle visualization)
         scale_bar_y = row3_y + 40  # Position below legend table
-        scale_bar_length = 30  # 30 pixels for 10mm at 3x canvas scale (10mm * 3 = 30px)
+        # The weld dots are at actual scale (1.5px radius = 3px diameter for center dot)
+        # Scale bar should represent real-world scale, not the 30x visualization scale
+        scale_bar_length = 10 * scale_factor  # 10mm at actual scale (30 pixels)
         scale_bar_height = 3  # 3 pixels height (10:1 ratio)
         scale_bar_x = icon_x  # Align with legend
 
