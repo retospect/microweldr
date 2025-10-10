@@ -425,10 +425,10 @@ class AnimationGenerator:
 
         f.write(f'  </g>\n')
 
-        # Scale bar - reasonably sized with 10:1 length to height ratio
+        # Scale bar - match nozzle scaling (30x scale means 1mm = 1px at base scale)
         scale_bar_y = row3_y + 40  # Position below legend table
-        scale_bar_length = 50  # 50 pixels for reasonable visibility (represents 10mm)
-        scale_bar_height = 5  # 5 pixels height (10:1 ratio)
+        scale_bar_length = 30  # 30 pixels for 10mm at 3x canvas scale (10mm * 3 = 30px)
+        scale_bar_height = 3  # 3 pixels height (10:1 ratio)
         scale_bar_x = icon_x  # Align with legend
 
         # Main horizontal line
