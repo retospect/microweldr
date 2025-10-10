@@ -88,6 +88,15 @@ class Config:
         """Get nozzle configuration."""
         return self.get_section("nozzle")
 
+    @property
+    def sequencing(self) -> Dict[str, Any]:
+        """Get sequencing configuration."""
+        try:
+            return self.get_section("sequencing")
+        except ConfigError:
+            # Return default values if section doesn't exist
+            return {"skip_base_distance": 5}
+
     def validate(self) -> None:
         """Validate configuration completeness and correctness."""
         required_sections = [
@@ -100,6 +109,7 @@ class Config:
             "output",
             "animation",
         ]
+        # Note: sequencing section is optional with defaults
 
         for section in required_sections:
             if section not in self._config:

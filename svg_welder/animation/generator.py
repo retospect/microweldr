@@ -15,10 +15,13 @@ class AnimationGenerator:
         self.config = config
 
     def generate_file(
-        self, weld_paths: List[WeldPath], output_path: str | Path, weld_sequence: str = "farthest"
+        self,
+        weld_paths: List[WeldPath],
+        output_path: str | Path,
+        weld_sequence: str = "farthest",
     ) -> None:
         """Generate animated SVG file from weld paths.
-        
+
         Args:
             weld_paths: List of weld paths to animate
             output_path: Path to output SVG file
@@ -75,6 +78,7 @@ class AnimationGenerator:
                 weld_sequence,
             )
             self._write_legend(f, height)
+            self._write_message_box(f, height)
             self._write_svg_footer(f)
 
     def _calculate_bounds(
@@ -164,7 +168,7 @@ class AnimationGenerator:
 
             # Process weld points in selected sequence order
             weld_order = self._generate_weld_order(path.points, weld_sequence)
-            
+
             for point_index in weld_order:
                 point = path.points[point_index]
                 # Adjust coordinates with scale factor
@@ -180,25 +184,27 @@ class AnimationGenerator:
 
     def _generate_weld_order(self, points: list, weld_sequence: str) -> list[int]:
         """Generate welding order based on selected algorithm.
-        
+
         Args:
             points: List of weld points
-            weld_sequence: Algorithm to use ('linear', 'binary', 'farthest')
-            
+            weld_sequence: Algorithm to use ('linear', 'binary', 'farthest', 'skip')
+
         Returns:
             List of point indices in welding order
         """
         num_points = len(points)
-        
+
         if weld_sequence == "linear":
             return self._generate_linear_order(num_points)
         elif weld_sequence == "binary":
             return self._generate_binary_subdivision_order(num_points)
         elif weld_sequence == "farthest":
             return self._generate_farthest_point_order(points)
+        elif weld_sequence == "skip":
+            return self._generate_skip_order(num_points)
         else:
-            # Default to farthest point
-            return self._generate_farthest_point_order(points)
+            # Default to skip
+            return self._generate_skip_order(num_points)
 
     def _generate_linear_order(self, num_points: int) -> list[int]:
         """Generate linear welding order (1, 2, 3, ...)."""
@@ -206,62 +212,103 @@ class AnimationGenerator:
 
     def _generate_farthest_point_order(self, points: list) -> list[int]:
         """Generate welding order using Greedy Farthest-Point Traversal.
-        
+
         This algorithm places each dot at the position farthest from the most recent dot,
         which helps minimize thermal stress by maximizing distance between consecutive welds.
-        
+
         Args:
             points: List of Point objects with x, y coordinates
-            
+
         Returns:
             List of point indices in farthest-point order
         """
         if len(points) <= 1:
             return list(range(len(points)))
-        
+
         order = []
         remaining = set(range(len(points)))
-        
+
         # Start with the first point (arbitrary choice)
         current_idx = 0
         order.append(current_idx)
         remaining.remove(current_idx)
-        
+
         while remaining:
             current_point = points[current_idx]
             max_distance = -1
             farthest_idx = None
-            
+
             # Find the point farthest from current point
             for idx in remaining:
                 candidate_point = points[idx]
                 # Calculate Euclidean distance
-                distance = ((candidate_point.x - current_point.x) ** 2 + 
-                           (candidate_point.y - current_point.y) ** 2) ** 0.5
-                
+                distance = (
+                    (candidate_point.x - current_point.x) ** 2
+                    + (candidate_point.y - current_point.y) ** 2
+                ) ** 0.5
+
                 if distance > max_distance:
                     max_distance = distance
                     farthest_idx = idx
-            
+
             # Move to the farthest point
             order.append(farthest_idx)
             remaining.remove(farthest_idx)
             current_idx = farthest_idx
-        
+
+        return order
+
+    def _generate_skip_order(self, num_points: int) -> list[int]:
+        """Generate welding order using skip pattern.
+
+        First prints every Nth dot (where N = skip_base_distance from config),
+        then fills in the gaps. This provides excellent thermal distribution
+        by ensuring maximum spacing between initial dots.
+
+        Example with skip_base_distance=5 and 20 points:
+        Pass 1: [0, 5, 10, 15] (every 5th dot)
+        Pass 2: [1, 6, 11, 16] (offset by 1)
+        Pass 3: [2, 7, 12, 17] (offset by 2)
+        Pass 4: [3, 8, 13, 18] (offset by 3)
+        Pass 5: [4, 9, 14, 19] (offset by 4)
+
+        Args:
+            num_points: Total number of points to weld
+
+        Returns:
+            List of point indices in skip order
+        """
+        if num_points <= 0:
+            return []
+        if num_points == 1:
+            return [0]
+
+        # Get skip distance from config
+        skip_distance = self.config.sequencing.get("skip_base_distance", 5)
+
+        order = []
+
+        # Generate passes: first every skip_distance, then offset by 1, 2, etc.
+        for offset in range(skip_distance):
+            current_idx = offset
+            while current_idx < num_points:
+                order.append(current_idx)
+                current_idx += skip_distance
+
         return order
 
     def _generate_binary_subdivision_order(self, num_points: int) -> list[int]:
         """Generate welding order using binary subdivision pattern.
-        
+
         For a line with points [0,1,2,3,4,5,6], the order would be:
         1. First and last: [0, 6]
         2. Middle of entire range: [3]
         3. Middles of remaining gaps: [1, 5]
         4. Middles of remaining gaps: [2, 4]
-        
+
         Args:
             num_points: Total number of points to weld
-            
+
         Returns:
             List of point indices in binary subdivision order
         """
@@ -271,29 +318,29 @@ class AnimationGenerator:
             return [0]
         if num_points == 2:
             return [0, 1]
-            
+
         order = []
-        
+
         # Start with first and last points
         order.extend([0, num_points - 1])
-        
+
         # Use a queue to track segments that need subdivision
         segments_to_subdivide = [(0, num_points - 1)]
-        
+
         while segments_to_subdivide:
             start, end = segments_to_subdivide.pop(0)
-            
+
             # Find middle point of this segment
             if end - start > 1:
                 mid = (start + end) // 2
                 order.append(mid)
-                
+
                 # Add new segments to subdivide (if they have gaps)
                 if mid - start > 1:
                     segments_to_subdivide.append((start, mid))
                 if end - mid > 1:
                     segments_to_subdivide.append((mid, end))
-        
+
         return order
 
     def _write_stop_point(
@@ -332,27 +379,35 @@ class AnimationGenerator:
         box_height = 25 * scale_factor
         font_size = 3 * scale_factor  # Reduced from 9 to 3 (1/3 size)
 
-        # Message background - appears during pause duration only
-        f.write(
-            f'  <rect x="{x-box_width/2}" y="{y-box_height-10}" width="{box_width}" height="{box_height}" '
-            f'fill="yellow" stroke="red" stroke-width="{2*scale_factor}" opacity="0">\n'
-        )
-        f.write(
-            f'    <animate attributeName="opacity" values="0;0.95;0.95;0" '
-            f'dur="{pause_time:.2f}s" begin="{current_time:.2f}s" fill="freeze"/>\n'
-        )
-        f.write("  </rect>\n")
+        # Update the static message box with this pause message
+        # Calculate approximate canvas height from scale and bounds
+        canvas_height = (
+            min_y + padding + 40
+        ) * scale_factor + 300  # Approximate height with legend space
+        message_y = canvas_height - 35  # Position in message box
 
-        # Message text - appears during pause duration only
         f.write(
-            f'  <text x="{x}" y="{y-box_height/2}" text-anchor="middle" font-family="Arial" '
-            f'font-size="{font_size}" font-weight="bold" fill="red" opacity="0">\n'
+            f'  <text x="410" y="{message_y}" font-family="Arial" '
+            f'font-size="12" font-weight="bold" fill="#e74c3c" opacity="0">\n'
         )
         f.write(
             f'    <animate attributeName="opacity" values="0;1;1;0" '
             f'dur="{pause_time:.2f}s" begin="{current_time:.2f}s" fill="freeze"/>\n'
         )
-        f.write(f'    {safe_message[:25]}{"..." if len(safe_message) > 25 else ""}\n')
+        f.write(f"    ⚠ {safe_message}\n")
+        f.write("  </text>\n")
+
+        # Show "cleared" message after pause time
+        clear_time = current_time + pause_time
+        f.write(
+            f'  <text x="410" y="{message_y}" font-family="Arial" '
+            f'font-size="11" fill="#7f8c8d" opacity="0">\n'
+        )
+        f.write(
+            f'    <animate attributeName="opacity" values="0;1" '
+            f'dur="0.5s" begin="{clear_time:.2f}s" fill="freeze"/>\n'
+        )
+        f.write("    No active notifications\n")
         f.write("  </text>\n")
 
         # Red circle with flip animation (similar to nozzle rings but simpler)
@@ -449,33 +504,43 @@ class AnimationGenerator:
 
         # Legend table group
         f.write(f'  <g id="legend-table">\n')
-        
+
         # Row 1: Normal welds - precise nozzle diameter with stroke for visibility
         row1_y = legend_start_y + row_height
         nozzle_radius = 0.4 / 2 * scale_factor  # 0.4mm OD = 0.2mm radius
         f.write(f'    <g id="normal-welds-row">\n')
-        f.write(f'      <circle cx="{icon_x}" cy="{row1_y-6}" r="{nozzle_radius:.2f}" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>\n')
-        f.write(f'      <text x="{text_x}" y="{row1_y}" font-family="Arial" font-size="{font_size*0.8}" '
-                f'fill="gray">Normal Welds (Hot)</text>\n')
-        f.write(f'    </g>\n')
+        f.write(
+            f'      <circle cx="{icon_x}" cy="{row1_y-6}" r="{nozzle_radius:.2f}" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>\n'
+        )
+        f.write(
+            f'      <text x="{text_x}" y="{row1_y}" font-family="Arial" font-size="{font_size*0.8}" '
+            f'fill="gray">Normal Welds (Hot)</text>\n'
+        )
+        f.write(f"    </g>\n")
 
         # Row 2: Light welds - precise nozzle diameter with stroke for visibility
         row2_y = row1_y + row_height
         f.write(f'    <g id="light-welds-row">\n')
-        f.write(f'      <circle cx="{icon_x}" cy="{row2_y-6}" r="{nozzle_radius:.2f}" fill="blue" stroke="blue" stroke-width="0.5" opacity="0.8"/>\n')
-        f.write(f'      <text x="{text_x}" y="{row2_y}" font-family="Arial" font-size="{font_size*0.8}" '
-                f'fill="gray">Light Welds (Warm)</text>\n')
-        f.write(f'    </g>\n')
+        f.write(
+            f'      <circle cx="{icon_x}" cy="{row2_y-6}" r="{nozzle_radius:.2f}" fill="blue" stroke="blue" stroke-width="0.5" opacity="0.8"/>\n'
+        )
+        f.write(
+            f'      <text x="{text_x}" y="{row2_y}" font-family="Arial" font-size="{font_size*0.8}" '
+            f'fill="gray">Light Welds (Warm)</text>\n'
+        )
+        f.write(f"    </g>\n")
 
         # Row 3: Stop points
-        row3_y = row2_y + row_height  
+        row3_y = row2_y + row_height
         f.write(f'    <g id="stop-points-row">\n')
         f.write(f'      <circle cx="{icon_x}" cy="{row3_y-6}" r="8" fill="red"/>\n')
-        f.write(f'      <text x="{text_x}" y="{row3_y}" font-family="Arial" font-size="{font_size*0.8}" '
-                f'fill="gray">Stop Points (Pause)</text>\n')
-        f.write(f'    </g>\n')
+        f.write(
+            f'      <text x="{text_x}" y="{row3_y}" font-family="Arial" font-size="{font_size*0.8}" '
+            f'fill="gray">Stop Points (Pause)</text>\n'
+        )
+        f.write(f"    </g>\n")
 
-        f.write(f'  </g>\n')
+        f.write(f"  </g>\n")
 
         # Scale bar - use same scaling as actual weld dots (not the enlarged nozzle visualization)
         scale_bar_y = row3_y + 40  # Position below legend table
@@ -516,6 +581,32 @@ class AnimationGenerator:
         f.write(
             f'  <text x="{icon_x}" y="{nozzle_info_y}" font-family="Arial" font-size="8" '
             f'fill="gray">Nozzle: {outer_diameter}mm OD, {inner_diameter}mm ID (actual scale)</text>\n'
+        )
+
+    def _write_message_box(self, f: TextIO, height: float) -> None:
+        """Write static message box near the legend for pause notifications."""
+        # Message box positioned to the right of the legend
+        box_x = 400
+        box_y = height - 80
+        box_width = 350
+        box_height = 60
+
+        # Static message box background
+        f.write(
+            f'  <rect id="message-box" x="{box_x}" y="{box_y}" width="{box_width}" height="{box_height}" '
+            f'fill="#f0f8ff" stroke="#4682b4" stroke-width="2" rx="8" ry="8" opacity="0.9"/>\n'
+        )
+
+        # Message box title
+        f.write(
+            f'  <text x="{box_x + 10}" y="{box_y + 20}" font-family="Arial" font-size="12" '
+            f'font-weight="bold" fill="#2c3e50">Notifications:</text>\n'
+        )
+
+        # Default message (will be updated by pause messages)
+        f.write(
+            f'  <text id="message-text-default" x="{box_x + 10}" y="{box_y + 45}" font-family="Arial" '
+            f'font-size="11" fill="#7f8c8d">No active notifications</text>\n'
         )
 
     def _write_svg_footer(self, f: TextIO) -> None:

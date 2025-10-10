@@ -24,6 +24,7 @@ def create_parser() -> argparse.ArgumentParser:
 Examples:
   %(prog)s input.svg -o output.gcode
   %(prog)s input.svg --skip-bed-leveling
+  %(prog)s input.svg --weld-sequence skip
   %(prog)s input.svg -c custom_config.toml
         """,
     )
@@ -52,9 +53,9 @@ Examples:
     )
     parser.add_argument(
         "--weld-sequence",
-        choices=["linear", "binary", "farthest"],
-        default="farthest",
-        help="Welding sequence algorithm: linear (1,2,3...), binary (binary subdivision), farthest (greedy farthest-point traversal, default)"
+        choices=["linear", "binary", "farthest", "skip"],
+        default="skip",
+        help="Welding sequence algorithm: linear (1,2,3...), binary (binary subdivision), farthest (greedy farthest-point traversal), skip (every Nth dot first, then fill gaps, default)",
     )
 
     return parser
@@ -147,7 +148,9 @@ def main() -> None:
             print(f"Generating animation: {output_animation}")
             try:
                 animation_generator = AnimationGenerator(config)
-                animation_generator.generate_file(weld_paths, output_animation, args.weld_sequence)
+                animation_generator.generate_file(
+                    weld_paths, output_animation, args.weld_sequence
+                )
 
                 # Validate generated animation
                 if not args.no_validation:
