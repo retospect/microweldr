@@ -47,14 +47,17 @@ weld_height = 0.2          # mm - welding height
 
 [normal_welds]
 weld_temperature = 200     # °C
-spot_dwell_time = 0.5      # seconds
 dot_spacing = 2.0          # mm
 
 [light_welds]
 weld_temperature = 180     # °C - lower temperature
 spot_dwell_time = 0.3      # seconds - shorter time
 dot_spacing = 3.0          # mm - wider spacing
-```
+
+[animation]
+time_between_welds = 0.1    # seconds - time between weld points in animation
+pause_time = 3.0            # seconds - how long pause messages are displayed
+min_animation_duration = 10.0  # seconds - minimum total animation time
 
 ## Usage
 
@@ -148,11 +151,20 @@ The generated G-code includes:
 
 ## Animation Output
 
-The script generates an animated SVG file showing:
-- Weld points appearing in sequence
-- Color-coded by weld type
-- Endless loop animation
-- Timing based on actual welding sequence
+The script generates an enhanced animated SVG file showing:
+- **Weld points appearing in sequence** with configurable timing
+- **Color-coded by weld type** (black=normal, blue=light, red=stop)
+- **Pause messages displayed** with yellow background and red text
+- **Timing information** displayed in header (duration, intervals, pause time)
+- **Visual legend** explaining weld types and stop points
+- **Endless loop animation** with realistic timing
+
+### Animation Features
+- **Configurable timing**: Adjust `time_between_welds` for weld point intervals
+- **Pause message display**: Stop points show custom messages for specified `pause_time`
+- **Smart duration calculation**: Automatically calculates total time based on weld count and pauses
+- **Enhanced visuals**: Larger stop indicators, message backgrounds, and comprehensive legend
+- **Timing display**: Shows actual animation parameters in the header
 
 ## Validation Features
 

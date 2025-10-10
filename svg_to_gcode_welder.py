@@ -478,6 +478,11 @@ class SVGToGCodeWelder:
         if not self.weld_paths:
             return
         
+        # Get animation configuration
+        time_between_welds = self.config['animation']['time_between_welds']
+        pause_time = self.config['animation']['pause_time']
+        min_animation_duration = self.config['animation']['min_animation_duration']
+        
         # Calculate bounds
         all_points = []
         for path in self.weld_paths:
@@ -492,13 +497,15 @@ class SVGToGCodeWelder:
         max_y = max(p.y for p in all_points)
         
         # Add padding
-        padding = 10
+        padding = 20  # Increased padding for pause messages
         width = max_x - min_x + 2 * padding
-        height = max_y - min_y + 2 * padding
+        height = max_y - min_y + 2 * padding + 40  # Extra space for messages
         
         # Calculate total animation time
-        total_points = sum(len(path.points) for path in self.weld_paths)
-        animation_duration = max(10, total_points * 0.1)  # At least 10 seconds
+        total_weld_points = sum(len(path.points) for path in self.weld_paths if path.weld_type != 'stop')
+        total_pause_time = sum(pause_time for path in self.weld_paths if path.weld_type == 'stop')
+        calculated_duration = total_weld_points * time_between_welds + total_pause_time
+        animation_duration = max(min_animation_duration, calculated_duration)
         
         with open(output_path, 'w') as f:
             f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
@@ -508,29 +515,71 @@ class SVGToGCodeWelder:
             # Add title
             f.write(f'  <text x="{width/2}" y="20" text-anchor="middle" font-family="Arial" font-size="14" fill="black">SVG Welding Animation</text>\n')
             
+            # Add timing info
+            f.write(f'  <text x="{width/2}" y="35" text-anchor="middle" font-family="Arial" font-size="10" fill="gray">Duration: {animation_duration:.1f}s | Weld interval: {time_between_welds}s | Pause time: {pause_time}s</text>\n')
+            
             current_time = 0
-            time_per_point = animation_duration / total_points if total_points > 0 else 1
             
             for path_idx, path in enumerate(self.weld_paths):
-                # Determine color based on weld type
+                # Handle stop points (pause messages)
                 if path.weld_type == 'stop':
-                    color = 'red'
-                elif path.weld_type == 'light':
+                    # Get the first point for message positioning
+                    if path.points:
+                        point = path.points[0]
+                        x = point.x - min_x + padding
+                        y = point.y - min_y + padding
+                        
+                        # Display pause message
+                        message = path.pause_message or 'Manual intervention required'
+                        safe_message = message.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+                        
+                        # Message background
+                        f.write(f'  <rect x="{x-50}" y="{y-25}" width="100" height="20" fill="yellow" stroke="red" stroke-width="1" opacity="0">\n')
+                        f.write(f'    <animate attributeName="opacity" values="0;0.9;0.9;0" dur="{animation_duration}s" begin="{current_time:.2f}s" repeatCount="indefinite"/>\n')
+                        f.write(f'  </rect>\n')
+                        
+                        # Message text
+                        f.write(f'  <text x="{x}" y="{y-10}" text-anchor="middle" font-family="Arial" font-size="8" fill="red" opacity="0">\n')
+                        f.write(f'    <animate attributeName="opacity" values="0;1;1;0" dur="{animation_duration}s" begin="{current_time:.2f}s" repeatCount="indefinite"/>\n')
+                        f.write(f'    {safe_message[:30]}{"..." if len(safe_message) > 30 else ""}\n')
+                        f.write(f'  </text>\n')
+                        
+                        # Stop indicator circle
+                        f.write(f'  <circle cx="{x:.2f}" cy="{y:.2f}" r="4" fill="red" stroke="darkred" stroke-width="2" opacity="0">\n')
+                        f.write(f'    <animate attributeName="opacity" values="0;1;1;0" dur="{animation_duration}s" begin="{current_time:.2f}s" repeatCount="indefinite"/>\n')
+                        f.write(f'  </circle>\n')
+                    
+                    current_time += pause_time
+                    continue
+                
+                # Determine color based on weld type
+                if path.weld_type == 'light':
                     color = 'blue'
                 else:
                     color = 'black'
                 
+                # Process weld points
                 for point_idx, point in enumerate(path.points):
                     # Adjust coordinates
                     x = point.x - min_x + padding
-                    y = point.y - min_y + padding
+                    y = point.y - min_y + padding + 40  # Offset for header
                     
-                    # Create animated circle
+                    # Create animated weld point circle
                     f.write(f'  <circle cx="{x:.2f}" cy="{y:.2f}" r="2" fill="{color}" opacity="0">\n')
-                    f.write(f'    <animate attributeName="opacity" values="0;1;1;0" dur="{animation_duration}s" begin="{current_time:.2f}s" repeatCount="indefinite"/>\n')
+                    f.write(f'    <animate attributeName="opacity" values="0;1;1;0.3" dur="{animation_duration}s" begin="{current_time:.2f}s" repeatCount="indefinite"/>\n')
                     f.write(f'  </circle>\n')
                     
-                    current_time += time_per_point
+                    current_time += time_between_welds
+            
+            # Add legend
+            legend_y = height - 15
+            f.write(f'  <text x="10" y="{legend_y}" font-family="Arial" font-size="10" fill="gray">Legend:</text>\n')
+            f.write(f'  <circle cx="60" cy="{legend_y-4}" r="2" fill="black"/>\n')
+            f.write(f'  <text x="70" y="{legend_y}" font-family="Arial" font-size="9" fill="gray">Normal Welds</text>\n')
+            f.write(f'  <circle cx="160" cy="{legend_y-4}" r="2" fill="blue"/>\n')
+            f.write(f'  <text x="170" y="{legend_y}" font-family="Arial" font-size="9" fill="gray">Light Welds</text>\n')
+            f.write(f'  <circle cx="250" cy="{legend_y-4}" r="4" fill="red"/>\n')
+            f.write(f'  <text x="260" y="{legend_y}" font-family="Arial" font-size="9" fill="gray">Stop Points</text>\n')
             
             f.write('</svg>\n')
 

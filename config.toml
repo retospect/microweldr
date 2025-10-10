@@ -34,3 +34,9 @@ dot_spacing = 3.0  # mm - wider spacing
 # Output file settings
 gcode_extension = ".gcode"
 animation_extension = "_animation.svg"
+
+[animation]
+# Animation timing settings for SVG output
+time_between_welds = 0.1  # seconds - time between each weld point appearing
+pause_time = 3.0  # seconds - how long pause messages are displayed
+min_animation_duration = 10.0  # seconds - minimum total animation time
