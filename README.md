@@ -225,6 +225,127 @@ The generated G-code includes:
    - Each dot: Move to position → Lower → Dwell → Raise
 6. **Cooldown**: Lower temperatures and home axes
 
+## Sending G-code to Prusa Printer
+
+Once you've generated the G-code file, you can send it to your Prusa Core One printer using several methods:
+
+### Method 1: PrusaConnect (Recommended)
+**Best for**: Remote monitoring and cloud-based printing
+
+1. **Upload via Web Interface**:
+   - Open [connect.prusa3d.com](https://connect.prusa3d.com) in your browser
+   - Log in to your Prusa account
+   - Select your printer from the dashboard
+   - Click "Upload G-code" or drag and drop your `.gcode` file
+   - The file will be transferred to your printer automatically
+
+2. **Start the Print**:
+   - The G-code will appear in your printer's file list
+   - Select the file on the printer's touchscreen
+   - Press "Print" to begin the welding process
+   - Monitor progress remotely via PrusaConnect dashboard
+
+### Method 2: USB Drive
+**Best for**: Offline printing and large files
+
+1. **Prepare USB Drive**:
+   - Use a FAT32 formatted USB drive
+   - Copy your `.gcode` file to the root directory or a folder
+   - Safely eject the USB drive from your computer
+
+2. **Load on Printer**:
+   - Insert the USB drive into the printer's USB port
+   - Navigate to "Print from USB" on the touchscreen
+   - Browse and select your G-code file
+   - Press "Print" to start welding
+
+### Method 3: PrusaLink (Local Network)
+**Best for**: Local network printing without cloud dependency
+
+1. **Access PrusaLink Interface**:
+   - Find your printer's IP address (Settings → Network → Wi-Fi Info)
+   - Open `http://[printer-ip-address]` in your browser
+   - Or use the Prusa app to connect locally
+
+2. **Upload G-code**:
+   - Click "Upload G-code" in the PrusaLink interface
+   - Select your `.gcode` file
+   - The file transfers directly to the printer over your local network
+
+3. **Start Printing**:
+   - Select the uploaded file from the printer's interface
+   - Begin the welding process
+
+### Pre-Print Checklist
+
+Before starting the welding process:
+
+#### **Printer Preparation**
+- [ ] **Clean the bed**: Remove any residue from previous prints
+- [ ] **Check nozzle**: Ensure nozzle is clean and appropriate for welding
+- [ ] **Verify temperatures**: Confirm bed and nozzle temperature settings match your plastic
+- [ ] **Load filament**: Even though no extrusion occurs, some printers require filament to be loaded
+
+#### **Material Preparation**
+- [ ] **Plastic sheets ready**: Have your plastic sheets cut to size and ready to insert
+- [ ] **Workspace clear**: Ensure adequate ventilation for plastic welding
+- [ ] **Safety equipment**: Have appropriate safety gear (ventilation, eye protection)
+
+#### **G-code Verification**
+- [ ] **Review animation**: Check the generated `*_animation.svg` file to verify weld pattern
+- [ ] **Validate settings**: Confirm temperatures and timing are appropriate for your materials
+- [ ] **Check pause points**: Note where manual intervention will be required
+
+### During the Welding Process
+
+#### **Initial Setup Phase**
+1. **Homing**: Printer will home all axes automatically
+2. **Bed Leveling**: If enabled, automatic bed leveling will run (G29)
+3. **Heating**: Bed and nozzle will heat to specified temperatures
+4. **User Pause**: Printer will pause with message "Insert plastic sheets and press continue"
+
+#### **Welding Phase**
+1. **Multi-pass welding**: Printer follows the programmed sequence
+2. **Pause points**: Respond to custom pause messages (red elements in SVG)
+3. **Monitor progress**: Watch for proper weld formation and material behavior
+4. **Temperature management**: Printer automatically manages heating between weld types
+
+#### **Completion**
+1. **Cooldown**: Printer will automatically cool down nozzle and bed
+2. **Homing**: Final homing sequence
+3. **Completion message**: Printer indicates welding is complete
+
+### Troubleshooting Transfer Issues
+
+#### **File Not Recognized**
+- Ensure file has `.gcode` extension
+- Check file size (some methods have limits)
+- Verify G-code syntax with a G-code viewer
+
+#### **Connection Problems**
+- **PrusaConnect**: Check internet connection and printer online status
+- **PrusaLink**: Verify printer and computer are on same network
+- **USB**: Try different USB drive or reformat as FAT32
+
+#### **Upload Failures**
+- Check available storage space on printer
+- Try smaller file sizes or reduce complexity
+- Restart printer network connection if needed
+
+### File Management Tips
+
+- **Organize files**: Use descriptive names like `project_name_v1.gcode`
+- **Keep backups**: Save both SVG source and generated G-code files
+- **Version control**: Include date/version in filenames for tracking
+- **Clean up**: Regularly remove old files from printer storage
+
+### Safety Reminders
+
+- **Never leave unattended**: Always supervise the welding process
+- **Emergency stop**: Know how to use the printer's emergency stop function
+- **Ventilation**: Ensure adequate ventilation for plastic welding fumes
+- **Temperature safety**: Be cautious around heated components
+
 ## Multi-Pass Welding System
 
 The welder implements an intelligent multi-pass system that allows plastic to cool between welding operations:

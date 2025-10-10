@@ -157,6 +157,7 @@ class SVGParser:
         # Simple path parser - handles M, L, Z commands
         commands = re.findall(r"[MLZ][^MLZ]*", d)
         current_x, current_y = 0.0, 0.0
+        start_x, start_y = 0.0, 0.0  # Track start point for Z command
 
         for command in commands:
             cmd = command[0]
@@ -165,10 +166,15 @@ class SVGParser:
 
             if cmd == "M" and len(coords) >= 2:  # Move to
                 current_x, current_y = coords[0], coords[1]
+                start_x, start_y = current_x, current_y  # Remember start point
                 points.append(WeldPoint(current_x, current_y, "normal"))
             elif cmd == "L" and len(coords) >= 2:  # Line to
                 current_x, current_y = coords[0], coords[1]
                 points.append(WeldPoint(current_x, current_y, "normal"))
+            elif cmd == "Z":  # Close path - return to start point
+                if points and (current_x != start_x or current_y != start_y):
+                    points.append(WeldPoint(start_x, start_y, "normal"))
+                    current_x, current_y = start_x, start_y
 
         return self._interpolate_points(points)
 
@@ -198,6 +204,11 @@ class SVGParser:
             x = cx + r * math.cos(angle)
             y = cy + r * math.sin(angle)
             points.append(WeldPoint(x, y, "normal"))
+
+        # Close the circle by adding the first point again at the end
+        if points:
+            first_point = points[0]
+            points.append(WeldPoint(first_point.x, first_point.y, first_point.weld_type))
 
         return self._interpolate_points(points)
 
