@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="150" xmlns="http://www.w3.org/2000/svg">
+  <!-- Example 1: Using data-message attribute (recommended) -->
+  <circle id="stop1" cx="30" cy="30" r="3" fill="red" 
+          data-message="Check first weld joint quality"/>
+  
+  <!-- Example 2: Using title attribute -->
+  <rect id="stop2" x="70" y="25" width="10" height="10" fill="red" 
+        title="Insert reinforcement material"/>
+  
+  <!-- Example 3: Using aria-label attribute -->
+  <circle id="stop3" cx="130" cy="30" r="3" fill="red" 
+          aria-label="Adjust welding temperature to 190C"/>
+  
+  <!-- Example 4: Red element without message (uses default) -->
+  <rect id="stop4" x="170" y="25" width="10" height="10" fill="red"/>
+  
+  <!-- Some welding paths between stops -->
+  <line id="weld1" x1="10" y1="60" x2="190" y2="60" stroke="black" stroke-width="2"/>
+  <line id="weld2" x1="10" y1="80" x2="190" y2="80" stroke="blue" stroke-width="2"/>
+  
+  <!-- Example 5: Long message that will be truncated -->
+  <circle id="stop5" cx="100" cy="110" r="3" fill="red" 
+          data-message="This is a very long message that exceeds the 50 character limit and will be truncated for safety"/>
+  
+  <!-- Final welding path -->
+  <path id="final_weld" d="M 20 130 Q 100 120 180 130" fill="none" stroke="black" stroke-width="2"/>
+</svg>
