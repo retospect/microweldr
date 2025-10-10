@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="250" xmlns="http://www.w3.org/2000/svg">
+  <title>Comprehensive Plastic Welding Sample</title>
+  <desc>Demonstrates all features of the SVG to G-code welder</desc>
+  
+  <!-- Header text for reference -->
+  <text x="100" y="15" text-anchor="middle" font-family="Arial" font-size="12" fill="gray">
+    Plastic Welding Pattern - All Features Demo
+  </text>
+  
+  <!-- 1. Normal welds (black) - Various shapes -->
+  <line id="weld01" x1="20" y1="30" x2="180" y2="30" stroke="black" stroke-width="2"/>
+  <rect id="weld02" x="20" y="40" width="160" height="15" fill="none" stroke="black" stroke-width="1"/>
+  <circle id="weld03" cx="100" cy="75" r="20" fill="none" stroke="black" stroke-width="1"/>
+  
+  <!-- 2. First stop point with custom message -->
+  <circle id="stop01" cx="50" cy="100" r="3" fill="red" 
+          data-message="Check initial weld quality - adjust temp if needed"/>
+  
+  <!-- 3. Light welds (blue) - Lower temperature -->
+  <path id="lightweld01" d="M 20 120 Q 60 110 100 120 Q 140 130 180 120" 
+        fill="none" stroke="blue" stroke-width="2"/>
+  <line id="lightweld02" x1="30" y1="140" x2="170" y2="140" stroke="blue" stroke-width="1"/>
+  
+  <!-- 4. Stop point using title attribute -->
+  <rect id="stop02" x="95" y="155" width="10" height="10" fill="red" 
+        title="Insert reinforcement layer"/>
+  
+  <!-- 5. Complex path with normal welds -->
+  <path id="weld04" d="M 20 180 L 50 170 L 80 180 L 110 170 L 140 180 L 170 170 L 180 180" 
+        fill="none" stroke="black" stroke-width="2"/>
+  
+  <!-- 6. Light weld circle -->
+  <circle id="lightweld03" cx="60" cy="200" r="15" fill="none" stroke="blue" stroke-width="1"/>
+  <circle id="lightweld04" cx="140" cy="200" r="15" fill="none" stroke="blue" stroke-width="1"/>
+  
+  <!-- 7. Stop point with aria-label -->
+  <circle id="stop03" cx="100" cy="200" r="3" fill="red" 
+          aria-label="Check alignment before final welds"/>
+  
+  <!-- 8. Final welding pattern -->
+  <rect id="weld05" x="30" y="220" width="140" height="20" fill="none" stroke="black" stroke-width="2"/>
+  
+  <!-- 9. Stop point without message (uses default) -->
+  <rect id="stop04" x="175" y="235" width="8" height="8" fill="red"/>
+  
+  <!-- 10. Final decorative elements (normal welds) -->
+  <path id="weld06" d="M 20 245 Q 100 235 180 245" fill="none" stroke="black" stroke-width="1"/>
+  
+  <!-- Processing order indicators (small text) -->
+  <text x="25" y="28" font-family="Arial" font-size="8" fill="gray">1</text>
+  <text x="25" y="52" font-family="Arial" font-size="8" fill="gray">2</text>
+  <text x="85" y="95" font-family="Arial" font-size="8" fill="gray">3</text>
+  <text x="45" y="98" font-family="Arial" font-size="8" fill="red">STOP</text>
+  <text x="25" y="135" font-family="Arial" font-size="8" fill="blue">4</text>
+  <text x="35" y="155" font-family="Arial" font-size="8" fill="blue">5</text>
+  <text x="90" y="152" font-family="Arial" font-size="8" fill="red">STOP</text>
+  <text x="25" y="195" font-family="Arial" font-size="8" fill="gray">6</text>
+  <text x="95" y="195" font-family="Arial" font-size="8" fill="red">STOP</text>
+  <text x="35" y="235" font-family="Arial" font-size="8" fill="gray">7</text>
+  <text x="170" y="230" font-family="Arial" font-size="8" fill="red">STOP</text>
+  <text x="25" y="260" font-family="Arial" font-size="8" fill="gray">8</text>
+</svg>

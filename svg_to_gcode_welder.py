@@ -15,6 +15,17 @@ import math
 from typing import List, Tuple, Dict, Optional
 from dataclasses import dataclass
 
+# Validation libraries
+try:
+    from lxml import etree
+    from gcodeparser import GcodeParser
+    import pygcode
+    VALIDATION_AVAILABLE = True
+except ImportError as e:
+    print(f"Warning: Validation libraries not available: {e}")
+    print("Install with: pip install lxml gcodeparser pygcode xmlschema")
+    VALIDATION_AVAILABLE = False
+
 
 @dataclass
 class WeldPoint:
@@ -52,6 +63,127 @@ class SVGToGCodeWelder:
         except toml.TomlDecodeError as e:
             print(f"Error: Invalid TOML configuration: {e}")
             sys.exit(1)
+    
+    def validate_svg(self, svg_path: str) -> bool:
+        """Validate SVG file structure and syntax."""
+        if not VALIDATION_AVAILABLE:
+            print("Warning: SVG validation skipped - validation libraries not available")
+            return True
+        
+        try:
+            # Parse with lxml for better validation
+            with open(svg_path, 'rb') as f:
+                doc = etree.parse(f)
+            
+            # Basic SVG structure validation
+            root = doc.getroot()
+            if root.tag != '{http://www.w3.org/2000/svg}svg':
+                print(f"Warning: Root element is not SVG: {root.tag}")
+                return False
+            
+            # Check for required attributes
+            if 'width' not in root.attrib or 'height' not in root.attrib:
+                print("Warning: SVG missing width or height attributes")
+            
+            print(f"✓ SVG validation passed: {svg_path}")
+            return True
+            
+        except etree.XMLSyntaxError as e:
+            print(f"Error: Invalid SVG syntax: {e}")
+            return False
+        except Exception as e:
+            print(f"Warning: SVG validation failed: {e}")
+            return True  # Continue processing despite validation issues
+    
+    def validate_gcode(self, gcode_path: str) -> bool:
+        """Validate generated G-code syntax and structure."""
+        if not VALIDATION_AVAILABLE:
+            print("Warning: G-code validation skipped - validation libraries not available")
+            return True
+        
+        try:
+            with open(gcode_path, 'r') as f:
+                gcode_content = f.read()
+            
+            # Parse with gcodeparser
+            parser = GcodeParser(gcode_content, include_comments=True)
+            lines = parser.lines
+            
+            # Basic validation checks
+            has_init = False
+            has_home = False
+            has_temp_commands = False
+            has_movement = False
+            
+            for line in lines:
+                if hasattr(line, 'command') and line.command:
+                    cmd_letter, cmd_number = line.command
+                    
+                    if cmd_letter == 'G':
+                        if cmd_number == 28:  # Home
+                            has_home = True
+                        elif cmd_number == 90:  # Absolute positioning
+                            has_init = True
+                        elif cmd_number in [0, 1]:  # Movement
+                            has_movement = True
+                    
+                    elif cmd_letter == 'M':
+                        if cmd_number in [104, 109, 140, 190]:  # Temperature commands
+                            has_temp_commands = True
+            
+            # Validation results
+            issues = []
+            if not has_init:
+                issues.append("Missing initialization commands (G90)")
+            if not has_home:
+                issues.append("Missing home command (G28)")
+            if not has_temp_commands:
+                issues.append("Missing temperature commands")
+            if not has_movement:
+                issues.append("Missing movement commands")
+            
+            if issues:
+                print("G-code validation warnings:")
+                for issue in issues:
+                    print(f"  - {issue}")
+            else:
+                print(f"✓ G-code validation passed: {gcode_path}")
+            
+            return len(issues) == 0
+            
+        except Exception as e:
+            print(f"Warning: G-code validation failed: {e}")
+            return True  # Continue despite validation issues
+    
+    def validate_output_svg(self, svg_path: str) -> bool:
+        """Validate generated animation SVG."""
+        if not VALIDATION_AVAILABLE:
+            return True
+        
+        try:
+            with open(svg_path, 'rb') as f:
+                doc = etree.parse(f)
+            
+            root = doc.getroot()
+            
+            # Check for animation elements
+            animations = root.xpath('//svg:animate', namespaces={'svg': 'http://www.w3.org/2000/svg'})
+            circles = root.xpath('//svg:circle', namespaces={'svg': 'http://www.w3.org/2000/svg'})
+            
+            if len(animations) == 0:
+                print("Warning: No animation elements found in output SVG")
+                return False
+            
+            if len(circles) == 0:
+                print("Warning: No circle elements found in animation SVG")
+                return False
+            
+            print(f"✓ Animation SVG validation passed: {svg_path} ({len(animations)} animations, {len(circles)} circles)")
+            return True
+            
+        except Exception as e:
+            print(f"Warning: Animation SVG validation failed: {e}")
+            return True
     
     def parse_svg(self, svg_path: str) -> None:
         """Parse SVG file and extract weld paths."""
@@ -446,6 +578,11 @@ Examples:
     
     print(f"Processing SVG file: {args.input_svg}")
     
+    # Validate input SVG
+    print("Validating input SVG...")
+    if not converter.validate_svg(args.input_svg):
+        print("Warning: SVG validation failed, but continuing processing...")
+    
     # Parse SVG
     converter.parse_svg(args.input_svg)
     print(f"Found {len(converter.weld_paths)} weld paths")
@@ -454,10 +591,18 @@ Examples:
     print(f"Generating G-code: {output_gcode}")
     converter.generate_gcode(str(output_gcode), args.skip_bed_leveling)
     
+    # Validate generated G-code
+    print("Validating generated G-code...")
+    converter.validate_gcode(str(output_gcode))
+    
     # Generate animation
     if not args.no_animation:
         print(f"Generating animation: {output_animation}")
         converter.generate_animation(str(output_animation))
+        
+        # Validate generated animation
+        print("Validating animation SVG...")
+        converter.validate_output_svg(str(output_animation))
     
     print("Conversion complete!")
 
