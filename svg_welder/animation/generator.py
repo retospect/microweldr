@@ -108,10 +108,10 @@ class AnimationGenerator:
         scale_factor = 3.0
 
         f.write(f'  <text x="{width/2}" y="{60*scale_factor}" text-anchor="middle" font-family="Arial" '
-                f'font-size="{14*scale_factor}" fill="black">SVG Welding Animation</text>\n')
+                f'font-size="{8*scale_factor}" fill="black">SVG Welding Animation</text>\n')
         
         f.write(f'  <text x="{width/2}" y="{105*scale_factor}" text-anchor="middle" font-family="Arial" '
-                f'font-size="{10*scale_factor}" fill="gray">Duration: {animation_duration:.1f}s | '
+                f'font-size="{6*scale_factor}" fill="gray">Duration: {animation_duration:.1f}s | '
                 f'Weld interval: {time_between_welds}s | Pause time: {pause_time}s</text>\n')
 
     def _write_animation_elements(
@@ -312,7 +312,7 @@ class AnimationGenerator:
         """Write legend explaining weld types with nozzle ring examples and scale bar."""
         scale_factor = 3.0
         legend_y = height - 80  # More space for scale bar
-        font_size = 3.33 * scale_factor  # Reduced from 10 to 3.33 (1/3 size)
+        font_size = 2.5 * scale_factor  # Further reduced for better fit
 
         f.write(
             f'  <text x="{30*scale_factor}" y="{legend_y}" font-family="Arial" font-size="{font_size}" '
@@ -326,7 +326,7 @@ class AnimationGenerator:
         f.write(f'    <circle cx="0" cy="0" r="{3*scale_factor}" fill="#FF6347"/>\n')
         f.write(f'    <circle cx="0" cy="0" r="{scale_factor}" fill="black"/>\n')
         f.write('  </g>\n')
-        f.write(f'  <text x="{210*scale_factor}" y="{legend_y}" font-family="Arial" font-size="{3*scale_factor}" '
+        f.write(f'  <text x="{210*scale_factor}" y="{legend_y}" font-family="Arial" font-size="{2*scale_factor}" '
                 f'fill="gray">Normal Welds (Hot)</text>\n')
 
         # Light welds - blue nozzle ring (scaled)
@@ -336,7 +336,7 @@ class AnimationGenerator:
         f.write(f'    <circle cx="0" cy="0" r="{3*scale_factor}" fill="#4169E1"/>\n')
         f.write(f'    <circle cx="0" cy="0" r="{scale_factor}" fill="blue"/>\n')
         f.write('  </g>\n')
-        f.write(f'  <text x="{570*scale_factor}" y="{legend_y}" font-family="Arial" font-size="{3*scale_factor}" '
+        f.write(f'  <text x="{570*scale_factor}" y="{legend_y}" font-family="Arial" font-size="{2*scale_factor}" '
                 f'fill="gray">Light Welds (Warm)</text>\n')
 
         # Stop points (scaled)
@@ -344,7 +344,7 @@ class AnimationGenerator:
         f.write(
             f'  <circle cx="{stop_x}" cy="{legend_y-12*scale_factor}" r="{12*scale_factor}" fill="red"/>\n'
         )
-        f.write(f'  <text x="{990*scale_factor}" y="{legend_y}" font-family="Arial" font-size="{3*scale_factor}" '
+        f.write(f'  <text x="{990*scale_factor}" y="{legend_y}" font-family="Arial" font-size="{2*scale_factor}" '
                 f'fill="gray">Stop Points</text>\n')
 
         # Scale bar - reasonably sized with 10:1 length to height ratio
@@ -372,9 +372,8 @@ class AnimationGenerator:
         # Nozzle info (scaled)
         outer_diameter = self.config.get("nozzle", "outer_diameter", 0.4)
         inner_diameter = self.config.get("nozzle", "inner_diameter", 0.2)
-        f.write(f'  <text x="{30*scale_factor}" y="{legend_y+80*scale_factor}" font-family="Arial" font-size="{2.67*scale_factor}" '
-                f'fill="gray">Nozzle: {outer_diameter}mm OD, {inner_diameter}mm ID (30x scale)</text>\n'
-        )
+        f.write(f'  <text x="{30*scale_factor}" y="{legend_y+80*scale_factor}" font-family="Arial" font-size="{1.5*scale_factor}" '
+                f'fill="gray">Nozzle: {outer_diameter}mm OD, {inner_diameter}mm ID (30x scale)</text>\n')
 
     def _write_svg_footer(self, f: TextIO) -> None:
         """Write SVG footer."""
