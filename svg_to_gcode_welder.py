@@ -420,7 +420,7 @@ Examples:
     else:
         output_gcode = input_path.with_suffix('.gcode')
     
-    output_animation = input_path.with_suffix('_animation.svg')
+    output_animation = input_path.with_name(input_path.stem + '_animation.svg')
     
     # Initialize converter
     try:
