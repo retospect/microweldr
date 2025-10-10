@@ -96,6 +96,25 @@ Colors can be specified via:
 - `fill` attribute  
 - `style` attribute (CSS format)
 
+### Custom Pause Messages
+Red elements (stop points) can include custom messages that will be displayed on the printer screen during the pause. The message can be specified using any of these SVG attributes (in order of priority):
+
+- `data-message="Your custom message"` - Recommended custom data attribute
+- `title="Your custom message"` - Standard SVG title attribute
+- `desc="Your custom message"` - SVG description element
+- `aria-label="Your custom message"` - Accessibility label
+
+If no message is specified, the default "Manual intervention required" will be used.
+
+**Example:**
+```xml
+<!-- Stop with custom message -->
+<circle cx="50" cy="50" r="2" fill="red" data-message="Check weld quality and adjust temperature"/>
+
+<!-- Stop using title attribute -->
+<rect x="10" y="10" width="5" height="5" fill="red" title="Insert second plastic sheet"/>
+```
+
 ### Supported SVG Elements
 - `<path>` - Follows path commands (M, L, Z supported)
 - `<line>` - Straight lines between two points

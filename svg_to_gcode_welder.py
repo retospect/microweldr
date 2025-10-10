@@ -30,6 +30,7 @@ class WeldPath:
     points: List[WeldPoint]
     weld_type: str
     svg_id: str
+    pause_message: Optional[str] = None  # Custom message for stop points
 
 
 class SVGToGCodeWelder:
@@ -98,7 +99,7 @@ class SVGToGCodeWelder:
         
         # Process each element
         for element_type, element in elements:
-            weld_type = self.determine_weld_type(element)
+            weld_type, pause_message = self.determine_weld_type(element)
             svg_id = element.get('id', f'unnamed_{len(self.weld_paths)}')
             
             if element_type == 'path':
@@ -113,11 +114,11 @@ class SVGToGCodeWelder:
                 continue
             
             if points:
-                weld_path = WeldPath(points=points, weld_type=weld_type, svg_id=svg_id)
+                weld_path = WeldPath(points=points, weld_type=weld_type, svg_id=svg_id, pause_message=pause_message)
                 self.weld_paths.append(weld_path)
     
-    def determine_weld_type(self, element) -> str:
-        """Determine weld type based on element color."""
+    def determine_weld_type(self, element) -> Tuple[str, Optional[str]]:
+        """Determine weld type based on element color and extract pause message if applicable."""
         # Check stroke color
         stroke = element.get('stroke', '').lower()
         fill = element.get('fill', '').lower()
@@ -126,12 +127,23 @@ class SVGToGCodeWelder:
         # Parse style attribute for color information
         color_info = f"{stroke} {fill} {style}"
         
+        # Extract pause message for red elements
+        pause_message = None
+        
         if any(color in color_info for color in ['red', '#ff0000', '#f00', 'rgb(255,0,0)']):
-            return 'stop'
+            # Look for pause message in various SVG attributes
+            pause_message = (
+                element.get('data-message') or  # Custom data attribute
+                element.get('title') or         # SVG title attribute
+                element.get('desc') or          # SVG description
+                element.get('aria-label') or    # Accessibility label
+                'Manual intervention required'  # Default message
+            )
+            return 'stop', pause_message
         elif any(color in color_info for color in ['blue', '#0000ff', '#00f', 'rgb(0,0,255)']):
-            return 'light'
+            return 'light', None
         else:
-            return 'normal'  # Default for black or other colors
+            return 'normal', None  # Default for black or other colors
     
     def parse_path_element(self, path_element) -> List[WeldPoint]:
         """Parse SVG path element and return weld points."""
@@ -285,7 +297,11 @@ class SVGToGCodeWelder:
                 f.write(f"; Processing path: {path.svg_id} (type: {path.weld_type})\n")
                 
                 if path.weld_type == 'stop':
-                    f.write("M0 ; User stop requested\n\n")
+                    # Use custom message if available, otherwise default
+                    message = path.pause_message or 'Manual intervention required'
+                    # Escape quotes and limit message length for G-code safety
+                    safe_message = message.replace('"', "'").replace(';', ',')[:50]
+                    f.write(f'M0 "{safe_message}" ; User stop requested\n\n')
                     continue
                 
                 # Get settings for this weld type
