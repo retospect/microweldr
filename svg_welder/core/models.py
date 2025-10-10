@@ -26,6 +26,8 @@ class WeldPath:
     weld_type: str
     svg_id: str
     pause_message: Optional[str] = None  # Custom message for stop points
+    element_type: Optional[str] = None  # Original SVG element type (circle, rect, etc.)
+    element_radius: Optional[float] = None  # Original radius for circles
 
     def __post_init__(self) -> None:
         """Validate weld path data."""

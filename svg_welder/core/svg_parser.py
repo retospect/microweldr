@@ -59,20 +59,37 @@ class SVGParser:
         # Sort by ID if available
         elements.sort(key=self._get_sort_key)
 
-        # Process each element
+        # Process each element and ensure unique IDs
         weld_paths = []
+        used_ids = set()
+        
         for element_type, element in elements:
             weld_type, pause_message = self._determine_weld_type(element)
-            svg_id = element.get('id', f'unnamed_{len(weld_paths)}')
+            
+            # Ensure unique SVG ID
+            base_id = element.get('id', f'{element_type}_{len(weld_paths) + 1}')
+            svg_id = base_id
+            counter = 1
+            while svg_id in used_ids:
+                svg_id = f"{base_id}_{counter}"
+                counter += 1
+            used_ids.add(svg_id)
             
             points = self._parse_element(element_type, element)
             
             if points:
+                # Extract element metadata
+                element_radius = None
+                if element_type == 'circle':
+                    element_radius = float(element.get('r', 1))
+                
                 weld_path = WeldPath(
                     points=points, 
                     weld_type=weld_type, 
                     svg_id=svg_id, 
-                    pause_message=pause_message
+                    pause_message=pause_message,
+                    element_type=element_type,
+                    element_radius=element_radius
                 )
                 weld_paths.append(weld_path)
 

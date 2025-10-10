@@ -118,39 +118,35 @@ class AnimationGenerator:
 
     def _write_stop_point(self, f: TextIO, path: WeldPath, min_x: float, min_y: float,
                          padding: float, animation_duration: float, current_time: float) -> None:
-        """Write stop point with pause message."""
+        """Write stop point as red circle only."""
         point = path.points[0]
         x = point.x - min_x + padding
-        y = point.y - min_y + padding
+        y = point.y - min_y + padding + 40  # Offset for header
         
-        # Display pause message
-        message = path.pause_message or 'Manual intervention required'
-        safe_message = message.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+        # Use original radius if it's a circle, otherwise use default
+        if path.element_type == 'circle' and path.element_radius is not None:
+            radius = max(2.0, min(path.element_radius, 8.0))  # Clamp between 2-8 for visibility
+        else:
+            radius = 3.0  # Default radius for non-circle stop points
         
-        # Message background
-        f.write(f'  <rect x="{x-50}" y="{y-25}" width="100" height="20" '
-                f'fill="yellow" stroke="red" stroke-width="1" opacity="0">\n')
-        f.write(f'    <animate attributeName="opacity" values="0;0.9;0.9;0" '
+        # Red circle with flip animation (similar to nozzle rings but simpler)
+        f.write(f'  <g transform="translate({x:.2f},{y:.2f})" opacity="0">\n')
+        
+        # Flip animation for stop point
+        f.write(f'    <animateTransform attributeName="transform" type="scale" '
+                f'values="0,0;0.2,1.2;1.1,0.9;1,1" dur="0.3s" '
+                f'begin="{current_time:.2f}s" fill="freeze"/>\n')
+        
+        # Opacity animation
+        f.write(f'    <animate attributeName="opacity" values="0;1;1;0.8" '
                 f'dur="{animation_duration}s" begin="{current_time:.2f}s" '
                 f'repeatCount="indefinite"/>\n')
-        f.write('  </rect>\n')
         
-        # Message text
-        f.write(f'  <text x="{x}" y="{y-10}" text-anchor="middle" font-family="Arial" '
-                f'font-size="8" fill="red" opacity="0">\n')
-        f.write(f'    <animate attributeName="opacity" values="0;1;1;0" '
-                f'dur="{animation_duration}s" begin="{current_time:.2f}s" '
-                f'repeatCount="indefinite"/>\n')
-        f.write(f'    {safe_message[:30]}{"..." if len(safe_message) > 30 else ""}\n')
-        f.write('  </text>\n')
+        # Red circle (stop indicator)
+        f.write(f'    <circle cx="0" cy="0" r="{radius:.1f}" fill="red" '
+                f'stroke="darkred" stroke-width="1"/>\n')
         
-        # Stop indicator circle
-        f.write(f'  <circle cx="{x:.2f}" cy="{y:.2f}" r="4" fill="red" '
-                f'stroke="darkred" stroke-width="2" opacity="0">\n')
-        f.write(f'    <animate attributeName="opacity" values="0;1;1;0" '
-                f'dur="{animation_duration}s" begin="{current_time:.2f}s" '
-                f'repeatCount="indefinite"/>\n')
-        f.write('  </circle>\n')
+        f.write('  </g>\n')
 
     def _write_nozzle_ring(self, f: TextIO, x: float, y: float, color: str, 
                           animation_duration: float, current_time: float) -> None:
