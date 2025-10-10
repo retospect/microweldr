@@ -78,7 +78,7 @@ class AnimationGenerator:
                 weld_sequence,
             )
             self._write_legend(f, height)
-            self._write_message_box(f, height)
+            self._write_message_box(f, width, height)
             self._write_svg_footer(f)
 
     def _calculate_bounds(
@@ -142,6 +142,12 @@ class AnimationGenerator:
     ) -> None:
         """Write animation elements for weld paths."""
         min_x, min_y, max_x, max_y = bounds
+
+        # Calculate canvas dimensions (same logic as in generate_file)
+        base_width = max_x - min_x + 2 * padding
+        base_height = max_y - min_y + 2 * padding + 120
+        width = base_width * 3
+        height = base_height * 3
         current_time = 0.0
         scale_factor = 3.0  # Scale factor for tripled canvas size
 
@@ -159,6 +165,8 @@ class AnimationGenerator:
                         current_time,
                         scale_factor,
                         pause_time,
+                        width,
+                        height,
                     )
                 current_time += pause_time
                 continue
@@ -354,6 +362,8 @@ class AnimationGenerator:
         current_time: float,
         scale_factor: float,
         pause_time: float,
+        width: float,
+        height: float,
     ) -> None:
         """Write stop point as red circle with immediate user message display."""
         point = path.points[0]
@@ -380,34 +390,19 @@ class AnimationGenerator:
         font_size = 3 * scale_factor  # Reduced from 9 to 3 (1/3 size)
 
         # Update the static message box with this pause message
-        # Calculate approximate canvas height from scale and bounds
-        canvas_height = (
-            min_y + padding + 40
-        ) * scale_factor + 300  # Approximate height with legend space
-        message_y = canvas_height - 35  # Position in message box
+        # Position text in the message box (need to calculate box position)
+        # For now, position relative to typical message box location
+        msg_box_x = width - 360  # Approximate message box x position
+        msg_box_y = height - 25  # Approximate message box text y position
 
         f.write(
-            f'  <text x="410" y="{message_y}" font-family="Arial" '
-            f'font-size="12" font-weight="bold" fill="#e74c3c" opacity="0">\n'
+            f'  <text x="{msg_box_x}" y="{msg_box_y}" font-family="Arial" font-size="11" fill="#e74c3c" opacity="0">\n'
         )
         f.write(
             f'    <animate attributeName="opacity" values="0;1;1;0" '
             f'dur="{pause_time:.2f}s" begin="{current_time:.2f}s" fill="freeze"/>\n'
         )
         f.write(f"    ⚠ {safe_message}\n")
-        f.write("  </text>\n")
-
-        # Show "cleared" message after pause time
-        clear_time = current_time + pause_time
-        f.write(
-            f'  <text x="410" y="{message_y}" font-family="Arial" '
-            f'font-size="11" fill="#7f8c8d" opacity="0">\n'
-        )
-        f.write(
-            f'    <animate attributeName="opacity" values="0;1" '
-            f'dur="0.5s" begin="{clear_time:.2f}s" fill="freeze"/>\n'
-        )
-        f.write("    No active notifications\n")
         f.write("  </text>\n")
 
         # Red circle with flip animation (similar to nozzle rings but simpler)
@@ -569,13 +564,16 @@ class AnimationGenerator:
             f'fill="gray">Nozzle: {outer_diameter}mm OD, {inner_diameter}mm ID (actual scale)</text>\n'
         )
 
-    def _write_message_box(self, f: TextIO, height: float) -> None:
+    def _write_message_box(self, f: TextIO, width: float, height: float) -> None:
         """Write static message box near the legend for pause notifications."""
-        # Message box positioned to the right of the legend
-        box_x = 400
-        box_y = height - 80
+        # Message box positioned with proper margins to stay within canvas
         box_width = 350
         box_height = 60
+        margin = 10  # Small margin from canvas edge
+
+        # Position box in bottom right with margin from actual canvas width
+        box_x = width - box_width - margin
+        box_y = height - box_height - margin
 
         # Static message box background
         f.write(
@@ -593,6 +591,12 @@ class AnimationGenerator:
         f.write(
             f'  <text id="message-text-default" x="{box_x + 10}" y="{box_y + 45}" font-family="Arial" '
             f'font-size="11" fill="#7f8c8d">No active notifications</text>\n'
+        )
+
+        # Dynamic message text for pause notifications (initially hidden)
+        f.write(
+            f'  <text id="message-text-active" x="{box_x + 10}" y="{box_y + 45}" font-family="Arial" '
+            f'font-size="11" fill="#e74c3c" opacity="0">⚠ Pause message will appear here</text>\n'
         )
 
     def _write_svg_footer(self, f: TextIO) -> None:
