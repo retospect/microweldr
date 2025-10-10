@@ -1,6 +1,9 @@
 # SVG to G-code Welder
 
-A professional Python package that converts SVG files to Prusa Core One G-code for plastic welding applications. The package processes SVG vector graphics and generates G-code that creates weld spots along the paths without extruding any plastic material.
+A Python package that converts SVG files to Prusa Core One G-code for plastic "spot" welding applications. The package processes SVG vector graphics and generates G-code that creates weld spots along the paths without extruding any plastic material.
+
+This allows for rapid microfluidics prototyping with a 3d printer.
+While the edges are not as smooth as a laser weld, the 3d printer is more available than a laser welder. 
 
 ## Project Structure
 
