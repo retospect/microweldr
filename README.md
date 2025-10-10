@@ -338,6 +338,68 @@ The repository includes several example files:
 - Use a G-code viewer to preview the toolpath
 - Start with simple test patterns before complex designs
 
+## Running the Examples
+
+### For Installed Package
+If you've installed svg-welder as a package:
+
+```bash
+# Install the package
+pip install svg-welder
+# or with validation libraries
+pip install svg-welder[validation]
+
+# Run examples (assuming you have the example files)
+svg-welder example.svg
+svg-welder example.svg --verbose
+svg-welder example.svg -o my_output.gcode
+```
+
+### For Development/Source Code
+If you're working with the source code:
+
+```bash
+# Setup (one-time)
+poetry install
+poetry install --extras validation  # optional validation libraries
+
+# Run examples
+poetry run svg-welder examples/example.svg
+poetry run svg-welder examples/comprehensive_sample.svg
+poetry run svg-welder examples/example.svg --verbose
+
+# Development shortcuts
+make run-example          # Quick example run
+make run-comprehensive    # Full sample run
+make install-dev          # Development setup
+```
+
+**📖 For detailed development setup, see [DEVELOPMENT.md](DEVELOPMENT.md)**
+
+### Example Files Included
+- **`examples/example.svg`**: Basic demonstration with normal welds, light welds, and stop points
+- **`examples/comprehensive_sample.svg`**: Full-featured demo showing all capabilities
+- **`examples/pause_examples.svg`**: Examples of different pause message formats
+- **`examples/config.toml`**: Complete configuration file with all parameters
+
+### Expected Output
+Each run generates:
+- **G-code file**: `example.gcode` - Ready to load on Prusa Core One
+- **Animation file**: `example_animation.svg` - Visual preview of welding sequence
+- **Console output**: Processing details and validation results
+
+### Alternative Run Methods
+```bash
+# Using Python module (development)
+python -m svg_welder.cli.main examples/example.svg
+
+# Direct script execution (development)
+python svg_welder/cli/main.py examples/example.svg
+
+# With custom configuration
+svg-welder examples/example.svg -c my_config.toml
+```
+
 ## License
 
 This project is open source. Use at your own risk and ensure proper safety precautions when operating 3D printing equipment.
