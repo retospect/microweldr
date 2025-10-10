@@ -352,25 +352,27 @@ class AnimationGenerator:
         f.write(f'  <text x="{990*scale_factor}" y="{legend_y}" font-family="Arial" font-size="{3*scale_factor}" '
                 f'fill="gray">Stop Points</text>\n')
 
-        # Scale bar
+        # Scale bar - reasonably sized with 10:1 length to height ratio
         scale_bar_y = legend_y + 40 * scale_factor
-        scale_bar_length = 10 * scale_factor  # 10mm scale bar
+        scale_bar_length = 50  # 50 pixels for reasonable visibility (represents 10mm)
+        scale_bar_height = 5   # 5 pixels height (10:1 ratio)
         scale_bar_x = 30 * scale_factor
-
-        f.write(
-            f'  <line x1="{scale_bar_x}" y1="{scale_bar_y}" x2="{scale_bar_x + scale_bar_length}" y2="{scale_bar_y}" '
-            f'stroke="black" stroke-width="{2*scale_factor}"/>\n'
-        )
-        f.write(
-            f'  <line x1="{scale_bar_x}" y1="{scale_bar_y-5*scale_factor}" x2="{scale_bar_x}" y2="{scale_bar_y+5*scale_factor}" '
-            f'stroke="black" stroke-width="{2*scale_factor}"/>\n'
-        )
-        f.write(
-            f'  <line x1="{scale_bar_x + scale_bar_length}" y1="{scale_bar_y-5*scale_factor}" x2="{scale_bar_x + scale_bar_length}" y2="{scale_bar_y+5*scale_factor}" '
-            f'stroke="black" stroke-width="{2*scale_factor}"/>\n'
-        )
-        f.write(f'  <text x="{scale_bar_x + scale_bar_length/2}" y="{scale_bar_y + 20*scale_factor}" text-anchor="middle" '
-                f'font-family="Arial" font-size="{2.67*scale_factor}" fill="black">10mm</text>\n')
+        
+        # Main horizontal line
+        f.write(f'  <line x1="{scale_bar_x}" y1="{scale_bar_y}" x2="{scale_bar_x + scale_bar_length}" y2="{scale_bar_y}" '
+                f'stroke="black" stroke-width="2"/>\n')
+        
+        # Left tick mark
+        f.write(f'  <line x1="{scale_bar_x}" y1="{scale_bar_y-scale_bar_height}" x2="{scale_bar_x}" y2="{scale_bar_y+scale_bar_height}" '
+                f'stroke="black" stroke-width="2"/>\n')
+        
+        # Right tick mark  
+        f.write(f'  <line x1="{scale_bar_x + scale_bar_length}" y1="{scale_bar_y-scale_bar_height}" x2="{scale_bar_x + scale_bar_length}" y2="{scale_bar_y+scale_bar_height}" '
+                f'stroke="black" stroke-width="2"/>\n')
+        
+        # Scale bar label
+        f.write(f'  <text x="{scale_bar_x + scale_bar_length/2}" y="{scale_bar_y + 18}" text-anchor="middle" '
+                f'font-family="Arial" font-size="10" fill="black">10mm</text>\n')
 
         # Nozzle info (scaled)
         outer_diameter = self.config.get("nozzle", "outer_diameter", 0.4)
