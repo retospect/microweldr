@@ -3,9 +3,9 @@
 import math
 import re
 import xml.etree.ElementTree as ET
-from typing import List, Tuple, Optional
+from typing import List, Optional, Tuple
 
-from svg_welder.core.models import WeldPoint, WeldPath
+from svg_welder.core.models import WeldPath, WeldPoint
 
 
 class SVGParseError(Exception):

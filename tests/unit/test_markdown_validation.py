@@ -17,16 +17,12 @@ class TestMarkdownValidation:
 
         # Find all .md files in the project
         for md_file in project_root.rglob("*.md"):
-            # Skip files in build/dist directories
-            if any(
-                part in md_file.parts
-                for part in ["build", "dist", ".git", "__pycache__"]
-            ):
+            # Skip files in build/dist/venv directories
+            if any(part in md_file.parts for part in ['build', 'dist', '.git', '__pycache__', 'venv', '.venv']):
                 continue
             markdown_files.append(md_file)
 
         return markdown_files
-
     def test_markdown_files_exist(self):
         """Test that expected markdown files exist."""
         project_root = Path(__file__).parent.parent.parent
