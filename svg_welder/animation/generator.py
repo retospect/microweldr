@@ -107,16 +107,12 @@ class AnimationGenerator:
         """Write title and timing information."""
         scale_factor = 3.0
 
-        f.write(
-            f'  <text x="{width/2}" y="{60*scale_factor}" text-anchor="middle" font-family="Arial" '
-            f'font-size="{42*scale_factor}" fill="black">SVG Welding Animation</text>\n'
-        )
-
-        f.write(
-            f'  <text x="{width/2}" y="{105*scale_factor}" text-anchor="middle" font-family="Arial" '
-            f'font-size="{30*scale_factor}" fill="gray">Duration: {animation_duration:.1f}s | '
-            f"Weld interval: {time_between_welds}s | Pause time: {pause_time}s</text>\n"
-        )
+        f.write(f'  <text x="{width/2}" y="{60*scale_factor}" text-anchor="middle" font-family="Arial" '
+                f'font-size="{14*scale_factor}" fill="black">SVG Welding Animation</text>\n')
+        
+        f.write(f'  <text x="{width/2}" y="{105*scale_factor}" text-anchor="middle" font-family="Arial" '
+                f'font-size="{10*scale_factor}" fill="gray">Duration: {animation_duration:.1f}s | '
+                f'Weld interval: {time_between_welds}s | Pause time: {pause_time}s</text>\n')
 
     def _write_animation_elements(
         self,
@@ -199,7 +195,7 @@ class AnimationGenerator:
         # Scale message box and text for larger canvas
         box_width = 120 * scale_factor
         box_height = 25 * scale_factor
-        font_size = 9 * scale_factor
+        font_size = 3 * scale_factor  # Reduced from 9 to 3 (1/3 size)
 
         # Message background - appears immediately, no fade-in
         f.write(
@@ -234,12 +230,9 @@ class AnimationGenerator:
             f'begin="{current_time:.2f}s" fill="freeze" additive="sum"/>\n'
         )
 
-        # Opacity animation
-        f.write(
-            f'    <animate attributeName="opacity" values="0;1;1;0.8" '
-            f'dur="{animation_duration}s" begin="{current_time:.2f}s" '
-            f'repeatCount="indefinite"/>\n'
-        )
+        # Opacity animation - instant on, no fade
+        f.write(f'    <animate attributeName="opacity" values="0;1" '
+                f'dur="0.01s" begin="{current_time:.2f}s" fill="freeze"/>\n')
 
         # Red circle (stop indicator) - scale radius
         scaled_radius = radius * scale_factor
@@ -273,43 +266,30 @@ class AnimationGenerator:
         f.write(f'  <g transform="translate({x:.2f},{y:.2f})" opacity="0">\n')
 
         # Flip animation: scale from 0 to 1 with a "flip" effect (preserving translation)
-        f.write(
-            f'    <animateTransform attributeName="transform" type="scale" '
-            f'values="0,0;0.2,1.2;1.1,0.9;1,1" dur="0.3s" '
-            f'begin="{current_time:.2f}s" fill="freeze" additive="sum"/>\n'
-        )
+        f.write(f'    <animateTransform attributeName="transform" type="scale" '
+                f'values="0,0;0.2,1.2;1.1,0.9;1,1" dur="0.3s" '
+                f'begin="{current_time:.2f}s" fill="freeze" additive="sum"/>\n')
 
-        # Opacity animation
-        f.write(
-            f'    <animate attributeName="opacity" values="0;1;1;0.7" '
-            f'dur="{animation_duration}s" begin="{current_time:.2f}s" '
-            f'repeatCount="indefinite"/>\n'
-        )
+        # Opacity animation - instant on, no fade
+        f.write(f'    <animate attributeName="opacity" values="0;1" '
+                f'dur="0.01s" begin="{current_time:.2f}s" fill="freeze"/>\n')
 
         # Outer ring (nozzle contact area)
         ring_color = self._get_ring_color(color)
-        f.write(
-            f'    <circle cx="0" cy="0" r="{outer_radius_scaled:.2f}" '
-            f'fill="{ring_color}" stroke="{color}" stroke-width="{0.5*scale_factor}" opacity="0.8"/>\n'
-        )
+        f.write(f'    <circle cx="0" cy="0" r="{outer_radius_scaled:.2f}" '
+                f'fill="{ring_color}" stroke="{color}" stroke-width="{0.5*scale_factor}" opacity="0.8"/>\n')
 
         # Inner ring (heated zone)
         inner_color = self._get_inner_ring_color(color)
-        f.write(
-            f'    <circle cx="0" cy="0" r="{inner_radius_scaled:.2f}" '
-            f'fill="{inner_color}" opacity="0.9"/>\n'
-        )
+        f.write(f'    <circle cx="0" cy="0" r="{inner_radius_scaled:.2f}" '
+                f'fill="{inner_color}" opacity="0.9"/>\n')
 
         # Heat effect (subtle glow)
-        f.write(
-            f'    <circle cx="0" cy="0" r="{outer_radius_scaled * 1.3:.2f}" '
-            f'fill="{ring_color}" opacity="0.1">\n'
-        )
-        f.write(
-            f'      <animate attributeName="opacity" values="0.1;0.3;0.1" '
-            f'dur="1s" begin="{current_time:.2f}s" repeatCount="indefinite"/>\n'
-        )
-        f.write("    </circle>\n")
+        f.write(f'    <circle cx="0" cy="0" r="{outer_radius_scaled * 1.3:.2f}" '
+                f'fill="{ring_color}" opacity="0.1">\n')
+        f.write(f'      <animate attributeName="opacity" values="0.1;0.3;0.1" '
+                f'dur="1s" begin="{current_time:.2f}s" repeatCount="indefinite"/>\n')
+        f.write('    </circle>\n')
 
         # Center dot (weld point) - scale radius
         center_dot_radius = 0.5 * scale_factor
@@ -335,7 +315,7 @@ class AnimationGenerator:
         """Write legend explaining weld types with nozzle ring examples and scale bar."""
         scale_factor = 3.0
         legend_y = height - 80  # More space for scale bar
-        font_size = 10 * scale_factor
+        font_size = 3.33 * scale_factor  # Reduced from 10 to 3.33 (1/3 size)
 
         f.write(
             f'  <text x="{30*scale_factor}" y="{legend_y}" font-family="Arial" font-size="{font_size}" '
@@ -345,40 +325,30 @@ class AnimationGenerator:
         # Normal welds - orange nozzle ring (scaled)
         normal_x = 180 * scale_factor
         f.write(f'  <g transform="translate({normal_x},{legend_y-12*scale_factor})">\n')
-        f.write(
-            f'    <circle cx="0" cy="0" r="{6*scale_factor}" fill="#FFB347" stroke="black" stroke-width="{scale_factor}"/>\n'
-        )
+        f.write(f'    <circle cx="0" cy="0" r="{6*scale_factor}" fill="#FFB347" stroke="black" stroke-width="{scale_factor}"/>\n')
         f.write(f'    <circle cx="0" cy="0" r="{3*scale_factor}" fill="#FF6347"/>\n')
         f.write(f'    <circle cx="0" cy="0" r="{scale_factor}" fill="black"/>\n')
-        f.write("  </g>\n")
-        f.write(
-            f'  <text x="{210*scale_factor}" y="{legend_y}" font-family="Arial" font-size="{9*scale_factor}" '
-            f'fill="gray">Normal Welds (Hot)</text>\n'
-        )
+        f.write('  </g>\n')
+        f.write(f'  <text x="{210*scale_factor}" y="{legend_y}" font-family="Arial" font-size="{3*scale_factor}" '
+                f'fill="gray">Normal Welds (Hot)</text>\n')
 
         # Light welds - blue nozzle ring (scaled)
         light_x = 540 * scale_factor
         f.write(f'  <g transform="translate({light_x},{legend_y-12*scale_factor})">\n')
-        f.write(
-            f'    <circle cx="0" cy="0" r="{6*scale_factor}" fill="#87CEEB" stroke="blue" stroke-width="{scale_factor}"/>\n'
-        )
+        f.write(f'    <circle cx="0" cy="0" r="{6*scale_factor}" fill="#87CEEB" stroke="blue" stroke-width="{scale_factor}"/>\n')
         f.write(f'    <circle cx="0" cy="0" r="{3*scale_factor}" fill="#4169E1"/>\n')
         f.write(f'    <circle cx="0" cy="0" r="{scale_factor}" fill="blue"/>\n')
-        f.write("  </g>\n")
-        f.write(
-            f'  <text x="{570*scale_factor}" y="{legend_y}" font-family="Arial" font-size="{9*scale_factor}" '
-            f'fill="gray">Light Welds (Warm)</text>\n'
-        )
+        f.write('  </g>\n')
+        f.write(f'  <text x="{570*scale_factor}" y="{legend_y}" font-family="Arial" font-size="{3*scale_factor}" '
+                f'fill="gray">Light Welds (Warm)</text>\n')
 
         # Stop points (scaled)
         stop_x = 960 * scale_factor
         f.write(
             f'  <circle cx="{stop_x}" cy="{legend_y-12*scale_factor}" r="{12*scale_factor}" fill="red"/>\n'
         )
-        f.write(
-            f'  <text x="{990*scale_factor}" y="{legend_y}" font-family="Arial" font-size="{9*scale_factor}" '
-            f'fill="gray">Stop Points</text>\n'
-        )
+        f.write(f'  <text x="{990*scale_factor}" y="{legend_y}" font-family="Arial" font-size="{3*scale_factor}" '
+                f'fill="gray">Stop Points</text>\n')
 
         # Scale bar
         scale_bar_y = legend_y + 40 * scale_factor
@@ -397,17 +367,14 @@ class AnimationGenerator:
             f'  <line x1="{scale_bar_x + scale_bar_length}" y1="{scale_bar_y-5*scale_factor}" x2="{scale_bar_x + scale_bar_length}" y2="{scale_bar_y+5*scale_factor}" '
             f'stroke="black" stroke-width="{2*scale_factor}"/>\n'
         )
-        f.write(
-            f'  <text x="{scale_bar_x + scale_bar_length/2}" y="{scale_bar_y + 20*scale_factor}" text-anchor="middle" '
-            f'font-family="Arial" font-size="{8*scale_factor}" fill="black">10mm</text>\n'
-        )
+        f.write(f'  <text x="{scale_bar_x + scale_bar_length/2}" y="{scale_bar_y + 20*scale_factor}" text-anchor="middle" '
+                f'font-family="Arial" font-size="{2.67*scale_factor}" fill="black">10mm</text>\n')
 
         # Nozzle info (scaled)
         outer_diameter = self.config.get("nozzle", "outer_diameter", 0.4)
         inner_diameter = self.config.get("nozzle", "inner_diameter", 0.2)
-        f.write(
-            f'  <text x="{30*scale_factor}" y="{legend_y+80*scale_factor}" font-family="Arial" font-size="{8*scale_factor}" '
-            f'fill="gray">Nozzle: {outer_diameter}mm OD, {inner_diameter}mm ID (30x scale)</text>\n'
+        f.write(f'  <text x="{30*scale_factor}" y="{legend_y+80*scale_factor}" font-family="Arial" font-size="{2.67*scale_factor}" '
+                f'fill="gray">Nozzle: {outer_diameter}mm OD, {inner_diameter}mm ID (30x scale)</text>\n'
         )
 
     def _write_svg_footer(self, f: TextIO) -> None:
