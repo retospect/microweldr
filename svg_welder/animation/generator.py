@@ -368,26 +368,18 @@ class AnimationGenerator:
         # Legend table group
         f.write(f'  <g id="legend-table">\n')
         
-        # Row 1: Normal welds
+        # Row 1: Normal welds - simplified single circle
         row1_y = legend_start_y + row_height
         f.write(f'    <g id="normal-welds-row">\n')
-        f.write(f'      <g transform="translate({icon_x},{row1_y-6})">\n')
-        f.write(f'        <circle cx="0" cy="0" r="6" fill="#FFB347" stroke="black" stroke-width="1"/>\n')
-        f.write(f'        <circle cx="0" cy="0" r="3" fill="#FF6347"/>\n')
-        f.write(f'        <circle cx="0" cy="0" r="1" fill="black"/>\n')
-        f.write(f'      </g>\n')
+        f.write(f'      <circle cx="{icon_x}" cy="{row1_y-6}" r="6" fill="black" opacity="0.8"/>\n')
         f.write(f'      <text x="{text_x}" y="{row1_y}" font-family="Arial" font-size="{font_size*0.8}" '
                 f'fill="gray">Normal Welds (Hot)</text>\n')
         f.write(f'    </g>\n')
 
-        # Row 2: Light welds  
+        # Row 2: Light welds - simplified single circle
         row2_y = row1_y + row_height
         f.write(f'    <g id="light-welds-row">\n')
-        f.write(f'      <g transform="translate({icon_x},{row2_y-6})">\n')
-        f.write(f'        <circle cx="0" cy="0" r="6" fill="#87CEEB" stroke="blue" stroke-width="1"/>\n')
-        f.write(f'        <circle cx="0" cy="0" r="3" fill="#4169E1"/>\n')
-        f.write(f'        <circle cx="0" cy="0" r="1" fill="blue"/>\n')
-        f.write(f'      </g>\n')
+        f.write(f'      <circle cx="{icon_x}" cy="{row2_y-6}" r="6" fill="blue" opacity="0.8"/>\n')
         f.write(f'      <text x="{text_x}" y="{row2_y}" font-family="Arial" font-size="{font_size*0.8}" '
                 f'fill="gray">Light Welds (Warm)</text>\n')
         f.write(f'    </g>\n')
