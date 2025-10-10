@@ -267,12 +267,7 @@ class AnimationGenerator:
         # Create group for the nozzle ring with flip animation
         f.write(f'  <g transform="translate({x:.2f},{y:.2f})" opacity="0">\n')
 
-        # Flip animation: scale from 0 to 1 with a "flip" effect (preserving translation)
-        f.write(f'    <animateTransform attributeName="transform" type="scale" '
-                f'values="0,0;0.2,1.2;1.1,0.9;1,1" dur="0.3s" '
-                f'begin="{current_time:.2f}s" fill="freeze" additive="sum"/>\n')
-
-        # Opacity animation - instant on, no fade
+        # Instant appearance - no flip animation, just immediate visibility
         f.write(f'    <animate attributeName="opacity" values="0;1" '
                 f'dur="0.01s" begin="{current_time:.2f}s" fill="freeze"/>\n')
 
