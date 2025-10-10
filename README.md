@@ -360,18 +360,18 @@ If you're working with the source code:
 
 ```bash
 # Setup (one-time)
-poetry install
-poetry install --extras validation  # optional validation libraries
+python -m venv venv
+source venv/bin/activate  # macOS/Linux (venv\Scripts\activate on Windows)
+pip install -e .[validation,dev]
 
-# Run examples
-poetry run svg-welder examples/example.svg
-poetry run svg-welder examples/comprehensive_sample.svg
-poetry run svg-welder examples/example.svg --verbose
+# Run examples (with venv activated)
+svg-welder examples/example.svg
+svg-welder examples/comprehensive_sample.svg
+svg-welder examples/example.svg --verbose
 
-# Development shortcuts
-make run-example          # Quick example run
-make run-comprehensive    # Full sample run
-make install-dev          # Development setup
+# Alternative methods
+python -m svg_welder.cli.main examples/example.svg
+python svg_welder/cli/main.py examples/example.svg
 ```
 
 **📖 For detailed development setup, see [DEVELOPMENT.md](DEVELOPMENT.md)**
@@ -390,10 +390,10 @@ Each run generates:
 
 ### Alternative Run Methods
 ```bash
-# Using Python module (development)
+# Using Python module (with virtual environment activated)
 python -m svg_welder.cli.main examples/example.svg
 
-# Direct script execution (development)
+# Direct script execution (with virtual environment activated)
 python svg_welder/cli/main.py examples/example.svg
 
 # With custom configuration
