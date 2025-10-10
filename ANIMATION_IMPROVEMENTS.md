@@ -2,7 +2,7 @@
 
 ## Overview
 
-Updated the SVG animation generator to display pause/notification messages in a clean, static message box near the legend instead of the previous yellow/orange popup boxes.
+Updated the SVG animation generator to display pause/notification messages in a clean, static message box near the legend instead of the previous yellow/orange popup boxes. Also improved the legend with larger, more visible dots and a cleaner scale bar design.
 
 ## Changes Made
 
@@ -19,8 +19,15 @@ Updated the SVG animation generator to display pause/notification messages in a 
 - **Styling**: Red text (`#e74c3c`) for visibility
 - **Animation**: Fade in/out with opacity changes during pause duration
 
+### **Improved Legend**
+- **Larger Dots**: Increased dot radius from 0.6mm to 6px for better color perception
+- **Enhanced Visibility**: Added stroke width and higher opacity (0.9) for all legend dots
+- **Scale Bar Redesign**: Moved to top of legend as black rectangle with 10:1 aspect ratio
+- **Cleaner Layout**: Better spacing and organization of legend elements
+
 ### **Removed Elements**
 - **Old Popup Boxes**: Eliminated yellow/orange popup boxes that appeared near weld points
+- **Old Scale Bar**: Replaced line-based scale bar with solid black rectangle
 - **Clutter Reduction**: Messages no longer obstruct the welding visualization
 - **Better UX**: Static location makes messages easier to read
 
@@ -61,6 +68,8 @@ Updated the SVG animation generator to display pause/notification messages in a 
 4. **Better Readability**: Larger, clearer text in a dedicated area
 5. **Less Visual Clutter**: No more popup boxes scattered around the animation
 6. **Auto-Clear Messages**: Messages automatically clear after pause time, returning to default state
+7. **Improved Color Perception**: Larger legend dots make weld type colors clearly visible
+8. **Better Scale Reference**: Clean black rectangle scale bar with proper 10:1 aspect ratio
 
 ## Usage
 

@@ -490,27 +490,43 @@ class AnimationGenerator:
     def _write_legend(self, f: TextIO, height: float) -> None:
         """Write legend explaining weld types with nozzle ring examples and scale bar."""
         scale_factor = 3.0
-        legend_start_y = height - 120  # More space for table layout
+        legend_start_y = height - 140  # More space for scale bar at top
         font_size = 2.5 * scale_factor
         row_height = 20  # Space between legend rows
         icon_x = 30 * scale_factor  # X position for icons
         text_x = icon_x + 30  # X position for text (30px after icon)
 
-        # Legend title
+        # Scale bar at the top - black rectangle with 10:1 aspect ratio
+        scale_bar_length = 30  # 10mm represented as 30 pixels (3x scale)
+        scale_bar_height = 3   # 1mm represented as 3 pixels (10:1 ratio)
+        scale_bar_x = icon_x
+        scale_bar_y = legend_start_y
+        
         f.write(
-            f'  <text x="{icon_x}" y="{legend_start_y}" font-family="Arial" font-size="{font_size}" '
+            f'  <rect x="{scale_bar_x}" y="{scale_bar_y}" width="{scale_bar_length}" height="{scale_bar_height}" '
+            f'fill="black"/>\n'
+        )
+        f.write(
+            f'  <text x="{scale_bar_x + scale_bar_length/2}" y="{scale_bar_y + 18}" text-anchor="middle" '
+            f'font-family="Arial" font-size="10" fill="black">10mm</text>\n'
+        )
+
+        # Legend title (moved down to accommodate scale bar)
+        legend_title_y = scale_bar_y + 35
+        f.write(
+            f'  <text x="{icon_x}" y="{legend_title_y}" font-family="Arial" font-size="{font_size}" '
             f'fill="gray">Legend:</text>\n'
         )
 
         # Legend table group
         f.write(f'  <g id="legend-table">\n')
 
-        # Row 1: Normal welds - precise nozzle diameter with stroke for visibility
-        row1_y = legend_start_y + row_height
-        nozzle_radius = 0.4 / 2 * scale_factor  # 0.4mm OD = 0.2mm radius
+        # Row 1: Normal welds - larger dots for better color perception
+        row1_y = legend_title_y + row_height
+        dot_radius = 6  # Larger radius for better color visibility
         f.write(f'    <g id="normal-welds-row">\n')
         f.write(
-            f'      <circle cx="{icon_x}" cy="{row1_y-6}" r="{nozzle_radius:.2f}" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>\n'
+            f'      <circle cx="{icon_x}" cy="{row1_y-6}" r="{dot_radius}" fill="black" stroke="black" stroke-width="1" opacity="0.9"/>\n'
         )
         f.write(
             f'      <text x="{text_x}" y="{row1_y}" font-family="Arial" font-size="{font_size*0.8}" '
@@ -518,11 +534,11 @@ class AnimationGenerator:
         )
         f.write(f"    </g>\n")
 
-        # Row 2: Light welds - precise nozzle diameter with stroke for visibility
+        # Row 2: Light welds - larger dots for better color perception
         row2_y = row1_y + row_height
         f.write(f'    <g id="light-welds-row">\n')
         f.write(
-            f'      <circle cx="{icon_x}" cy="{row2_y-6}" r="{nozzle_radius:.2f}" fill="blue" stroke="blue" stroke-width="0.5" opacity="0.8"/>\n'
+            f'      <circle cx="{icon_x}" cy="{row2_y-6}" r="{dot_radius}" fill="blue" stroke="blue" stroke-width="1" opacity="0.9"/>\n'
         )
         f.write(
             f'      <text x="{text_x}" y="{row2_y}" font-family="Arial" font-size="{font_size*0.8}" '
@@ -530,10 +546,10 @@ class AnimationGenerator:
         )
         f.write(f"    </g>\n")
 
-        # Row 3: Stop points
+        # Row 3: Stop points - larger for consistency
         row3_y = row2_y + row_height
         f.write(f'    <g id="stop-points-row">\n')
-        f.write(f'      <circle cx="{icon_x}" cy="{row3_y-6}" r="8" fill="red"/>\n')
+        f.write(f'      <circle cx="{icon_x}" cy="{row3_y-6}" r="{dot_radius}" fill="red" stroke="red" stroke-width="1" opacity="0.9"/>\n')
         f.write(
             f'      <text x="{text_x}" y="{row3_y}" font-family="Arial" font-size="{font_size*0.8}" '
             f'fill="gray">Stop Points (Pause)</text>\n'
@@ -542,40 +558,8 @@ class AnimationGenerator:
 
         f.write(f"  </g>\n")
 
-        # Scale bar - use same scaling as actual weld dots (not the enlarged nozzle visualization)
-        scale_bar_y = row3_y + 40  # Position below legend table
-        # The weld dots are at actual scale (1.5px radius = 3px diameter for center dot)
-        # Scale bar should represent real-world scale, not the 30x visualization scale
-        scale_bar_length = 10 * scale_factor  # 10mm at actual scale (30 pixels)
-        scale_bar_height = 3  # 3 pixels height (10:1 ratio)
-        scale_bar_x = icon_x  # Align with legend
-
-        # Main horizontal line
-        f.write(
-            f'  <line x1="{scale_bar_x}" y1="{scale_bar_y}" x2="{scale_bar_x + scale_bar_length}" y2="{scale_bar_y}" '
-            f'stroke="black" stroke-width="2"/>\n'
-        )
-
-        # Left tick mark
-        f.write(
-            f'  <line x1="{scale_bar_x}" y1="{scale_bar_y-scale_bar_height}" x2="{scale_bar_x}" y2="{scale_bar_y+scale_bar_height}" '
-            f'stroke="black" stroke-width="2"/>\n'
-        )
-
-        # Right tick mark
-        f.write(
-            f'  <line x1="{scale_bar_x + scale_bar_length}" y1="{scale_bar_y-scale_bar_height}" x2="{scale_bar_x + scale_bar_length}" y2="{scale_bar_y+scale_bar_height}" '
-            f'stroke="black" stroke-width="2"/>\n'
-        )
-
-        # Scale bar label
-        f.write(
-            f'  <text x="{scale_bar_x + scale_bar_length/2}" y="{scale_bar_y + 18}" text-anchor="middle" '
-            f'font-family="Arial" font-size="10" fill="black">10mm</text>\n'
-        )
-
-        # Nozzle info - align with legend table
-        nozzle_info_y = scale_bar_y + 30
+        # Nozzle info - positioned below legend table
+        nozzle_info_y = row3_y + 30
         outer_diameter = self.config.get("nozzle", "outer_diameter", 0.4)
         inner_diameter = self.config.get("nozzle", "inner_diameter", 0.2)
         f.write(
