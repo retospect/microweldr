@@ -253,3 +253,100 @@ min_animation_duration = 10.0
             
         finally:
             config_path.unlink()
+
+
+class TestExampleFiles:
+    """Integration tests for example files in the examples directory."""
+
+    def test_example_svg(self):
+        """Test processing the basic example.svg file."""
+        examples_dir = Path(__file__).parent.parent.parent / "examples"
+        example_svg = examples_dir / "example.svg"
+        config_file = examples_dir / "config.toml"
+        
+        # Skip if example files don't exist
+        if not example_svg.exists() or not config_file.exists():
+            pytest.skip("Example files not found")
+        
+        config = Config(config_file)
+        converter = SVGToGCodeConverter(config)
+        
+        # Test parsing
+        weld_paths = converter.parse_svg(example_svg)
+        assert len(weld_paths) > 0
+        
+        # Test G-code generation
+        with tempfile.NamedTemporaryFile(suffix='.gcode', delete=False) as gcode_file:
+            gcode_path = Path(gcode_file.name)
+        
+        try:
+            converter.generate_gcode(gcode_path)
+            assert gcode_path.exists()
+            
+            # Verify G-code content
+            gcode_content = gcode_path.read_text()
+            assert 'G90' in gcode_content  # Absolute positioning
+            assert 'G28' in gcode_content  # Home
+            assert 'Multi-pass welding' in gcode_content  # Multi-pass feature
+            
+        finally:
+            gcode_path.unlink()
+
+    def test_all_examples_complete_workflow(self):
+        """Test complete workflow (SVG → G-code → Animation) for all examples."""
+        examples_dir = Path(__file__).parent.parent.parent / "examples"
+        config_file = examples_dir / "config.toml"
+        
+        if not config_file.exists():
+            pytest.skip("Config file not found")
+        
+        # List of example SVG files to test
+        example_files = [
+            "example.svg",
+            "comprehensive_sample.svg", 
+            "pause_examples.svg"
+        ]
+        
+        config = Config(config_file)
+        
+        for svg_filename in example_files:
+            svg_path = examples_dir / svg_filename
+            
+            if not svg_path.exists():
+                continue  # Skip missing files
+            
+            converter = SVGToGCodeConverter(config)
+            
+            # Complete workflow test
+            weld_paths = converter.parse_svg(svg_path)
+            assert len(weld_paths) > 0, f"No weld paths found in {svg_filename}"
+            
+            # Generate G-code
+            with tempfile.NamedTemporaryFile(suffix='.gcode', delete=False) as gcode_file:
+                gcode_path = Path(gcode_file.name)
+            
+            # Generate animation
+            with tempfile.NamedTemporaryFile(suffix='.svg', delete=False) as anim_file:
+                anim_path = Path(anim_file.name)
+            
+            try:
+                converter.generate_gcode(gcode_path)
+                
+                from svg_welder.animation.generator import AnimationGenerator
+                animation_generator = AnimationGenerator(config)
+                animation_generator.generate_file(weld_paths, anim_path)
+                
+                # Verify both files were created
+                assert gcode_path.exists(), f"G-code not generated for {svg_filename}"
+                assert anim_path.exists(), f"Animation not generated for {svg_filename}"
+                
+                # Basic content verification
+                gcode_content = gcode_path.read_text()
+                anim_content = anim_path.read_text()
+                
+                assert len(gcode_content) > 100, f"G-code too short for {svg_filename}"
+                assert len(anim_content) > 100, f"Animation too short for {svg_filename}"
+                
+            finally:
+                gcode_path.unlink()
+                anim_path.unlink()
