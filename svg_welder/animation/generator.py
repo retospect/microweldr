@@ -154,8 +154,11 @@ class AnimationGenerator:
             # Determine color based on weld type
             color = "blue" if path.weld_type == "light" else "black"
 
-            # Process weld points
-            for point in path.points:
+            # Process weld points in binary subdivision order
+            weld_order = self._generate_binary_subdivision_order(len(path.points))
+            
+            for point_index in weld_order:
+                point = path.points[point_index]
                 # Adjust coordinates with scale factor
                 x = (point.x - min_x + padding) * scale_factor
                 y = (point.y - min_y + padding + 40) * scale_factor  # Offset for header
@@ -166,6 +169,52 @@ class AnimationGenerator:
                 )
 
                 current_time += time_between_welds
+
+    def _generate_binary_subdivision_order(self, num_points: int) -> list[int]:
+        """Generate welding order using binary subdivision pattern.
+        
+        For a line with points [0,1,2,3,4,5,6], the order would be:
+        1. First and last: [0, 6]
+        2. Middle of entire range: [3]
+        3. Middles of remaining gaps: [1, 5]
+        4. Middles of remaining gaps: [2, 4]
+        
+        Args:
+            num_points: Total number of points to weld
+            
+        Returns:
+            List of point indices in binary subdivision order
+        """
+        if num_points <= 0:
+            return []
+        if num_points == 1:
+            return [0]
+        if num_points == 2:
+            return [0, 1]
+            
+        order = []
+        
+        # Start with first and last points
+        order.extend([0, num_points - 1])
+        
+        # Use a queue to track segments that need subdivision
+        segments_to_subdivide = [(0, num_points - 1)]
+        
+        while segments_to_subdivide:
+            start, end = segments_to_subdivide.pop(0)
+            
+            # Find middle point of this segment
+            if end - start > 1:
+                mid = (start + end) // 2
+                order.append(mid)
+                
+                # Add new segments to subdivide (if they have gaps)
+                if mid - start > 1:
+                    segments_to_subdivide.append((start, mid))
+                if end - mid > 1:
+                    segments_to_subdivide.append((mid, end))
+        
+        return order
 
     def _write_stop_point(
         self,
