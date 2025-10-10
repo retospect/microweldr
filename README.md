@@ -22,6 +22,16 @@ A Python script that converts SVG files to Prusa Core One G-code for plastic wel
    pip install -r requirements.txt
    ```
 
+### Validation Libraries (Optional)
+The script includes optional validation for input SVG files, generated G-code, and output animations:
+
+- **lxml**: Advanced SVG structure validation
+- **gcodeparser**: G-code syntax and command validation  
+- **pygcode**: Additional G-code parsing capabilities
+- **xmlschema**: XML schema validation support
+
+If these libraries are not installed, the script will run normally but skip validation steps with warnings.
+
 ## Configuration
 
 Edit `config.toml` to adjust welding parameters:
@@ -144,15 +154,51 @@ The script generates an animated SVG file showing:
 - Endless loop animation
 - Timing based on actual welding sequence
 
+## Validation Features
+
+When validation libraries are installed, the script automatically validates:
+
+### Input SVG Validation
+- **Structure Check**: Verifies proper SVG root element and namespace
+- **Attribute Validation**: Checks for required width/height attributes
+- **Syntax Validation**: Uses lxml for robust XML syntax checking
+
+### G-code Output Validation
+- **Command Verification**: Validates G-code syntax and structure
+- **Sequence Checking**: Ensures proper initialization, homing, and temperature commands
+- **Movement Validation**: Confirms presence of required movement commands
+- **Safety Verification**: Checks for proper heating/cooling sequences
+
+### Animation SVG Validation
+- **Element Counting**: Verifies presence of animation and circle elements
+- **Structure Validation**: Ensures proper SVG animation syntax
+- **Content Verification**: Confirms animation elements match expected output
+
+All validation is **non-blocking** - the script continues processing even if validation fails, but provides detailed feedback about any issues found.
+
+## Sample Files
+
+The repository includes several example files:
+
+- **`example.svg`**: Basic demonstration of all weld types and pause messages
+- **`pause_examples.svg`**: Comprehensive examples of different pause message attributes
+- **`comprehensive_sample.svg`**: Full-featured sample demonstrating all capabilities including:
+  - Multiple normal weld shapes (lines, rectangles, circles, complex paths)
+  - Light weld patterns with curved paths
+  - Stop points with various message attributes
+  - Processing order indicators
+  - Complete workflow demonstration
+
 ## Example Workflow
 
-1. Create an SVG file with your welding pattern
+1. Create an SVG file with your welding pattern (or use `comprehensive_sample.svg`)
 2. Use black paths for normal welds, blue for light welds
-3. Add red elements where you need manual stops
+3. Add red elements where you need manual stops with custom messages
 4. Run the script: `python svg_to_gcode_welder.py pattern.svg`
-5. Load the generated G-code file on your Prusa Core One
-6. Insert plastic sheets when prompted
-7. Monitor the welding process
+5. Review validation output for any issues
+6. Load the generated G-code file on your Prusa Core One
+7. Insert plastic sheets when prompted
+8. Monitor the welding process and respond to custom pause messages
 
 ## Safety Notes
 
