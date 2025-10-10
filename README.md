@@ -94,14 +94,14 @@ weld_height = 0.2          # mm - welding height
 
 [normal_welds]
 weld_temperature = 200     # °C
-dot_spacing = 2.0          # mm - final desired spacing
+dot_spacing = 0.3          # mm - final desired spacing
 initial_dot_spacing = 8.0  # mm - spacing for first pass (wider)
 cooling_time_between_passes = 2.0  # seconds - cooling between passes
 
 [light_welds]
 weld_temperature = 180     # °C - lower temperature
 spot_dwell_time = 0.3      # seconds - shorter time
-dot_spacing = 3.0          # mm - final desired spacing
+dot_spacing = 0.3          # mm - final desired spacing
 initial_dot_spacing = 12.0 # mm - spacing for first pass (wider)
 cooling_time_between_passes = 1.5  # seconds - cooling between passes
 

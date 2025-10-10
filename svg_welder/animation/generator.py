@@ -328,10 +328,12 @@ class AnimationGenerator:
             f'dur="0.01s" begin="{current_time:.2f}s" fill="freeze"/>\n'
         )
 
-        # Single colored circle with nozzle outer diameter
+        # Single colored circle with precise nozzle outer diameter (not enlarged for visibility)
+        # Use actual scale: outer_radius * scale_factor (no 10x enlargement)
+        actual_radius = outer_radius * scale_factor
         f.write(
-            f'    <circle cx="0" cy="0" r="{outer_radius_scaled:.2f}" '
-            f'fill="{color}" opacity="0.8"/>\n'
+            f'    <circle cx="0" cy="0" r="{actual_radius:.2f}" '
+            f'fill="{color}" stroke="{color}" stroke-width="0.5" opacity="0.8"/>\n'
         )
 
         f.write("  </g>\n")
@@ -368,18 +370,19 @@ class AnimationGenerator:
         # Legend table group
         f.write(f'  <g id="legend-table">\n')
         
-        # Row 1: Normal welds - simplified single circle
+        # Row 1: Normal welds - precise nozzle diameter with stroke for visibility
         row1_y = legend_start_y + row_height
+        nozzle_radius = 0.4 / 2 * scale_factor  # 0.4mm OD = 0.2mm radius
         f.write(f'    <g id="normal-welds-row">\n')
-        f.write(f'      <circle cx="{icon_x}" cy="{row1_y-6}" r="6" fill="black" opacity="0.8"/>\n')
+        f.write(f'      <circle cx="{icon_x}" cy="{row1_y-6}" r="{nozzle_radius:.2f}" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>\n')
         f.write(f'      <text x="{text_x}" y="{row1_y}" font-family="Arial" font-size="{font_size*0.8}" '
                 f'fill="gray">Normal Welds (Hot)</text>\n')
         f.write(f'    </g>\n')
 
-        # Row 2: Light welds - simplified single circle
+        # Row 2: Light welds - precise nozzle diameter with stroke for visibility
         row2_y = row1_y + row_height
         f.write(f'    <g id="light-welds-row">\n')
-        f.write(f'      <circle cx="{icon_x}" cy="{row2_y-6}" r="6" fill="blue" opacity="0.8"/>\n')
+        f.write(f'      <circle cx="{icon_x}" cy="{row2_y-6}" r="{nozzle_radius:.2f}" fill="blue" stroke="blue" stroke-width="0.5" opacity="0.8"/>\n')
         f.write(f'      <text x="{text_x}" y="{row2_y}" font-family="Arial" font-size="{font_size*0.8}" '
                 f'fill="gray">Light Welds (Warm)</text>\n')
         f.write(f'    </g>\n')
@@ -432,7 +435,7 @@ class AnimationGenerator:
         inner_diameter = self.config.get("nozzle", "inner_diameter", 0.2)
         f.write(
             f'  <text x="{icon_x}" y="{nozzle_info_y}" font-family="Arial" font-size="8" '
-            f'fill="gray">Nozzle: {outer_diameter}mm OD, {inner_diameter}mm ID (30x scale)</text>\n'
+            f'fill="gray">Nozzle: {outer_diameter}mm OD, {inner_diameter}mm ID (actual scale)</text>\n'
         )
 
     def _write_svg_footer(self, f: TextIO) -> None:

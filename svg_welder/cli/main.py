@@ -50,6 +50,12 @@ Examples:
     parser.add_argument(
         "--verbose", "-v", action="store_true", help="Enable verbose output"
     )
+    parser.add_argument(
+        "--weld-sequence",
+        choices=["linear", "binary", "farthest"],
+        default="farthest",
+        help="Welding sequence algorithm: linear (1,2,3...), binary (binary subdivision), farthest (greedy farthest-point traversal, default)"
+    )
 
     return parser
 
