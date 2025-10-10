@@ -15,7 +15,7 @@ class TestAnimationGenerator:
 
     def create_temp_config(self, content: str) -> Path:
         """Create a temporary config file for testing."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.toml', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".toml", delete=False) as f:
             f.write(content)
             return Path(f.name)
 
@@ -76,14 +76,14 @@ skip_base_distance = 5
         """Test animation generator initialization."""
         config = self.create_test_config()
         generator = AnimationGenerator(config)
-        
+
         assert generator.config == config
 
     def test_generate_basic_animation(self):
         """Test generating basic animation."""
         config = self.create_test_config()
         generator = AnimationGenerator(config)
-        
+
         weld_paths = [
             WeldPath(
                 svg_id="test1",
@@ -92,36 +92,36 @@ skip_base_distance = 5
                     WeldPoint(10.0, 10.0, "normal"),
                     WeldPoint(20.0, 10.0, "normal"),
                     WeldPoint(30.0, 10.0, "normal"),
-                ]
+                ],
             )
         ]
-        
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.svg', delete=False) as f:
+
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".svg", delete=False) as f:
             output_path = Path(f.name)
-        
+
         try:
             generator.generate_file(weld_paths, output_path)
-            
+
             # Verify file was created
             assert output_path.exists()
             assert output_path.stat().st_size > 0
-            
+
             # Read and verify content
             content = output_path.read_text()
-            
+
             # Check for SVG structure
             assert '<?xml version="1.0" encoding="UTF-8"?>' in content
-            assert '<svg' in content
-            assert '</svg>' in content
-            
+            assert "<svg" in content
+            assert "</svg>" in content
+
             # Check for animation elements
-            assert 'animate' in content
-            assert 'circle' in content
-            
+            assert "animate" in content
+            assert "circle" in content
+
             # Check for title and timing info
             assert "SVG Welding Animation" in content
             assert "Duration:" in content
-            
+
         finally:
             if output_path.exists():
                 output_path.unlink()
@@ -130,42 +130,42 @@ skip_base_distance = 5
         """Test generating animation with different weld types."""
         config = self.create_test_config()
         generator = AnimationGenerator(config)
-        
+
         weld_paths = [
             WeldPath(
                 svg_id="normal1",
                 weld_type="normal",
-                points=[WeldPoint(10.0, 10.0, "normal")]
+                points=[WeldPoint(10.0, 10.0, "normal")],
             ),
             WeldPath(
                 svg_id="light1",
                 weld_type="light",
-                points=[WeldPoint(20.0, 10.0, "light")]
+                points=[WeldPoint(20.0, 10.0, "light")],
             ),
             WeldPath(
                 svg_id="stop1",
                 weld_type="stop",
                 points=[WeldPoint(30.0, 10.0, "stop")],
-                pause_message="Test pause"
-            )
+                pause_message="Test pause",
+            ),
         ]
-        
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.svg', delete=False) as f:
+
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".svg", delete=False) as f:
             output_path = Path(f.name)
-        
+
         try:
             generator.generate_file(weld_paths, output_path)
-            
+
             content = output_path.read_text()
-            
+
             # Check for different colors/types
             assert 'fill="black"' in content  # Normal welds
-            assert 'fill="blue"' in content   # Light welds
-            assert 'fill="red"' in content    # Stop points
-            
+            assert 'fill="blue"' in content  # Light welds
+            assert 'fill="red"' in content  # Stop points
+
             # Check for pause message
             assert "Test pause" in content
-            
+
         finally:
             if output_path.exists():
                 output_path.unlink()
@@ -174,32 +174,34 @@ skip_base_distance = 5
         """Test generating animation with different weld sequences."""
         config = self.create_test_config()
         generator = AnimationGenerator(config)
-        
+
         weld_paths = [
             WeldPath(
                 svg_id="test1",
                 weld_type="normal",
-                points=[WeldPoint(float(i), 10.0, "normal") for i in range(10, 50, 5)]
+                points=[WeldPoint(float(i), 10.0, "normal") for i in range(10, 50, 5)],
             )
         ]
-        
+
         sequences = ["linear", "binary", "farthest", "skip"]
-        
+
         for sequence in sequences:
-            with tempfile.NamedTemporaryFile(mode='w', suffix='.svg', delete=False) as f:
+            with tempfile.NamedTemporaryFile(
+                mode="w", suffix=".svg", delete=False
+            ) as f:
                 output_path = Path(f.name)
-            
+
             try:
                 generator.generate_file(weld_paths, output_path, weld_sequence=sequence)
-                
+
                 # Verify file was created
                 assert output_path.exists()
                 content = output_path.read_text()
-                
+
                 # Should contain animation elements
-                assert 'animate' in content
-                assert 'circle' in content
-                
+                assert "animate" in content
+                assert "circle" in content
+
             finally:
                 if output_path.exists():
                     output_path.unlink()
@@ -208,30 +210,30 @@ skip_base_distance = 5
         """Test that animation includes legend."""
         config = self.create_test_config()
         generator = AnimationGenerator(config)
-        
+
         weld_paths = [
             WeldPath(
                 svg_id="test1",
                 weld_type="normal",
-                points=[WeldPoint(10.0, 10.0, "normal")]
+                points=[WeldPoint(10.0, 10.0, "normal")],
             )
         ]
-        
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.svg', delete=False) as f:
+
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".svg", delete=False) as f:
             output_path = Path(f.name)
-        
+
         try:
             generator.generate_file(weld_paths, output_path)
-            
+
             content = output_path.read_text()
-            
+
             # Check for legend elements
             assert "Legend:" in content
             assert "Normal Welds" in content
             assert "Light Welds" in content
             assert "Stop Points" in content
             assert "10mm" in content  # Scale bar
-            
+
         finally:
             if output_path.exists():
                 output_path.unlink()
@@ -240,29 +242,29 @@ skip_base_distance = 5
         """Test that animation includes message box."""
         config = self.create_test_config()
         generator = AnimationGenerator(config)
-        
+
         weld_paths = [
             WeldPath(
                 svg_id="stop1",
                 weld_type="stop",
                 points=[WeldPoint(10.0, 10.0, "stop")],
-                pause_message="Test notification"
+                pause_message="Test notification",
             )
         ]
-        
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.svg', delete=False) as f:
+
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".svg", delete=False) as f:
             output_path = Path(f.name)
-        
+
         try:
             generator.generate_file(weld_paths, output_path)
-            
+
             content = output_path.read_text()
-            
+
             # Check for message box
             assert 'id="message-box"' in content
             assert "Notifications:" in content
             assert "No active notifications" in content
-            
+
         finally:
             if output_path.exists():
                 output_path.unlink()
@@ -271,20 +273,20 @@ skip_base_distance = 5
         """Test generating animation with no weld paths."""
         config = self.create_test_config()
         generator = AnimationGenerator(config)
-        
+
         weld_paths = []
-        
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.svg', delete=False) as f:
+
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".svg", delete=False) as f:
             output_path = Path(f.name)
-        
+
         try:
             # Empty weld paths should not crash but may not generate content
             # The animation generator might skip generation for empty paths
             generator.generate_file(weld_paths, output_path)
-            
+
             # File should exist (even if empty or minimal)
             assert output_path.exists()
-            
+
         finally:
             if output_path.exists():
                 output_path.unlink()
@@ -293,11 +295,11 @@ skip_base_distance = 5
         """Test linear weld order generation."""
         config = self.create_test_config()
         generator = AnimationGenerator(config)
-        
+
         # Test linear order
         points = [WeldPoint(float(i), 10.0, "normal") for i in range(5)]
         order = generator._generate_weld_order(points, "linear")
-        
+
         # Linear should be [0, 1, 2, 3, 4]
         assert order == list(range(len(points)))
 
@@ -305,21 +307,21 @@ skip_base_distance = 5
         """Test skip weld order generation."""
         config = self.create_test_config()
         generator = AnimationGenerator(config)
-        
+
         # Test skip order with 10 points
         points = [WeldPoint(float(i), 10.0, "normal") for i in range(10)]
         order = generator._generate_weld_order(points, "skip")
-        
+
         # Skip should start with every 5th point (0, 5), then fill gaps
         assert len(order) == len(points)
         assert 0 in order
         assert 5 in order
-        
+
     def test_calculate_bounds(self):
         """Test bounds calculation."""
         config = self.create_test_config()
         generator = AnimationGenerator(config)
-        
+
         weld_paths = [
             WeldPath(
                 svg_id="test1",
@@ -328,11 +330,11 @@ skip_base_distance = 5
                     WeldPoint(10.0, 20.0, "normal"),
                     WeldPoint(50.0, 80.0, "normal"),
                     WeldPoint(30.0, 40.0, "normal"),
-                ]
+                ],
             )
         ]
-        
+
         bounds = generator._calculate_bounds(weld_paths)
-        
+
         # Should return (min_x, min_y, max_x, max_y)
         assert bounds == (10.0, 20.0, 50.0, 80.0)

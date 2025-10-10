@@ -208,7 +208,9 @@ class SVGParser:
         # Close the circle by adding the first point again at the end
         if points:
             first_point = points[0]
-            points.append(WeldPoint(first_point.x, first_point.y, first_point.weld_type))
+            points.append(
+                WeldPoint(first_point.x, first_point.y, first_point.weld_type)
+            )
 
         return self._interpolate_points(points)
 

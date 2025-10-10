@@ -498,10 +498,10 @@ class AnimationGenerator:
 
         # Scale bar at the top - black rectangle with 10:1 aspect ratio
         scale_bar_length = 30  # 10mm represented as 30 pixels (3x scale)
-        scale_bar_height = 3   # 1mm represented as 3 pixels (10:1 ratio)
+        scale_bar_height = 3  # 1mm represented as 3 pixels (10:1 ratio)
         scale_bar_x = icon_x
         scale_bar_y = legend_start_y
-        
+
         f.write(
             f'  <rect x="{scale_bar_x}" y="{scale_bar_y}" width="{scale_bar_length}" height="{scale_bar_height}" '
             f'fill="black"/>\n'
@@ -549,7 +549,9 @@ class AnimationGenerator:
         # Row 3: Stop points - larger for consistency
         row3_y = row2_y + row_height
         f.write(f'    <g id="stop-points-row">\n')
-        f.write(f'      <circle cx="{icon_x}" cy="{row3_y-6}" r="{dot_radius}" fill="red" stroke="red" stroke-width="1" opacity="0.9"/>\n')
+        f.write(
+            f'      <circle cx="{icon_x}" cy="{row3_y-6}" r="{dot_radius}" fill="red" stroke="red" stroke-width="1" opacity="0.9"/>\n'
+        )
         f.write(
             f'      <text x="{text_x}" y="{row3_y}" font-family="Arial" font-size="{font_size*0.8}" '
             f'fill="gray">Stop Points (Pause)</text>\n'
