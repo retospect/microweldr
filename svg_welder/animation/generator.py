@@ -142,6 +142,7 @@ class AnimationGenerator:
                         animation_duration,
                         current_time,
                         scale_factor,
+                        pause_time,
                     )
                 current_time += pause_time
                 continue
@@ -172,6 +173,7 @@ class AnimationGenerator:
         animation_duration: float,
         current_time: float,
         scale_factor: float,
+        pause_time: float,
     ) -> None:
         """Write stop point as red circle with immediate user message display."""
         point = path.points[0]
@@ -197,25 +199,25 @@ class AnimationGenerator:
         box_height = 25 * scale_factor
         font_size = 3 * scale_factor  # Reduced from 9 to 3 (1/3 size)
 
-        # Message background - appears immediately, no fade-in
+        # Message background - appears during pause duration only
         f.write(
             f'  <rect x="{x-box_width/2}" y="{y-box_height-10}" width="{box_width}" height="{box_height}" '
             f'fill="yellow" stroke="red" stroke-width="{2*scale_factor}" opacity="0">\n'
         )
         f.write(
-            f'    <animate attributeName="opacity" values="0;0.95" '
-            f'dur="0.1s" begin="{current_time:.2f}s" fill="freeze"/>\n'
+            f'    <animate attributeName="opacity" values="0;0.95;0.95;0" '
+            f'dur="{pause_time:.2f}s" begin="{current_time:.2f}s" fill="freeze"/>\n'
         )
         f.write("  </rect>\n")
 
-        # Message text - appears immediately, no fade-in
+        # Message text - appears during pause duration only
         f.write(
             f'  <text x="{x}" y="{y-box_height/2}" text-anchor="middle" font-family="Arial" '
             f'font-size="{font_size}" font-weight="bold" fill="red" opacity="0">\n'
         )
         f.write(
-            f'    <animate attributeName="opacity" values="0;1" '
-            f'dur="0.1s" begin="{current_time:.2f}s" fill="freeze"/>\n'
+            f'    <animate attributeName="opacity" values="0;1;1;0" '
+            f'dur="{pause_time:.2f}s" begin="{current_time:.2f}s" fill="freeze"/>\n'
         )
         f.write(f'    {safe_message[:25]}{"..." if len(safe_message) > 25 else ""}\n')
         f.write("  </text>\n")
@@ -230,9 +232,9 @@ class AnimationGenerator:
             f'begin="{current_time:.2f}s" fill="freeze" additive="sum"/>\n'
         )
 
-        # Opacity animation - instant on, no fade
-        f.write(f'    <animate attributeName="opacity" values="0;1" '
-                f'dur="0.01s" begin="{current_time:.2f}s" fill="freeze"/>\n')
+        # Opacity animation - show only during pause duration
+        f.write(f'    <animate attributeName="opacity" values="0;1;1;0" '
+                f'dur="{pause_time:.2f}s" begin="{current_time:.2f}s" fill="freeze"/>\n')
 
         # Red circle (stop indicator) - scale radius
         scaled_radius = radius * scale_factor
