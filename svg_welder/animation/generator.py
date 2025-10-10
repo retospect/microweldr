@@ -15,9 +15,15 @@ class AnimationGenerator:
         self.config = config
 
     def generate_file(
-        self, weld_paths: List[WeldPath], output_path: str | Path
+        self, weld_paths: List[WeldPath], output_path: str | Path, weld_sequence: str = "farthest"
     ) -> None:
-        """Generate animated SVG file from weld paths."""
+        """Generate animated SVG file from weld paths.
+        
+        Args:
+            weld_paths: List of weld paths to animate
+            output_path: Path to output SVG file
+            weld_sequence: Welding sequence algorithm ('linear', 'binary', 'farthest')
+        """
         if not weld_paths:
             return
 
@@ -66,6 +72,7 @@ class AnimationGenerator:
                 animation_duration,
                 time_between_welds,
                 pause_time,
+                weld_sequence,
             )
             self._write_legend(f, height)
             self._write_svg_footer(f)
@@ -127,6 +134,7 @@ class AnimationGenerator:
         animation_duration: float,
         time_between_welds: float,
         pause_time: float,
+        weld_sequence: str,
     ) -> None:
         """Write animation elements for weld paths."""
         min_x, min_y, max_x, max_y = bounds
@@ -154,8 +162,8 @@ class AnimationGenerator:
             # Determine color based on weld type
             color = "blue" if path.weld_type == "light" else "black"
 
-            # Process weld points in binary subdivision order
-            weld_order = self._generate_binary_subdivision_order(len(path.points))
+            # Process weld points in selected sequence order
+            weld_order = self._generate_weld_order(path.points, weld_sequence)
             
             for point_index in weld_order:
                 point = path.points[point_index]
@@ -169,6 +177,78 @@ class AnimationGenerator:
                 )
 
                 current_time += time_between_welds
+
+    def _generate_weld_order(self, points: list, weld_sequence: str) -> list[int]:
+        """Generate welding order based on selected algorithm.
+        
+        Args:
+            points: List of weld points
+            weld_sequence: Algorithm to use ('linear', 'binary', 'farthest')
+            
+        Returns:
+            List of point indices in welding order
+        """
+        num_points = len(points)
+        
+        if weld_sequence == "linear":
+            return self._generate_linear_order(num_points)
+        elif weld_sequence == "binary":
+            return self._generate_binary_subdivision_order(num_points)
+        elif weld_sequence == "farthest":
+            return self._generate_farthest_point_order(points)
+        else:
+            # Default to farthest point
+            return self._generate_farthest_point_order(points)
+
+    def _generate_linear_order(self, num_points: int) -> list[int]:
+        """Generate linear welding order (1, 2, 3, ...)."""
+        return list(range(num_points))
+
+    def _generate_farthest_point_order(self, points: list) -> list[int]:
+        """Generate welding order using Greedy Farthest-Point Traversal.
+        
+        This algorithm places each dot at the position farthest from the most recent dot,
+        which helps minimize thermal stress by maximizing distance between consecutive welds.
+        
+        Args:
+            points: List of Point objects with x, y coordinates
+            
+        Returns:
+            List of point indices in farthest-point order
+        """
+        if len(points) <= 1:
+            return list(range(len(points)))
+        
+        order = []
+        remaining = set(range(len(points)))
+        
+        # Start with the first point (arbitrary choice)
+        current_idx = 0
+        order.append(current_idx)
+        remaining.remove(current_idx)
+        
+        while remaining:
+            current_point = points[current_idx]
+            max_distance = -1
+            farthest_idx = None
+            
+            # Find the point farthest from current point
+            for idx in remaining:
+                candidate_point = points[idx]
+                # Calculate Euclidean distance
+                distance = ((candidate_point.x - current_point.x) ** 2 + 
+                           (candidate_point.y - current_point.y) ** 2) ** 0.5
+                
+                if distance > max_distance:
+                    max_distance = distance
+                    farthest_idx = idx
+            
+            # Move to the farthest point
+            order.append(farthest_idx)
+            remaining.remove(farthest_idx)
+            current_idx = farthest_idx
+        
+        return order
 
     def _generate_binary_subdivision_order(self, num_points: int) -> list[int]:
         """Generate welding order using binary subdivision pattern.

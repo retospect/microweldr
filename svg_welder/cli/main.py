@@ -147,7 +147,7 @@ def main() -> None:
             print(f"Generating animation: {output_animation}")
             try:
                 animation_generator = AnimationGenerator(config)
-                animation_generator.generate_file(weld_paths, output_animation)
+                animation_generator.generate_file(weld_paths, output_animation, args.weld_sequence)
 
                 # Validate generated animation
                 if not args.no_validation:
