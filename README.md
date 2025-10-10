@@ -94,12 +94,16 @@ weld_height = 0.2          # mm - welding height
 
 [normal_welds]
 weld_temperature = 200     # °C
-dot_spacing = 2.0          # mm
+dot_spacing = 2.0          # mm - final desired spacing
+initial_dot_spacing = 8.0  # mm - spacing for first pass (wider)
+cooling_time_between_passes = 2.0  # seconds - cooling between passes
 
 [light_welds]
 weld_temperature = 180     # °C - lower temperature
 spot_dwell_time = 0.3      # seconds - shorter time
-dot_spacing = 3.0          # mm - wider spacing
+dot_spacing = 3.0          # mm - final desired spacing
+initial_dot_spacing = 12.0 # mm - spacing for first pass (wider)
+cooling_time_between_passes = 1.5  # seconds - cooling between passes
 
 [nozzle]
 outer_diameter = 0.4        # mm - nozzle outer diameter
@@ -213,12 +217,38 @@ The generated G-code includes:
 2. **Bed Leveling**: Optional automatic bed leveling (G29)
 3. **Heating**: Bed and nozzle to specified temperatures
 4. **User Pause**: For inserting plastic sheets (M0)
-5. **Welding Process**: 
-   - Move to each weld point at safe height
-   - Lower to weld height
-   - Dwell for specified time
-   - Raise to safe height
+5. **Multi-Pass Welding Process**: 
+   - **Pass 1**: Create initial dots with wide spacing (allows plastic to set)
+   - **Cooling Period**: Wait between passes for plastic to cool
+   - **Pass 2+**: Fill in between previous dots until desired density achieved
+   - Each dot: Move to position → Lower → Dwell → Raise
 6. **Cooldown**: Lower temperatures and home axes
+
+## Multi-Pass Welding System
+
+The welder implements an intelligent multi-pass system that allows plastic to cool between welding operations:
+
+### How It Works
+1. **Initial Pass**: Places dots with wide spacing (`initial_dot_spacing`)
+2. **Cooling Period**: Waits for `cooling_time_between_passes` to let plastic cool
+3. **Subsequent Passes**: Progressively fills in between existing dots
+4. **Final Density**: Achieves the desired `dot_spacing` through multiple passes
+
+### Benefits
+- **Prevents Overheating**: Allows plastic to cool between passes
+- **Better Quality**: Reduces warping and material degradation
+- **Consistent Results**: Each dot gets proper cooling time
+- **Automatic Calculation**: Number of passes calculated from spacing ratio
+
+### Configuration Example
+```toml
+[normal_welds]
+dot_spacing = 2.0          # Final 2mm spacing
+initial_dot_spacing = 8.0  # Start with 8mm spacing
+cooling_time_between_passes = 2.0  # 2 seconds between passes
+```
+
+This creates **3 passes**: 8mm → 4mm → 2mm spacing with 2-second cooling between each pass.
 
 ## Animation Output
 

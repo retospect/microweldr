@@ -103,8 +103,8 @@ class Config:
             'nozzle': ['outer_diameter', 'inner_diameter'],
             'temperatures': ['bed_temperature', 'nozzle_temperature', 'cooldown_temperature'],
             'movement': ['move_height', 'travel_speed', 'z_speed'],
-            'normal_welds': ['weld_height', 'weld_temperature', 'spot_dwell_time', 'dot_spacing'],
-            'light_welds': ['weld_height', 'weld_temperature', 'spot_dwell_time', 'dot_spacing'],
+            'normal_welds': ['weld_height', 'weld_temperature', 'spot_dwell_time', 'dot_spacing', 'initial_dot_spacing', 'cooling_time_between_passes'],
+            'light_welds': ['weld_height', 'weld_temperature', 'spot_dwell_time', 'dot_spacing', 'initial_dot_spacing', 'cooling_time_between_passes'],
             'animation': ['time_between_welds', 'pause_time', 'min_animation_duration']
         }
 
@@ -137,8 +137,14 @@ class Config:
             weld_config = self.get_section(weld_type)
             if weld_config['dot_spacing'] <= 0:
                 raise ConfigError(f"{weld_type}.dot_spacing must be positive")
+            if weld_config['initial_dot_spacing'] <= 0:
+                raise ConfigError(f"{weld_type}.initial_dot_spacing must be positive")
+            if weld_config['initial_dot_spacing'] <= weld_config['dot_spacing']:
+                raise ConfigError(f"{weld_type}.initial_dot_spacing must be greater than dot_spacing")
             if weld_config['spot_dwell_time'] < 0:
                 raise ConfigError(f"{weld_type}.spot_dwell_time must be non-negative")
+            if weld_config['cooling_time_between_passes'] < 0:
+                raise ConfigError(f"{weld_type}.cooling_time_between_passes must be non-negative")
 
         # Nozzle validations
         nozzle = self.nozzle
