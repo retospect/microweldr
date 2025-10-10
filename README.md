@@ -22,7 +22,7 @@ svg-welder/
 ## Features
 
 - **SVG Processing**: Converts SVG paths, lines, circles, and rectangles to weld points
-- **Color-based Weld Types**: 
+- **Color-based Weld Types**:
   - Black elements → Normal welds
   - Blue elements → Light welds (lower temperature, shorter dwell time)
   - Red elements → Stop points (pause for user intervention)
@@ -113,6 +113,7 @@ inner_diameter = 0.2        # mm - nozzle inner diameter (opening)
 time_between_welds = 0.1    # seconds - time between weld points in animation
 pause_time = 3.0            # seconds - how long pause messages are displayed
 min_animation_duration = 10.0  # seconds - minimum total animation time
+```
 
 ## Usage
 
@@ -217,7 +218,7 @@ The generated G-code includes:
 2. **Bed Leveling**: Optional automatic bed leveling (G29)
 3. **Heating**: Bed and nozzle to specified temperatures
 4. **User Pause**: For inserting plastic sheets (M0)
-5. **Multi-Pass Welding Process**: 
+5. **Multi-Pass Welding Process**:
    - **Pass 1**: Create initial dots with wide spacing (allows plastic to set)
    - **Cooling Period**: Wait between passes for plastic to cool
    - **Pass 2+**: Fill in between previous dots until desired density achieved

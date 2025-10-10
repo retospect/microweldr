@@ -21,6 +21,9 @@ test-integration:  ## Run integration tests only
 test-examples:  ## Run example file tests only
 	pytest tests/integration/test_full_workflow.py::TestExampleFiles -v
 
+test-markdown:  ## Run markdown validation tests
+	pytest tests/unit/test_markdown_validation.py -v
+
 test-coverage:  ## Run tests with coverage report
 	pytest --cov=svg_welder --cov-report=html --cov-report=term
 
