@@ -327,57 +327,60 @@ class AnimationGenerator:
     def _write_legend(self, f: TextIO, height: float) -> None:
         """Write legend explaining weld types with nozzle ring examples and scale bar."""
         scale_factor = 3.0
-        legend_y = height - 80  # More space for scale bar
-        font_size = 2.5 * scale_factor  # Further reduced for better fit
+        legend_start_y = height - 120  # More space for table layout
+        font_size = 2.5 * scale_factor
+        row_height = 20  # Space between legend rows
+        icon_x = 30 * scale_factor  # X position for icons
+        text_x = icon_x + 30  # X position for text (30px after icon)
 
+        # Legend title
         f.write(
-            f'  <text x="{30*scale_factor}" y="{legend_y}" font-family="Arial" font-size="{font_size}" '
+            f'  <text x="{icon_x}" y="{legend_start_y}" font-family="Arial" font-size="{font_size}" '
             f'fill="gray">Legend:</text>\n'
         )
 
-        # Normal welds - orange nozzle ring (scaled)
-        normal_x = 180 * scale_factor
-        f.write(f'  <g transform="translate({normal_x},{legend_y-12*scale_factor})">\n')
-        f.write(
-            f'    <circle cx="0" cy="0" r="{6*scale_factor}" fill="#FFB347" stroke="black" stroke-width="{scale_factor}"/>\n'
-        )
-        f.write(f'    <circle cx="0" cy="0" r="{3*scale_factor}" fill="#FF6347"/>\n')
-        f.write(f'    <circle cx="0" cy="0" r="{scale_factor}" fill="black"/>\n')
-        f.write("  </g>\n")
-        f.write(
-            f'  <text x="{210*scale_factor}" y="{legend_y}" font-family="Arial" font-size="{2*scale_factor}" '
-            f'fill="gray">Normal Welds (Hot)</text>\n'
-        )
+        # Legend table group
+        f.write(f'  <g id="legend-table">\n')
+        
+        # Row 1: Normal welds
+        row1_y = legend_start_y + row_height
+        f.write(f'    <g id="normal-welds-row">\n')
+        f.write(f'      <g transform="translate({icon_x},{row1_y-6})">\n')
+        f.write(f'        <circle cx="0" cy="0" r="6" fill="#FFB347" stroke="black" stroke-width="1"/>\n')
+        f.write(f'        <circle cx="0" cy="0" r="3" fill="#FF6347"/>\n')
+        f.write(f'        <circle cx="0" cy="0" r="1" fill="black"/>\n')
+        f.write(f'      </g>\n')
+        f.write(f'      <text x="{text_x}" y="{row1_y}" font-family="Arial" font-size="{font_size*0.8}" '
+                f'fill="gray">Normal Welds (Hot)</text>\n')
+        f.write(f'    </g>\n')
 
-        # Light welds - blue nozzle ring (scaled)
-        light_x = 540 * scale_factor
-        f.write(f'  <g transform="translate({light_x},{legend_y-12*scale_factor})">\n')
-        f.write(
-            f'    <circle cx="0" cy="0" r="{6*scale_factor}" fill="#87CEEB" stroke="blue" stroke-width="{scale_factor}"/>\n'
-        )
-        f.write(f'    <circle cx="0" cy="0" r="{3*scale_factor}" fill="#4169E1"/>\n')
-        f.write(f'    <circle cx="0" cy="0" r="{scale_factor}" fill="blue"/>\n')
-        f.write("  </g>\n")
-        f.write(
-            f'  <text x="{570*scale_factor}" y="{legend_y}" font-family="Arial" font-size="{2*scale_factor}" '
-            f'fill="gray">Light Welds (Warm)</text>\n'
-        )
+        # Row 2: Light welds  
+        row2_y = row1_y + row_height
+        f.write(f'    <g id="light-welds-row">\n')
+        f.write(f'      <g transform="translate({icon_x},{row2_y-6})">\n')
+        f.write(f'        <circle cx="0" cy="0" r="6" fill="#87CEEB" stroke="blue" stroke-width="1"/>\n')
+        f.write(f'        <circle cx="0" cy="0" r="3" fill="#4169E1"/>\n')
+        f.write(f'        <circle cx="0" cy="0" r="1" fill="blue"/>\n')
+        f.write(f'      </g>\n')
+        f.write(f'      <text x="{text_x}" y="{row2_y}" font-family="Arial" font-size="{font_size*0.8}" '
+                f'fill="gray">Light Welds (Warm)</text>\n')
+        f.write(f'    </g>\n')
 
-        # Stop points (scaled)
-        stop_x = 960 * scale_factor
-        f.write(
-            f'  <circle cx="{stop_x}" cy="{legend_y-12*scale_factor}" r="{12*scale_factor}" fill="red"/>\n'
-        )
-        f.write(
-            f'  <text x="{990*scale_factor}" y="{legend_y}" font-family="Arial" font-size="{2*scale_factor}" '
-            f'fill="gray">Stop Points</text>\n'
-        )
+        # Row 3: Stop points
+        row3_y = row2_y + row_height  
+        f.write(f'    <g id="stop-points-row">\n')
+        f.write(f'      <circle cx="{icon_x}" cy="{row3_y-6}" r="8" fill="red"/>\n')
+        f.write(f'      <text x="{text_x}" y="{row3_y}" font-family="Arial" font-size="{font_size*0.8}" '
+                f'fill="gray">Stop Points (Pause)</text>\n')
+        f.write(f'    </g>\n')
+
+        f.write(f'  </g>\n')
 
         # Scale bar - reasonably sized with 10:1 length to height ratio
-        scale_bar_y = legend_y + 40 * scale_factor
+        scale_bar_y = row3_y + 40  # Position below legend table
         scale_bar_length = 50  # 50 pixels for reasonable visibility (represents 10mm)
         scale_bar_height = 5  # 5 pixels height (10:1 ratio)
-        scale_bar_x = 30 * scale_factor
+        scale_bar_x = icon_x  # Align with legend
 
         # Main horizontal line
         f.write(
@@ -403,11 +406,12 @@ class AnimationGenerator:
             f'font-family="Arial" font-size="10" fill="black">10mm</text>\n'
         )
 
-        # Nozzle info (scaled)
+        # Nozzle info - align with legend table
+        nozzle_info_y = scale_bar_y + 30
         outer_diameter = self.config.get("nozzle", "outer_diameter", 0.4)
         inner_diameter = self.config.get("nozzle", "inner_diameter", 0.2)
         f.write(
-            f'  <text x="{30*scale_factor}" y="{legend_y+80*scale_factor}" font-family="Arial" font-size="{1.5*scale_factor}" '
+            f'  <text x="{icon_x}" y="{nozzle_info_y}" font-family="Arial" font-size="8" '
             f'fill="gray">Nozzle: {outer_diameter}mm OD, {inner_diameter}mm ID (30x scale)</text>\n'
         )
 
