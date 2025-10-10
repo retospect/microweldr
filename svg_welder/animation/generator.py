@@ -118,7 +118,7 @@ class AnimationGenerator:
 
     def _write_stop_point(self, f: TextIO, path: WeldPath, min_x: float, min_y: float,
                          padding: float, animation_duration: float, current_time: float) -> None:
-        """Write stop point as red circle only."""
+        """Write stop point as red circle with immediate user message display."""
         point = path.points[0]
         x = point.x - min_x + padding
         y = point.y - min_y + padding + 40  # Offset for header
@@ -128,6 +128,25 @@ class AnimationGenerator:
             radius = max(2.0, min(path.element_radius, 8.0))  # Clamp between 2-8 for visibility
         else:
             radius = 3.0  # Default radius for non-circle stop points
+        
+        # Get pause message
+        message = path.pause_message or 'Manual intervention required'
+        safe_message = message.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+        
+        # Message background - appears immediately, no fade-in
+        f.write(f'  <rect x="{x-60}" y="{y-35}" width="120" height="25" '
+                f'fill="yellow" stroke="red" stroke-width="2" opacity="0">\n')
+        f.write(f'    <animate attributeName="opacity" values="0;0.95" '
+                f'dur="0.1s" begin="{current_time:.2f}s" fill="freeze"/>\n')
+        f.write('  </rect>\n')
+        
+        # Message text - appears immediately, no fade-in
+        f.write(f'  <text x="{x}" y="{y-18}" text-anchor="middle" font-family="Arial" '
+                f'font-size="9" font-weight="bold" fill="red" opacity="0">\n')
+        f.write(f'    <animate attributeName="opacity" values="0;1" '
+                f'dur="0.1s" begin="{current_time:.2f}s" fill="freeze"/>\n')
+        f.write(f'    {safe_message[:25]}{"..." if len(safe_message) > 25 else ""}\n')
+        f.write('  </text>\n')
         
         # Red circle with flip animation (similar to nozzle rings but simpler)
         f.write(f'  <g transform="translate({x:.2f},{y:.2f})" opacity="0">\n')
