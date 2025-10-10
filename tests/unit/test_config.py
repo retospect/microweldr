@@ -13,7 +13,7 @@ class TestConfig:
 
     def create_temp_config(self, content: str) -> Path:
         """Create a temporary config file with given content."""
-        temp_file = tempfile.NamedTemporaryFile(mode='w', suffix='.toml', delete=False)
+        temp_file = tempfile.NamedTemporaryFile(mode="w", suffix=".toml", delete=False)
         temp_file.write(content)
         temp_file.close()
         return Path(temp_file.name)
@@ -55,14 +55,14 @@ time_between_welds = 0.1
 pause_time = 3.0
 min_animation_duration = 10.0
         """
-        
+
         config_path = self.create_temp_config(config_content)
         try:
             config = Config(config_path)
-            
-            assert config.get('temperatures', 'bed_temperature') == 60
-            assert config.get('movement', 'move_height') == 5.0
-            assert config.get('normal_welds', 'dot_spacing') == 2.0
+
+            assert config.get("temperatures", "bed_temperature") == 60
+            assert config.get("movement", "move_height") == 5.0
+            assert config.get("normal_welds", "dot_spacing") == 2.0
         finally:
             config_path.unlink()
 
@@ -77,7 +77,7 @@ min_animation_duration = 10.0
 [section
 invalid toml content
         """
-        
+
         config_path = self.create_temp_config(invalid_content)
         try:
             with pytest.raises(ConfigError, match="Invalid TOML configuration"):
@@ -91,16 +91,16 @@ invalid toml content
 [test_section]
 existing_key = "value"
         """
-        
+
         config_path = self.create_temp_config(config_content)
         try:
             config = Config(config_path)
-            
+
             # Existing key
-            assert config.get('test_section', 'existing_key') == "value"
-            
+            assert config.get("test_section", "existing_key") == "value"
+
             # Non-existing key with default
-            assert config.get('test_section', 'missing_key', 'default') == 'default'
+            assert config.get("test_section", "missing_key", "default") == "default"
         finally:
             config_path.unlink()
 
@@ -110,13 +110,13 @@ existing_key = "value"
 [test_section]
 existing_key = "value"
         """
-        
+
         config_path = self.create_temp_config(config_content)
         try:
             config = Config(config_path)
-            
+
             with pytest.raises(ConfigError, match="Configuration key .* not found"):
-                config.get('test_section', 'missing_key')
+                config.get("test_section", "missing_key")
         finally:
             config_path.unlink()
 
@@ -128,13 +128,13 @@ key1 = "value1"
 key2 = 42
 key3 = true
         """
-        
+
         config_path = self.create_temp_config(config_content)
         try:
             config = Config(config_path)
-            
-            section = config.get_section('test_section')
-            assert section == {'key1': 'value1', 'key2': 42, 'key3': True}
+
+            section = config.get_section("test_section")
+            assert section == {"key1": "value1", "key2": 42, "key3": True}
         finally:
             config_path.unlink()
 
@@ -144,13 +144,13 @@ key3 = true
 [existing_section]
 key = "value"
         """
-        
+
         config_path = self.create_temp_config(config_content)
         try:
             config = Config(config_path)
-            
+
             with pytest.raises(ConfigError, match="Configuration section .* not found"):
-                config.get_section('missing_section')
+                config.get_section("missing_section")
         finally:
             config_path.unlink()
 
@@ -178,18 +178,18 @@ gcode_extension = ".gcode"
 [animation]
 time_between_welds = 0.1
         """
-        
+
         config_path = self.create_temp_config(config_content)
         try:
             config = Config(config_path)
-            
-            assert config.printer['bed_size_x'] == 250.0
-            assert config.temperatures['bed_temperature'] == 60
-            assert config.movement['move_height'] == 5.0
-            assert config.normal_welds['dot_spacing'] == 2.0
-            assert config.light_welds['dot_spacing'] == 3.0
-            assert config.output['gcode_extension'] == ".gcode"
-            assert config.animation['time_between_welds'] == 0.1
+
+            assert config.printer["bed_size_x"] == 250.0
+            assert config.temperatures["bed_temperature"] == 60
+            assert config.movement["move_height"] == 5.0
+            assert config.normal_welds["dot_spacing"] == 2.0
+            assert config.light_welds["dot_spacing"] == 3.0
+            assert config.output["gcode_extension"] == ".gcode"
+            assert config.animation["time_between_welds"] == 0.1
         finally:
             config_path.unlink()
 
@@ -229,7 +229,7 @@ time_between_welds = 0.1
 pause_time = 3.0
 min_animation_duration = 10.0
         """
-        
+
         config_path = self.create_temp_config(config_content)
         try:
             config = Config(config_path)
@@ -243,12 +243,14 @@ min_animation_duration = 10.0
 [temperatures]
 bed_temperature = 60
         """
-        
+
         config_path = self.create_temp_config(config_content)
         try:
             config = Config(config_path)
-            
-            with pytest.raises(ConfigError, match="Missing required configuration section"):
+
+            with pytest.raises(
+                ConfigError, match="Missing required configuration section"
+            ):
                 config.validate()
         finally:
             config_path.unlink()
@@ -288,11 +290,11 @@ time_between_welds = 0.1
 pause_time = 3.0
 min_animation_duration = 10.0
         """
-        
+
         config_path = self.create_temp_config(config_content)
         try:
             config = Config(config_path)
-            
+
             with pytest.raises(ConfigError, match="Missing required key"):
                 config.validate()
         finally:
@@ -334,11 +336,11 @@ time_between_welds = 0.1
 pause_time = 3.0
 min_animation_duration = 10.0
         """
-        
+
         config_path = self.create_temp_config(config_content)
         try:
             config = Config(config_path)
-            
+
             with pytest.raises(ConfigError, match="bed_temperature must be between"):
                 config.validate()
         finally:
@@ -380,11 +382,11 @@ time_between_welds = 0.1
 pause_time = 3.0
 min_animation_duration = 10.0
         """
-        
+
         config_path = self.create_temp_config(config_content)
         try:
             config = Config(config_path)
-            
+
             with pytest.raises(ConfigError, match="dot_spacing must be positive"):
                 config.validate()
         finally:

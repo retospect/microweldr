@@ -112,19 +112,24 @@ make clean
 # Activate virtual environment first
 source venv/bin/activate
 
-# Format code
+# Check code formatting (required before commits)
+make test-format
+# or
+black --check svg_welder tests
+
+# Auto-format code
+make format
+# or
 black svg_welder tests
 isort svg_welder tests
-
-# Check formatting
-black --check svg_welder tests
-isort --check-only svg_welder tests
 
 # Lint code
 flake8 svg_welder tests
 mypy svg_welder
 
-# Run all tests
+# Run all tests (includes formatting check)
+make test
+# or
 pytest
 
 # Run with coverage

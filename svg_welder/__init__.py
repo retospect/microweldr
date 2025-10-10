@@ -10,7 +10,7 @@ from svg_welder.core.config import Config
 
 __all__ = [
     "WeldPoint",
-    "WeldPath", 
+    "WeldPath",
     "SVGToGCodeConverter",
     "Config",
 ]

@@ -7,21 +7,21 @@ from typing import List, Optional
 @dataclass
 class WeldPoint:
     """Represents a single weld point."""
-    
+
     x: float
     y: float
     weld_type: str  # 'normal', 'light', or 'stop'
 
     def __post_init__(self) -> None:
         """Validate weld point data."""
-        if self.weld_type not in ('normal', 'light', 'stop'):
+        if self.weld_type not in ("normal", "light", "stop"):
             raise ValueError(f"Invalid weld_type: {self.weld_type}")
 
 
 @dataclass
 class WeldPath:
     """Represents a path with multiple weld points."""
-    
+
     points: List[WeldPoint]
     weld_type: str
     svg_id: str
@@ -31,12 +31,12 @@ class WeldPath:
 
     def __post_init__(self) -> None:
         """Validate weld path data."""
-        if self.weld_type not in ('normal', 'light', 'stop'):
+        if self.weld_type not in ("normal", "light", "stop"):
             raise ValueError(f"Invalid weld_type: {self.weld_type}")
-        
+
         if not self.points:
             raise ValueError("WeldPath must contain at least one point")
-        
+
         if not self.svg_id:
             raise ValueError("WeldPath must have a valid svg_id")
 
@@ -49,13 +49,8 @@ class WeldPath:
         """Get the bounding box of this path as (min_x, min_y, max_x, max_y)."""
         if not self.points:
             return (0.0, 0.0, 0.0, 0.0)
-        
+
         x_coords = [p.x for p in self.points]
         y_coords = [p.y for p in self.points]
-        
-        return (
-            min(x_coords),
-            min(y_coords), 
-            max(x_coords),
-            max(y_coords)
-        )
+
+        return (min(x_coords), min(y_coords), max(x_coords), max(y_coords))

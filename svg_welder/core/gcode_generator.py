@@ -15,12 +15,16 @@ class GCodeGenerator:
         """Initialize G-code generator."""
         self.config = config
 
-    def generate_file(self, weld_paths: List[WeldPath], output_path: str | Path, 
-                     skip_bed_leveling: bool = False) -> None:
+    def generate_file(
+        self,
+        weld_paths: List[WeldPath],
+        output_path: str | Path,
+        skip_bed_leveling: bool = False,
+    ) -> None:
         """Generate G-code file from weld paths."""
         output_path = Path(output_path)
-        
-        with open(output_path, 'w') as f:
+
+        with open(output_path, "w") as f:
             self._write_header(f, weld_paths)
             self._write_initialization(f, skip_bed_leveling)
             self._write_heating(f)
@@ -40,7 +44,7 @@ class GCodeGenerator:
         f.write("G90 ; Absolute positioning\n")
         f.write("M83 ; Relative extruder positioning\n")
         f.write("G28 ; Home all axes\n\n")
-        
+
         # Bed leveling (optional)
         if not skip_bed_leveling:
             f.write("; Bed leveling\n")
@@ -48,13 +52,13 @@ class GCodeGenerator:
 
     def _write_heating(self, f: TextIO) -> None:
         """Write heating commands."""
-        bed_temp = self.config.get('temperatures', 'bed_temperature')
-        nozzle_temp = self.config.get('temperatures', 'nozzle_temperature')
-        
+        bed_temp = self.config.get("temperatures", "bed_temperature")
+        nozzle_temp = self.config.get("temperatures", "nozzle_temperature")
+
         f.write(f"; Heat bed to {bed_temp}°C\n")
         f.write(f"M140 S{bed_temp} ; Set bed temperature\n")
         f.write(f"M190 S{bed_temp} ; Wait for bed temperature\n\n")
-        
+
         f.write(f"; Heat nozzle to {nozzle_temp}°C\n")
         f.write(f"M104 S{nozzle_temp} ; Set nozzle temperature\n")
         f.write(f"M109 S{nozzle_temp} ; Wait for nozzle temperature\n\n")
@@ -66,139 +70,161 @@ class GCodeGenerator:
 
     def _write_welding_sequence(self, f: TextIO, weld_paths: List[WeldPath]) -> None:
         """Write the main welding sequence."""
-        move_height = self.config.get('movement', 'move_height')
-        z_speed = self.config.get('movement', 'z_speed')
-        travel_speed = self.config.get('movement', 'travel_speed')
-        
+        move_height = self.config.get("movement", "move_height")
+        z_speed = self.config.get("movement", "z_speed")
+        travel_speed = self.config.get("movement", "travel_speed")
+
         f.write(f"G1 Z{move_height} F{z_speed} ; Move to safe height\n\n")
-        
-        current_nozzle_temp = self.config.get('temperatures', 'nozzle_temperature')
-        
+
+        current_nozzle_temp = self.config.get("temperatures", "nozzle_temperature")
+
         for path in weld_paths:
             f.write(f"; Processing path: {path.svg_id} (type: {path.weld_type})\n")
-            
-            if path.weld_type == 'stop':
+
+            if path.weld_type == "stop":
                 # Handle stop points with custom messages
-                message = path.pause_message or 'Manual intervention required'
+                message = path.pause_message or "Manual intervention required"
                 # Escape quotes and limit message length for G-code safety
-                safe_message = message.replace('"', "'").replace(';', ',')[:50]
+                safe_message = message.replace('"', "'").replace(";", ",")[:50]
                 f.write(f'M0 "{safe_message}" ; User stop requested\n\n')
                 continue
-            
+
             # Get settings for this weld type
-            weld_config = self.config.get_section(f'{path.weld_type}_welds')
-            
+            weld_config = self.config.get_section(f"{path.weld_type}_welds")
+
             # Set temperature if different
-            if weld_config['weld_temperature'] != current_nozzle_temp:
-                current_nozzle_temp = weld_config['weld_temperature']
-                f.write(f"M104 S{current_nozzle_temp} ; Set temperature for {path.weld_type} welds\n")
+            if weld_config["weld_temperature"] != current_nozzle_temp:
+                current_nozzle_temp = weld_config["weld_temperature"]
+                f.write(
+                    f"M104 S{current_nozzle_temp} ; Set temperature for {path.weld_type} welds\n"
+                )
                 f.write(f"M109 S{current_nozzle_temp} ; Wait for temperature\n")
-            
+
             # Process path with multi-pass welding
-            self._write_multipass_welding(f, path, weld_config, move_height, travel_speed, z_speed)
-            
+            self._write_multipass_welding(
+                f, path, weld_config, move_height, travel_speed, z_speed
+            )
+
             f.write("\n")
 
-    def _write_multipass_welding(self, f: TextIO, path, weld_config: dict, 
-                                move_height: float, travel_speed: int, z_speed: int) -> None:
+    def _write_multipass_welding(
+        self,
+        f: TextIO,
+        path,
+        weld_config: dict,
+        move_height: float,
+        travel_speed: int,
+        z_speed: int,
+    ) -> None:
         """Write multi-pass welding sequence for a path."""
-        
-        initial_spacing = weld_config['initial_dot_spacing']
-        final_spacing = weld_config['dot_spacing']
-        cooling_time = weld_config['cooling_time_between_passes']
-        
+
+        initial_spacing = weld_config["initial_dot_spacing"]
+        final_spacing = weld_config["dot_spacing"]
+        cooling_time = weld_config["cooling_time_between_passes"]
+
         # Calculate how many passes we need
         spacing_ratio = initial_spacing / final_spacing
         num_passes = max(1, int(math.log2(spacing_ratio)) + 1)
-        
-        f.write(f"; Multi-pass welding: {num_passes} passes from {initial_spacing}mm to {final_spacing}mm spacing\n")
-        
+
+        f.write(
+            f"; Multi-pass welding: {num_passes} passes from {initial_spacing}mm to {final_spacing}mm spacing\n"
+        )
+
         # Generate all weld points for all passes
-        all_passes_points = self._generate_multipass_points(path.points, initial_spacing, final_spacing, num_passes)
-        
+        all_passes_points = self._generate_multipass_points(
+            path.points, initial_spacing, final_spacing, num_passes
+        )
+
         # Execute each pass
         for pass_num, pass_points in enumerate(all_passes_points, 1):
             if not pass_points:
                 continue
-                
+
             f.write(f"; Pass {pass_num}/{num_passes}\n")
-            
+
             for point in pass_points:
                 # Move to position at safe height
-                f.write(f"G1 X{point.x:.3f} Y{point.y:.3f} Z{move_height} F{travel_speed}\n")
-                
+                f.write(
+                    f"G1 X{point.x:.3f} Y{point.y:.3f} Z{move_height} F{travel_speed}\n"
+                )
+
                 # Lower to weld height
                 f.write(f"G1 Z{weld_config['weld_height']:.3f} F{z_speed}\n")
-                
+
                 # Dwell for welding
-                dwell_ms = int(weld_config['spot_dwell_time'] * 1000)
+                dwell_ms = int(weld_config["spot_dwell_time"] * 1000)
                 f.write(f"G4 P{dwell_ms} ; Dwell for welding\n")
-                
+
                 # Raise to safe height
                 f.write(f"G1 Z{move_height} F{z_speed}\n")
-            
+
             # Cooling time between passes (except after the last pass)
             if pass_num < num_passes and cooling_time > 0:
                 cooling_ms = int(cooling_time * 1000)
                 f.write(f"G4 P{cooling_ms} ; Cooling time between passes\n")
-            
+
             f.write(f"; End of pass {pass_num}\n")
 
-    def _generate_multipass_points(self, original_points, initial_spacing: float, 
-                                  final_spacing: float, num_passes: int):
+    def _generate_multipass_points(
+        self,
+        original_points,
+        initial_spacing: float,
+        final_spacing: float,
+        num_passes: int,
+    ):
         """Generate points for each pass of multi-pass welding."""
-        
+
         if num_passes == 1:
             return [original_points]
-        
+
         # Create a continuous path from all points
         all_path_points = []
         for i in range(len(original_points) - 1):
             start = original_points[i]
             end = original_points[i + 1]
-            
+
             # Calculate distance
             dx = end.x - start.x
             dy = end.y - start.y
             distance = math.sqrt(dx * dx + dy * dy)
-            
+
             if distance == 0:
                 continue
-            
+
             # Generate points at final spacing along this segment
             num_points = max(1, int(distance / final_spacing))
-            
+
             for j in range(num_points + 1):
                 t = j / num_points if num_points > 0 else 0
                 x = start.x + t * dx
                 y = start.y + t * dy
                 all_path_points.append((x, y, start.weld_type))
-        
+
         # Now distribute these points across passes
         passes = [[] for _ in range(num_passes)]
-        
+
         # First pass: every 2^(num_passes-1) point
         step = 2 ** (num_passes - 1)
         for i in range(0, len(all_path_points), step):
             x, y, weld_type = all_path_points[i]
             passes[0].append(WeldPoint(x, y, weld_type))
-        
+
         # Subsequent passes: fill in between previous pass points
         for pass_num in range(1, num_passes):
             step = 2 ** (num_passes - 1 - pass_num)
             offset = step
-            
+
             for i in range(offset, len(all_path_points), step * 2):
                 if i < len(all_path_points):
                     x, y, weld_type = all_path_points[i]
                     passes[pass_num].append(WeldPoint(x, y, weld_type))
-        
+
         return passes
 
     def _write_cooldown(self, f: TextIO) -> None:
         """Write cooldown and end sequence."""
-        cooldown_temp = self.config.get('temperatures', 'cooldown_temperature')
-        
+        cooldown_temp = self.config.get("temperatures", "cooldown_temperature")
+
         f.write("; Cool down\n")
         f.write(f"M104 S{cooldown_temp} ; Cool nozzle\n")
         f.write(f"M140 S{cooldown_temp} ; Cool bed\n")

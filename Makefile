@@ -9,7 +9,8 @@ install:  ## Install the package in virtual environment
 install-dev:  ## Install the package with development dependencies
 	python -m venv venv && source venv/bin/activate && pip install -e .[validation,dev]
 
-test:  ## Run all tests including examples
+test:  ## Run all tests including examples and code formatting
+	black --check svg_welder tests
 	pytest
 
 test-unit:  ## Run unit tests only
@@ -23,6 +24,9 @@ test-examples:  ## Run example file tests only
 
 test-markdown:  ## Run markdown validation tests
 	pytest tests/unit/test_markdown_validation.py -v
+
+test-format:  ## Check code formatting with black
+	black --check svg_welder tests
 
 test-coverage:  ## Run tests with coverage report
 	pytest --cov=svg_welder --cov-report=html --cov-report=term
