@@ -33,7 +33,7 @@ class AnimationGenerator:
         # Add padding
         padding = 20  # Increased padding for pause messages
         width = max_x - min_x + 2 * padding
-        height = max_y - min_y + 2 * padding + 40  # Extra space for messages
+        height = max_y - min_y + 2 * padding + 60  # Extra space for messages and enhanced legend
         
         # Calculate total animation time
         total_weld_points = sum(
@@ -111,12 +111,8 @@ class AnimationGenerator:
                 x = point.x - min_x + padding
                 y = point.y - min_y + padding + 40  # Offset for header
                 
-                # Create animated weld point circle
-                f.write(f'  <circle cx="{x:.2f}" cy="{y:.2f}" r="2" fill="{color}" opacity="0">\n')
-                f.write(f'    <animate attributeName="opacity" values="0;1;1;0.3" '
-                        f'dur="{animation_duration}s" begin="{current_time:.2f}s" '
-                        f'repeatCount="indefinite"/>\n')
-                f.write('  </circle>\n')
+                # Create realistic nozzle ring animation
+                self._write_nozzle_ring(f, x, y, color, animation_duration, current_time)
                 
                 current_time += time_between_welds
 
@@ -156,20 +152,100 @@ class AnimationGenerator:
                 f'repeatCount="indefinite"/>\n')
         f.write('  </circle>\n')
 
+    def _write_nozzle_ring(self, f: TextIO, x: float, y: float, color: str, 
+                          animation_duration: float, current_time: float) -> None:
+        """Write animated nozzle ring that flips into existence."""
+        # Get nozzle dimensions from config
+        outer_radius = self.config.get('nozzle', 'outer_diameter', 0.4) / 2
+        inner_radius = self.config.get('nozzle', 'inner_diameter', 0.2) / 2
+        
+        # Scale up for visibility (multiply by 10 for better visualization)
+        outer_radius_scaled = outer_radius * 10
+        inner_radius_scaled = inner_radius * 10
+        
+        # Create group for the nozzle ring with flip animation
+        f.write(f'  <g transform="translate({x:.2f},{y:.2f})" opacity="0">\n')
+        
+        # Flip animation: scale from 0 to 1 with a "flip" effect
+        f.write(f'    <animateTransform attributeName="transform" type="scale" '
+                f'values="0,0;0.2,1.2;1.1,0.9;1,1" dur="0.3s" '
+                f'begin="{current_time:.2f}s" fill="freeze"/>\n')
+        
+        # Opacity animation
+        f.write(f'    <animate attributeName="opacity" values="0;1;1;0.7" '
+                f'dur="{animation_duration}s" begin="{current_time:.2f}s" '
+                f'repeatCount="indefinite"/>\n')
+        
+        # Outer ring (nozzle contact area)
+        ring_color = self._get_ring_color(color)
+        f.write(f'    <circle cx="0" cy="0" r="{outer_radius_scaled:.2f}" '
+                f'fill="{ring_color}" stroke="{color}" stroke-width="0.5" opacity="0.8"/>\n')
+        
+        # Inner ring (heated zone)
+        inner_color = self._get_inner_ring_color(color)
+        f.write(f'    <circle cx="0" cy="0" r="{inner_radius_scaled:.2f}" '
+                f'fill="{inner_color}" opacity="0.9"/>\n')
+        
+        # Heat effect (subtle glow)
+        f.write(f'    <circle cx="0" cy="0" r="{outer_radius_scaled * 1.3:.2f}" '
+                f'fill="{ring_color}" opacity="0.1">\n')
+        f.write(f'      <animate attributeName="opacity" values="0.1;0.3;0.1" '
+                f'dur="1s" begin="{current_time:.2f}s" repeatCount="indefinite"/>\n')
+        f.write('    </circle>\n')
+        
+        # Center dot (weld point)
+        f.write(f'    <circle cx="0" cy="0" r="0.5" fill="{color}"/>\n')
+        
+        f.write('  </g>\n')
+
+    def _get_ring_color(self, weld_color: str) -> str:
+        """Get the ring color based on weld type."""
+        if weld_color == 'blue':
+            return '#87CEEB'  # Light blue for light welds
+        else:
+            return '#FFB347'  # Orange for normal welds (heated metal)
+
+    def _get_inner_ring_color(self, weld_color: str) -> str:
+        """Get the inner ring color based on weld type."""
+        if weld_color == 'blue':
+            return '#4169E1'  # Royal blue for light welds
+        else:
+            return '#FF6347'  # Tomato red for normal welds (hot zone)
+
     def _write_legend(self, f: TextIO, height: float) -> None:
-        """Write legend explaining weld types."""
-        legend_y = height - 15
+        """Write legend explaining weld types with nozzle ring examples."""
+        legend_y = height - 25
         f.write(f'  <text x="10" y="{legend_y}" font-family="Arial" font-size="10" '
                 f'fill="gray">Legend:</text>\n')
-        f.write(f'  <circle cx="60" cy="{legend_y-4}" r="2" fill="black"/>\n')
+        
+        # Normal welds - orange nozzle ring
+        f.write(f'  <g transform="translate(60,{legend_y-4})">\n')
+        f.write(f'    <circle cx="0" cy="0" r="2" fill="#FFB347" stroke="black" stroke-width="0.3"/>\n')
+        f.write(f'    <circle cx="0" cy="0" r="1" fill="#FF6347"/>\n')
+        f.write(f'    <circle cx="0" cy="0" r="0.3" fill="black"/>\n')
+        f.write('  </g>\n')
         f.write(f'  <text x="70" y="{legend_y}" font-family="Arial" font-size="9" '
-                f'fill="gray">Normal Welds</text>\n')
-        f.write(f'  <circle cx="160" cy="{legend_y-4}" r="2" fill="blue"/>\n')
-        f.write(f'  <text x="170" y="{legend_y}" font-family="Arial" font-size="9" '
-                f'fill="gray">Light Welds</text>\n')
-        f.write(f'  <circle cx="250" cy="{legend_y-4}" r="4" fill="red"/>\n')
-        f.write(f'  <text x="260" y="{legend_y}" font-family="Arial" font-size="9" '
+                f'fill="gray">Normal Welds (Hot)</text>\n')
+        
+        # Light welds - blue nozzle ring
+        f.write(f'  <g transform="translate(180,{legend_y-4})">\n')
+        f.write(f'    <circle cx="0" cy="0" r="2" fill="#87CEEB" stroke="blue" stroke-width="0.3"/>\n')
+        f.write(f'    <circle cx="0" cy="0" r="1" fill="#4169E1"/>\n')
+        f.write(f'    <circle cx="0" cy="0" r="0.3" fill="blue"/>\n')
+        f.write('  </g>\n')
+        f.write(f'  <text x="190" y="{legend_y}" font-family="Arial" font-size="9" '
+                f'fill="gray">Light Welds (Warm)</text>\n')
+        
+        # Stop points
+        f.write(f'  <circle cx="320" cy="{legend_y-4}" r="4" fill="red"/>\n')
+        f.write(f'  <text x="330" y="{legend_y}" font-family="Arial" font-size="9" '
                 f'fill="gray">Stop Points</text>\n')
+        
+        # Nozzle info
+        outer_diameter = self.config.get('nozzle', 'outer_diameter', 0.4)
+        inner_diameter = self.config.get('nozzle', 'inner_diameter', 0.2)
+        f.write(f'  <text x="10" y="{legend_y+12}" font-family="Arial" font-size="8" '
+                f'fill="gray">Nozzle: {outer_diameter}mm OD, {inner_diameter}mm ID (10x scale)</text>\n')
 
     def _write_svg_footer(self, f: TextIO) -> None:
         """Write SVG footer."""

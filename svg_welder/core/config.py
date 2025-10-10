@@ -82,10 +82,15 @@ class Config:
         """Get animation configuration."""
         return self.get_section('animation')
 
+    @property
+    def nozzle(self) -> Dict[str, Any]:
+        """Get nozzle configuration."""
+        return self.get_section('nozzle')
+
     def validate(self) -> None:
         """Validate configuration completeness and correctness."""
         required_sections = [
-            'printer', 'temperatures', 'movement', 
+            'printer', 'nozzle', 'temperatures', 'movement', 
             'normal_welds', 'light_welds', 'output', 'animation'
         ]
         
@@ -95,6 +100,7 @@ class Config:
 
         # Validate specific required keys
         required_keys = {
+            'nozzle': ['outer_diameter', 'inner_diameter'],
             'temperatures': ['bed_temperature', 'nozzle_temperature', 'cooldown_temperature'],
             'movement': ['move_height', 'travel_speed', 'z_speed'],
             'normal_welds': ['weld_height', 'weld_temperature', 'spot_dwell_time', 'dot_spacing'],
@@ -133,6 +139,15 @@ class Config:
                 raise ConfigError(f"{weld_type}.dot_spacing must be positive")
             if weld_config['spot_dwell_time'] < 0:
                 raise ConfigError(f"{weld_type}.spot_dwell_time must be non-negative")
+
+        # Nozzle validations
+        nozzle = self.nozzle
+        if nozzle['outer_diameter'] <= 0:
+            raise ConfigError("nozzle.outer_diameter must be positive")
+        if nozzle['inner_diameter'] <= 0:
+            raise ConfigError("nozzle.inner_diameter must be positive")
+        if nozzle['inner_diameter'] >= nozzle['outer_diameter']:
+            raise ConfigError("nozzle.inner_diameter must be less than outer_diameter")
 
         # Animation validations
         animation = self.animation

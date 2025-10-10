@@ -6,6 +6,11 @@ bed_size_x = 250.0  # mm
 bed_size_y = 210.0  # mm
 max_z_height = 270.0  # mm
 
+[nozzle]
+# Nozzle dimensions for animation visualization
+outer_diameter = 0.4  # mm - nozzle outer diameter
+inner_diameter = 0.2  # mm - nozzle inner diameter (opening)
+
 [temperatures]
 bed_temperature = 60  # °C
 nozzle_temperature = 200  # °C for normal welds

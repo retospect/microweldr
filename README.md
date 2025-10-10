@@ -101,6 +101,10 @@ weld_temperature = 180     # °C - lower temperature
 spot_dwell_time = 0.3      # seconds - shorter time
 dot_spacing = 3.0          # mm - wider spacing
 
+[nozzle]
+outer_diameter = 0.4        # mm - nozzle outer diameter
+inner_diameter = 0.2        # mm - nozzle inner diameter (opening)
+
 [animation]
 time_between_welds = 0.1    # seconds - time between weld points in animation
 pause_time = 3.0            # seconds - how long pause messages are displayed
@@ -219,19 +223,23 @@ The generated G-code includes:
 ## Animation Output
 
 The script generates an enhanced animated SVG file showing:
-- **Weld points appearing in sequence** with configurable timing
-- **Color-coded by weld type** (black=normal, blue=light, red=stop)
+- **Realistic nozzle rings** that flip into existence at each weld point
+- **Temperature-based visualization** with color-coded heat zones
+- **Overlapping ring patterns** showing actual nozzle contact areas
 - **Pause messages displayed** with yellow background and red text
 - **Timing information** displayed in header (duration, intervals, pause time)
-- **Visual legend** explaining weld types and stop points
+- **Enhanced legend** with nozzle ring examples and dimensions
 - **Endless loop animation** with realistic timing
 
 ### Animation Features
-- **Configurable timing**: Adjust `time_between_welds` for weld point intervals
+- **Realistic nozzle visualization**: Shows outer diameter (contact area) and inner diameter (heated zone)
+- **Flip animation**: Nozzle rings scale and flip into existence with realistic physics
+- **Temperature visualization**: Orange/red rings for normal welds, blue rings for light welds
+- **Heat effects**: Subtle glow animation around weld points
+- **Configurable nozzle dimensions**: Set actual nozzle OD/ID in configuration
+- **10x scale factor**: Nozzle dimensions scaled up for visibility in animation
 - **Pause message display**: Stop points show custom messages for specified `pause_time`
 - **Smart duration calculation**: Automatically calculates total time based on weld count and pauses
-- **Enhanced visuals**: Larger stop indicators, message backgrounds, and comprehensive legend
-- **Timing display**: Shows actual animation parameters in the header
 
 ## Validation Features
 
