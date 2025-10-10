@@ -328,34 +328,11 @@ class AnimationGenerator:
             f'dur="0.01s" begin="{current_time:.2f}s" fill="freeze"/>\n'
         )
 
-        # Outer ring (nozzle contact area)
-        ring_color = self._get_ring_color(color)
+        # Single colored circle with nozzle outer diameter
         f.write(
             f'    <circle cx="0" cy="0" r="{outer_radius_scaled:.2f}" '
-            f'fill="{ring_color}" stroke="{color}" stroke-width="{0.5*scale_factor}" opacity="0.8"/>\n'
+            f'fill="{color}" opacity="0.8"/>\n'
         )
-
-        # Inner ring (heated zone)
-        inner_color = self._get_inner_ring_color(color)
-        f.write(
-            f'    <circle cx="0" cy="0" r="{inner_radius_scaled:.2f}" '
-            f'fill="{inner_color}" opacity="0.9"/>\n'
-        )
-
-        # Heat effect (subtle glow)
-        f.write(
-            f'    <circle cx="0" cy="0" r="{outer_radius_scaled * 1.3:.2f}" '
-            f'fill="{ring_color}" opacity="0.1">\n'
-        )
-        f.write(
-            f'      <animate attributeName="opacity" values="0.1;0.3;0.1" '
-            f'dur="1s" begin="{current_time:.2f}s" repeatCount="indefinite"/>\n'
-        )
-        f.write("    </circle>\n")
-
-        # Center dot (weld point) - scale radius
-        center_dot_radius = 0.5 * scale_factor
-        f.write(f'    <circle cx="0" cy="0" r="{center_dot_radius}" fill="{color}"/>\n')
 
         f.write("  </g>\n")
 
