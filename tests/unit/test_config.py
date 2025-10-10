@@ -36,13 +36,13 @@ travel_speed = 6000
 z_speed = 300
 
 [normal_welds]
-weld_height = 0.2
+weld_height = 0.05
 weld_temperature = 200
 spot_dwell_time = 0.5
 dot_spacing = 2.0
 
 [light_welds]
-weld_height = 0.5
+weld_height = 0.05
 weld_temperature = 180
 spot_dwell_time = 0.3
 dot_spacing = 3.0
@@ -214,7 +214,7 @@ travel_speed = 6000
 z_speed = 300
 
 [normal_welds]
-weld_height = 0.2
+weld_height = 0.05
 weld_temperature = 200
 spot_dwell_time = 0.5
 dot_spacing = 2.0
@@ -222,7 +222,7 @@ initial_dot_spacing = 8.0
 cooling_time_between_passes = 2.0
 
 [light_welds]
-weld_height = 0.5
+weld_height = 0.05
 weld_temperature = 180
 spot_dwell_time = 0.3
 dot_spacing = 3.0
@@ -283,7 +283,7 @@ travel_speed = 6000
 z_speed = 300
 
 [normal_welds]
-weld_height = 0.2
+weld_height = 0.05
 weld_temperature = 200
 spot_dwell_time = 0.5
 dot_spacing = 2.0
@@ -291,7 +291,7 @@ initial_dot_spacing = 8.0
 cooling_time_between_passes = 2.0
 
 [light_welds]
-weld_height = 0.5
+weld_height = 0.05
 weld_temperature = 180
 spot_dwell_time = 0.3
 dot_spacing = 3.0
@@ -337,7 +337,7 @@ travel_speed = 6000
 z_speed = 300
 
 [normal_welds]
-weld_height = 0.2
+weld_height = 0.05
 weld_temperature = 200
 spot_dwell_time = 0.5
 dot_spacing = 2.0
@@ -345,7 +345,7 @@ initial_dot_spacing = 8.0
 cooling_time_between_passes = 2.0
 
 [light_welds]
-weld_height = 0.5
+weld_height = 0.05
 weld_temperature = 180
 spot_dwell_time = 0.3
 dot_spacing = 3.0
@@ -391,7 +391,7 @@ travel_speed = 6000
 z_speed = 300
 
 [normal_welds]
-weld_height = 0.2
+weld_height = 0.05
 weld_temperature = 200
 spot_dwell_time = 0.5
 dot_spacing = -1.0  # Invalid
@@ -399,7 +399,7 @@ initial_dot_spacing = 8.0
 cooling_time_between_passes = 2.0
 
 [light_welds]
-weld_height = 0.5
+weld_height = 0.05
 weld_temperature = 180
 spot_dwell_time = 0.3
 dot_spacing = 3.0

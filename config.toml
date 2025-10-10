@@ -23,7 +23,7 @@ z_speed = 300  # mm/min
 
 [normal_welds]
 # Settings for black SVG elements
-weld_height = 0.2  # mm - how low the nozzle goes for welding
+weld_height = 0.04  # mm - how low the nozzle goes for welding (40 microns, 2x Prusa step size)
 weld_temperature = 200  # °C
 spot_dwell_time = 0.5  # seconds
 dot_spacing = 0.9  # mm - final desired spacing (minimal overlap with 1.0mm diameter)
@@ -32,7 +32,7 @@ cooling_time_between_passes = 2.0  # seconds - time to let plastic cool
 
 [light_welds]
 # Settings for blue SVG elements
-weld_height = 0.5  # mm - higher than normal welds
+weld_height = 0.04  # mm - same precision height for light welds (40 microns, 2x Prusa step size)
 weld_temperature = 180  # °C - lower temperature
 spot_dwell_time = 0.3  # seconds - shorter dwell time
 dot_spacing = 0.9  # mm - final desired spacing (minimal overlap with 1.0mm diameter)
