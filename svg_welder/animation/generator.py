@@ -119,12 +119,12 @@ class AnimationGenerator:
         scale_factor = 3.0
 
         f.write(
-            f'  <text x="{width/2}" y="{60*scale_factor}" text-anchor="middle" font-family="Arial" '
+            f'  <text x="{width/2}" y="{20*scale_factor}" text-anchor="middle" font-family="Arial" '
             f'font-size="{8*scale_factor}" fill="black">SVG Welding Animation</text>\n'
         )
 
         f.write(
-            f'  <text x="{width/2}" y="{105*scale_factor}" text-anchor="middle" font-family="Arial" '
+            f'  <text x="{width/2}" y="{35*scale_factor}" text-anchor="middle" font-family="Arial" '
             f'font-size="{6*scale_factor}" fill="gray">Duration: {animation_duration:.1f}s | '
             f"Weld interval: {time_between_welds}s | Pause time: {pause_time}s</text>\n"
         )
