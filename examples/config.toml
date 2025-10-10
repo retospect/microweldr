@@ -1,0 +1,42 @@
+# SVG to G-code Welder Configuration
+
+[printer]
+# Prusa Core One specific settings
+bed_size_x = 250.0  # mm
+bed_size_y = 210.0  # mm
+max_z_height = 270.0  # mm
+
+[temperatures]
+bed_temperature = 60  # °C
+nozzle_temperature = 200  # °C for normal welds
+cooldown_temperature = 50  # °C
+
+[movement]
+move_height = 5.0  # mm - height for safe movement
+travel_speed = 6000  # mm/min
+z_speed = 300  # mm/min
+
+[normal_welds]
+# Settings for black SVG elements
+weld_height = 0.2  # mm - how low the nozzle goes for welding
+weld_temperature = 200  # °C
+spot_dwell_time = 0.5  # seconds
+dot_spacing = 2.0  # mm
+
+[light_welds]
+# Settings for blue SVG elements
+weld_height = 0.5  # mm - higher than normal welds
+weld_temperature = 180  # °C - lower temperature
+spot_dwell_time = 0.3  # seconds - shorter dwell time
+dot_spacing = 3.0  # mm - wider spacing
+
+[output]
+# Output file settings
+gcode_extension = ".gcode"
+animation_extension = "_animation.svg"
+
+[animation]
+# Animation timing settings for SVG output
+time_between_welds = 0.1  # seconds - time between each weld point appearing
+pause_time = 3.0  # seconds - how long pause messages are displayed
+min_animation_duration = 10.0  # seconds - minimum total animation time

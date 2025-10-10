@@ -1,5 +1,0 @@
-toml>=0.10.2
-lxml>=4.9.0
-xmlschema>=2.0.0
-gcodeparser>=0.2.0
-pygcode>=0.2.0

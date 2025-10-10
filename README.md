@@ -1,6 +1,23 @@
 # SVG to G-code Welder
 
-A Python script that converts SVG files to Prusa Core One G-code for plastic welding applications. The script processes SVG vector graphics and generates G-code that creates weld spots along the paths without extruding any plastic material.
+A professional Python package that converts SVG files to Prusa Core One G-code for plastic welding applications. The package processes SVG vector graphics and generates G-code that creates weld spots along the paths without extruding any plastic material.
+
+## Project Structure
+
+```
+svg-welder/
+├── svg_welder/           # Main package
+│   ├── core/            # Core functionality
+│   ├── validation/      # Validation modules
+│   ├── animation/       # Animation generation
+│   └── cli/             # Command line interface
+├── tests/               # Test suite
+│   ├── unit/           # Unit tests
+│   └── integration/    # Integration tests
+├── examples/           # Example files and configurations
+├── docs/              # Documentation
+└── pyproject.toml     # Poetry configuration
+```
 
 ## Features
 
@@ -16,21 +33,51 @@ A Python script that converts SVG files to Prusa Core One G-code for plastic wel
 
 ## Installation
 
-1. Clone or download this repository
-2. Install Python dependencies:
+### Using Poetry (Recommended)
+
+1. Clone the repository:
    ```bash
-   pip install -r requirements.txt
+   git clone <repository-url>
+   cd svg-to-gcode-welder
    ```
 
-### Validation Libraries (Optional)
-The script includes optional validation for input SVG files, generated G-code, and output animations:
+2. Install with Poetry:
+   ```bash
+   # Install core dependencies only
+   poetry install
+   
+   # Install with validation libraries
+   poetry install --extras validation
+   
+   # Install with development dependencies
+   poetry install --with dev,validation
+   ```
 
-- **lxml**: Advanced SVG structure validation
-- **gcodeparser**: G-code syntax and command validation  
-- **pygcode**: Additional G-code parsing capabilities
-- **xmlschema**: XML schema validation support
+3. Activate the virtual environment:
+   ```bash
+   poetry shell
+   ```
 
-If these libraries are not installed, the script will run normally but skip validation steps with warnings.
+### Using pip
+
+```bash
+pip install -e .
+# Or with validation libraries
+pip install -e .[validation]
+```
+
+### Development Setup
+
+```bash
+# Install development dependencies
+make install-dev
+
+# Install pre-commit hooks
+make install-pre-commit
+
+# Run tests
+make test
+```
 
 ## Configuration
 
@@ -63,22 +110,42 @@ min_animation_duration = 10.0  # seconds - minimum total animation time
 
 ### Basic Usage
 ```bash
-python svg_to_gcode_welder.py input.svg
+# Using the installed command
+svg-welder input.svg
+
+# Using Poetry
+poetry run svg-welder input.svg
+
+# Using the module directly
+python -m svg_welder.cli.main input.svg
 ```
 
 ### Advanced Options
 ```bash
 # Specify output file
-python svg_to_gcode_welder.py input.svg -o output.gcode
+svg-welder input.svg -o output.gcode
 
 # Skip bed leveling
-python svg_to_gcode_welder.py input.svg --skip-bed-leveling
+svg-welder input.svg --skip-bed-leveling
 
 # Use custom configuration
-python svg_to_gcode_welder.py input.svg -c custom_config.toml
+svg-welder input.svg -c custom_config.toml
 
 # Skip animation generation
-python svg_to_gcode_welder.py input.svg --no-animation
+svg-welder input.svg --no-animation
+
+# Skip validation
+svg-welder input.svg --no-validation
+
+# Verbose output
+svg-welder input.svg --verbose
+```
+
+### Quick Start with Examples
+```bash
+# Run with example files
+make run-example
+make run-comprehensive
 ```
 
 ### Command Line Options
