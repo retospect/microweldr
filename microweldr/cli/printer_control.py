@@ -8,9 +8,9 @@ import argparse
 import json
 import sys
 
-from svg_welder.monitoring import MonitorMode, PrintMonitor
-from svg_welder.prusalink.client import PrusaLinkClient
-from svg_welder.prusalink.exceptions import PrusaLinkError
+from microweldr.monitoring import MonitorMode, PrintMonitor
+from microweldr.prusalink.client import PrusaLinkClient
+from microweldr.prusalink.exceptions import PrusaLinkError
 
 
 def create_parser():

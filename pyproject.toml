@@ -1,12 +1,12 @@
 [tool.poetry]
-name = "svg-welder"
+name = "microweldr"
 version = "1.0.0"
 description = "Convert SVG files to Prusa Core One G-code for plastic welding"
 authors = ["Your Name <your.email@example.com>"]
 readme = "README.md"
-packages = [{include = "svg_welder"}]
+packages = [{include = "microweldr"}]
 license = "MIT"
-repository = "https://github.com/yourusername/svg-welder"
+repository = "https://github.com/retospect/microweldr"
 keywords = ["svg", "gcode", "3d-printing", "welding", "prusa"]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -55,15 +55,15 @@ validation = ["lxml", "xmlschema", "gcodeparser", "pygcode"]
 dev = ["pytest", "pytest-cov", "black", "isort", "flake8", "mypy", "pre-commit"]
 
 [tool.poetry.scripts]
-svg-welder = "svg_welder.cli.main:main"
-svg2gcode = "svg_welder.cli.main:main"
-prusa-welder = "svg_welder.cli.main:main"
-test-prusalink = "svg_welder.cli.prusalink_test:main"
-printer-control = "svg_welder.cli.printer_control:main"
+microweldr = "microweldr.cli.main:main"
+svg2gcode = "microweldr.cli.main:main"
+prusa-welder = "microweldr.cli.main:main"
+test-prusalink = "microweldr.cli.prusalink_test:main"
+printer-control = "microweldr.cli.printer_control:main"
 # Legacy aliases (deprecated - use printer-control instead)
-monitor-print = "svg_welder.cli.monitor_print:main"
-printer-status = "svg_welder.cli.printer_status:main"
-stop-print = "svg_welder.cli.stop_print:main"
+monitor-print = "microweldr.cli.monitor_print:main"
+printer-status = "microweldr.cli.printer_status:main"
+stop-print = "microweldr.cli.stop_print:main"
 
 [build-system]
 requires = ["poetry-core"]
@@ -91,7 +91,7 @@ extend-exclude = '''
 profile = "black"
 multi_line_output = 3
 line_length = 88
-known_first_party = ["svg_welder"]
+known_first_party = ["microweldr"]
 
 [tool.mypy]
 python_version = "3.8"
@@ -110,14 +110,14 @@ strict_equality = true
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "-ra -q --strict-markers --cov=svg_welder --cov-report=term-missing"
+addopts = "-ra -q --strict-markers --cov=microweldr --cov-report=term-missing"
 testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
 
 [tool.coverage.run]
-source = ["svg_welder"]
+source = ["microweldr"]
 omit = ["*/tests/*"]
 
 [tool.coverage.report]

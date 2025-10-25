@@ -7,8 +7,8 @@ import time
 from enum import Enum
 from typing import Any, Callable, Dict, Optional
 
-from svg_welder.prusalink.client import PrusaLinkClient
-from svg_welder.prusalink.exceptions import PrusaLinkError
+from microweldr.prusalink.client import PrusaLinkClient
+from microweldr.prusalink.exceptions import PrusaLinkError
 
 
 class MonitorMode(Enum):

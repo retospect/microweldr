@@ -1,4 +1,4 @@
-# SVG to G-code Welder
+# MicroWeldr
 
 A Python package that converts SVG files to Prusa Core One G-code for plastic "spot" welding applications. The package processes SVG vector graphics and generates G-code that creates weld spots along the paths without extruding any plastic material.
 
@@ -10,8 +10,8 @@ While the edges are not as smooth as a laser weld, the 3d printer is more availa
 ## Project Structure
 
 ```
-svg-welder/
-├── svg_welder/           # Main package
+microweldr/
+├── microweldr/           # Main package
 │   ├── core/            # Core functionality
 │   ├── validation/      # Validation modules
 │   ├── animation/       # Animation generation

@@ -4,8 +4,8 @@ import math
 from pathlib import Path
 from typing import List, TextIO
 
-from svg_welder.core.config import Config
-from svg_welder.core.models import WeldPath, WeldPoint
+from microweldr.core.config import Config
+from microweldr.core.models import WeldPath, WeldPoint
 
 
 class GCodeGenerator:

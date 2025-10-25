@@ -5,13 +5,14 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-from svg_welder.animation.generator import AnimationGenerator
-from svg_welder.core.config import Config, ConfigError
-from svg_welder.core.converter import SVGToGCodeConverter
-from svg_welder.core.svg_parser import SVGParseError
-from svg_welder.monitoring import MonitorMode, PrintMonitor
-from svg_welder.prusalink import PrusaLinkClient, PrusaLinkError
-from svg_welder.validation.validators import (
+from microweldr.animation.generator import AnimationGenerator
+from microweldr.core.config import Config, ConfigError
+from microweldr.core.converter import SVGToGCodeConverter
+from microweldr.core.svg_parser import SVGParseError
+from microweldr.monitoring import MonitorMode, PrintMonitor
+from microweldr.prusalink.client import PrusaLinkClient
+from microweldr.prusalink.exceptions import PrusaLinkError
+from microweldr.validation.validators import (
     AnimationValidator,
     GCodeValidator,
     SVGValidator,

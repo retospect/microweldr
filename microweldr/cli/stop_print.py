@@ -6,8 +6,8 @@ Stop current print utility.
 import argparse
 import sys
 
-from svg_welder.prusalink.client import PrusaLinkClient
-from svg_welder.prusalink.exceptions import PrusaLinkError
+from microweldr.prusalink.client import PrusaLinkClient
+from microweldr.prusalink.exceptions import PrusaLinkError
 
 
 def create_parser():

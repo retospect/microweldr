@@ -1,6 +1,6 @@
-# SVG Welder Examples
+# MicroWeldr Examples
 
-This directory contains example SVG files and configurations to help you get started with the SVG Welder for Prusa Core One plastic welding.
+This directory contains example SVG files and configurations to help you get started with MicroWeldr for Prusa Core One plastic welding.
 
 ## 🚀 Quick Start
 
@@ -8,27 +8,27 @@ This directory contains example SVG files and configurations to help you get sta
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-repo/PrusaWelder.git
-cd PrusaWelder
+git clone https://github.com/retospect/microweldr.git
+cd microweldr
 
 # Install the package
 pip install -e .
 
-# Or install from PyPI (when available)
-pip install svg-welder
+# Or install from PyPI
+pip install microweldr
 ```
 
 ### Basic Usage
 
 ```bash
 # Generate G-code from an example
-svg-welder examples/example.svg
+microweldr examples/example.svg
 
 # Generate and submit to printer
-svg-welder examples/example.svg --submit-to-printer
+microweldr examples/example.svg --submit-to-printer
 
 # Use custom config
-svg-welder examples/example.svg --config examples/config.toml
+microweldr examples/example.svg --config examples/config.toml
 ```
 
 ## 📁 Example Files
@@ -75,12 +75,12 @@ svg-welder examples/example.svg --config examples/config.toml
 
 ### 1. Start Simple
 ```bash
-svg-welder examples/example.svg
+microweldr examples/example.svg
 ```
 
 ### 2. Test Parameters
 ```bash
-svg-welder examples/calibration_test.svg --submit-to-printer
+microweldr examples/calibration_test.svg --submit-to-printer
 ```
 
 ### 3. Analyze Results
@@ -90,7 +90,7 @@ svg-welder examples/calibration_test.svg --submit-to-printer
 
 ### 4. Production Use
 ```bash
-svg-welder your_design.svg --config examples/config.toml
+microweldr your_design.svg --config examples/config.toml
 ```
 
 ## 🔬 Calibration Test Details

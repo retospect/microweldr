@@ -3,10 +3,10 @@
 from pathlib import Path
 from typing import List
 
-from svg_welder.core.config import Config
-from svg_welder.core.gcode_generator import GCodeGenerator
-from svg_welder.core.models import WeldPath
-from svg_welder.core.svg_parser import SVGParser
+from microweldr.core.config import Config
+from microweldr.core.gcode_generator import GCodeGenerator
+from microweldr.core.models import WeldPath
+from microweldr.core.svg_parser import SVGParser
 
 
 class SVGToGCodeConverter:
