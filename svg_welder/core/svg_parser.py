@@ -237,8 +237,24 @@ class SVGParser:
         custom_height = self._get_float_attr(line_element, "data-height")
 
         points = [
-            WeldPoint(x1, y1, "normal", custom_temp, custom_dwell, custom_bed_temp, custom_height),
-            WeldPoint(x2, y2, "normal", custom_temp, custom_dwell, custom_bed_temp, custom_height)
+            WeldPoint(
+                x1,
+                y1,
+                "normal",
+                custom_temp,
+                custom_dwell,
+                custom_bed_temp,
+                custom_height,
+            ),
+            WeldPoint(
+                x2,
+                y2,
+                "normal",
+                custom_temp,
+                custom_dwell,
+                custom_bed_temp,
+                custom_height,
+            ),
         ]
 
         return self._interpolate_points(points)

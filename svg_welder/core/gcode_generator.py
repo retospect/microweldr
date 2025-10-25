@@ -51,7 +51,7 @@ class GCodeGenerator:
         )  # Default 35°C
 
         f.write("; Start heating before calibration (efficient timing)\n")
-        
+
         # Chamber heating (optional)
         if use_chamber_heating:
             f.write(f"; Heat chamber to {chamber_temp}°C (Core One)\n")
@@ -72,9 +72,15 @@ class GCodeGenerator:
 
         if layed_back_mode:
             # Print warning about layed back mode
-            print("⚠️  WARNING: Layed back mode is EXPERIMENTAL and may not work properly!")
-            print("⚠️  Known issues: calibration conflicts, Z-axis problems, coordinate issues")
-            print("⚠️  Recommendation: Set layed_back_mode = false for reliable operation")
+            print(
+                "⚠️  WARNING: Layed back mode is EXPERIMENTAL and may not work properly!"
+            )
+            print(
+                "⚠️  Known issues: calibration conflicts, Z-axis problems, coordinate issues"
+            )
+            print(
+                "⚠️  Recommendation: Set layed_back_mode = false for reliable operation"
+            )
             print("⚠️  Continue at your own risk - manual intervention may be required")
             print()
             f.write("; Initialize printer (layed back mode - printer on its back!)\n")
@@ -125,8 +131,12 @@ class GCodeGenerator:
             f.write(
                 "; Skipping automatic Z-homing to avoid X/Y conflicts in layed back mode\n"
             )
-            f.write("G92 Z0 ; Set current Z position as zero reference (trust manual positioning)\n")
-            f.write("G1 Z10 F150 ; Move Z to safe position slowly (no rush when layed back)\n\n")
+            f.write(
+                "G92 Z0 ; Set current Z position as zero reference (trust manual positioning)\n"
+            )
+            f.write(
+                "G1 Z10 F150 ; Move Z to safe position slowly (no rush when layed back)\n\n"
+            )
 
         # Now wait for bed temperature (should be ready or nearly ready)
         f.write(f"; Wait for bed to reach target temperature\n")
@@ -196,14 +206,22 @@ class GCodeGenerator:
             weld_config = self.config.get_section(f"{path.weld_type}_welds")
 
             # Check for custom temperature on this path
-            target_temp = path.custom_temp if path.custom_temp is not None else weld_config["weld_temperature"]
-            
+            target_temp = (
+                path.custom_temp
+                if path.custom_temp is not None
+                else weld_config["weld_temperature"]
+            )
+
             # Set temperature if different
             if target_temp != current_nozzle_temp:
                 current_nozzle_temp = target_temp
                 if path.custom_temp is not None:
-                    f.write(f"M104 S{current_nozzle_temp} ; Set custom temperature {current_nozzle_temp}°C\n")
-                    f.write(f"M109 S{current_nozzle_temp} ; Wait for custom temperature\n\n")
+                    f.write(
+                        f"M104 S{current_nozzle_temp} ; Set custom temperature {current_nozzle_temp}°C\n"
+                    )
+                    f.write(
+                        f"M109 S{current_nozzle_temp} ; Wait for custom temperature\n\n"
+                    )
                 else:
                     f.write(
                         f"M104 S{current_nozzle_temp} ; Set temperature for {path.weld_type} welds\n"
@@ -259,15 +277,27 @@ class GCodeGenerator:
                 )
 
                 # Lower to weld height - use custom height if specified (path-level or point-level)
-                weld_height = (point.custom_height if point.custom_height is not None 
-                              else path.custom_height if path.custom_height is not None 
-                              else weld_config["weld_height"])
+                weld_height = (
+                    point.custom_height
+                    if point.custom_height is not None
+                    else (
+                        path.custom_height
+                        if path.custom_height is not None
+                        else weld_config["weld_height"]
+                    )
+                )
                 f.write(f"G1 Z{weld_height:.3f} F{z_speed}\n")
 
                 # Dwell for welding - use custom dwell time if specified (path-level or point-level)
-                dwell_time = (point.custom_dwell if point.custom_dwell is not None 
-                             else path.custom_dwell if path.custom_dwell is not None 
-                             else weld_config["spot_dwell_time"])
+                dwell_time = (
+                    point.custom_dwell
+                    if point.custom_dwell is not None
+                    else (
+                        path.custom_dwell
+                        if path.custom_dwell is not None
+                        else weld_config["spot_dwell_time"]
+                    )
+                )
                 dwell_ms = int(dwell_time * 1000)
                 if point.custom_dwell is not None or path.custom_dwell is not None:
                     f.write(f"G4 P{dwell_ms} ; Custom dwell time {dwell_time}s\n")
