@@ -40,23 +40,23 @@ class GCodeGenerator:
 
     def _write_initialization(self, f: TextIO, skip_bed_leveling: bool) -> None:
         """Write printer initialization commands."""
-        inverted_mode = self.config.get("printer", "inverted_operation", True)  # Default to inverted
+        layed_back_mode = self.config.get("printer", "layed_back_mode", True)  # Default to layed back
         
-        if inverted_mode:
-            f.write("; Initialize printer (inverted operation mode)\n")
+        if layed_back_mode:
+            f.write("; Initialize printer (layed back mode - printer on its back!)\n")
             f.write("; IMPORTANT: Manually position print head before starting!\n")
             f.write("; Expected position: Rear right corner of bed\n")
-            f.write("; No homing performed - assumes manual positioning\n\n")
+            f.write("; No homing performed - printer is chillin' and trusts your positioning\n\n")
             
             f.write("G90 ; Absolute positioning\n")
             f.write("M83 ; Relative extruder positioning\n")
-            f.write("M84 S0 ; Disable stepper timeout for inverted operation\n")
+            f.write("M84 S0 ; Disable stepper timeout for layed back operation\n")
             f.write("G92 X0 Y0 Z0 ; Set current position as origin (manual positioning assumed)\n")
-            f.write("G1 Z10 F150 ; Move Z to safe position slowly\n\n")
+            f.write("G1 Z10 F150 ; Move Z to safe position slowly (no rush when layed back)\n\n")
 
-            # Always skip bed leveling for inverted operation
-            f.write("; Bed leveling disabled for inverted operation\n")
-            f.write("; Manual bed preparation required\n\n")
+            # Always skip bed leveling for layed back operation
+            f.write("; Bed leveling disabled for layed back operation\n")
+            f.write("; Manual bed preparation required (printer is relaxing)\n\n")
         else:
             # Standard operation mode
             f.write("; Initialize printer (standard operation mode)\n")
