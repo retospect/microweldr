@@ -12,11 +12,9 @@ class WeldPoint:
     y: float
     weld_type: str  # 'normal', 'light', 'stop', or 'pipette'
     custom_temp: Optional[float] = None  # Custom temperature for this point
-    custom_welding_time: Optional[float] = None  # Custom welding time for this point
+    custom_weld_time: Optional[float] = None  # Custom weld time for this point
     custom_bed_temp: Optional[float] = None  # Custom bed temperature
-    custom_welding_height: Optional[
-        float
-    ] = None  # Custom weld height (compression depth)
+    custom_weld_height: Optional[float] = None  # Custom weld height (compression depth)
 
     def __post_init__(self) -> None:
         """Validate weld point data."""
@@ -35,11 +33,9 @@ class WeldPath:
     element_type: Optional[str] = None  # Original SVG element type (circle, rect, etc.)
     element_radius: Optional[float] = None  # Original radius for circles
     custom_temp: Optional[float] = None  # Custom temperature for this path
-    custom_welding_time: Optional[float] = None  # Custom welding time for this path
+    custom_weld_time: Optional[float] = None  # Custom welding time for this path
     custom_bed_temp: Optional[float] = None  # Custom bed temperature
-    custom_welding_height: Optional[
-        float
-    ] = None  # Custom weld height (compression depth)
+    custom_weld_height: Optional[float] = None  # Custom weld height (compression depth)
 
     def __post_init__(self) -> None:
         """Validate weld path data."""

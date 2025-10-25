@@ -9,175 +9,175 @@
   <!-- 130°C Tests - Complete Array -->
   <!-- 0.1s dwell time variants -->
   <line x1="10" y1="10" x2="25" y2="10" stroke="black" stroke-width="1" 
-        data-temp="130" data-welding-time="0.1" data-welding-height="0.020" data-bed-temp="60" 
+        data-temp="130" data-weld-time="0.1" data-weld-height="0.020" data-bed-temp="60" 
         title="130°C, 0.1s, 20µm compression"/>
   <line x1="10" y1="13" x2="25" y2="13" stroke="black" stroke-width="1" 
-        data-temp="130" data-welding-time="0.1" data-welding-height="0.040" data-bed-temp="60" 
+        data-temp="130" data-weld-time="0.1" data-weld-height="0.040" data-bed-temp="60" 
         title="130°C, 0.1s, 40µm compression"/>
   <line x1="10" y1="16" x2="25" y2="16" stroke="black" stroke-width="1" 
-        data-temp="130" data-welding-time="0.1" data-welding-height="0.060" data-bed-temp="60" 
+        data-temp="130" data-weld-time="0.1" data-weld-height="0.060" data-bed-temp="60" 
         title="130°C, 0.1s, 60µm compression"/>
   <line x1="10" y1="19" x2="25" y2="19" stroke="black" stroke-width="1" 
-        data-temp="130" data-welding-time="0.1" data-welding-height="0.080" data-bed-temp="60" 
+        data-temp="130" data-weld-time="0.1" data-weld-height="0.080" data-bed-temp="60" 
         title="130°C, 0.1s, 80µm compression"/>
   
   <!-- 0.2s dwell time variants -->
   <line x1="10" y1="25" x2="25" y2="25" stroke="black" stroke-width="1" 
-        data-temp="130" data-welding-time="0.2" data-welding-height="0.020" data-bed-temp="60" 
+        data-temp="130" data-weld-time="0.2" data-weld-height="0.020" data-bed-temp="60" 
         title="130°C, 0.2s, 20µm compression"/>
   <line x1="10" y1="28" x2="25" y2="28" stroke="black" stroke-width="1" 
-        data-temp="130" data-welding-time="0.2" data-welding-height="0.040" data-bed-temp="60" 
+        data-temp="130" data-weld-time="0.2" data-weld-height="0.040" data-bed-temp="60" 
         title="130°C, 0.2s, 40µm compression"/>
   <line x1="10" y1="31" x2="25" y2="31" stroke="black" stroke-width="1" 
-        data-temp="130" data-welding-time="0.2" data-welding-height="0.060" data-bed-temp="60" 
+        data-temp="130" data-weld-time="0.2" data-weld-height="0.060" data-bed-temp="60" 
         title="130°C, 0.2s, 60µm compression"/>
   <line x1="10" y1="34" x2="25" y2="34" stroke="black" stroke-width="1" 
-        data-temp="130" data-welding-time="0.2" data-welding-height="0.080" data-bed-temp="60" 
+        data-temp="130" data-weld-time="0.2" data-weld-height="0.080" data-bed-temp="60" 
         title="130°C, 0.2s, 80µm compression"/>
   
   <!-- 140°C Tests - Complete Array -->
   <!-- 0.1s dwell time variants -->
   <line x1="30" y1="10" x2="45" y2="10" stroke="black" stroke-width="1" 
-        data-temp="140" data-welding-time="0.1" data-welding-height="0.020" data-bed-temp="60" 
+        data-temp="140" data-weld-time="0.1" data-weld-height="0.020" data-bed-temp="60" 
         title="140°C, 0.1s, 20µm compression"/>
   <line x1="30" y1="13" x2="45" y2="13" stroke="black" stroke-width="1" 
-        data-temp="140" data-welding-time="0.1" data-welding-height="0.040" data-bed-temp="60" 
+        data-temp="140" data-weld-time="0.1" data-weld-height="0.040" data-bed-temp="60" 
         title="140°C, 0.1s, 40µm compression"/>
   <line x1="30" y1="16" x2="45" y2="16" stroke="black" stroke-width="1" 
-        data-temp="140" data-welding-time="0.1" data-welding-height="0.060" data-bed-temp="60" 
+        data-temp="140" data-weld-time="0.1" data-weld-height="0.060" data-bed-temp="60" 
         title="140°C, 0.1s, 60µm compression"/>
   <line x1="30" y1="19" x2="45" y2="19" stroke="black" stroke-width="1" 
-        data-temp="140" data-welding-time="0.1" data-welding-height="0.080" data-bed-temp="60" 
+        data-temp="140" data-weld-time="0.1" data-weld-height="0.080" data-bed-temp="60" 
         title="140°C, 0.1s, 80µm compression"/>
   
   <!-- 0.2s dwell time variants -->
   <line x1="30" y1="25" x2="45" y2="25" stroke="black" stroke-width="1" 
-        data-temp="140" data-welding-time="0.2" data-welding-height="0.020" data-bed-temp="60" 
+        data-temp="140" data-weld-time="0.2" data-weld-height="0.020" data-bed-temp="60" 
         title="140°C, 0.2s, 20µm compression"/>
   <line x1="30" y1="28" x2="45" y2="28" stroke="black" stroke-width="1" 
-        data-temp="140" data-welding-time="0.2" data-welding-height="0.040" data-bed-temp="60" 
+        data-temp="140" data-weld-time="0.2" data-weld-height="0.040" data-bed-temp="60" 
         title="140°C, 0.2s, 40µm compression"/>
   <line x1="30" y1="31" x2="45" y2="31" stroke="black" stroke-width="1" 
-        data-temp="140" data-welding-time="0.2" data-welding-height="0.060" data-bed-temp="60" 
+        data-temp="140" data-weld-time="0.2" data-weld-height="0.060" data-bed-temp="60" 
         title="140°C, 0.2s, 60µm compression"/>
   <line x1="30" y1="34" x2="45" y2="34" stroke="black" stroke-width="1" 
-        data-temp="140" data-welding-time="0.2" data-welding-height="0.080" data-bed-temp="60" 
+        data-temp="140" data-weld-time="0.2" data-weld-height="0.080" data-bed-temp="60" 
         title="140°C, 0.2s, 80µm compression"/>
   
   <!-- 150°C Tests - Complete Array -->
   <!-- 0.1s dwell time variants -->
   <line x1="50" y1="10" x2="65" y2="10" stroke="black" stroke-width="1" 
-        data-temp="150" data-welding-time="0.1" data-welding-height="0.020" data-bed-temp="60" 
+        data-temp="150" data-weld-time="0.1" data-weld-height="0.020" data-bed-temp="60" 
         title="150°C, 0.1s, 20µm compression"/>
   <line x1="50" y1="13" x2="65" y2="13" stroke="black" stroke-width="1" 
-        data-temp="150" data-welding-time="0.1" data-welding-height="0.040" data-bed-temp="60" 
+        data-temp="150" data-weld-time="0.1" data-weld-height="0.040" data-bed-temp="60" 
         title="150°C, 0.1s, 40µm compression"/>
   <line x1="50" y1="16" x2="65" y2="16" stroke="black" stroke-width="1" 
-        data-temp="150" data-welding-time="0.1" data-welding-height="0.060" data-bed-temp="60" 
+        data-temp="150" data-weld-time="0.1" data-weld-height="0.060" data-bed-temp="60" 
         title="150°C, 0.1s, 60µm compression"/>
   <line x1="50" y1="19" x2="65" y2="19" stroke="black" stroke-width="1" 
-        data-temp="150" data-welding-time="0.1" data-welding-height="0.080" data-bed-temp="60" 
+        data-temp="150" data-weld-time="0.1" data-weld-height="0.080" data-bed-temp="60" 
         title="150°C, 0.1s, 80µm compression"/>
   
   <!-- 0.2s dwell time variants -->
   <line x1="50" y1="25" x2="65" y2="25" stroke="black" stroke-width="1" 
-        data-temp="150" data-welding-time="0.2" data-welding-height="0.020" data-bed-temp="60" 
+        data-temp="150" data-weld-time="0.2" data-weld-height="0.020" data-bed-temp="60" 
         title="150°C, 0.2s, 20µm compression"/>
   <line x1="50" y1="28" x2="65" y2="28" stroke="black" stroke-width="1" 
-        data-temp="150" data-welding-time="0.2" data-welding-height="0.040" data-bed-temp="60" 
+        data-temp="150" data-weld-time="0.2" data-weld-height="0.040" data-bed-temp="60" 
         title="150°C, 0.2s, 40µm compression"/>
   <line x1="50" y1="31" x2="65" y2="31" stroke="black" stroke-width="1" 
-        data-temp="150" data-welding-time="0.2" data-welding-height="0.060" data-bed-temp="60" 
+        data-temp="150" data-weld-time="0.2" data-weld-height="0.060" data-bed-temp="60" 
         title="150°C, 0.2s, 60µm compression"/>
   <line x1="50" y1="34" x2="65" y2="34" stroke="black" stroke-width="1" 
-        data-temp="150" data-welding-time="0.2" data-welding-height="0.080" data-bed-temp="60" 
+        data-temp="150" data-weld-time="0.2" data-weld-height="0.080" data-bed-temp="60" 
         title="150°C, 0.2s, 80µm compression"/>
   
   <!-- 160°C Tests - Complete Array -->
   <!-- 0.1s dwell time variants -->
   <line x1="70" y1="10" x2="85" y2="10" stroke="black" stroke-width="1" 
-        data-temp="160" data-welding-time="0.1" data-welding-height="0.020" data-bed-temp="60" 
+        data-temp="160" data-weld-time="0.1" data-weld-height="0.020" data-bed-temp="60" 
         title="160°C, 0.1s, 20µm compression"/>
   <line x1="70" y1="13" x2="85" y2="13" stroke="black" stroke-width="1" 
-        data-temp="160" data-welding-time="0.1" data-welding-height="0.040" data-bed-temp="60" 
+        data-temp="160" data-weld-time="0.1" data-weld-height="0.040" data-bed-temp="60" 
         title="160°C, 0.1s, 40µm compression"/>
   <line x1="70" y1="16" x2="85" y2="16" stroke="black" stroke-width="1" 
-        data-temp="160" data-welding-time="0.1" data-welding-height="0.060" data-bed-temp="60" 
+        data-temp="160" data-weld-time="0.1" data-weld-height="0.060" data-bed-temp="60" 
         title="160°C, 0.1s, 60µm compression"/>
   <line x1="70" y1="19" x2="85" y2="19" stroke="black" stroke-width="1" 
-        data-temp="160" data-welding-time="0.1" data-welding-height="0.080" data-bed-temp="60" 
+        data-temp="160" data-weld-time="0.1" data-weld-height="0.080" data-bed-temp="60" 
         title="160°C, 0.1s, 80µm compression"/>
   
   <!-- 0.2s dwell time variants -->
   <line x1="70" y1="25" x2="85" y2="25" stroke="black" stroke-width="1" 
-        data-temp="160" data-welding-time="0.2" data-welding-height="0.020" data-bed-temp="60" 
+        data-temp="160" data-weld-time="0.2" data-weld-height="0.020" data-bed-temp="60" 
         title="160°C, 0.2s, 20µm compression"/>
   <line x1="70" y1="28" x2="85" y2="28" stroke="black" stroke-width="1" 
-        data-temp="160" data-welding-time="0.2" data-welding-height="0.040" data-bed-temp="60" 
+        data-temp="160" data-weld-time="0.2" data-weld-height="0.040" data-bed-temp="60" 
         title="160°C, 0.2s, 40µm compression"/>
   <line x1="70" y1="31" x2="85" y2="31" stroke="black" stroke-width="1" 
-        data-temp="160" data-welding-time="0.2" data-welding-height="0.060" data-bed-temp="60" 
+        data-temp="160" data-weld-time="0.2" data-weld-height="0.060" data-bed-temp="60" 
         title="160°C, 0.2s, 60µm compression"/>
   <line x1="70" y1="34" x2="85" y2="34" stroke="black" stroke-width="1" 
-        data-temp="160" data-welding-time="0.2" data-welding-height="0.080" data-bed-temp="60" 
+        data-temp="160" data-weld-time="0.2" data-weld-height="0.080" data-bed-temp="60" 
         title="160°C, 0.2s, 80µm compression"/>
   
   <!-- 170°C Tests - Complete Array -->
   <!-- 0.1s dwell time variants -->
   <line x1="90" y1="10" x2="105" y2="10" stroke="black" stroke-width="1" 
-        data-temp="170" data-welding-time="0.1" data-welding-height="0.020" data-bed-temp="60" 
+        data-temp="170" data-weld-time="0.1" data-weld-height="0.020" data-bed-temp="60" 
         title="170°C, 0.1s, 20µm compression"/>
   <line x1="90" y1="13" x2="105" y2="13" stroke="black" stroke-width="1" 
-        data-temp="170" data-welding-time="0.1" data-welding-height="0.040" data-bed-temp="60" 
+        data-temp="170" data-weld-time="0.1" data-weld-height="0.040" data-bed-temp="60" 
         title="170°C, 0.1s, 40µm compression"/>
   <line x1="90" y1="16" x2="105" y2="16" stroke="black" stroke-width="1" 
-        data-temp="170" data-welding-time="0.1" data-welding-height="0.060" data-bed-temp="60" 
+        data-temp="170" data-weld-time="0.1" data-weld-height="0.060" data-bed-temp="60" 
         title="170°C, 0.1s, 60µm compression"/>
   <line x1="90" y1="19" x2="105" y2="19" stroke="black" stroke-width="1" 
-        data-temp="170" data-welding-time="0.1" data-welding-height="0.080" data-bed-temp="60" 
+        data-temp="170" data-weld-time="0.1" data-weld-height="0.080" data-bed-temp="60" 
         title="170°C, 0.1s, 80µm compression"/>
   
   <!-- 0.2s dwell time variants -->
   <line x1="90" y1="25" x2="105" y2="25" stroke="black" stroke-width="1" 
-        data-temp="170" data-welding-time="0.2" data-welding-height="0.020" data-bed-temp="60" 
+        data-temp="170" data-weld-time="0.2" data-weld-height="0.020" data-bed-temp="60" 
         title="170°C, 0.2s, 20µm compression"/>
   <line x1="90" y1="28" x2="105" y2="28" stroke="black" stroke-width="1" 
-        data-temp="170" data-welding-time="0.2" data-welding-height="0.040" data-bed-temp="60" 
+        data-temp="170" data-weld-time="0.2" data-weld-height="0.040" data-bed-temp="60" 
         title="170°C, 0.2s, 40µm compression"/>
   <line x1="90" y1="31" x2="105" y2="31" stroke="black" stroke-width="1" 
-        data-temp="170" data-welding-time="0.2" data-welding-height="0.060" data-bed-temp="60" 
+        data-temp="170" data-weld-time="0.2" data-weld-height="0.060" data-bed-temp="60" 
         title="170°C, 0.2s, 60µm compression"/>
   <line x1="90" y1="34" x2="105" y2="34" stroke="black" stroke-width="1" 
-        data-temp="170" data-welding-time="0.2" data-welding-height="0.080" data-bed-temp="60" 
+        data-temp="170" data-weld-time="0.2" data-weld-height="0.080" data-bed-temp="60" 
         title="170°C, 0.2s, 80µm compression"/>
   
   <!-- 180°C Tests - Complete Array -->
   <!-- 0.1s dwell time variants -->
   <line x1="110" y1="10" x2="125" y2="10" stroke="black" stroke-width="1" 
-        data-temp="180" data-welding-time="0.1" data-welding-height="0.020" data-bed-temp="60" 
+        data-temp="180" data-weld-time="0.1" data-weld-height="0.020" data-bed-temp="60" 
         title="180°C, 0.1s, 20µm compression"/>
   <line x1="110" y1="13" x2="125" y2="13" stroke="black" stroke-width="1" 
-        data-temp="180" data-welding-time="0.1" data-welding-height="0.040" data-bed-temp="60" 
+        data-temp="180" data-weld-time="0.1" data-weld-height="0.040" data-bed-temp="60" 
         title="180°C, 0.1s, 40µm compression"/>
   <line x1="110" y1="16" x2="125" y2="16" stroke="black" stroke-width="1" 
-        data-temp="180" data-welding-time="0.1" data-welding-height="0.060" data-bed-temp="60" 
+        data-temp="180" data-weld-time="0.1" data-weld-height="0.060" data-bed-temp="60" 
         title="180°C, 0.1s, 60µm compression"/>
   <line x1="110" y1="19" x2="125" y2="19" stroke="black" stroke-width="1" 
-        data-temp="180" data-welding-time="0.1" data-welding-height="0.080" data-bed-temp="60" 
+        data-temp="180" data-weld-time="0.1" data-weld-height="0.080" data-bed-temp="60" 
         title="180°C, 0.1s, 80µm compression"/>
   
   <!-- 0.2s dwell time variants -->
   <line x1="110" y1="25" x2="125" y2="25" stroke="black" stroke-width="1" 
-        data-temp="180" data-welding-time="0.2" data-welding-height="0.020" data-bed-temp="60" 
+        data-temp="180" data-weld-time="0.2" data-weld-height="0.020" data-bed-temp="60" 
         title="180°C, 0.2s, 20µm compression"/>
   <line x1="110" y1="28" x2="125" y2="28" stroke="black" stroke-width="1" 
-        data-temp="180" data-welding-time="0.2" data-welding-height="0.040" data-bed-temp="60" 
+        data-temp="180" data-weld-time="0.2" data-weld-height="0.040" data-bed-temp="60" 
         title="180°C, 0.2s, 40µm compression"/>
   <line x1="110" y1="31" x2="125" y2="31" stroke="black" stroke-width="1" 
-        data-temp="180" data-welding-time="0.2" data-welding-height="0.060" data-bed-temp="60" 
+        data-temp="180" data-weld-time="0.2" data-weld-height="0.060" data-bed-temp="60" 
         title="180°C, 0.2s, 60µm compression"/>
   <line x1="110" y1="34" x2="125" y2="34" stroke="black" stroke-width="1" 
-        data-temp="180" data-welding-time="0.2" data-welding-height="0.080" data-bed-temp="60" 
+        data-temp="180" data-weld-time="0.2" data-weld-height="0.080" data-bed-temp="60" 
         title="180°C, 0.2s, 80µm compression"/>
   
   <!-- Labels for reference -->

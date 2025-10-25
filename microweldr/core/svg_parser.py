@@ -86,11 +86,9 @@ class SVGParser:
 
                 # Extract custom parameters for the path
                 custom_temp = self._get_float_attr(element, "data-temp")
-                custom_welding_time = self._get_float_attr(element, "data-welding-time")
+                custom_weld_time = self._get_float_attr(element, "data-weld-time")
                 custom_bed_temp = self._get_float_attr(element, "data-bed-temp")
-                custom_welding_height = self._get_float_attr(
-                    element, "data-welding-height"
-                )
+                custom_weld_height = self._get_float_attr(element, "data-weld-height")
 
                 weld_path = WeldPath(
                     points=points,
@@ -100,9 +98,9 @@ class SVGParser:
                     element_type=element_type,
                     element_radius=element_radius,
                     custom_temp=custom_temp,
-                    custom_welding_time=custom_welding_time,
+                    custom_weld_time=custom_weld_time,
                     custom_bed_temp=custom_bed_temp,
-                    custom_welding_height=custom_welding_height,
+                    custom_weld_height=custom_weld_height,
                 )
                 weld_paths.append(weld_path)
 
@@ -234,11 +232,9 @@ class SVGParser:
 
         # Extract custom parameters from line element
         custom_temp = self._get_float_attr(line_element, "data-temp")
-        custom_welding_time = self._get_float_attr(line_element, "data-welding-time")
+        custom_weld_time = self._get_float_attr(line_element, "data-weld-time")
         custom_bed_temp = self._get_float_attr(line_element, "data-bed-temp")
-        custom_welding_height = self._get_float_attr(
-            line_element, "data-welding-height"
-        )
+        custom_weld_height = self._get_float_attr(line_element, "data-weld-height")
 
         points = [
             WeldPoint(
@@ -246,18 +242,18 @@ class SVGParser:
                 y1,
                 "normal",
                 custom_temp,
-                custom_welding_time,
+                custom_weld_time,
                 custom_bed_temp,
-                custom_welding_height,
+                custom_weld_height,
             ),
             WeldPoint(
                 x2,
                 y2,
                 "normal",
                 custom_temp,
-                custom_welding_time,
+                custom_weld_time,
                 custom_bed_temp,
-                custom_welding_height,
+                custom_weld_height,
             ),
         ]
 

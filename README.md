@@ -535,8 +535,8 @@ Control what message appears on the printer screen during stops:
 Override default welding settings per element:
 
 - **`data-temp="180"`** - Custom temperature in °C
-- **`data-welding-time="0.5"`** - Custom welding time in seconds  
-- **`data-welding-height="0.03"`** - Custom welding height in mm
+- **`data-weld-time="0.5"`** - Custom weld time in seconds  
+- **`data-weld-height="0.03"`** - Custom weld height in mm
 - **`data-spacing="1.5"`** - Custom dot spacing in mm
 
 #### **Processing Control**
@@ -559,8 +559,8 @@ Customize animation appearance:
 <line x1="10" y1="10" x2="50" y2="10"
       stroke="black"
       data-temp="160"
-      data-welding-time="0.3"
-      data-welding-height="0.025"
+      data-weld-time="0.3"
+      data-weld-height="0.025"
       id="weld_001"/>
 
 <!-- Stop point with custom message and priority -->
@@ -939,7 +939,7 @@ When working with bubble film rolls for microfluidic device creation:
 **💡 Pro Tip:**
 Use the `data-temp` attribute in your SVG to fine-tune welding temperature for different areas:
 ```xml
-<line stroke="black" data-temp="165" data-welding-time="0.2" />
+<line stroke="black" data-temp="165" data-weld-time="0.2" />
 ```
 
 ## License

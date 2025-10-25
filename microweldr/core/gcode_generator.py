@@ -277,35 +277,35 @@ class GCodeGenerator:
                 )
 
                 # Lower to welding height - use custom height if specified (path-level or point-level)
-                welding_height = (
-                    point.custom_welding_height
-                    if point.custom_welding_height is not None
+                weld_height = (
+                    point.custom_weld_height
+                    if point.custom_weld_height is not None
                     else (
-                        path.custom_welding_height
-                        if path.custom_welding_height is not None
+                        path.custom_weld_height
+                        if path.custom_weld_height is not None
                         else weld_config["weld_height"]
                     )
                 )
-                f.write(f"G1 Z{welding_height:.3f} F{z_speed}\n")
+                f.write(f"G1 Z{weld_height:.3f} F{z_speed}\n")
 
                 # Welding time - use custom welding time if specified (path-level or point-level)
-                welding_time = (
-                    point.custom_welding_time
-                    if point.custom_welding_time is not None
+                weld_time = (
+                    point.custom_weld_time
+                    if point.custom_weld_time is not None
                     else (
-                        path.custom_welding_time
-                        if path.custom_welding_time is not None
+                        path.custom_weld_time
+                        if path.custom_weld_time is not None
                         else weld_config["weld_time"]
                     )
                 )
-                welding_ms = int(welding_time * 1000)
+                weld_ms = int(weld_time * 1000)
                 if (
-                    point.custom_welding_time is not None
-                    or path.custom_welding_time is not None
+                    point.custom_weld_time is not None
+                    or path.custom_weld_time is not None
                 ):
-                    f.write(f"G4 P{welding_ms} ; Custom welding time {welding_time}s\n")
+                    f.write(f"G4 P{weld_ms} ; Custom weld time {weld_time}s\n")
                 else:
-                    f.write(f"G4 P{welding_ms} ; Welding time at welding height\n")
+                    f.write(f"G4 P{weld_ms} ; Weld time at weld height\n")
 
                 # Raise to safe height
                 f.write(f"G1 Z{move_height} F{z_speed}\n")
