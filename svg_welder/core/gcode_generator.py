@@ -112,7 +112,9 @@ class GCodeGenerator:
     def _write_user_pause(self, f: TextIO) -> None:
         """Write user pause for plastic sheet insertion."""
         f.write("; Pause for user to insert plastic sheets\n")
-        f.write("M0 ; Pause - Insert plastic sheets and press continue\n\n")
+        f.write("M117 Insert plastic sheets and press continue\n")
+        f.write("M0 ; Pause - Insert plastic sheets and press continue\n")
+        f.write("M117 Starting welding sequence...\n\n")
 
     def _write_welding_sequence(self, f: TextIO, weld_paths: List[WeldPath]) -> None:
         """Write the main welding sequence."""
@@ -130,16 +132,22 @@ class GCodeGenerator:
             if path.weld_type == "stop":
                 # Handle stop points with custom messages
                 message = path.pause_message or "Manual intervention required"
-                # Escape quotes and limit message length for G-code safety
-                safe_message = message.replace('"', "'").replace(";", ",")[:50]
-                f.write(f'M0 "{safe_message}" ; User stop requested\n\n')
+                # Clean message for LCD display (remove problematic characters)
+                safe_message = message.replace('"', "'").replace(";", ",").replace("\n", " ")[:64]  # Prusa LCD limit
+                f.write(f"; User stop requested\n")
+                f.write(f"M117 {safe_message}\n")
+                f.write(f"M0 ; Pause for user action\n")
+                f.write(f"M117 Continuing welding...\n\n")
                 continue
             elif path.weld_type == "pipette":
                 # Handle pipetting stops for microfluidic device filling
                 message = path.pause_message or "Pipette filling required"
-                # Escape quotes and limit message length for G-code safety
-                safe_message = message.replace('"', "'").replace(";", ",")[:50]
-                f.write(f'M0 "{safe_message}" ; Pipetting stop - fill pouch with pipette\n\n')
+                # Clean message for LCD display (remove problematic characters)
+                safe_message = message.replace('"', "'").replace(";", ",").replace("\n", " ")[:64]  # Prusa LCD limit
+                f.write(f"; Pipetting stop - fill pouch with pipette\n")
+                f.write(f"M117 {safe_message}\n")
+                f.write(f"M0 ; Pause for pipetting\n")
+                f.write(f"M117 Continuing welding...\n\n")
                 continue
 
             # Get settings for this weld type
