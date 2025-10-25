@@ -494,4 +494,4 @@ class MicroWeldr:
         Returns:
             Version string
         """
-        return "3.0.2"
+        return "4.0.0"

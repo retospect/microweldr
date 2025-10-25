@@ -69,7 +69,7 @@ def printer_options(func):
 
 
 @click.group()
-@click.version_option(version="3.0.2", prog_name="MicroWeldr")
+@click.version_option(version="4.0.0", prog_name="MicroWeldr")
 @click.pass_context
 def cli(ctx):
     """MicroWeldr - Convert SVG files to G-code for plastic welding.

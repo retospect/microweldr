@@ -264,7 +264,7 @@ class SystemMonitor:
             "memory": memory_info,
             "disk": disk_info,
             "working_directory": str(Path.cwd()),
-            "microweldr_version": "3.0.2",
+            "microweldr_version": "4.0.0",
         }
 
     def generate_report(self, output_path: Optional[str] = None) -> str:
