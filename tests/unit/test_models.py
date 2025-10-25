@@ -39,6 +39,13 @@ class TestWeldPoint:
         assert point1 == point2
         assert point1 != point3
 
+    def test_weld_point_type_enum(self):
+        """Test weld point type enum property."""
+        from microweldr.core.constants import WeldType
+
+        point = WeldPoint(x=1.0, y=2.0, weld_type="normal")
+        assert point.weld_type_enum == WeldType.NORMAL
+
 
 class TestWeldPath:
     """Test cases for WeldPath model."""
@@ -129,3 +136,18 @@ class TestWeldPath:
 
         bounds = path.get_bounds()
         assert bounds == (0.0, 0.0, 0.0, 0.0)
+
+    def test_weld_path_type_enum(self):
+        """Test weld path type enum property."""
+        from microweldr.core.constants import WeldType
+
+        points = [WeldPoint(x=0.0, y=0.0, weld_type="normal")]
+        path = WeldPath(points=points, weld_type="normal", svg_id="test")
+        assert path.weld_type_enum == WeldType.NORMAL
+
+    def test_weld_path_name_property(self):
+        """Test weld path name property (alias for svg_id)."""
+        points = [WeldPoint(x=0.0, y=0.0, weld_type="normal")]
+        path = WeldPath(points=points, weld_type="normal", svg_id="test_path")
+        assert path.name == "test_path"
+        assert path.name == path.svg_id
