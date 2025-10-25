@@ -181,29 +181,29 @@
         title="180°C, 0.2s, 80µm compression"/>
   
   <!-- Labels for reference -->
-  <text x="10" y="45" font-family="Arial" font-size="8" fill="blue">130°C</text>
-  <text x="30" y="45" font-family="Arial" font-size="8" fill="blue">140°C</text>
-  <text x="50" y="45" font-family="Arial" font-size="8" fill="blue">150°C</text>
-  <text x="70" y="45" font-family="Arial" font-size="8" fill="blue">160°C</text>
-  <text x="90" y="45" font-family="Arial" font-size="8" fill="blue">170°C</text>
-  <text x="110" y="45" font-family="Arial" font-size="8" fill="blue">180°C</text>
+  <text x="10" y="45" font-family="Arial" font-size="8" fill="orange">130°C</text>
+  <text x="30" y="45" font-family="Arial" font-size="8" fill="orange">140°C</text>
+  <text x="50" y="45" font-family="Arial" font-size="8" fill="orange">150°C</text>
+  <text x="70" y="45" font-family="Arial" font-size="8" fill="orange">160°C</text>
+  <text x="90" y="45" font-family="Arial" font-size="8" fill="orange">170°C</text>
+  <text x="110" y="45" font-family="Arial" font-size="8" fill="orange">180°C</text>
   
   <!-- Dwell time labels -->
   <text x="2" y="12" font-family="Arial" font-size="5" fill="green">0.1s</text>
   <text x="2" y="27" font-family="Arial" font-size="5" fill="green">0.2s</text>
   
   <!-- Height compression labels -->
-  <text x="130" y="12" font-family="Arial" font-size="5" fill="red">20µm</text>
-  <text x="130" y="15" font-family="Arial" font-size="5" fill="red">40µm</text>
-  <text x="130" y="18" font-family="Arial" font-size="5" fill="red">60µm</text>
-  <text x="130" y="21" font-family="Arial" font-size="5" fill="red">80µm</text>
+  <text x="130" y="12" font-family="Arial" font-size="5" fill="purple">20µm</text>
+  <text x="130" y="15" font-family="Arial" font-size="5" fill="purple">40µm</text>
+  <text x="130" y="18" font-family="Arial" font-size="5" fill="purple">60µm</text>
+  <text x="130" y="21" font-family="Arial" font-size="5" fill="purple">80µm</text>
   
-  <text x="130" y="27" font-family="Arial" font-size="5" fill="red">20µm</text>
-  <text x="130" y="30" font-family="Arial" font-size="5" fill="red">40µm</text>
-  <text x="130" y="33" font-family="Arial" font-size="5" fill="red">60µm</text>
-  <text x="130" y="36" font-family="Arial" font-size="5" fill="red">80µm</text>
+  <text x="130" y="27" font-family="Arial" font-size="5" fill="purple">20µm</text>
+  <text x="130" y="30" font-family="Arial" font-size="5" fill="purple">40µm</text>
+  <text x="130" y="33" font-family="Arial" font-size="5" fill="purple">60µm</text>
+  <text x="130" y="36" font-family="Arial" font-size="5" fill="purple">80µm</text>
   
   <!-- Grid explanation -->
-  <text x="10" y="55" font-family="Arial" font-size="6" fill="black">Calibration Array: Temperature × Dwell Time × Height Compression</text>
+  <text x="10" y="55" font-family="Arial" font-size="6" fill="darkgreen">Calibration Array: Temperature × Dwell Time × Height Compression</text>
   <text x="10" y="65" font-family="Arial" font-size="5" fill="gray">Each column = temperature, each row group = dwell time, each line = compression depth</text>
 </svg>
