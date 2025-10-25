@@ -22,12 +22,12 @@ cooldown_temperature = 50  # °C
 [movement]
 move_height = 5.0  # mm - height for safe movement
 travel_speed = 3000  # mm/min - reduced for layed back operation
-z_speed = 150  # mm/min - much slower Z movements for layed back printer
+z_speed = 300  # mm/min - faster Z movements for efficiency (doubled from 150)
 
 [normal_welds]
 # Settings for black SVG elements
-weld_height = 0.04  # mm - how low the nozzle goes for welding (40 microns, 2x Prusa step size)
-weld_temperature = 200  # °C
+weld_height = 0.020  # mm - how low the nozzle goes for welding (20 microns, optimized compression)
+weld_temperature = 160  # °C - optimized from calibration test results
 spot_dwell_time = 0.5  # seconds
 dot_spacing = 0.9  # mm - final desired spacing (minimal overlap with 1.0mm diameter)
 initial_dot_spacing = 3.6  # mm - spacing for first pass (wider, 4x final spacing)
@@ -35,7 +35,7 @@ cooling_time_between_passes = 2.0  # seconds - time to let plastic cool
 
 [light_welds]
 # Settings for blue SVG elements
-weld_height = 0.04  # mm - same precision height for light welds (40 microns, 2x Prusa step size)
+weld_height = 0.020  # mm - same precision height for light welds (20 microns, optimized compression)
 weld_temperature = 180  # °C - lower temperature
 spot_dwell_time = 0.3  # seconds - shorter dwell time
 dot_spacing = 0.9  # mm - final desired spacing (minimal overlap with 1.0mm diameter)
