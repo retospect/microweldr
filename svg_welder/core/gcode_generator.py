@@ -51,9 +51,19 @@ class GCodeGenerator:
             f.write("G29 ; Auto bed leveling\n\n")
 
     def _write_heating(self, f: TextIO) -> None:
-        """Write heating commands."""
+        """Write heating commands for Prusa Core One."""
         bed_temp = self.config.get("temperatures", "bed_temperature")
         nozzle_temp = self.config.get("temperatures", "nozzle_temperature")
+        use_chamber_heating = self.config.get("temperatures", "use_chamber_heating", True)
+        chamber_temp = self.config.get("temperatures", "chamber_temperature", 35)  # Default 35°C
+
+        # Chamber heating (optional)
+        if use_chamber_heating:
+            f.write(f"; Heat chamber to {chamber_temp}°C (Core One)\n")
+            f.write(f"M141 S{chamber_temp} ; Set chamber temperature\n")
+            f.write(f"M191 S{chamber_temp} ; Wait for chamber temperature\n\n")
+        else:
+            f.write("; Chamber heating disabled (sensor not available)\n\n")
 
         f.write(f"; Heat bed to {bed_temp}°C\n")
         f.write(f"M140 S{bed_temp} ; Set bed temperature\n")
@@ -65,7 +75,11 @@ class GCodeGenerator:
 
     def _write_user_pause(self, f: TextIO) -> None:
         """Write user pause for plastic sheet insertion."""
+        z_speed = self.config.get("movement", "z_speed")
+        pause_height = self.config.get("movement", "pause_height", 100.0)  # Default 100mm
+        
         f.write("; Pause for user to insert plastic sheets\n")
+        f.write("G1 Z{} F{} ; Move nozzle up for plastic sheet access\n".format(pause_height, z_speed))
         f.write("M0 ; Pause - Insert plastic sheets and press continue\n\n")
 
     def _write_welding_sequence(self, f: TextIO, weld_paths: List[WeldPath]) -> None:
@@ -222,12 +236,17 @@ class GCodeGenerator:
         return passes
 
     def _write_cooldown(self, f: TextIO) -> None:
-        """Write cooldown and end sequence."""
+        """Write cooldown and end sequence for Prusa Core One."""
         cooldown_temp = self.config.get("temperatures", "cooldown_temperature")
+        use_chamber_heating = self.config.get("temperatures", "use_chamber_heating", True)
 
-        f.write("; Cool down\n")
+        f.write("; Cool down (Core One)\n")
         f.write(f"M104 S{cooldown_temp} ; Cool nozzle\n")
         f.write(f"M140 S{cooldown_temp} ; Cool bed\n")
+        
+        if use_chamber_heating:
+            f.write(f"M141 S0 ; Turn off chamber heating\n")
+        
         f.write("G28 X Y ; Home X and Y\n")
         f.write("M84 ; Disable steppers\n")
         f.write("; End of G-code\n")

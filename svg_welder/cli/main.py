@@ -13,6 +13,7 @@ from svg_welder.validation.validators import (
     GCodeValidator,
     SVGValidator,
 )
+from svg_welder.prusalink import PrusaLinkClient, PrusaLinkError
 
 
 def create_parser() -> argparse.ArgumentParser:
@@ -26,6 +27,9 @@ Examples:
   %(prog)s input.svg --skip-bed-leveling
   %(prog)s input.svg --weld-sequence skip
   %(prog)s input.svg -c custom_config.toml
+  %(prog)s input.svg --submit-to-printer
+  %(prog)s input.svg --submit-to-printer --auto-start-print
+  %(prog)s input.svg --submit-to-printer --queue-only
         """,
     )
 
@@ -56,6 +60,36 @@ Examples:
         choices=["linear", "binary", "farthest", "skip"],
         default="skip",
         help="Welding sequence algorithm: linear (1,2,3...), binary (binary subdivision), farthest (greedy farthest-point traversal), skip (every Nth dot first, then fill gaps, default)",
+    )
+    parser.add_argument(
+        "--submit-to-printer", 
+        action="store_true", 
+        help="Submit G-code to PrusaLink after generation"
+    )
+    parser.add_argument(
+        "--secrets-config",
+        default="secrets.toml",
+        help="Path to secrets configuration file (default: secrets.toml)"
+    )
+    parser.add_argument(
+        "--printer-storage",
+        choices=["local", "usb"],
+        help="Target storage on printer (overrides config default)"
+    )
+    parser.add_argument(
+        "--auto-start-print",
+        action="store_true",
+        help="Automatically start printing after upload (overrides config default)"
+    )
+    parser.add_argument(
+        "--no-auto-start",
+        action="store_true",
+        help="Do not start printing after upload (overrides config default)"
+    )
+    parser.add_argument(
+        "--queue-only",
+        action="store_true",
+        help="Queue the file without starting (same as --no-auto-start, but clearer intent)"
     )
 
     return parser
@@ -163,7 +197,72 @@ def main() -> None:
                 print(f"Error generating animation: {e}")
                 # Don't exit on animation errors, just warn
 
-        print("Conversion complete!")
+        # Submit to printer if requested
+        if args.submit_to_printer:
+            try:
+                print("\nSubmitting G-code to printer...")
+                client = PrusaLinkClient(args.secrets_config)
+                
+                # Test connection first
+                if not client.test_connection():
+                    print("Warning: Could not connect to printer. Check your configuration.")
+                else:
+                    if args.verbose:
+                        printer_info = client.get_printer_info()
+                        print(f"Connected to: {printer_info.get('name', 'Unknown printer')}")
+                    
+                    # Determine auto-start behavior
+                    if args.no_auto_start or args.queue_only:
+                        will_auto_start = False
+                        auto_start_override = False
+                        queue_mode = args.queue_only
+                    elif args.auto_start_print:
+                        will_auto_start = True
+                        auto_start_override = True
+                        queue_mode = False
+                    else:
+                        will_auto_start = client.config.get('auto_start_print', False)
+                        auto_start_override = None
+                        queue_mode = False
+                    
+                    if queue_mode:
+                        print("📋 Queue mode: File will be uploaded but not started")
+                    elif will_auto_start:
+                        if client.is_printer_ready():
+                            print("✓ Printer is ready - will start printing immediately")
+                        else:
+                            print("⚠ Warning: Printer may not be ready (check if it's busy or has errors)")
+                            if not args.verbose:
+                                print("  Use --verbose to see printer status details")
+                    else:
+                        print("📁 File will be uploaded without auto-starting")
+                    
+                    # Upload G-code
+                    upload_result = client.upload_gcode(
+                        str(output_gcode),
+                        storage=args.printer_storage,
+                        auto_start=auto_start_override,
+                        overwrite=True  # Always overwrite for immediate printing
+                    )
+                    
+                    print(f"✓ G-code uploaded successfully: {upload_result['filename']}")
+                    if upload_result['auto_started']:
+                        print("🚀 Print started immediately - welding in progress!")
+                        print("  Monitor your printer to ensure proper operation")
+                    elif queue_mode:
+                        print("📋 File queued successfully - ready to print when you are")
+                        print("  Start the print from your printer's interface or web UI")
+                    else:
+                        print("📁 File uploaded - use your printer's interface to start the print")
+                        
+            except PrusaLinkError as e:
+                print(f"Printer submission failed: {e}")
+                print("G-code file was still generated successfully.")
+            except Exception as e:
+                print(f"Unexpected error during printer submission: {e}")
+                print("G-code file was still generated successfully.")
+
+        print("\nConversion complete!")
 
         if args.verbose:
             print(f"Output files:")

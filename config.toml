@@ -3,7 +3,7 @@
 [printer]
 # Prusa Core One specific settings
 bed_size_x = 250.0  # mm
-bed_size_y = 210.0  # mm
+bed_size_y = 220.0  # mm - Core One has 220mm Y axis
 max_z_height = 270.0  # mm
 
 [nozzle]
@@ -12,12 +12,15 @@ outer_diameter = 1.0  # mm - nozzle outer diameter
 inner_diameter = 0.2  # mm - nozzle inner diameter (opening)
 
 [temperatures]
-bed_temperature = 60  # °C
+bed_temperature = 80  # °C
 nozzle_temperature = 200  # °C for normal welds
+chamber_temperature = 35  # °C - Core One chamber temperature for plastic welding
+use_chamber_heating = false  # Set to false to disable chamber heating (useful if sensor is not working)
 cooldown_temperature = 50  # °C
 
 [movement]
 move_height = 5.0  # mm - height for safe movement
+pause_height = 100.0  # mm - height for plastic sheet insertion pause
 travel_speed = 6000  # mm/min
 z_speed = 300  # mm/min
 

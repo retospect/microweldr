@@ -2,6 +2,8 @@
 
 A Python package that converts SVG files to Prusa Core One G-code for plastic "spot" welding applications. The package processes SVG vector graphics and generates G-code that creates weld spots along the paths without extruding any plastic material.
 
+**Optimized for Prusa Core One**: Includes chamber temperature control (M141/M191), proper bed dimensions (250×220×270mm), and CoreXY-specific settings.
+
 This allows for rapid microfluidics prototyping with a 3d printer.
 While the edges are not as smooth as a laser weld, the 3d printer is more available than a laser welder. 
 
@@ -33,6 +35,7 @@ svg-welder/
 - **Bed Leveling**: Optional automatic bed leveling (can be disabled)
 - **Animation Output**: Generates animated SVG showing the welding sequence
 - **Proper G-code Structure**: Includes heating, cooling, and safety procedures
+- **PrusaLink Integration**: Direct G-code submission to Prusa MINI via PrusaLink API
 
 ## Installation
 
@@ -88,8 +91,10 @@ Edit `config.toml` to adjust welding parameters:
 
 ```toml
 [temperatures]
-bed_temperature = 60        # °C
+bed_temperature = 80        # °C
 nozzle_temperature = 200    # °C for normal welds
+chamber_temperature = 35    # °C - Core One chamber temperature
+use_chamber_heating = false # Set to false to disable chamber heating (useful if sensor is not working)
 
 [movement]
 move_height = 5.0          # mm - safe travel height
@@ -116,6 +121,109 @@ inner_diameter = 0.2        # mm - nozzle inner diameter (opening)
 time_between_welds = 0.1    # seconds - time between weld points in animation
 pause_time = 3.0            # seconds - how long pause messages are displayed
 min_animation_duration = 10.0  # seconds - minimum total animation time
+```
+
+## PrusaLink Configuration
+
+To enable direct G-code submission to your Prusa Core One, you need to configure PrusaLink access:
+
+### 1. Setup PrusaLink on Your Printer
+- Enable PrusaLink on your Prusa Core One (should be enabled by default on newer firmware)
+- Connect your printer to your network (WiFi or Ethernet)
+- Note your printer's IP address (check printer display or router) or find its `.local` hostname
+
+### 2. Find Your Printer's Address
+You can use either:
+- **IP Address**: Check your printer's display or router's connected devices
+- **.local hostname**: Usually `prusacoreone.local` or similar (check printer display for exact name)
+
+### 3. Get Authentication Credentials
+**Choose ONE method:**
+
+**Method A: LCD Password (Recommended - Easier)**
+- Check your printer's LCD display for the password (usually shown in network settings)
+- No web interface setup needed
+
+**Method B: API Key (Alternative)**
+- Open your printer's web interface: `http://YOUR_PRINTER_IP` or `http://prusacoreone.local`
+- Go to Settings → API
+- Generate or copy your API key
+
+### 4. Configure secrets.toml
+Copy the template and fill in your details:
+```bash
+cp secrets.toml.template secrets.toml
+```
+
+Edit `secrets.toml`:
+```toml
+[prusalink]
+host = "192.168.1.100"         # Your printer's IP address
+# OR use .local hostname:
+# host = "prusacoreone.local"  # More convenient, doesn't change with DHCP
+
+# Method A: LCD Password (recommended)
+username = "maker"             # Default username (usually "maker")
+password = "your-lcd-password" # Password from printer's LCD display
+
+# Method B: API Key (alternative - comment out Method A if using this)
+# username = "maker"
+# api_key = "your-api-key-here"  # From printer's web interface
+
+default_storage = "local"      # "local" or "usb"
+auto_start_print = true        # Whether to start printing immediately
+timeout = 30                   # Connection timeout in seconds
+```
+
+### 5. Test Connection
+```bash
+python test_prusalink.py
+```
+
+### 6. Submit G-code to Printer
+```bash
+# Generate and submit G-code (starts printing immediately with default config)
+svg-welder input.svg --submit-to-printer
+
+# Force immediate printing (overrides config)
+svg-welder input.svg --submit-to-printer --auto-start-print
+
+# Use USB storage instead of local
+svg-welder input.svg --submit-to-printer --printer-storage usb
+
+# Upload without starting (override config default)
+svg-welder input.svg --submit-to-printer --no-auto-start
+
+# Queue the file for later printing (clearer intent)
+svg-welder input.svg --submit-to-printer --queue-only
+```
+
+## Printing Modes
+
+The SVG welder supports three different printing modes when submitting to your printer:
+
+### **🚀 Immediate Printing** (Default)
+Files are uploaded and printing starts immediately:
+```bash
+svg-welder input.svg --submit-to-printer
+# or force immediate printing:
+svg-welder input.svg --submit-to-printer --auto-start-print
+```
+
+### **📋 Queue Mode**
+Files are uploaded and queued for later printing:
+```bash
+svg-welder input.svg --submit-to-printer --queue-only
+```
+Use this when:
+- You want to prepare multiple files
+- The printer is currently busy
+- You want to review the file before printing
+
+### **📁 Upload Only**
+Files are uploaded without any automatic behavior:
+```bash
+svg-welder input.svg --submit-to-printer --no-auto-start
 ```
 
 ## Usage
@@ -166,6 +274,15 @@ make run-comprehensive
 - `-c, --config`: Configuration file path (default: config.toml)
 - `--skip-bed-leveling`: Skip automatic bed leveling
 - `--no-animation`: Skip generating animation SVG
+- `--no-validation`: Skip validation steps
+- `--verbose, -v`: Enable verbose output
+- `--weld-sequence`: Welding sequence algorithm (linear, binary, farthest, skip)
+- `--submit-to-printer`: Submit G-code to PrusaLink after generation
+- `--secrets-config`: Path to secrets configuration file (default: secrets.toml)
+- `--printer-storage`: Target storage on printer (local or usb)
+- `--auto-start-print`: Automatically start printing after upload (overrides config)
+- `--no-auto-start`: Do not start printing after upload (overrides config)
+- `--queue-only`: Queue the file without starting (clearer intent than --no-auto-start)
 
 ## SVG Requirements
 

@@ -198,3 +198,6 @@ Thumbs.db
 
 # Log files
 *.log
+
+# Secrets and credentials
+secrets.toml
