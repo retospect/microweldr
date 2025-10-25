@@ -116,58 +116,56 @@ class SVGParser:
 
     def _determine_weld_type(self, element: ET.Element) -> Tuple[str, Optional[str]]:
         """Determine weld type based on element color and extract pause message."""
+        from .constants import Colors, WeldType, SVGAttributes, get_color_weld_type
+        
         # Check stroke color
-        stroke = element.get("stroke", "").lower()
-        fill = element.get("fill", "").lower()
+        stroke = element.get(SVGAttributes.STROKE, "").lower()
+        fill = element.get(SVGAttributes.FILL, "").lower()
         style = element.get("style", "").lower()
 
         # Parse style attribute for color information
         color_info = f"{stroke} {fill} {style}"
 
-        # Extract pause message for red elements (welding stops)
-        if any(
-            color in color_info for color in ["red", "#ff0000", "#f00", "rgb(255,0,0)"]
-        ):
-            # Look for pause message in various SVG attributes
-            pause_message = (
-                element.get("data-message")
-                or element.get("title")
-                or element.get("aria-label")
-                or element.get("desc")
-                or None
-            )
-            return "stop", pause_message
-        # Extract pause message for pink/magenta elements (pipetting stops)
-        elif any(
-            color in color_info
-            for color in [
-                "magenta",
-                "pink",
-                "fuchsia",
-                "#ff00ff",
-                "#f0f",
-                "#ff69b4",
-                "#ffc0cb",
-                "rgb(255,0,255)",
-                "rgb(255,105,180)",
-                "rgb(255,192,203)",
-            ]
-        ):
-            # Look for pipetting message in various SVG attributes
-            pipette_message = (
-                element.get("data-message")
-                or element.get("title")
-                or element.get("aria-label")
-                or element.get("desc")
-                or "Pipette filling required"  # Default message
-            )
-            return "pipette", pipette_message
-        elif any(
-            color in color_info for color in ["blue", "#0000ff", "#00f", "rgb(0,0,255)"]
-        ):
-            return "light", None
-        else:
-            return "normal", None  # Default for black or other colors
+        # Try to determine weld type from color
+        try:
+            # Check each color alias set to find a match
+            for color_alias in Colors.STOP_ALIASES:
+                if color_alias in color_info:
+                    # Look for pause message in various SVG attributes
+                    pause_message = (
+                        element.get(SVGAttributes.DATA_PAUSE_MESSAGE)
+                        or element.get("data-message")
+                        or element.get("title")
+                        or element.get("aria-label")
+                        or element.get("desc")
+                        or None
+                    )
+                    return WeldType.STOP.value, pause_message
+            
+            # Check for pipette colors (magenta/pink variants)
+            if any(color in color_info for color in Colors.PIPETTE_ALIASES):
+                # Look for pipetting message in various SVG attributes
+                pipette_message = (
+                    element.get(SVGAttributes.DATA_PAUSE_MESSAGE)
+                    or element.get("data-message")
+                    or element.get("title")
+                    or element.get("aria-label")
+                    or element.get("desc")
+                    or "Pipette filling required"  # Default message
+                )
+                return WeldType.PIPETTE.value, pipette_message
+            
+            # Check for light weld colors
+            for color_alias in Colors.LIGHT_ALIASES:
+                if color_alias in color_info:
+                    return WeldType.LIGHT.value, None
+            
+            # Default to normal weld (black or other colors)
+            return WeldType.NORMAL.value, None
+            
+        except ValueError:
+            # Fallback to normal if color parsing fails
+            return WeldType.NORMAL.value, None
 
     def _get_float_attr(self, element: ET.Element, attr_name: str) -> Optional[float]:
         """Extract float attribute from element, return None if not found or invalid."""

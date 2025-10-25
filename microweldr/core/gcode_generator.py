@@ -66,21 +66,20 @@ class GCodeGenerator:
 
     def _write_initialization(self, f: TextIO, skip_bed_leveling: bool) -> None:
         """Write printer initialization commands."""
-        layed_back_mode = self.config.get(
-            "printer", "layed_back_mode", False
-        )  # Default to upright mode (layed back is experimental)
+        from .constants import (
+            OperatingMode, ConfigSections, ConfigKeys, 
+            WarningMessages, GCodeCommands, get_operating_mode_enum, is_experimental_mode
+        )
+        
+        # Get operating mode using constants
+        mode_str = self.config.get(ConfigSections.PRINTER, ConfigKeys.LAYED_BACK_MODE, False)
+        operating_mode = OperatingMode.LAYED_BACK if mode_str else OperatingMode.UPRIGHT
 
-        if layed_back_mode:
-            # Print warning about layed back mode
-            print(
-                "⚠️  WARNING: Layed back mode is EXPERIMENTAL and may not work properly!"
-            )
-            print(
-                "⚠️  Known issues: calibration conflicts, Z-axis problems, coordinate issues"
-            )
-            print(
-                "⚠️  Recommendation: Set layed_back_mode = false for reliable operation"
-            )
+        if is_experimental_mode(operating_mode):
+            # Print warning about experimental mode
+            print(WarningMessages.EXPERIMENTAL_MODE)
+            print("⚠️  Known issues: calibration conflicts, Z-axis problems, coordinate issues")
+            print(f"⚠️  Recommendation: Set {ConfigKeys.LAYED_BACK_MODE} = false for reliable operation")
             print("⚠️  Continue at your own risk - manual intervention may be required")
             print()
             f.write("; Initialize printer (layed back mode - printer on its back!)\n")
@@ -90,9 +89,9 @@ class GCodeGenerator:
                 "; All positioning fully manual - no homing to avoid X/Y conflicts\n\n"
             )
 
-            f.write("G90 ; Absolute positioning\n")
-            f.write("M83 ; Relative extruder positioning\n")
-            f.write("M84 S0 ; Disable stepper timeout for layed back operation\n")
+            f.write(f"{GCodeCommands.G90} ; Absolute positioning\n")
+            f.write(f"{GCodeCommands.M83} ; Relative extruder positioning\n")
+            f.write(f"{GCodeCommands.M84} S0 ; Disable stepper timeout for layed back operation\n")
 
             # Trust X/Y but will home Z during heating
             f.write(
@@ -105,9 +104,9 @@ class GCodeGenerator:
         else:
             # Standard operation mode
             f.write("; Initialize printer (standard operation mode)\n")
-            f.write("G90 ; Absolute positioning\n")
-            f.write("M83 ; Relative extruder positioning\n")
-            f.write("G28 ; Home all axes\n\n")
+            f.write(f"{GCodeCommands.G90} ; Absolute positioning\n")
+            f.write(f"{GCodeCommands.M83} ; Relative extruder positioning\n")
+            f.write(f"{GCodeCommands.G28} ; Home all axes\n\n")
 
             # Bed leveling (optional)
             if not skip_bed_leveling:

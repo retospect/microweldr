@@ -3,6 +3,8 @@
 from dataclasses import dataclass
 from typing import List, Optional
 
+from .constants import WeldType, get_valid_weld_types, get_weld_type_enum, ErrorMessages
+
 
 @dataclass
 class WeldPoint:
@@ -10,7 +12,7 @@ class WeldPoint:
 
     x: float
     y: float
-    weld_type: str  # 'normal', 'light', 'stop', or 'pipette'
+    weld_type: str  # Use WeldType enum values: 'normal', 'light', 'stop', or 'pipette'
     custom_temp: Optional[float] = None  # Custom temperature for this point
     custom_weld_time: Optional[float] = None  # Custom weld time for this point
     custom_bed_temp: Optional[float] = None  # Custom bed temperature
@@ -18,8 +20,17 @@ class WeldPoint:
 
     def __post_init__(self) -> None:
         """Validate weld point data."""
-        if self.weld_type not in ("normal", "light", "stop", "pipette"):
-            raise ValueError(f"Invalid weld_type: {self.weld_type}")
+        valid_types = get_valid_weld_types()
+        if self.weld_type not in valid_types:
+            raise ValueError(ErrorMessages.INVALID_WELD_TYPE.format(
+                weld_type=self.weld_type,
+                valid_types=", ".join(valid_types)
+            ))
+
+    @property
+    def weld_type_enum(self) -> WeldType:
+        """Get weld type as enum."""
+        return get_weld_type_enum(self.weld_type)
 
 
 @dataclass
@@ -39,14 +50,28 @@ class WeldPath:
 
     def __post_init__(self) -> None:
         """Validate weld path data."""
-        if self.weld_type not in ("normal", "light", "stop", "pipette"):
-            raise ValueError(f"Invalid weld_type: {self.weld_type}")
+        valid_types = get_valid_weld_types()
+        if self.weld_type not in valid_types:
+            raise ValueError(ErrorMessages.INVALID_WELD_TYPE.format(
+                weld_type=self.weld_type,
+                valid_types=", ".join(valid_types)
+            ))
 
         if not self.points:
             raise ValueError("WeldPath must contain at least one point")
 
         if not self.svg_id:
             raise ValueError("WeldPath must have a valid svg_id")
+
+    @property
+    def weld_type_enum(self) -> WeldType:
+        """Get weld type as enum."""
+        return get_weld_type_enum(self.weld_type)
+
+    @property
+    def name(self) -> str:
+        """Get path name (alias for svg_id for backward compatibility)."""
+        return self.svg_id
 
     @property
     def point_count(self) -> int:

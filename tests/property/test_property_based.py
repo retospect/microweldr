@@ -11,6 +11,7 @@ from microweldr.core.models import WeldPoint, WeldPath
 from microweldr.core.safety import SafetyValidator, validate_weld_operation
 from microweldr.core.security import SecretsValidator
 from microweldr.core.caching import optimize_weld_paths
+from microweldr.core.constants import WeldType, get_valid_weld_types
 
 
 class TestSafetyValidation:
@@ -63,7 +64,7 @@ class TestWeldPointGeneration:
     @given(
         x=st.floats(min_value=-1000, max_value=1000, allow_nan=False, allow_infinity=False),
         y=st.floats(min_value=-1000, max_value=1000, allow_nan=False, allow_infinity=False),
-        weld_type=st.sampled_from(["normal", "light", "stop", "pipette"]),
+        weld_type=st.sampled_from([wt.value for wt in WeldType]),
         custom_temp=st.one_of(st.none(), st.floats(min_value=50, max_value=120)),
         custom_weld_time=st.one_of(st.none(), st.floats(min_value=0.05, max_value=5.0)),
         custom_weld_height=st.one_of(st.none(), st.floats(min_value=0.001, max_value=0.5))
@@ -99,7 +100,7 @@ class TestWeldPointGeneration:
                 WeldPoint,
                 x=st.floats(min_value=0, max_value=250, allow_nan=False, allow_infinity=False),
                 y=st.floats(min_value=0, max_value=220, allow_nan=False, allow_infinity=False),
-                weld_type=st.sampled_from(["normal", "light"]),
+                weld_type=st.sampled_from([WeldType.NORMAL.value, WeldType.LIGHT.value]),
                 custom_temp=st.one_of(st.none(), st.floats(min_value=50, max_value=120)),
                 custom_weld_time=st.one_of(st.none(), st.floats(min_value=0.05, max_value=5.0)),
                 custom_weld_height=st.one_of(st.none(), st.floats(min_value=0.001, max_value=0.5))
@@ -107,7 +108,7 @@ class TestWeldPointGeneration:
             min_size=1,
             max_size=100
         ),
-        weld_type=st.sampled_from(["normal", "light"]),
+        weld_type=st.sampled_from([WeldType.NORMAL.value, WeldType.LIGHT.value]),
         name=st.text(min_size=1, max_size=50, alphabet=st.characters(whitelist_categories=('Lu', 'Ll', 'Nd', 'Pc', 'Pd')))
     )
     def test_weld_path_creation_and_optimization(self, points, weld_type, name):
@@ -276,7 +277,7 @@ class WeldOperationStateMachine(RuleBasedStateMachine):
     @rule(
         x=st.floats(min_value=0, max_value=250, allow_nan=False, allow_infinity=False),
         y=st.floats(min_value=0, max_value=220, allow_nan=False, allow_infinity=False),
-        weld_type=st.sampled_from(["normal", "light"])
+        weld_type=st.sampled_from([WeldType.NORMAL.value, WeldType.LIGHT.value])
     )
     def add_weld_point(self, x, y, weld_type):
         """Add a weld point to the current operation."""
@@ -312,21 +313,22 @@ class WeldOperationStateMachine(RuleBasedStateMachine):
             # Each optimized path should have valid structure
             for path in optimized:
                 assert len(path.points) >= 1
-                assert path.weld_type in ["normal", "light"]
+                assert path.weld_type in [WeldType.NORMAL.value, WeldType.LIGHT.value]
                 assert isinstance(path.name, str)
     
     @invariant()
     def paths_are_valid(self):
         """Invariant: all paths should always be valid."""
+        valid_types = get_valid_weld_types()
         for path in self.weld_paths:
             assert len(path.points) >= 1
-            assert path.weld_type in ["normal", "light", "stop", "pipette"]
+            assert path.weld_type in valid_types
             assert isinstance(path.name, str)
             
             for point in path.points:
                 assert isinstance(point.x, (int, float))
                 assert isinstance(point.y, (int, float))
-                assert point.weld_type in ["normal", "light", "stop", "pipette"]
+                assert point.weld_type in valid_types
 
 
 # Configure Hypothesis settings for reasonable test execution time
