@@ -1,29 +1,6 @@
 # MicroWeldr
 
-<!-- Core Project Info -->
 [![PyPI version](https://badge.fury.io/py/microweldr.svg)](https://badge.fury.io/py/microweldr)
-[![Python versions](https://img.shields.io/pypi/pyversions/microweldr.svg)](https://pypi.org/project/microweldr/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub release](https://img.shields.io/github/release/retospect/microweldr.svg)](https://github.com/retospect/microweldr/releases)
-
-<!-- Quality & Testing -->
-[![Tests](https://github.com/retospect/microweldr/workflows/Tests/badge.svg)](https://github.com/retospect/microweldr/actions)
-[![Coverage](https://codecov.io/gh/retospect/microweldr/branch/master/graph/badge.svg)](https://codecov.io/gh/retospect/microweldr)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Type checked: mypy](https://img.shields.io/badge/type%20checked-mypy-blue)](http://mypy-lang.org/)
-[![Security: bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
-
-<!-- Platform & Application -->
-[![Supported Platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)](https://github.com/retospect/microweldr)
-[![Prusa Printer](https://img.shields.io/badge/printer-Prusa%20Core%20One-orange)](https://www.prusa3d.com/)
-[![Microfluidics](https://img.shields.io/badge/application-microfluidics-blue)](https://github.com/retospect/microweldr)
-[![SVG to G-code](https://img.shields.io/badge/conversion-SVG%20to%20G--code-purple)](https://github.com/retospect/microweldr)
-
-<!-- Documentation & Community -->
-[![Documentation Status](https://readthedocs.org/projects/microweldr/badge/?version=latest)](https://microweldr.readthedocs.io/en/latest/?badge=latest)
-[![Downloads](https://pepy.tech/badge/microweldr)](https://pepy.tech/project/microweldr)
-[![GitHub last commit](https://img.shields.io/github/last-commit/retospect/microweldr.svg)](https://github.com/retospect/microweldr/commits)
-[![GitHub stars](https://img.shields.io/github/stars/retospect/microweldr.svg?style=social&label=Star)](https://github.com/retospect/microweldr)
 
 A Python package that converts SVG files to Prusa Core One G-code for plastic "spot" welding applications. The package processes SVG vector graphics and generates G-code that creates weld spots along the paths without extruding any plastic material.
 
@@ -91,7 +68,7 @@ microweldr-workflow weld design.svg
 
 - **`calibrate`** - Performs XYZ calibration and stores results persistently (no SVG file needed)
 - **`load`** - Lowers table 10cm for easy film loading, sets target temperature but doesn't wait
-- **`frame`** - Runs rectangle at move height to check for magnet interference with nozzle path  
+- **`frame`** - Runs rectangle at move height to check for magnet interference with nozzle path
 - **`weld`** - Sets bed temperature, waits for it, then runs the complete welding sequence
 
 All commands are **immediately executed** on the printer via PrusaLink.
@@ -108,7 +85,7 @@ microweldr-workflow frame design1.svg
 microweldr-workflow weld design1.svg
 
 # Second design (no calibration needed)
-microweldr-workflow load  
+microweldr-workflow load
 # [Load new film, adjust magnets]
 microweldr-workflow frame design2.svg
 microweldr-workflow weld design2.svg
@@ -488,7 +465,7 @@ MicroWeldr interprets SVG element colors to determine weld behavior:
 #### **Color Specification:**
 Colors can be specified via:
 - `stroke` attribute: `stroke="black"`
-- `fill` attribute: `fill="blue"`  
+- `fill` attribute: `fill="blue"`
 - `style` attribute: `style="fill:red;stroke:none"`
 
 #### **Best Practice for Labels:**
@@ -550,7 +527,7 @@ MicroWeldr recognizes several custom SVG attributes that allow fine-grained cont
 Control what message appears on the printer screen during stops:
 
 - **`data-message="text"`** - Custom pause message (recommended)
-- **`title="text"`** - Standard SVG title attribute  
+- **`title="text"`** - Standard SVG title attribute
 - **`desc="text"`** - SVG description element
 - **`aria-label="text"`** - Accessibility label
 
@@ -560,7 +537,7 @@ Control what message appears on the printer screen during stops:
 Override default welding settings per element:
 
 - **`data-temp="180"`** - Custom temperature in °C
-- **`data-weld-time="0.5"`** - Custom weld time in seconds  
+- **`data-weld-time="0.5"`** - Custom weld time in seconds
 - **`data-weld-height="0.03"`** - Custom weld height in mm
 - **`data-spacing="1.5"`** - Custom dot spacing in mm
 
@@ -612,7 +589,7 @@ Customize animation appearance:
 
 #### **Parameter Inheritance**
 - **Global defaults** from `config.toml` apply to all elements
-- **Color-based defaults** (normal/light welds) override global defaults  
+- **Color-based defaults** (normal/light welds) override global defaults
 - **Custom attributes** override both global and color-based defaults
 - **Invalid values** fall back to defaults with warnings
 
