@@ -49,6 +49,10 @@ isort = "^5.12.0"
 flake8 = "^6.0.0"
 mypy = "^1.0.0"
 pre-commit = "^3.0.0"
+hypothesis = "^6.0.0"
+requests-mock = "^1.12.0"
+click = "^8.0.0"
+tqdm = "^4.65.0"
 
 # All features included by default - no optional extras needed
 
