@@ -2,7 +2,7 @@
 
 A Python package that converts SVG files to Prusa Core One G-code for plastic "spot" welding applications. The package processes SVG vector graphics and generates G-code that creates weld spots along the paths without extruding any plastic material.
 
-**Optimized for Prusa Core One**: Includes chamber temperature control (M141/M191), proper bed dimensions (250×220×270mm), and CoreXY-specific settings.
+**Optimized for Prusa Core One**: Includes chamber temperature control (M141/M191), proper bed dimensions (250×220×270mm), CoreXY-specific settings, and **inverted operation mode** for door-up positioning.
 
 This allows for rapid microfluidics prototyping with a 3d printer.
 While the edges are not as smooth as a laser weld, the 3d printer is more available than a laser welder. 
@@ -122,6 +122,32 @@ time_between_welds = 0.1    # seconds - time between weld points in animation
 pause_time = 3.0            # seconds - how long pause messages are displayed
 min_animation_duration = 10.0  # seconds - minimum total animation time
 ```
+
+## Inverted Operation Mode
+
+The SVG welder is **optimized for inverted printer operation** (door pointing up) which is ideal for plastic welding applications.
+
+### **🔄 Default Configuration**
+```toml
+[printer]
+inverted_operation = true  # Default: true for door-up operation
+```
+
+### **📍 Manual Positioning Required**
+**IMPORTANT**: Before starting any print:
+1. **Manually position** the print head to the **rear right corner** of the bed
+2. **No homing** is performed - the printer assumes your manual position is the origin
+3. **G92 X0 Y0 Z0** command sets current position as (0,0,0)
+
+### **🛡️ Safety Features for Inverted Mode**
+- ✅ **No automatic homing** (prevents endpoint errors)
+- ✅ **No bed leveling** (too risky when inverted)
+- ✅ **Slower movements** (3000 mm/min travel, 150 mm/min Z-axis)
+- ✅ **Disabled stepper timeout** (M84 S0)
+- ✅ **Gentle Z positioning** (slow movements to avoid crashes)
+
+### **⚙️ Standard Mode (Optional)**
+Set `inverted_operation = false` for normal upright printer operation with full homing and bed leveling.
 
 ## PrusaLink Configuration
 

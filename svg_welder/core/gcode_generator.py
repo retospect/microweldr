@@ -40,15 +40,36 @@ class GCodeGenerator:
 
     def _write_initialization(self, f: TextIO, skip_bed_leveling: bool) -> None:
         """Write printer initialization commands."""
-        f.write("; Initialize printer\n")
-        f.write("G90 ; Absolute positioning\n")
-        f.write("M83 ; Relative extruder positioning\n")
-        f.write("G28 ; Home all axes\n\n")
+        inverted_mode = self.config.get("printer", "inverted_operation", True)  # Default to inverted
+        
+        if inverted_mode:
+            f.write("; Initialize printer (inverted operation mode)\n")
+            f.write("; IMPORTANT: Manually position print head before starting!\n")
+            f.write("; Expected position: Rear right corner of bed\n")
+            f.write("; No homing performed - assumes manual positioning\n\n")
+            
+            f.write("G90 ; Absolute positioning\n")
+            f.write("M83 ; Relative extruder positioning\n")
+            f.write("M84 S0 ; Disable stepper timeout for inverted operation\n")
+            f.write("G92 X0 Y0 Z0 ; Set current position as origin (manual positioning assumed)\n")
+            f.write("G1 Z10 F150 ; Move Z to safe position slowly\n\n")
 
-        # Bed leveling (optional)
-        if not skip_bed_leveling:
-            f.write("; Bed leveling\n")
-            f.write("G29 ; Auto bed leveling\n\n")
+            # Always skip bed leveling for inverted operation
+            f.write("; Bed leveling disabled for inverted operation\n")
+            f.write("; Manual bed preparation required\n\n")
+        else:
+            # Standard operation mode
+            f.write("; Initialize printer (standard operation mode)\n")
+            f.write("G90 ; Absolute positioning\n")
+            f.write("M83 ; Relative extruder positioning\n")
+            f.write("G28 ; Home all axes\n\n")
+
+            # Bed leveling (optional)
+            if not skip_bed_leveling:
+                f.write("; Bed leveling\n")
+                f.write("G29 ; Auto bed leveling\n\n")
+            else:
+                f.write("; Bed leveling disabled\n\n")
 
     def _write_heating(self, f: TextIO) -> None:
         """Write heating commands for Prusa Core One."""
@@ -75,11 +96,7 @@ class GCodeGenerator:
 
     def _write_user_pause(self, f: TextIO) -> None:
         """Write user pause for plastic sheet insertion."""
-        z_speed = self.config.get("movement", "z_speed")
-        pause_height = self.config.get("movement", "pause_height", 100.0)  # Default 100mm
-        
         f.write("; Pause for user to insert plastic sheets\n")
-        f.write("G1 Z{} F{} ; Move nozzle up for plastic sheet access\n".format(pause_height, z_speed))
         f.write("M0 ; Pause - Insert plastic sheets and press continue\n\n")
 
     def _write_welding_sequence(self, f: TextIO, weld_paths: List[WeldPath]) -> None:

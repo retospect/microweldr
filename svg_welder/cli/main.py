@@ -1,6 +1,7 @@
 """Command line interface for the SVG welder."""
 
 import argparse
+from datetime import datetime
 import sys
 from pathlib import Path
 
@@ -91,6 +92,11 @@ Examples:
         action="store_true",
         help="Queue the file without starting (same as --no-auto-start, but clearer intent)"
     )
+    parser.add_argument(
+        "--timestamp",
+        action="store_true",
+        help="Add timestamp (yy-mm-dd-hh-mm-ss) to output filename for uniqueness"
+    )
 
     return parser
 
@@ -122,9 +128,18 @@ def main() -> None:
     if args.output:
         output_gcode = Path(args.output)
     else:
-        output_gcode = input_path.with_suffix(".gcode")
+        base_name = input_path.stem
+        if args.timestamp:
+            timestamp = datetime.now().strftime("%y-%m-%d-%H-%M-%S")
+            base_name = f"{base_name}_{timestamp}"
+        output_gcode = input_path.with_name(base_name + ".gcode")
 
-    output_animation = input_path.with_name(input_path.stem + "_animation.svg")
+    # Animation path (always use timestamped name if timestamp option is used)
+    animation_base = input_path.stem
+    if args.timestamp:
+        timestamp = datetime.now().strftime("%y-%m-%d-%H-%M-%S")
+        animation_base = f"{animation_base}_{timestamp}"
+    output_animation = input_path.with_name(animation_base + "_animation.svg")
 
     try:
         # Initialize configuration

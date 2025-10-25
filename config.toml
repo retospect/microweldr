@@ -5,6 +5,7 @@
 bed_size_x = 250.0  # mm
 bed_size_y = 220.0  # mm - Core One has 220mm Y axis
 max_z_height = 270.0  # mm
+inverted_operation = true  # Set to true for inverted printer operation (door pointing up)
 
 [nozzle]
 # Nozzle dimensions for animation visualization
@@ -20,9 +21,8 @@ cooldown_temperature = 50  # °C
 
 [movement]
 move_height = 5.0  # mm - height for safe movement
-pause_height = 100.0  # mm - height for plastic sheet insertion pause
-travel_speed = 6000  # mm/min
-z_speed = 300  # mm/min
+travel_speed = 3000  # mm/min - reduced for inverted operation
+z_speed = 150  # mm/min - much slower Z movements for inverted printer
 
 [normal_welds]
 # Settings for black SVG elements
