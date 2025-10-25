@@ -134,15 +134,15 @@ layed_back_mode = true  # Default: true for when printer is relaxing on its back
 ```
 
 ### **📍 Manual Positioning Required**
-**IMPORTANT**: Before starting any print (your printer is trusting you here!):
+**IMPORTANT**: Before starting any print (your printer is trusting you completely!):
 1. **Manually position** the print head to the **rear right corner** of the bed
-2. **X/Y positioning trusted** - the printer is chillin' and trusts your positioning
-3. **Z-axis will be homed** - critical for proper weld depth calibration
-4. **G92 X0 Y0** sets current X/Y as origin, **G28 Z** homes Z-axis
+2. **Set proper Z-height** - position nozzle at desired starting height above bed
+3. **All positioning trusted** - the printer is chillin' and trusts your setup completely
+4. **G92 X0 Y0 Z0** sets current position as origin (no homing performed)
 
 ### **🛡️ Safety Features for Layed Back Mode**
-- ✅ **No X/Y homing** (prevents endpoint errors when printer is on its back)
-- ✅ **Z-axis calibration** (G28 Z ensures proper weld depth accuracy)
+- ✅ **No homing at all** (prevents any endpoint errors when printer is on its back)
+- ✅ **Fully manual positioning** (complete trust in your setup)
 - ✅ **No bed leveling** (too risky when printer is layed back)
 - ✅ **Slower movements** (3000 mm/min travel, 150 mm/min Z-axis - no rush!)
 - ✅ **Disabled stepper timeout** (M84 S0 - printer stays relaxed)
