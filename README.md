@@ -403,6 +403,86 @@ If no message is specified, the default "Manual intervention required" will be u
 <rect x="10" y="10" width="5" height="5" fill="red" title="Insert second plastic sheet"/>
 ```
 
+### Special SVG Attributes
+
+MicroWeldr recognizes several custom SVG attributes that allow fine-grained control over welding parameters and behavior:
+
+#### **Custom Pause Messages**
+Control what message appears on the printer screen during stops:
+
+- **`data-message="text"`** - Custom pause message (recommended)
+- **`title="text"`** - Standard SVG title attribute  
+- **`desc="text"`** - SVG description element
+- **`aria-label="text"`** - Accessibility label
+
+**Priority Order**: `data-message` > `title` > `desc` > `aria-label` > default message
+
+#### **Custom Welding Parameters**
+Override default welding settings per element:
+
+- **`data-temp="180"`** - Custom temperature in °C
+- **`data-dwell="0.5"`** - Custom dwell time in seconds  
+- **`data-height="0.03"`** - Custom weld height in mm
+- **`data-spacing="1.5"`** - Custom dot spacing in mm
+
+#### **Processing Control**
+Control how elements are processed:
+
+- **`data-skip="true"`** - Skip this element entirely
+- **`data-priority="10"`** - Processing priority (lower = earlier)
+- **`id="weld_001"`** - Element ID for ordering (numeric IDs sorted)
+
+#### **Animation Control**
+Customize animation appearance:
+
+- **`data-animate="false"`** - Exclude from animation
+- **`data-color="#ff0000"`** - Custom animation color
+- **`data-delay="2.0"`** - Extra delay before this element (seconds)
+
+#### **Complete Example**
+```xml
+<!-- Normal weld with custom parameters -->
+<line x1="10" y1="10" x2="50" y2="10" 
+      stroke="black" 
+      data-temp="160" 
+      data-dwell="0.3"
+      data-height="0.025"
+      id="weld_001"/>
+
+<!-- Stop point with custom message and priority -->
+<circle cx="30" cy="30" r="2" 
+        fill="red" 
+        data-message="Insert reagent tube and press continue"
+        data-priority="5"
+        title="Reagent insertion point"/>
+
+<!-- Light weld with custom spacing -->
+<path d="M 60,20 L 80,20 L 80,40 Z" 
+      stroke="blue" 
+      data-spacing="0.8"
+      data-animate="true"
+      data-color="#00aaff"/>
+
+<!-- Pipetting stop with custom parameters -->
+<rect x="70" y="50" width="5" height="5" 
+      fill="magenta" 
+      data-message="Pipette 5μL sample into chamber"
+      data-delay="1.0"
+      aria-label="Sample injection point"/>
+```
+
+#### **Parameter Inheritance**
+- **Global defaults** from `config.toml` apply to all elements
+- **Color-based defaults** (normal/light welds) override global defaults  
+- **Custom attributes** override both global and color-based defaults
+- **Invalid values** fall back to defaults with warnings
+
+#### **Validation**
+- Temperature: 100-300°C (validated against printer limits)
+- Dwell time: 0.1-5.0 seconds (prevents damage)
+- Height: 0.01-1.0 mm (prevents crashes)
+- Spacing: 0.1-10.0 mm (reasonable welding density)
+
 ### Supported SVG Elements
 - `<path>` - Follows path commands (M, L, Z supported)
 - `<line>` - Straight lines between two points
