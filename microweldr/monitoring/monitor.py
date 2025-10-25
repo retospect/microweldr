@@ -56,6 +56,71 @@ class PrintMonitor:
         }
         return mode_emojis.get(self.mode, "📊")
 
+    def _get_status_emoji(self, state: str) -> str:
+        """Get emoji for printer state."""
+        state_emojis = {
+            "operational": "🟢",
+            "printing": "🔥",
+            "paused": "⏸️",
+            "error": "❌",
+            "failed": "❌",
+            "cancelled": "🛑",
+            "finished": "✅",
+            "completed": "✅",
+            "done": "✅",
+        }
+        return state_emojis.get(state.lower(), "❓")
+
+    def _format_time(self, seconds: Optional[float]) -> str:
+        """Format time in human readable format."""
+        if seconds is None:
+            return "Unknown"
+        
+        seconds = int(seconds)
+        if seconds < 60:
+            return f"{seconds}s"
+        elif seconds < 3600:
+            minutes = seconds // 60
+            remaining_seconds = seconds % 60
+            return f"{minutes}m {remaining_seconds}s"
+        else:
+            hours = seconds // 3600
+            minutes = (seconds % 3600) // 60
+            return f"{hours}h {minutes}m"
+
+    def _get_welding_phase(self, z_position: float) -> str:
+        """Get welding phase based on Z position."""
+        if z_position < 10:
+            return "🔧 Welding"
+        elif z_position < 50:
+            return "⚡ Active welding"
+        else:
+            return "🔥 High-layer welding"
+
+    def get_print_status(self) -> Optional[Dict[str, Any]]:
+        """Get current print status (alias for get_current_status)."""
+        return self.get_current_status()
+
+    def _display_status(self, status: Dict[str, Any], mode: str = "welding") -> None:
+        """Display status information."""
+        state = status.get("state", "Unknown")
+        progress = status.get("progress", 0)
+        file_name = status.get("file_name", "Unknown")
+        
+        emoji = self._get_status_emoji(state)
+        mode_emoji = self.get_mode_emoji()
+        
+        print(f"{emoji} {state} | {progress:.1f}% | {mode_emoji} {mode.title()} Mode")
+        print(f"📄 File: {file_name}")
+        
+        if "current_activity" in status:
+            print(f"🎯 Activity: {status['current_activity']}")
+
+    def _clear_screen(self) -> None:
+        """Clear the terminal screen."""
+        import os
+        os.system('cls' if os.name == 'nt' else 'clear')
+
     def format_time_remaining(self, seconds: Optional[float]) -> str:
         """Format time remaining in human readable format."""
         if not seconds or seconds <= 0:

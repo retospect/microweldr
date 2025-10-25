@@ -108,8 +108,8 @@ class SecretsValidator:
         if len(set(password)) < len(password) * 0.6:
             issues.append("Password contains too many repeated characters")
 
-        # Check for sequential characters
-        sequential_patterns = ["123", "abc", "qwe", "asd", "zxc"]
+        # Check for sequential characters (longer patterns only)
+        sequential_patterns = ["1234", "abcd", "qwer", "asdf", "zxcv"]
         if any(pattern in password.lower() for pattern in sequential_patterns):
             issues.append("Password contains sequential characters")
 
@@ -423,6 +423,44 @@ class SecretsValidator:
 
         is_safe = len(issues) == 0
         return is_safe, issues
+
+    def sanitize_filename(self, filename: str) -> str:
+        """Sanitize a filename to make it safe for filesystem use.
+        
+        Args:
+            filename: The filename to sanitize
+            
+        Returns:
+            A safe filename with dangerous characters removed/replaced
+        """
+        if not filename:
+            return "unnamed_file"
+        
+        # Remove path traversal attempts
+        filename = filename.replace("..", "")
+        filename = filename.replace("/", "_")
+        filename = filename.replace("\\", "_")
+        
+        # Remove or replace dangerous characters
+        dangerous_chars = '<>:"|?*\x00-\x1f'
+        for char in dangerous_chars:
+            filename = filename.replace(char, "_")
+        
+        # Remove HTML/script tags and dangerous keywords
+        filename = re.sub(r'<[^>]*>', '', filename)
+        filename = re.sub(r'script', '', filename, flags=re.IGNORECASE)
+        filename = re.sub(r'javascript', '', filename, flags=re.IGNORECASE)
+        
+        # Limit length and ensure it's not empty
+        filename = filename.strip()[:255]
+        if not filename:
+            filename = "sanitized_file"
+            
+        # Ensure it doesn't start with dangerous prefixes
+        if filename.startswith(('.', '-')):
+            filename = 'safe_' + filename
+            
+        return filename
 
 
 def validate_secrets_interactive(secrets_path: str) -> bool:
