@@ -67,10 +67,16 @@ class GCodeGenerator:
     def _write_initialization(self, f: TextIO, skip_bed_leveling: bool) -> None:
         """Write printer initialization commands."""
         layed_back_mode = self.config.get(
-            "printer", "layed_back_mode", True
-        )  # Default to layed back
+            "printer", "layed_back_mode", False
+        )  # Default to upright mode (layed back is experimental)
 
         if layed_back_mode:
+            # Print warning about layed back mode
+            print("⚠️  WARNING: Layed back mode is EXPERIMENTAL and may not work properly!")
+            print("⚠️  Known issues: calibration conflicts, Z-axis problems, coordinate issues")
+            print("⚠️  Recommendation: Set layed_back_mode = false for reliable operation")
+            print("⚠️  Continue at your own risk - manual intervention may be required")
+            print()
             f.write("; Initialize printer (layed back mode - printer on its back!)\n")
             f.write("; IMPORTANT: Manually position print head before starting!\n")
             f.write("; Expected position: Rear right corner of bed\n")
@@ -108,7 +114,7 @@ class GCodeGenerator:
         """Wait for bed temperature and heat nozzle."""
         bed_temp = self.config.get("temperatures", "bed_temperature")
         nozzle_temp = self.config.get("temperatures", "nozzle_temperature")
-        layed_back_mode = self.config.get("printer", "layed_back_mode", True)
+        layed_back_mode = self.config.get("printer", "layed_back_mode", False)
 
         # Z-axis calibration while bed heats up (layed back mode only)
         if layed_back_mode:

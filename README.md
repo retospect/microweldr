@@ -174,15 +174,29 @@ pause_time = 3.0            # seconds - how long pause messages are displayed
 min_animation_duration = 10.0  # seconds - minimum total animation time
 ```
 
-## Layed Back Mode 😎
+## Layed Back Mode (⚠️ EXPERIMENTAL - NOT WORKING YET)
 
-The SVG welder is **optimized for layed back printer operation** - when your printer is chillin' on its back with the door pointing up! Perfect for plastic welding applications.
+**⚠️ WARNING: Layed back mode is currently under development and does not work properly. Use standard upright mode for reliable operation.**
 
-### **🛋️ Default Configuration**
+The SVG welder was designed to support "layed back printer operation" - when your printer is chillin' on its back with the door pointing up for easy access to microfluidic devices. However, this mode is currently experiencing technical issues.
+
+### **Known Issues:**
+- ❌ Calibration conflicts with manual positioning
+- ❌ Z-axis homing issues when printer is on its back
+- ❌ Coordinate system needs adjustment for inverted orientation
+- ❌ Safety features need refinement for this configuration
+
+### **Current Recommendation:**
 ```toml
 [printer]
-layed_back_mode = true  # Default: true for when printer is relaxing on its back
+layed_back_mode = false  # Use standard upright mode for now
 ```
+
+### **Future Development:**
+Once the issues are resolved, layed back mode will provide:
+- Easy access for pipetting and microfluidic operations
+- Manual positioning with trusted coordinates
+- Optimized G-code for inverted printer orientation
 
 ### **📍 Manual Positioning Required**
 **IMPORTANT**: Before starting any print (your printer is trusting you completely!):
