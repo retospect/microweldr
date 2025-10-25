@@ -100,24 +100,32 @@ After installation, these console commands are available:
 svg-welder input.svg -o output.gcode
 svg2gcode input.svg -o output.gcode  
 prusa-welder input.svg -o output.gcode
+
+# Print with automatic monitoring
+svg-welder input.svg --submit-to-printer --monitor
+svg-welder input.svg --submit-to-printer --monitor --monitor-mode pipetting
 ```
 
-### **Printer Control & Monitoring**
+### **Unified Printer Control**
 ```bash
+# All-in-one printer control tool
+printer-control status                    # Check printer status
+printer-control status --verbose         # Detailed status
+printer-control monitor                   # Monitor current print
+printer-control monitor --mode layed-back --interval 20
+printer-control stop                      # Stop current print
+printer-control stop --force             # Force stop
+printer-control test                      # Test connection
+
 # Test PrusaLink connection
 test-prusalink
+```
 
-# Check current printer status
-printer-status
-printer-status --verbose
-
-# Monitor print progress
-monitor-print
-monitor-print --mode layed-back
-monitor-print --mode pipetting --interval 20
-
-# Stop current print
-stop-print
+### **Legacy Commands (Deprecated)**
+```bash
+# These still work but use printer-control instead
+monitor-print --mode pipetting
+printer-status --verbose  
 stop-print --force
 ```
 

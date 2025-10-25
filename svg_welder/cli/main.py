@@ -15,6 +15,7 @@ from svg_welder.validation.validators import (
     SVGValidator,
 )
 from svg_welder.prusalink import PrusaLinkClient, PrusaLinkError
+from svg_welder.monitoring import PrintMonitor, MonitorMode
 
 
 def create_parser() -> argparse.ArgumentParser:
@@ -96,6 +97,23 @@ Examples:
         "--timestamp",
         action="store_true",
         help="Add timestamp (yy-mm-dd-hh-mm-ss) to output filename for uniqueness"
+    )
+    parser.add_argument(
+        "--monitor",
+        action="store_true",
+        help="Monitor print progress after submission until completion"
+    )
+    parser.add_argument(
+        "--monitor-mode",
+        choices=["standard", "layed-back", "pipetting"],
+        default="standard",
+        help="Monitoring mode when --monitor is used (default: standard)"
+    )
+    parser.add_argument(
+        "--monitor-interval",
+        type=int,
+        default=30,
+        help="Monitoring check interval in seconds (default: 30)"
     )
 
     return parser
@@ -263,12 +281,44 @@ def main() -> None:
                     print(f"✓ G-code uploaded successfully: {upload_result['filename']}")
                     if upload_result['auto_started']:
                         print("🚀 Print started immediately - welding in progress!")
-                        print("  Monitor your printer to ensure proper operation")
+                        if not args.monitor:
+                            print("  Monitor your printer to ensure proper operation")
                     elif queue_mode:
                         print("📋 File queued successfully - ready to print when you are")
                         print("  Start the print from your printer's interface or web UI")
                     else:
                         print("📁 File uploaded - use your printer's interface to start the print")
+                    
+                    # Start monitoring if requested and print was started
+                    if args.monitor and upload_result['auto_started']:
+                        print("\n" + "="*60)
+                        print("🔍 Starting print monitoring...")
+                        
+                        mode_map = {
+                            'standard': MonitorMode.STANDARD,
+                            'layed-back': MonitorMode.LAYED_BACK,
+                            'pipetting': MonitorMode.PIPETTING
+                        }
+                        
+                        monitor = PrintMonitor(
+                            mode=mode_map[args.monitor_mode],
+                            interval=args.monitor_interval,
+                            verbose=args.verbose
+                        )
+                        
+                        try:
+                            success = monitor.monitor_until_complete()
+                            if success:
+                                print("\n✅ Print monitoring completed successfully!")
+                            else:
+                                print("\n❌ Print monitoring ended with issues")
+                        except KeyboardInterrupt:
+                            print("\n🛑 Monitoring stopped by user")
+                        except Exception as e:
+                            print(f"\n⚠️ Monitoring error: {e}")
+                    elif args.monitor and not upload_result['auto_started']:
+                        print("\n⚠️ Monitoring requested but print was not auto-started")
+                        print("   Use --auto-start-print to enable monitoring")
                         
             except PrusaLinkError as e:
                 print(f"Printer submission failed: {e}")

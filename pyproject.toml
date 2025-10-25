@@ -58,6 +58,8 @@ svg-welder = "svg_welder.cli.main:main"
 svg2gcode = "svg_welder.cli.main:main"
 prusa-welder = "svg_welder.cli.main:main"
 test-prusalink = "svg_welder.cli.prusalink_test:main"
+printer-control = "svg_welder.cli.printer_control:main"
+# Legacy aliases (deprecated - use printer-control instead)
 monitor-print = "svg_welder.cli.monitor_print:main"
 printer-status = "svg_welder.cli.printer_status:main"
 stop-print = "svg_welder.cli.stop_print:main"
