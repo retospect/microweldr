@@ -390,17 +390,34 @@ make run-comprehensive
 
 ### Color-Based Weld Types
 
-The SVG welder supports different weld types based on element colors:
+MicroWeldr interprets SVG element colors to determine weld behavior:
 
+#### **Recognized Colors:**
 - **Black elements** (default): Normal welding with full temperature and multi-pass
-- **Blue elements**: Light welding with reduced temperature  
-- **Red elements**: Stop points with custom pause messages
+- **Blue elements**: Light welding with reduced temperature and shorter dwell time
+- **Red elements**: Stop points with custom pause messages for manual intervention
 - **Pink/Magenta elements**: Pipetting stops for microfluidic device filling
 
+#### **Other Colors (Ignored):**
+- **All other colors** (green, orange, purple, yellow, etc.): **Completely ignored** - no G-code generated
+- **Gray elements**: Ignored (commonly used for labels and annotations)
+- **White elements**: Ignored
+- **Any unlisted color**: Ignored and skipped during processing
+
+#### **Color Specification:**
 Colors can be specified via:
-- `stroke` attribute
-- `fill` attribute  
-- `style` attribute (CSS format)
+- `stroke` attribute: `stroke="black"`
+- `fill` attribute: `fill="blue"`  
+- `style` attribute: `style="fill:red;stroke:none"`
+
+#### **Best Practice for Labels:**
+Use non-weld colors (orange, purple, green, gray) for text labels and annotations to prevent unintended G-code generation:
+```xml
+<!-- These will be ignored (no welding) -->
+<text fill="orange">Temperature: 130°C</text>
+<text fill="purple">Dwell: 0.1s</text>
+<text fill="gray">Calibration Grid</text>
+```
 
 ### Pipetting Stops for Microfluidics 🧪
 
