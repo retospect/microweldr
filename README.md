@@ -119,6 +119,57 @@ pause_time = 3.0            # seconds - how long pause messages are displayed
 min_animation_duration = 10.0  # seconds - minimum total animation time
 ```
 
+### Configuration File Loading
+
+MicroWeldr looks for configuration files in the following order (first found wins):
+
+#### **Main Configuration (`config.toml`)**
+1. **Command line specified**: `-c custom_config.toml` or `--config custom_config.toml`
+2. **Current directory**: `./config.toml`
+3. **Examples directory**: `./examples/config.toml` (if running from repo root)
+4. **Package defaults**: Built-in fallback configuration
+
+#### **Secrets Configuration (`secrets.toml`)**
+Used for PrusaLink printer connection settings:
+
+1. **Command line specified**: `--secrets-config custom_secrets.toml`
+2. **Current directory**: `./secrets.toml`
+3. **Examples directory**: `./examples/secrets.toml`
+4. **No secrets file**: PrusaLink features disabled (local G-code generation only)
+
+#### **Configuration Hierarchy**
+- **Built-in defaults** provide base configuration
+- **Main config file** overrides defaults
+- **Command line arguments** override config file settings
+- **SVG attributes** override all other settings (per-element)
+
+#### **File Locations Examples**
+```bash
+# Using default config in current directory
+microweldr input.svg                    # Uses ./config.toml
+
+# Using custom config file
+microweldr input.svg -c my_config.toml  # Uses my_config.toml
+
+# Using custom secrets file
+microweldr input.svg --secrets-config my_secrets.toml
+
+# Both custom configs
+microweldr input.svg -c my_config.toml --secrets-config my_secrets.toml
+```
+
+#### **Config File Templates**
+- **`config.toml`**: Main welding parameters (temperatures, speeds, etc.)
+- **`examples/config.toml`**: Optimized settings for new users
+- **`secrets.toml`**: PrusaLink connection settings (not in git)
+- **`secrets.toml.template`**: Template for PrusaLink setup
+
+#### **Missing Files Behavior**
+- **No config.toml**: Uses built-in defaults (safe for basic operation)
+- **No secrets.toml**: PrusaLink disabled, local G-code generation only
+- **Invalid config**: Falls back to defaults with warnings
+- **Partial config**: Missing sections use defaults
+
 ## Layed Back Mode (⚠️ EXPERIMENTAL - NOT WORKING YET)
 
 **⚠️ WARNING: Layed back mode is currently under development and does not work properly. Use standard upright mode for reliable operation.**
