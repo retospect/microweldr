@@ -191,10 +191,50 @@ git merge hotfix/critical-fix
 - GitHub Discussions: Community questions
 - Dependabot: Security vulnerability alerts
 
+## 🛠️ Development Environment
+
+### **Poetry Setup (Maintainers)**
+For maintainers working on the codebase, use Poetry for dependency management:
+
+```bash
+# Clone repository
+git clone https://github.com/retospect/microweldr.git
+cd microweldr
+
+# Install with Poetry
+poetry install
+
+# Activate virtual environment
+poetry shell
+
+# Run development commands
+poetry run pytest
+poetry run black .
+poetry run mypy microweldr/
+```
+
+### **Poetry Commands**
+```bash
+# Add dependencies
+poetry add requests
+
+# Add development dependencies  
+poetry add --group dev pytest
+
+# Update dependencies
+poetry update
+
+# Build package
+poetry build
+
+# Publish to PyPI (use GitHub Actions instead)
+poetry publish
+```
+
 ## 🛠️ Maintenance Tasks
 
 ### **Regular Updates**
-- [ ] Dependency updates (monthly)
+- [ ] Dependency updates (monthly): `poetry update`
 - [ ] Security patches (as needed)
 - [ ] Python version compatibility (annually)
 - [ ] Documentation updates (as needed)

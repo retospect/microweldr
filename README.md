@@ -39,62 +39,21 @@ microweldr/
 
 ## Installation
 
-### Using Poetry (Recommended)
-
-1. Clone the repository:
-   ```bash
-   git clone <repository-url>
-   cd svg-to-gcode-welder
-   ```
-
-2. Install with Poetry:
-   ```bash
-   # Install core dependencies only
-   poetry install
-   
-   # Install with validation libraries
-   poetry install --extras validation
-   
-   # Install with development dependencies
-   poetry install --with dev,validation
-   ```
-
-3. Activate the virtual environment:
-   ```bash
-   poetry shell
-   ```
-
-## Installation
-
 ### **From PyPI (Recommended)**
 ```bash
-# Basic installation
-pip install svg-welder
-
-# With optional validation features
-pip install svg-welder[validation]
-
-# With all features (validation + development tools)
-pip install svg-welder[validation,dev]
+pip install microweldr
 ```
+
+That's it! All validation and development tools are included by default.
 
 ### **Development Installation**
 ```bash
 # Clone repository
-git clone <repository-url>
-cd PrusaWelder
+git clone https://github.com/retospect/microweldr.git
+cd microweldr
 
-# Install with poetry (recommended for development)
-poetry install
-
-# Or install with pip (editable mode)
+# Install in editable mode
 pip install -e .
-
-# Install with validation features
-pip install -e .[validation]
-
-# Run tests
-make test
 ```
 
 ## Available Commands
@@ -103,37 +62,23 @@ After installation, these console commands are available:
 
 ### **Main Commands**
 ```bash
-# SVG to G-code conversion (all equivalent)
-svg-welder input.svg -o output.gcode
-svg2gcode input.svg -o output.gcode  
-prusa-welder input.svg -o output.gcode
+# SVG to G-code conversion
+microweldr input.svg -o output.gcode
 
 # Print with automatic monitoring
-svg-welder input.svg --submit-to-printer --monitor
-svg-welder input.svg --submit-to-printer --monitor --monitor-mode pipetting
+microweldr input.svg --submit-to-printer --monitor
+microweldr input.svg --submit-to-printer --monitor --monitor-mode pipetting
 ```
 
-### **Unified Printer Control**
+### **Utility Commands**
 ```bash
-# All-in-one printer control tool
+# Printer control tool
 printer-control status                    # Check printer status
-printer-control status --verbose         # Detailed status
 printer-control monitor                   # Monitor current print
-printer-control monitor --mode layed-back --interval 20
 printer-control stop                      # Stop current print
-printer-control stop --force             # Force stop
-printer-control test                      # Test connection
 
 # Test PrusaLink connection
 test-prusalink
-```
-
-### **Legacy Commands (Deprecated)**
-```bash
-# These still work but use printer-control instead
-monitor-print --mode pipetting
-printer-status --verbose  
-stop-print --force
 ```
 
 ## Configuration
@@ -276,19 +221,19 @@ python test_prusalink.py
 ### 6. Submit G-code to Printer
 ```bash
 # Generate and submit G-code (starts printing immediately with default config)
-svg-welder input.svg --submit-to-printer
+microweldr input.svg --submit-to-printer
 
 # Force immediate printing (overrides config)
-svg-welder input.svg --submit-to-printer --auto-start-print
+microweldr input.svg --submit-to-printer --auto-start-print
 
 # Use USB storage instead of local
-svg-welder input.svg --submit-to-printer --printer-storage usb
+microweldr input.svg --submit-to-printer --printer-storage usb
 
 # Upload without starting (override config default)
-svg-welder input.svg --submit-to-printer --no-auto-start
+microweldr input.svg --submit-to-printer --no-auto-start
 
 # Queue the file for later printing (clearer intent)
-svg-welder input.svg --submit-to-printer --queue-only
+microweldr input.svg --submit-to-printer --queue-only
 ```
 
 ## Printing Modes
@@ -298,15 +243,15 @@ The SVG welder supports three different printing modes when submitting to your p
 ### **🚀 Immediate Printing** (Default)
 Files are uploaded and printing starts immediately:
 ```bash
-svg-welder input.svg --submit-to-printer
+microweldr input.svg --submit-to-printer
 # or force immediate printing:
-svg-welder input.svg --submit-to-printer --auto-start-print
+microweldr input.svg --submit-to-printer --auto-start-print
 ```
 
 ### **📋 Queue Mode**
 Files are uploaded and queued for later printing:
 ```bash
-svg-welder input.svg --submit-to-printer --queue-only
+microweldr input.svg --submit-to-printer --queue-only
 ```
 Use this when:
 - You want to prepare multiple files
@@ -316,42 +261,39 @@ Use this when:
 ### **📁 Upload Only**
 Files are uploaded without any automatic behavior:
 ```bash
-svg-welder input.svg --submit-to-printer --no-auto-start
+microweldr input.svg --submit-to-printer --no-auto-start
 ```
 
 ## Usage
 
 ### Basic Usage
 ```bash
-# Using the installed command
-svg-welder input.svg
-
-# Using Poetry
-poetry run svg-welder input.svg
+# Convert SVG to G-code
+microweldr input.svg
 
 # Using the module directly
-python -m svg_welder.cli.main input.svg
+python -m microweldr.cli.main input.svg
 ```
 
 ### Advanced Options
 ```bash
 # Specify output file
-svg-welder input.svg -o output.gcode
+microweldr input.svg -o output.gcode
 
 # Skip bed leveling
-svg-welder input.svg --skip-bed-leveling
+microweldr input.svg --skip-bed-leveling
 
 # Use custom configuration
-svg-welder input.svg -c custom_config.toml
+microweldr input.svg -c custom_config.toml
 
 # Skip animation generation
-svg-welder input.svg --no-animation
+microweldr input.svg --no-animation
 
 # Skip validation
-svg-welder input.svg --no-validation
+microweldr input.svg --no-validation
 
 # Verbose output
-svg-welder input.svg --verbose
+microweldr input.svg --verbose
 ```
 
 ### Quick Start with Examples
@@ -720,18 +662,16 @@ The repository includes several example files:
 ## Running the Examples
 
 ### For Installed Package
-If you've installed svg-welder as a package:
+If you've installed microweldr as a package:
 
 ```bash
 # Install the package
-pip install svg-welder
-# or with validation libraries
-pip install svg-welder[validation]
+pip install microweldr
 
 # Run examples (assuming you have the example files)
-svg-welder example.svg
-svg-welder example.svg --verbose
-svg-welder example.svg -o my_output.gcode
+microweldr example.svg
+microweldr example.svg --verbose
+microweldr example.svg -o my_output.gcode
 ```
 
 ### For Development/Source Code
@@ -741,16 +681,15 @@ If you're working with the source code:
 # Setup (one-time)
 python -m venv venv
 source venv/bin/activate  # macOS/Linux (venv\Scripts\activate on Windows)
-pip install -e .[validation,dev]
+pip install -e .
 
 # Run examples (with venv activated)
-svg-welder examples/example.svg
-svg-welder examples/comprehensive_sample.svg
-svg-welder examples/example.svg --verbose
+microweldr examples/example.svg
+microweldr examples/comprehensive_sample.svg
+microweldr examples/example.svg --verbose
 
 # Alternative methods
-python -m svg_welder.cli.main examples/example.svg
-python svg_welder/cli/main.py examples/example.svg
+python -m microweldr.cli.main examples/example.svg
 ```
 
 **📖 For detailed development setup, see [DEVELOPMENT.md](DEVELOPMENT.md)**
@@ -770,13 +709,10 @@ Each run generates:
 ### Alternative Run Methods
 ```bash
 # Using Python module (with virtual environment activated)
-python -m svg_welder.cli.main examples/example.svg
-
-# Direct script execution (with virtual environment activated)
-python svg_welder/cli/main.py examples/example.svg
+python -m microweldr.cli.main examples/example.svg
 
 # With custom configuration
-svg-welder examples/example.svg -c my_config.toml
+microweldr examples/example.svg -c my_config.toml
 ```
 
 ## License
