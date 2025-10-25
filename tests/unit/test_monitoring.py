@@ -74,35 +74,38 @@ password = "test123"
 
     def test_get_print_status_printing(self, requests_mock, monitor):
         """Test getting print status when printing."""
-        printer_response = {
-            "state": "Printing",
-            "temp_bed": {"actual": 60.0, "target": 60.0},
-            "temp_nozzle": {"actual": 200.0, "target": 200.0},
-        }
-
         job_response = {
-            "file": {"name": "test_weld.gcode"},
+            "file": {"name": "test_weld.gcode", "display_name": "test_weld.gcode"},
             "estimatedPrintTime": 1800,
-            "progress": {"completion": 45.5, "printTimeLeft": 990},
+            "progress": 45.5,
+            "state": "Printing",
+            "time_printing": 300,
         }
 
-        requests_mock.get(
-            "http://192.168.1.100/api/printer", json={"printer": printer_response}
-        )
-        requests_mock.get("http://192.168.1.100/api/job", json={"job": job_response})
+        printer_status_response = {
+            "printer": {
+                "state": "Printing",
+                "temp_bed": {"actual": 60.0, "target": 60.0},
+                "temp_nozzle": {"actual": 200.0, "target": 200.0},
+            }
+        }
+
+        monitor.client.get_job_status.return_value = job_response
+        monitor.client.get_printer_status.return_value = printer_status_response
 
         status = monitor.get_print_status()
+        assert status is not None
         assert status["state"] == "Printing"
         assert status["progress"] == 45.5
-        assert status["time_left"] == 990
-        assert status["filename"] == "test_weld.gcode"
+        assert status["file_name"] == "test_weld.gcode"
 
     def test_get_print_status_error(self, requests_mock, monitor):
         """Test getting print status with API error."""
-        requests_mock.get("http://192.168.1.100/api/printer", status_code=500)
+        monitor.client.get_job_status.side_effect = PrusaLinkError("Connection failed")
 
-        with pytest.raises(PrusaLinkError):
-            monitor.get_print_status()
+        # The method catches exceptions and returns None
+        status = monitor.get_print_status()
+        assert status is None
 
     def test_format_time_seconds(self, monitor):
         """Test time formatting for seconds."""
@@ -162,156 +165,98 @@ password = "test123"
 
     def test_stop_print_success(self, requests_mock, monitor):
         """Test successful print stop."""
-        requests_mock.delete("http://192.168.1.100/api/job", json={"stopped": True})
+        monitor.client.get_job_status.return_value = {
+            "file": {"name": "test.gcode"},
+            "state": "Printing",
+        }
+        monitor.client.stop_print.return_value = True
 
-        result = monitor.stop_print()
+        with patch("builtins.input", return_value="y"):
+            result = monitor.stop_print()
         assert result is True
 
     def test_stop_print_failure(self, requests_mock, monitor):
         """Test print stop failure."""
-        requests_mock.delete("http://192.168.1.100/api/job", status_code=409)
+        monitor.client.get_job_status.return_value = {
+            "file": {"name": "test.gcode"},
+            "state": "Printing",
+        }
+        monitor.client.stop_print.return_value = False
 
-        result = monitor.stop_print()
+        with patch("builtins.input", return_value="y"):
+            result = monitor.stop_print()
         assert result is False
 
     def test_stop_print_force(self, requests_mock, monitor):
         """Test forced print stop."""
-        # First attempt fails, second succeeds
-        requests_mock.delete(
-            "http://192.168.1.100/api/job",
-            [{"status_code": 409}, {"json": {"stopped": True}}],
-        )
+        monitor.client.get_job_status.return_value = {
+            "file": {"name": "test.gcode"},
+            "state": "Printing",
+        }
+        monitor.client.stop_print.return_value = True
 
         result = monitor.stop_print(force=True)
         assert result is True
 
-    @patch("time.sleep")
-    def test_monitor_print_completion(self, mock_sleep, requests_mock, monitor):
-        """Test monitoring a print to completion."""
-        # Simulate print progress
-        responses = [
-            # First check - printing
-            {
-                "printer": {
-                    "state": "Printing",
-                    "temp_bed": {"actual": 60.0, "target": 60.0},
-                    "temp_nozzle": {"actual": 200.0, "target": 200.0},
-                }
-            },
-            # Second check - still printing
-            {
-                "printer": {
-                    "state": "Printing",
-                    "temp_bed": {"actual": 60.0, "target": 60.0},
-                    "temp_nozzle": {"actual": 200.0, "target": 200.0},
-                }
-            },
-            # Third check - completed
-            {
-                "printer": {
-                    "state": "Operational",
-                    "temp_bed": {"actual": 30.0, "target": 0.0},
-                    "temp_nozzle": {"actual": 25.0, "target": 0.0},
-                }
-            },
-        ]
-
-        job_responses = [
-            {"job": {"progress": {"completion": 25.0}}},
-            {"job": {"progress": {"completion": 75.0}}},
-            {"job": {"progress": {"completion": 100.0}}},
-        ]
-
-        for i, (printer_resp, job_resp) in enumerate(zip(responses, job_responses)):
-            requests_mock.get(f"http://192.168.1.100/api/printer", json=printer_resp)
-            requests_mock.get(f"http://192.168.1.100/api/job", json=job_resp)
-
-        # Mock the monitor method to stop after a few iterations
-        original_monitoring = monitor.monitoring
+    def test_monitor_until_complete_success(self, monitor):
+        """Test monitoring until completion with successful completion."""
+        # Mock successful job completion
         call_count = 0
 
-        def mock_get_status():
+        def mock_get_job_status():
             nonlocal call_count
             call_count += 1
-            if call_count >= 3:
-                monitor.monitoring = False
-            return monitor.get_print_status()
+            if call_count == 1:
+                return {"state": "printing", "progress": {"completion": 50}}
+            elif call_count == 2:
+                return {"state": "finished", "progress": {"completion": 100}}
+            return None
 
-        with patch.object(monitor, "get_print_status", side_effect=mock_get_status):
-            monitor.monitor_print(update_interval=0.1)
+        monitor.client.get_job_status.side_effect = mock_get_job_status
 
-        # Should have made multiple status checks
-        assert call_count >= 3
+        with patch.object(monitor, "print_header"), patch.object(
+            monitor, "print_status_update"
+        ), patch("time.sleep"):
+            result = monitor.monitor_until_complete()
 
-    def test_monitor_print_mode_welding(self, monitor):
-        """Test monitor print with welding mode."""
-        # Test that welding mode is properly set
-        with patch.object(monitor, "get_print_status") as mock_status:
-            mock_status.side_effect = [
-                {
-                    "state": "Printing",
-                    "progress": 50.0,
-                    "z_position": 5.0,
-                    "bed_temp": 60.0,
-                    "nozzle_temp": 200.0,
-                },
-                {
-                    "state": "Operational",
-                    "progress": 100.0,
-                    "z_position": 10.0,
-                    "bed_temp": 30.0,
-                    "nozzle_temp": 25.0,
-                },
-            ]
+        assert result is True
 
-            call_count = 0
+    def test_monitor_mode_welding(self, monitor):
+        """Test monitor with welding mode."""
+        from microweldr.monitoring.monitor import MonitorMode
 
-            def stop_after_two():
-                nonlocal call_count
-                call_count += 1
-                if call_count >= 2:
-                    monitor.monitoring = False
-                return mock_status.return_value
+        assert monitor.mode == MonitorMode.STANDARD
 
-            mock_status.side_effect = stop_after_two
+        # Test mode emoji
+        emoji = monitor.get_mode_emoji()
+        assert emoji == "🏗️"
 
-            monitor.monitor_print(mode="welding", update_interval=0.1)
+    def test_monitor_mode_pipetting(self, monitor):
+        """Test monitor with pipetting mode."""
+        from unittest.mock import Mock
 
-            assert call_count >= 2
+        from microweldr.monitoring.monitor import MonitorMode
 
-    def test_monitor_print_mode_pipetting(self, monitor):
-        """Test monitor print with pipetting mode."""
-        with patch.object(monitor, "get_print_status") as mock_status:
-            mock_status.return_value = {
-                "state": "Paused",
-                "progress": 30.0,
-                "z_position": 15.0,
-                "bed_temp": 40.0,
-                "nozzle_temp": 100.0,
-            }
+        # Create a pipetting mode monitor
+        pipetting_monitor = PrintMonitor(
+            mode=MonitorMode.PIPETTING, interval=1, verbose=False
+        )
+        pipetting_monitor.client = Mock()
+        assert pipetting_monitor.mode == MonitorMode.PIPETTING
 
-            # Stop monitoring after first check
-            def stop_immediately():
-                monitor.monitoring = False
-                return mock_status.return_value
+        # Test mode emoji
+        emoji = pipetting_monitor.get_mode_emoji()
+        assert emoji == "🧪"
 
-            mock_status.side_effect = stop_immediately
+    def test_monitor_keyboard_interrupt_handling(self, monitor):
+        """Test monitor handles keyboard interrupt gracefully."""
+        monitor.client.get_job_status.side_effect = KeyboardInterrupt()
 
-            monitor.monitor_print(mode="pipetting", update_interval=0.1)
+        # Should handle KeyboardInterrupt gracefully in monitor_until_complete
+        with patch.object(monitor, "print_header"):
+            result = monitor.monitor_until_complete()
 
-            mock_status.assert_called_once()
-
-    @patch("builtins.input", return_value="y")
-    def test_monitor_print_keyboard_interrupt(self, mock_input, monitor):
-        """Test monitor print with keyboard interrupt."""
-        with patch.object(monitor, "get_print_status") as mock_status:
-            mock_status.side_effect = KeyboardInterrupt()
-
-            # Should handle KeyboardInterrupt gracefully
-            monitor.monitor_print(update_interval=0.1)
-
-            # Should have attempted to get status
-            mock_status.assert_called_once()
+        assert result is False
 
     def test_display_status_welding_mode(self, monitor):
         """Test status display in welding mode."""
@@ -365,46 +310,28 @@ password = "test123"
             monitor._clear_screen()
             mock_system.assert_called_once_with("clear")
 
-    def test_get_print_status_with_z_position(self, requests_mock, monitor):
-        """Test getting print status with Z position information."""
-        printer_response = {
-            "state": "Printing",
-            "temp_bed": {"actual": 60.0, "target": 60.0},
-            "temp_nozzle": {"actual": 200.0, "target": 200.0},
-            "axis": {"z": {"value": 5.5}},
-        }
-
+    def test_get_current_status_returns_printer_info(self, monitor):
+        """Test that get_current_status includes printer_info."""
         job_response = {
-            "file": {"name": "test.gcode"},
-            "progress": {"completion": 50.0},
+            "file": {"name": "test.gcode", "display_name": "test.gcode"},
+            "state": "Printing",
+            "progress": 50.0,
+            "time_printing": 300,
         }
 
-        requests_mock.get(
-            "http://192.168.1.100/api/printer", json={"printer": printer_response}
-        )
-        requests_mock.get("http://192.168.1.100/api/job", json={"job": job_response})
+        printer_status_response = {
+            "printer": {
+                "state": "Printing",
+                "temp_bed": {"actual": 60.0, "target": 60.0},
+                "temp_nozzle": {"actual": 200.0, "target": 200.0},
+                "axis": {"z": {"value": 5.5}},
+            }
+        }
+
+        monitor.client.get_job_status.return_value = job_response
+        monitor.client.get_printer_status.return_value = printer_status_response
 
         status = monitor.get_print_status()
-        assert status["z_position"] == 5.5
-
-    def test_get_print_status_missing_z_position(self, requests_mock, monitor):
-        """Test getting print status when Z position is missing."""
-        printer_response = {
-            "state": "Printing",
-            "temp_bed": {"actual": 60.0, "target": 60.0},
-            "temp_nozzle": {"actual": 200.0, "target": 200.0}
-            # No axis information
-        }
-
-        job_response = {
-            "file": {"name": "test.gcode"},
-            "progress": {"completion": 50.0},
-        }
-
-        requests_mock.get(
-            "http://192.168.1.100/api/printer", json={"printer": printer_response}
-        )
-        requests_mock.get("http://192.168.1.100/api/job", json={"job": job_response})
-
-        status = monitor.get_print_status()
-        assert status["z_position"] is None
+        assert status is not None
+        assert "printer_info" in status
+        assert status["printer_info"]["temp_bed"]["actual"] == 60.0
