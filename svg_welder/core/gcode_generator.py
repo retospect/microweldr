@@ -46,7 +46,7 @@ class GCodeGenerator:
             f.write("; Initialize printer (layed back mode - printer on its back!)\n")
             f.write("; IMPORTANT: Manually position print head before starting!\n")
             f.write("; Expected position: Rear right corner of bed\n")
-            f.write("; Z-axis will be homed while bed heats up (efficient timing)\n\n")
+            f.write("; All positioning fully manual - no homing to avoid X/Y conflicts\n\n")
             
             f.write("G90 ; Absolute positioning\n")
             f.write("M83 ; Relative extruder positioning\n")
@@ -92,10 +92,12 @@ class GCodeGenerator:
         f.write(f"; Start heating bed to {bed_temp}°C\n")
         f.write(f"M140 S{bed_temp} ; Set bed temperature (start heating)\n\n")
 
-        # Home Z-axis while bed heats up (layed back mode only)
+        # Z-axis calibration while bed heats up (layed back mode only)
         if layed_back_mode:
-            f.write("; Home Z-axis while bed heats up (efficient timing)\n")
-            f.write("G28 Z ; Home Z-axis only (X/Y position trusted)\n")
+            f.write("; Z-axis calibration while bed heats up (efficient timing)\n")
+            f.write("; IMPORTANT: Manually position Z-axis at desired height before starting\n")
+            f.write("; Skipping automatic Z-homing to avoid X/Y conflicts in layed back mode\n")
+            f.write("G92 Z0 ; Set current Z position as zero reference (trust manual positioning)\n")
             f.write("G1 Z10 F150 ; Move Z to safe position slowly (no rush when layed back)\n\n")
 
         # Now wait for bed temperature
@@ -269,6 +271,7 @@ class GCodeGenerator:
         """Write cooldown and end sequence for Prusa Core One."""
         cooldown_temp = self.config.get("temperatures", "cooldown_temperature")
         use_chamber_heating = self.config.get("temperatures", "use_chamber_heating", True)
+        layed_back_mode = self.config.get("printer", "layed_back_mode", True)
 
         f.write("; Cool down (Core One)\n")
         f.write(f"M104 S{cooldown_temp} ; Cool nozzle\n")
@@ -277,6 +280,11 @@ class GCodeGenerator:
         if use_chamber_heating:
             f.write(f"M141 S0 ; Turn off chamber heating\n")
         
-        f.write("G28 X Y ; Home X and Y\n")
+        # Skip homing in layed back mode to avoid conflicts
+        if not layed_back_mode:
+            f.write("G28 X Y ; Home X and Y\n")
+        else:
+            f.write("; Skipping X/Y homing in layed back mode (avoid conflicts)\n")
+        
         f.write("M84 ; Disable steppers\n")
         f.write("; End of G-code\n")
