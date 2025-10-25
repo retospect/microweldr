@@ -54,7 +54,9 @@ class AnimationGenerator:
 
         # Calculate total animation time
         total_weld_points = sum(
-            len(path.points) for path in weld_paths if path.weld_type not in ["stop", "pipette"]
+            len(path.points)
+            for path in weld_paths
+            if path.weld_type not in ["stop", "pipette"]
         )
         total_pause_time = sum(
             pause_time for path in weld_paths if path.weld_type in ["stop", "pipette"]
@@ -481,14 +483,14 @@ class AnimationGenerator:
         # Message display area - positioned above the pipette point
         message_x = x
         message_y = y - (radius + 5) * scale_factor - 20
-        
+
         # Ensure message stays within bounds
         message_x = max(10, min(message_x, width - 200))
         message_y = max(30, message_y)
 
         # Message background and text
         f.write(f'  <g opacity="0">\n')
-        
+
         # Opacity animation for message - show during pause
         f.write(
             f'    <animate attributeName="opacity" values="0;1;1;0" '

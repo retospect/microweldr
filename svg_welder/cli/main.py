@@ -1,21 +1,21 @@
 """Command line interface for the SVG welder."""
 
 import argparse
-from datetime import datetime
 import sys
+from datetime import datetime
 from pathlib import Path
 
 from svg_welder.animation.generator import AnimationGenerator
 from svg_welder.core.config import Config, ConfigError
 from svg_welder.core.converter import SVGToGCodeConverter
 from svg_welder.core.svg_parser import SVGParseError
+from svg_welder.monitoring import MonitorMode, PrintMonitor
+from svg_welder.prusalink import PrusaLinkClient, PrusaLinkError
 from svg_welder.validation.validators import (
     AnimationValidator,
     GCodeValidator,
     SVGValidator,
 )
-from svg_welder.prusalink import PrusaLinkClient, PrusaLinkError
-from svg_welder.monitoring import PrintMonitor, MonitorMode
 
 
 def create_parser() -> argparse.ArgumentParser:
@@ -64,61 +64,61 @@ Examples:
         help="Welding sequence algorithm: linear (1,2,3...), binary (binary subdivision), farthest (greedy farthest-point traversal), skip (every Nth dot first, then fill gaps, default)",
     )
     parser.add_argument(
-        "--submit-to-printer", 
-        action="store_true", 
-        help="Submit G-code to PrusaLink after generation"
+        "--submit-to-printer",
+        action="store_true",
+        help="Submit G-code to PrusaLink after generation",
     )
     parser.add_argument(
         "--secrets-config",
         default="secrets.toml",
-        help="Path to secrets configuration file (default: secrets.toml)"
+        help="Path to secrets configuration file (default: secrets.toml)",
     )
     parser.add_argument(
         "--printer-storage",
         choices=["local", "usb"],
-        help="Target storage on printer (overrides config default)"
+        help="Target storage on printer (overrides config default)",
     )
     parser.add_argument(
         "--auto-start-print",
         action="store_true",
-        help="Automatically start printing after upload (overrides config default)"
+        help="Automatically start printing after upload (overrides config default)",
     )
     parser.add_argument(
         "--no-auto-start",
         action="store_true",
-        help="Do not start printing after upload (overrides config default)"
+        help="Do not start printing after upload (overrides config default)",
     )
     parser.add_argument(
         "--queue-only",
         action="store_true",
-        help="Queue the file without starting (same as --no-auto-start, but clearer intent)"
+        help="Queue the file without starting (same as --no-auto-start, but clearer intent)",
     )
     parser.add_argument(
         "--timestamp",
         action="store_true",
-        help="Add timestamp (yy-mm-dd-hh-mm-ss) to output filename for uniqueness"
+        help="Add timestamp (yy-mm-dd-hh-mm-ss) to output filename for uniqueness",
     )
     parser.add_argument(
         "--monitor",
         action="store_true",
-        help="Monitor print progress after submission until completion"
+        help="Monitor print progress after submission until completion",
     )
     parser.add_argument(
         "--monitor-mode",
         choices=["standard", "layed-back", "pipetting"],
         default="standard",
-        help="Monitoring mode when --monitor is used (default: standard)"
+        help="Monitoring mode when --monitor is used (default: standard)",
     )
     parser.add_argument(
         "--monitor-interval",
         type=int,
         default=30,
-        help="Monitoring check interval in seconds (default: 30)"
+        help="Monitoring check interval in seconds (default: 30)",
     )
     parser.add_argument(
         "--no-center",
         action="store_true",
-        help="Disable automatic centering on bed (use SVG coordinates as-is)"
+        help="Disable automatic centering on bed (use SVG coordinates as-is)",
     )
 
     return parser
@@ -172,7 +172,9 @@ def main() -> None:
         config = Config(args.config)
 
         # Initialize converter with centering option
-        center_on_bed = not args.no_center  # Default to centering unless --no-center is used
+        center_on_bed = (
+            not args.no_center
+        )  # Default to centering unless --no-center is used
         converter = SVGToGCodeConverter(config, center_on_bed=center_on_bed)
 
         print(f"Processing SVG file: {args.input_svg}")
@@ -241,15 +243,19 @@ def main() -> None:
             try:
                 print("\nSubmitting G-code to printer...")
                 client = PrusaLinkClient(args.secrets_config)
-                
+
                 # Test connection first
                 if not client.test_connection():
-                    print("Warning: Could not connect to printer. Check your configuration.")
+                    print(
+                        "Warning: Could not connect to printer. Check your configuration."
+                    )
                 else:
                     if args.verbose:
                         printer_info = client.get_printer_info()
-                        print(f"Connected to: {printer_info.get('name', 'Unknown printer')}")
-                    
+                        print(
+                            f"Connected to: {printer_info.get('name', 'Unknown printer')}"
+                        )
+
                     # Determine auto-start behavior
                     if args.no_auto_start or args.queue_only:
                         will_auto_start = False
@@ -260,58 +266,70 @@ def main() -> None:
                         auto_start_override = True
                         queue_mode = False
                     else:
-                        will_auto_start = client.config.get('auto_start_print', False)
+                        will_auto_start = client.config.get("auto_start_print", False)
                         auto_start_override = None
                         queue_mode = False
-                    
+
                     if queue_mode:
                         print("📋 Queue mode: File will be uploaded but not started")
                     elif will_auto_start:
                         if client.is_printer_ready():
-                            print("✓ Printer is ready - will start printing immediately")
+                            print(
+                                "✓ Printer is ready - will start printing immediately"
+                            )
                         else:
-                            print("⚠ Warning: Printer may not be ready (check if it's busy or has errors)")
+                            print(
+                                "⚠ Warning: Printer may not be ready (check if it's busy or has errors)"
+                            )
                             if not args.verbose:
                                 print("  Use --verbose to see printer status details")
                     else:
                         print("📁 File will be uploaded without auto-starting")
-                    
+
                     # Upload G-code
                     upload_result = client.upload_gcode(
                         str(output_gcode),
                         storage=args.printer_storage,
                         auto_start=auto_start_override,
-                        overwrite=True  # Always overwrite for immediate printing
+                        overwrite=True,  # Always overwrite for immediate printing
                     )
-                    
-                    print(f"✓ G-code uploaded successfully: {upload_result['filename']}")
-                    if upload_result['auto_started']:
+
+                    print(
+                        f"✓ G-code uploaded successfully: {upload_result['filename']}"
+                    )
+                    if upload_result["auto_started"]:
                         print("🚀 Print started immediately - welding in progress!")
                         if not args.monitor:
                             print("  Monitor your printer to ensure proper operation")
                     elif queue_mode:
-                        print("📋 File queued successfully - ready to print when you are")
-                        print("  Start the print from your printer's interface or web UI")
+                        print(
+                            "📋 File queued successfully - ready to print when you are"
+                        )
+                        print(
+                            "  Start the print from your printer's interface or web UI"
+                        )
                     else:
-                        print("📁 File uploaded - use your printer's interface to start the print")
-                    
+                        print(
+                            "📁 File uploaded - use your printer's interface to start the print"
+                        )
+
                     # Start monitoring if requested and print was started
-                    if args.monitor and upload_result['auto_started']:
-                        print("\n" + "="*60)
+                    if args.monitor and upload_result["auto_started"]:
+                        print("\n" + "=" * 60)
                         print("🔍 Starting print monitoring...")
-                        
+
                         mode_map = {
-                            'standard': MonitorMode.STANDARD,
-                            'layed-back': MonitorMode.LAYED_BACK,
-                            'pipetting': MonitorMode.PIPETTING
+                            "standard": MonitorMode.STANDARD,
+                            "layed-back": MonitorMode.LAYED_BACK,
+                            "pipetting": MonitorMode.PIPETTING,
                         }
-                        
+
                         monitor = PrintMonitor(
                             mode=mode_map[args.monitor_mode],
                             interval=args.monitor_interval,
-                            verbose=args.verbose
+                            verbose=args.verbose,
                         )
-                        
+
                         try:
                             success = monitor.monitor_until_complete()
                             if success:
@@ -322,10 +340,10 @@ def main() -> None:
                             print("\n🛑 Monitoring stopped by user")
                         except Exception as e:
                             print(f"\n⚠️ Monitoring error: {e}")
-                    elif args.monitor and not upload_result['auto_started']:
+                    elif args.monitor and not upload_result["auto_started"]:
                         print("\n⚠️ Monitoring requested but print was not auto-started")
                         print("   Use --auto-start-print to enable monitoring")
-                        
+
             except PrusaLinkError as e:
                 print(f"Printer submission failed: {e}")
                 print("G-code file was still generated successfully.")

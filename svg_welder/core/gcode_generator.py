@@ -41,20 +41,26 @@ class GCodeGenerator:
 
     def _write_initialization(self, f: TextIO, skip_bed_leveling: bool) -> None:
         """Write printer initialization commands."""
-        layed_back_mode = self.config.get("printer", "layed_back_mode", True)  # Default to layed back
-        
+        layed_back_mode = self.config.get(
+            "printer", "layed_back_mode", True
+        )  # Default to layed back
+
         if layed_back_mode:
             f.write("; Initialize printer (layed back mode - printer on its back!)\n")
             f.write("; IMPORTANT: Manually position print head before starting!\n")
             f.write("; Expected position: Rear right corner of bed\n")
-            f.write("; All positioning fully manual - no homing to avoid X/Y conflicts\n\n")
-            
+            f.write(
+                "; All positioning fully manual - no homing to avoid X/Y conflicts\n\n"
+            )
+
             f.write("G90 ; Absolute positioning\n")
             f.write("M83 ; Relative extruder positioning\n")
             f.write("M84 S0 ; Disable stepper timeout for layed back operation\n")
-            
+
             # Trust X/Y but will home Z during heating
-            f.write("G92 X0 Y0 ; Set current X/Y position as origin (manual positioning trusted)\n\n")
+            f.write(
+                "G92 X0 Y0 ; Set current X/Y position as origin (manual positioning trusted)\n\n"
+            )
 
             # Always skip bed leveling for layed back operation
             f.write("; Bed leveling disabled for layed back operation\n")
@@ -77,8 +83,12 @@ class GCodeGenerator:
         """Write heating commands for Prusa Core One."""
         bed_temp = self.config.get("temperatures", "bed_temperature")
         nozzle_temp = self.config.get("temperatures", "nozzle_temperature")
-        use_chamber_heating = self.config.get("temperatures", "use_chamber_heating", True)
-        chamber_temp = self.config.get("temperatures", "chamber_temperature", 35)  # Default 35°C
+        use_chamber_heating = self.config.get(
+            "temperatures", "use_chamber_heating", True
+        )
+        chamber_temp = self.config.get(
+            "temperatures", "chamber_temperature", 35
+        )  # Default 35°C
         layed_back_mode = self.config.get("printer", "layed_back_mode", True)
 
         # Chamber heating (optional)
@@ -96,10 +106,18 @@ class GCodeGenerator:
         # Z-axis calibration while bed heats up (layed back mode only)
         if layed_back_mode:
             f.write("; Z-axis calibration while bed heats up (efficient timing)\n")
-            f.write("; IMPORTANT: Manually position Z-axis at desired height before starting\n")
-            f.write("; Skipping automatic Z-homing to avoid X/Y conflicts in layed back mode\n")
-            f.write("G92 Z0 ; Set current Z position as zero reference (trust manual positioning)\n")
-            f.write("G1 Z10 F150 ; Move Z to safe position slowly (no rush when layed back)\n\n")
+            f.write(
+                "; IMPORTANT: Manually position Z-axis at desired height before starting\n"
+            )
+            f.write(
+                "; Skipping automatic Z-homing to avoid X/Y conflicts in layed back mode\n"
+            )
+            f.write(
+                "G92 Z0 ; Set current Z position as zero reference (trust manual positioning)\n"
+            )
+            f.write(
+                "G1 Z10 F150 ; Move Z to safe position slowly (no rush when layed back)\n\n"
+            )
 
         # Now wait for bed temperature
         f.write(f"; Wait for bed to reach target temperature\n")
@@ -113,7 +131,7 @@ class GCodeGenerator:
     def _write_user_pause(self, f: TextIO, margin_info: dict = None) -> None:
         """Write user pause for plastic sheet insertion."""
         f.write("; Pause for user to insert plastic sheets\n")
-        
+
         # Create message with margin information if available
         if margin_info:
             message = f"Place film (margins F/B:{margin_info['front_back']}, L/R:{margin_info['left_right']})"
@@ -122,7 +140,7 @@ class GCodeGenerator:
                 message = f"Place film (F/B:{margin_info['front_back']}, L/R:{margin_info['left_right']})"
         else:
             message = "Insert plastic sheets and press continue"
-        
+
         f.write(f"M117 {message}\n")
         f.write("M0 ; Pause - Insert plastic sheets and press continue\n")
         f.write("M117 Starting welding sequence...\n\n")
@@ -144,7 +162,9 @@ class GCodeGenerator:
                 # Handle stop points with custom messages
                 message = path.pause_message or "Manual intervention required"
                 # Clean message for LCD display (remove problematic characters)
-                safe_message = message.replace('"', "'").replace(";", ",").replace("\n", " ")[:64]  # Prusa LCD limit
+                safe_message = (
+                    message.replace('"', "'").replace(";", ",").replace("\n", " ")[:64]
+                )  # Prusa LCD limit
                 f.write(f"; User stop requested\n")
                 f.write(f"M117 {safe_message}\n")
                 f.write(f"M0 ; Pause for user action\n")
@@ -154,7 +174,9 @@ class GCodeGenerator:
                 # Handle pipetting stops for microfluidic device filling
                 message = path.pause_message or "Pipette filling required"
                 # Clean message for LCD display (remove problematic characters)
-                safe_message = message.replace('"', "'").replace(";", ",").replace("\n", " ")[:64]  # Prusa LCD limit
+                safe_message = (
+                    message.replace('"', "'").replace(";", ",").replace("\n", " ")[:64]
+                )  # Prusa LCD limit
                 f.write(f"; Pipetting stop - fill pouch with pipette\n")
                 f.write(f"M117 {safe_message}\n")
                 f.write(f"M0 ; Pause for pipetting\n")
@@ -296,21 +318,23 @@ class GCodeGenerator:
     def _write_cooldown(self, f: TextIO) -> None:
         """Write cooldown and end sequence for Prusa Core One."""
         cooldown_temp = self.config.get("temperatures", "cooldown_temperature")
-        use_chamber_heating = self.config.get("temperatures", "use_chamber_heating", True)
+        use_chamber_heating = self.config.get(
+            "temperatures", "use_chamber_heating", True
+        )
         layed_back_mode = self.config.get("printer", "layed_back_mode", True)
 
         f.write("; Cool down (Core One)\n")
         f.write(f"M104 S{cooldown_temp} ; Cool nozzle\n")
         f.write(f"M140 S{cooldown_temp} ; Cool bed\n")
-        
+
         if use_chamber_heating:
             f.write(f"M141 S0 ; Turn off chamber heating\n")
-        
+
         # Skip homing in layed back mode to avoid conflicts
         if not layed_back_mode:
             f.write("G28 X Y ; Home X and Y\n")
         else:
             f.write("; Skipping X/Y homing in layed back mode (avoid conflicts)\n")
-        
+
         f.write("M84 ; Disable steppers\n")
         f.write("; End of G-code\n")

@@ -129,16 +129,24 @@ class SVGParser:
             return "stop", pause_message
         # Extract pause message for pink/magenta elements (pipetting stops)
         elif any(
-            color in color_info for color in [
-                "magenta", "pink", "fuchsia", 
-                "#ff00ff", "#f0f", "#ff69b4", "#ffc0cb",
-                "rgb(255,0,255)", "rgb(255,105,180)", "rgb(255,192,203)"
+            color in color_info
+            for color in [
+                "magenta",
+                "pink",
+                "fuchsia",
+                "#ff00ff",
+                "#f0f",
+                "#ff69b4",
+                "#ffc0cb",
+                "rgb(255,0,255)",
+                "rgb(255,105,180)",
+                "rgb(255,192,203)",
             ]
         ):
             # Look for pipetting message in various SVG attributes
             pipette_message = (
                 element.get("data-message")
-                or element.get("title") 
+                or element.get("title")
                 or element.get("aria-label")
                 or element.get("desc")
                 or "Pipette filling required"  # Default message

@@ -2,6 +2,6 @@
 Monitoring library for SVG welder print jobs.
 """
 
-from .monitor import PrintMonitor, MonitorMode
+from .monitor import MonitorMode, PrintMonitor
 
-__all__ = ['PrintMonitor', 'MonitorMode']
+__all__ = ["PrintMonitor", "MonitorMode"]
