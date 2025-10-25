@@ -846,6 +846,37 @@ python -m microweldr.cli.main examples/example.svg
 microweldr examples/example.svg -c my_config.toml
 ```
 
+## Materials Guide
+
+### Bubble Film Polypropylene Orientation
+
+When working with bubble film rolls for microfluidic device creation:
+
+**🔍 Identifying the Polypropylene Side:**
+- **Smooth side**: This is the **polypropylene layer** - use this side for welding
+- **Bubble side**: This is typically polyethylene - **do not weld this side**
+
+**📏 Proper Orientation:**
+- Place bubble film with **smooth side UP** on the printer bed
+- The welding nozzle should contact the **smooth polypropylene surface**
+- Bubbles should face **DOWN** toward the bed
+
+**🌡️ Temperature Guidelines:**
+- **Polypropylene welding**: 160-180°C (use light welds for thin films)
+- **Test first**: Always test weld parameters on scrap material
+- **Avoid overheating**: Polypropylene can degrade above 200°C
+
+**⚠️ Safety Notes:**
+- Ensure adequate ventilation when welding plastics
+- Test weld strength before using for critical applications
+- Different bubble film manufacturers may use different material combinations
+
+**💡 Pro Tip:**
+Use the `data-temp` attribute in your SVG to fine-tune welding temperature for different areas:
+```xml
+<line stroke="black" data-temp="165" data-dwell="0.2" />
+```
+
 ## License
 
 This project is open source. Use at your own risk and ensure proper safety precautions when operating 3D printing equipment.
