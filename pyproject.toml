@@ -56,14 +56,8 @@ dev = ["pytest", "pytest-cov", "black", "isort", "flake8", "mypy", "pre-commit"]
 
 [tool.poetry.scripts]
 microweldr = "microweldr.cli.main:main"
-svg2gcode = "microweldr.cli.main:main"
-prusa-welder = "microweldr.cli.main:main"
 test-prusalink = "microweldr.cli.prusalink_test:main"
 printer-control = "microweldr.cli.printer_control:main"
-# Legacy aliases (deprecated - use printer-control instead)
-monitor-print = "microweldr.cli.monitor_print:main"
-printer-status = "microweldr.cli.printer_status:main"
-stop-print = "microweldr.cli.stop_print:main"
 
 [build-system]
 requires = ["poetry-core"]
