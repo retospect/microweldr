@@ -194,9 +194,10 @@ timeout = 30
             weld_paths = parser.parse_file(test_svg)
 
             # Generate animation
-            animation_path = temp_manager.create_temp_file(suffix=".svg")
+            animation_path = temp_manager.create_temp_file()
+            animation_path = animation_path.with_suffix(".svg")
             generator = AnimationGenerator(test_config)
-            generator.generate(weld_paths, str(animation_path))
+            generator.generate_file(weld_paths, str(animation_path))
 
             # Validate animation
             validator = AnimationValidator()
@@ -252,7 +253,8 @@ timeout = 30
         with TemporaryFileManager(prefix="progress_test_") as temp_manager:
             # Create several test SVG files
             for i in range(5):
-                svg_path = temp_manager.create_temp_file(suffix=f"_{i}.svg")
+                svg_path = temp_manager.create_temp_file()
+                svg_path = svg_path.with_suffix(f"_{i}.svg")
                 svg_path.write_text(Path(test_svg).read_text())
                 svg_files.append(svg_path)
 
@@ -304,9 +306,10 @@ timeout = 30
             parser = SVGParser()
             weld_paths = parser.parse_file(test_svg)
 
-            gcode_path = temp_manager.create_temp_file(suffix=".gcode")
+            gcode_path = temp_manager.create_temp_file()
+            gcode_path = gcode_path.with_suffix(".gcode")
             generator = GCodeGenerator(test_config)
-            generator.generate(weld_paths, str(gcode_path))
+            generator.generate_file(weld_paths, str(gcode_path))
 
             # Test printer communication
             client = ResilientPrusaLinkClient(secrets_file)
@@ -356,7 +359,8 @@ timeout = 30
         """Test workflow with error recovery and graceful degradation."""
         with TemporaryFileManager(prefix="error_test_") as temp_manager:
             # Test with invalid SVG
-            invalid_svg = temp_manager.create_temp_file(suffix=".svg")
+            invalid_svg = temp_manager.create_temp_file()
+            invalid_svg = invalid_svg.with_suffix(".svg")
             invalid_svg.write_text("This is not valid SVG content")
 
             parser = SVGParser()
@@ -398,18 +402,20 @@ timeout = 30
             assert len(errors) == 0
 
             # Step 3: Generate and validate G-code
-            gcode_path = temp_manager.create_temp_file(suffix=".gcode")
+            gcode_path = temp_manager.create_temp_file()
+            gcode_path = gcode_path.with_suffix(".gcode")
             generator = GCodeGenerator(test_config)
-            generator.generate(weld_paths, str(gcode_path))
+            generator.generate_file(weld_paths, str(gcode_path))
 
             gcode_validator = GCodeValidator()
             gcode_result = gcode_validator.validate(str(gcode_path))
             assert gcode_result.is_valid or len(gcode_result.warnings) == 0
 
             # Step 4: Generate and validate animation
-            animation_path = temp_manager.create_temp_file(suffix=".svg")
+            animation_path = temp_manager.create_temp_file()
+            animation_path = animation_path.with_suffix(".svg")
             animation_generator = AnimationGenerator(test_config)
-            animation_generator.generate(weld_paths, str(animation_path))
+            animation_generator.generate_file(weld_paths, str(animation_path))
 
             animation_validator = AnimationValidator()
             animation_result = animation_validator.validate(str(animation_path))
@@ -432,9 +438,10 @@ timeout = 30
                 with TemporaryFileManager(
                     prefix=f"worker_{worker_id}_"
                 ) as temp_manager:
-                    gcode_path = temp_manager.create_temp_file(suffix=".gcode")
+                    gcode_path = temp_manager.create_temp_file()
+                    gcode_path = gcode_path.with_suffix(".gcode")
                     generator = GCodeGenerator(test_config)
-                    generator.generate(weld_paths, str(gcode_path))
+                    generator.generate_file(weld_paths, str(gcode_path))
 
                     results_queue.put(
                         {
@@ -496,7 +503,8 @@ timeout = 30
 
         with TemporaryFileManager(prefix="memory_test_") as temp_manager:
             # Create large SVG file
-            large_svg_path = temp_manager.create_temp_file(suffix=".svg")
+            large_svg_path = temp_manager.create_temp_file()
+            large_svg_path = large_svg_path.with_suffix(".svg")
             large_svg_path.write_text(large_svg_content)
 
             # Process large file
@@ -504,9 +512,10 @@ timeout = 30
             weld_paths = parser.parse_file(str(large_svg_path))
 
             # Generate G-code
-            gcode_path = temp_manager.create_temp_file(suffix=".gcode")
+            gcode_path = temp_manager.create_temp_file()
+            gcode_path = gcode_path.with_suffix(".gcode")
             generator = GCodeGenerator(test_config)
-            generator.generate(weld_paths, str(gcode_path))
+            generator.generate_file(weld_paths, str(gcode_path))
 
             # Check memory usage hasn't grown excessively
             final_memory = process.memory_info().rss

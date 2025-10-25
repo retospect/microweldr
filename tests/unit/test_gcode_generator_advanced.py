@@ -145,7 +145,7 @@ animation_extension = "_animation.svg"
         weld_paths = [WeldPath(points, "normal", "custom_test")]
 
         with tempfile.NamedTemporaryFile(mode="w", suffix=".gcode", delete=False) as f:
-            generator.generate(weld_paths, f.name)
+            generator.generate_file(weld_paths, f.name)
 
             # Read generated G-code
             with open(f.name, "r") as gf:
@@ -173,7 +173,7 @@ animation_extension = "_animation.svg"
         ]
 
         with tempfile.NamedTemporaryFile(mode="w", suffix=".gcode", delete=False) as f:
-            generator.generate(weld_paths, f.name)
+            generator.generate_file(weld_paths, f.name)
 
             # Read generated G-code
             with open(f.name, "r") as gf:
@@ -196,7 +196,7 @@ animation_extension = "_animation.svg"
         ]
 
         with tempfile.NamedTemporaryFile(mode="w", suffix=".gcode", delete=False) as f:
-            generator.generate(weld_paths, f.name)
+            generator.generate_file(weld_paths, f.name)
 
             # Read generated G-code
             with open(f.name, "r") as gf:
@@ -221,7 +221,7 @@ animation_extension = "_animation.svg"
         weld_paths = [WeldPath(points, "normal", "multipass_test")]
 
         with tempfile.NamedTemporaryFile(mode="w", suffix=".gcode", delete=False) as f:
-            generator.generate(weld_paths, f.name)
+            generator.generate_file(weld_paths, f.name)
 
             # Read generated G-code
             with open(f.name, "r") as gf:
@@ -288,7 +288,7 @@ animation_extension = "_animation.svg"
         ]
 
         with tempfile.NamedTemporaryFile(mode="w", suffix=".gcode", delete=False) as f:
-            generator.generate(weld_paths, f.name)
+            generator.generate_file(weld_paths, f.name)
 
             # Read generated G-code
             with open(f.name, "r") as gf:
@@ -334,7 +334,7 @@ animation_extension = "_animation.svg"
         weld_paths = []
 
         with tempfile.NamedTemporaryFile(mode="w", suffix=".gcode", delete=False) as f:
-            generator.generate(weld_paths, f.name)
+            generator.generate_file(weld_paths, f.name)
 
             # Read generated G-code
             with open(f.name, "r") as gf:
@@ -362,7 +362,7 @@ animation_extension = "_animation.svg"
         ]
 
         with tempfile.NamedTemporaryFile(mode="w", suffix=".gcode", delete=False) as f:
-            generator.generate(weld_paths, f.name)
+            generator.generate_file(weld_paths, f.name)
 
             # Read generated G-code
             with open(f.name, "r") as gf:
@@ -392,7 +392,7 @@ animation_extension = "_animation.svg"
         ]
 
         with tempfile.NamedTemporaryFile(mode="w", suffix=".gcode", delete=False) as f:
-            generator.generate(weld_paths, f.name)
+            generator.generate_file(weld_paths, f.name)
 
             # Read generated G-code
             with open(f.name, "r") as gf:
