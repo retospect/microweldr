@@ -55,6 +55,9 @@ dev = ["pytest", "pytest-cov", "black", "isort", "flake8", "mypy", "pre-commit"]
 
 [tool.poetry.scripts]
 svg-welder = "svg_welder.cli.main:main"
+svg2gcode = "svg_welder.cli.main:main"
+prusa-welder = "svg_welder.cli.main:main"
+test-prusalink = "svg_welder.cli.prusalink_test:main"
 
 [build-system]
 requires = ["poetry-core"]

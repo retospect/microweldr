@@ -67,22 +67,41 @@ svg-welder/
 ### Using pip
 
 ```bash
-pip install -e .
-# Or with validation libraries
-pip install -e .[validation]
+# Install the package
+pip install svg-welder
+
+# Install with validation support (optional)
+pip install svg-welder[validation]
 ```
 
-### Development Setup
-
+### **From Source**
 ```bash
-# Install development dependencies
-make install-dev
+# Clone repository
+git clone https://github.com/yourusername/svg-welder.git
+cd svg-welder
 
-# Install pre-commit hooks
-make install-pre-commit
+# Install with poetry
+poetry install
+
+# Or install with pip
+pip install -e .
 
 # Run tests
 make test
+```
+
+## Available Commands
+
+After installation, these console commands are available:
+
+```bash
+# Main command (all equivalent)
+svg-welder input.svg -o output.gcode
+svg2gcode input.svg -o output.gcode  
+prusa-welder input.svg -o output.gcode
+
+# Test PrusaLink connection
+test-prusalink
 ```
 
 ## Configuration
