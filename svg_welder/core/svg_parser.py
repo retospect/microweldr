@@ -114,19 +114,36 @@ class SVGParser:
         # Parse style attribute for color information
         color_info = f"{stroke} {fill} {style}"
 
-        # Extract pause message for red elements
+        # Extract pause message for red elements (welding stops)
         if any(
             color in color_info for color in ["red", "#ff0000", "#f00", "rgb(255,0,0)"]
         ):
             # Look for pause message in various SVG attributes
             pause_message = (
                 element.get("data-message")
-                or element.get("title")  # Custom data attribute
-                or element.get("desc")  # SVG title attribute
-                or element.get("aria-label")  # SVG description
-                or "Manual intervention required"  # Accessibility label  # Default message
+                or element.get("title")
+                or element.get("aria-label")
+                or element.get("desc")
+                or None
             )
             return "stop", pause_message
+        # Extract pause message for pink/magenta elements (pipetting stops)
+        elif any(
+            color in color_info for color in [
+                "magenta", "pink", "fuchsia", 
+                "#ff00ff", "#f0f", "#ff69b4", "#ffc0cb",
+                "rgb(255,0,255)", "rgb(255,105,180)", "rgb(255,192,203)"
+            ]
+        ):
+            # Look for pipetting message in various SVG attributes
+            pipette_message = (
+                element.get("data-message")
+                or element.get("title") 
+                or element.get("aria-label")
+                or element.get("desc")
+                or "Pipette filling required"  # Default message
+            )
+            return "pipette", pipette_message
         elif any(
             color in color_info for color in ["blue", "#0000ff", "#00f", "rgb(0,0,255)"]
         ):

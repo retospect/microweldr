@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="150" xmlns="http://www.w3.org/2000/svg">
+  <!-- Microfluidic channel outline (black = normal welding) -->
+  <rect x="20" y="30" width="160" height="80" fill="none" stroke="black" stroke-width="2" id="channel-outline"/>
+  
+  <!-- Input channel (black = normal welding) -->
+  <line x1="10" y1="50" x2="20" y2="50" stroke="black" stroke-width="2" id="input-channel"/>
+  
+  <!-- Output channel (black = normal welding) -->
+  <line x1="180" y1="90" x2="190" y2="90" stroke="black" stroke-width="2" id="output-channel"/>
+  
+  <!-- Mixing chamber (light blue = light welding) -->
+  <circle cx="100" cy="70" r="15" fill="none" stroke="blue" stroke-width="2" id="mixing-chamber"/>
+  
+  <!-- Pipetting stop 1: Fill reagent A (pink/magenta circle) -->
+  <circle cx="60" cy="50" r="8" fill="magenta" stroke="darkmagenta" stroke-width="2" 
+          title="Fill with reagent A using pipette" id="pipette-reagent-a"/>
+  
+  <!-- Pipetting stop 2: Fill reagent B (pink/magenta circle) -->
+  <circle cx="140" cy="90" r="8" fill="#ff69b4" stroke="darkmagenta" stroke-width="2" 
+          data-message="Add 10μL reagent B with micropipette" id="pipette-reagent-b"/>
+  
+  <!-- Sample collection point (red = welding stop) -->
+  <circle cx="100" cy="120" r="6" fill="red" stroke="darkred" stroke-width="2" 
+          title="Insert collection tube before continuing" id="collection-point"/>
+  
+  <!-- Pipetting stop 3: Add sample (fuchsia color) -->
+  <circle cx="50" cy="80" r="7" fill="fuchsia" stroke="darkmagenta" stroke-width="2" 
+          aria-label="Pipette 5μL sample into inlet" id="pipette-sample"/>
+</svg>

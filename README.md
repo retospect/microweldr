@@ -342,18 +342,45 @@ make run-comprehensive
 - IDs with numeric components are sorted numerically
 - Elements without IDs are processed last
 
-### Color Coding
-- **Black elements**: Normal welds (higher temperature, longer dwell time)
-- **Blue elements**: Light welds (lower temperature, shorter dwell time)
-- **Red elements**: Stop points (printer pauses for user intervention)
+### Color-Based Weld Types
+
+The SVG welder supports different weld types based on element colors:
+
+- **Black elements** (default): Normal welding with full temperature and multi-pass
+- **Blue elements**: Light welding with reduced temperature  
+- **Red elements**: Stop points with custom pause messages
+- **Pink/Magenta elements**: Pipetting stops for microfluidic device filling
 
 Colors can be specified via:
 - `stroke` attribute
 - `fill` attribute  
 - `style` attribute (CSS format)
 
+### Pipetting Stops for Microfluidics 🧪
+
+**Pink/Magenta elements** create pipetting stops specifically designed for microfluidic device operation:
+
+**Supported Colors:**
+- `magenta`, `pink`, `fuchsia`
+- `#ff00ff`, `#f0f`, `#ff69b4`, `#ffc0cb`
+- `rgb(255,0,255)`, `rgb(255,105,180)`, `rgb(255,192,203)`
+
+**Use Cases:**
+- **Reagent filling**: Pause to add reagents to pouches
+- **Sample injection**: Stop for sample introduction
+- **Buffer addition**: Add buffers or washing solutions
+- **Collection**: Insert collection tubes or containers
+
+**Example:**
+```xml
+<!-- Pipetting stop with custom message -->
+<circle cx="60" cy="50" r="8" fill="magenta" 
+        title="Fill with 10μL reagent A using micropipette"/>
+```
+
 ### Custom Pause Messages
-Red elements (stop points) can include custom messages that will be displayed on the printer screen during the pause. The message can be specified using any of these SVG attributes (in order of priority):
+
+Both red elements (stop points) and pink elements (pipetting stops) can include custom messages displayed on the printer screen. Messages can be specified using any of these SVG attributes (in order of priority):
 
 - `data-message="Your custom message"` - Recommended custom data attribute
 - `title="Your custom message"` - Standard SVG title attribute

@@ -134,6 +134,13 @@ class GCodeGenerator:
                 safe_message = message.replace('"', "'").replace(";", ",")[:50]
                 f.write(f'M0 "{safe_message}" ; User stop requested\n\n')
                 continue
+            elif path.weld_type == "pipette":
+                # Handle pipetting stops for microfluidic device filling
+                message = path.pause_message or "Pipette filling required"
+                # Escape quotes and limit message length for G-code safety
+                safe_message = message.replace('"', "'").replace(";", ",")[:50]
+                f.write(f'M0 "{safe_message}" ; Pipetting stop - fill pouch with pipette\n\n')
+                continue
 
             # Get settings for this weld type
             weld_config = self.config.get_section(f"{path.weld_type}_welds")

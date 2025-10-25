@@ -10,11 +10,11 @@ class WeldPoint:
 
     x: float
     y: float
-    weld_type: str  # 'normal', 'light', or 'stop'
+    weld_type: str  # 'normal', 'light', 'stop', or 'pipette'
 
     def __post_init__(self) -> None:
         """Validate weld point data."""
-        if self.weld_type not in ("normal", "light", "stop"):
+        if self.weld_type not in ("normal", "light", "stop", "pipette"):
             raise ValueError(f"Invalid weld_type: {self.weld_type}")
 
 
@@ -31,7 +31,7 @@ class WeldPath:
 
     def __post_init__(self) -> None:
         """Validate weld path data."""
-        if self.weld_type not in ("normal", "light", "stop"):
+        if self.weld_type not in ("normal", "light", "stop", "pipette"):
             raise ValueError(f"Invalid weld_type: {self.weld_type}")
 
         if not self.points:

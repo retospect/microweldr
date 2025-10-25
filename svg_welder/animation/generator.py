@@ -54,10 +54,10 @@ class AnimationGenerator:
 
         # Calculate total animation time
         total_weld_points = sum(
-            len(path.points) for path in weld_paths if path.weld_type != "stop"
+            len(path.points) for path in weld_paths if path.weld_type not in ["stop", "pipette"]
         )
         total_pause_time = sum(
-            pause_time for path in weld_paths if path.weld_type == "stop"
+            pause_time for path in weld_paths if path.weld_type in ["stop", "pipette"]
         )
         calculated_duration = total_weld_points * time_between_welds + total_pause_time
         animation_duration = max(min_animation_duration, calculated_duration)
@@ -156,6 +156,24 @@ class AnimationGenerator:
             if path.weld_type == "stop":
                 if path.points:
                     self._write_stop_point(
+                        f,
+                        path,
+                        min_x,
+                        min_y,
+                        padding,
+                        animation_duration,
+                        current_time,
+                        scale_factor,
+                        pause_time,
+                        width,
+                        height,
+                    )
+                current_time += pause_time
+                continue
+            # Handle pipette stops (microfluidic filling)
+            elif path.weld_type == "pipette":
+                if path.points:
+                    self._write_pipette_point(
                         f,
                         path,
                         min_x,
@@ -426,6 +444,92 @@ class AnimationGenerator:
         f.write(
             f'    <circle cx="0" cy="0" r="{scaled_radius:.1f}" fill="red" '
             f'stroke="darkred" stroke-width="{scale_factor}"/>\n'
+        )
+
+        f.write("  </g>\n")
+
+    def _write_pipette_point(
+        self,
+        f: TextIO,
+        path: WeldPath,
+        min_x: float,
+        min_y: float,
+        padding: float,
+        animation_duration: float,
+        current_time: float,
+        scale_factor: float,
+        pause_time: float,
+        width: float,
+        height: float,
+    ) -> None:
+        """Write pipette point as pink/magenta circle with pipetting message display."""
+        point = path.points[0]
+        x = (point.x - min_x + padding) * scale_factor
+        y = (point.y - min_y + padding + 40) * scale_factor  # Offset for header
+
+        # Use element radius if available, otherwise default
+        if path.element_type == "circle" and path.element_radius:
+            radius = max(
+                2.0, min(path.element_radius, 8.0)
+            )  # Clamp between 2-8 for visibility
+        else:
+            radius = 3.0  # Default radius for non-circle pipette points
+
+        # Get pipette message
+        message = path.pause_message or "Pipette filling required"
+
+        # Message display area - positioned above the pipette point
+        message_x = x
+        message_y = y - (radius + 5) * scale_factor - 20
+        
+        # Ensure message stays within bounds
+        message_x = max(10, min(message_x, width - 200))
+        message_y = max(30, message_y)
+
+        # Message background and text
+        f.write(f'  <g opacity="0">\n')
+        
+        # Opacity animation for message - show during pause
+        f.write(
+            f'    <animate attributeName="opacity" values="0;1;1;0" '
+            f'dur="{pause_time:.2f}s" begin="{current_time:.2f}s" fill="freeze"/>\n'
+        )
+
+        # Message background (rounded rectangle)
+        f.write(
+            f'    <rect x="{message_x-5}" y="{message_y-15}" width="190" height="25" '
+            f'fill="rgba(255,0,255,0.9)" stroke="magenta" stroke-width="1" rx="3"/>\n'
+        )
+
+        # Message text
+        f.write(
+            f'    <text x="{message_x}" y="{message_y}" font-family="Arial, sans-serif" '
+            f'font-size="12" fill="white" font-weight="bold">{message}</text>\n'
+        )
+
+        f.write("  </g>\n")
+
+        # Pipette point with flip animation
+        f.write(f'  <g transform="translate({x:.2f},{y:.2f})" opacity="0">\n')
+
+        # Flip animation for pipette point
+        f.write(
+            f'    <animateTransform attributeName="transform" type="scale" '
+            f'values="0,0;0.2,1.2;1.1,0.9;1,1" dur="0.3s" '
+            f'begin="{current_time:.2f}s" fill="freeze" additive="sum"/>\n'
+        )
+
+        # Opacity animation - show only during pause duration
+        f.write(
+            f'    <animate attributeName="opacity" values="0;1;1;0" '
+            f'dur="{pause_time:.2f}s" begin="{current_time:.2f}s" fill="freeze"/>\n'
+        )
+
+        # Pink/magenta circle (pipette indicator) - scale radius
+        scaled_radius = radius * scale_factor
+        f.write(
+            f'    <circle cx="0" cy="0" r="{scaled_radius:.1f}" fill="magenta" '
+            f'stroke="darkmagenta" stroke-width="{scale_factor}"/>\n'
         )
 
         f.write("  </g>\n")
