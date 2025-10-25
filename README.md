@@ -29,7 +29,7 @@ microweldr/
 - **SVG Processing**: Converts SVG paths, lines, circles, and rectangles to weld points
 - **Color-based Weld Types**:
   - Black elements → Normal welds
-  - Blue elements → Light welds (lower temperature, shorter dwell time)
+  - Blue elements → Light welds (lower temperature, shorter welding time)
   - Red elements → Stop points (pause for user intervention)
 - **Configurable Parameters**: TOML-based configuration for temperatures, heights, and timing
 - **Bed Leveling**: Optional automatic bed leveling (can be disabled)
@@ -104,7 +104,7 @@ cooling_time_between_passes = 2.0  # seconds - cooling between passes
 
 [light_welds]
 weld_temperature = 180     # °C - lower temperature
-spot_dwell_time = 0.3      # seconds - shorter time
+welding_time = 0.3      # seconds - shorter time
 dot_spacing = 0.3          # mm - final desired spacing
 initial_dot_spacing = 12.0 # mm - spacing for first pass (wider)
 cooling_time_between_passes = 1.5  # seconds - cooling between passes
@@ -387,7 +387,7 @@ MicroWeldr interprets SVG element colors to determine weld behavior:
 
 #### **Recognized Colors:**
 - **Black elements** (default): Normal welding with full temperature and multi-pass
-- **Blue elements**: Light welding with reduced temperature and shorter dwell time
+- **Blue elements**: Light welding with reduced temperature and shorter welding time
 - **Red elements**: Stop points with custom pause messages for manual intervention
 - **Pink/Magenta elements**: Pipetting stops for microfluidic device filling
 
@@ -472,7 +472,7 @@ Control what message appears on the printer screen during stops:
 Override default welding settings per element:
 
 - **`data-temp="180"`** - Custom temperature in °C
-- **`data-dwell="0.5"`** - Custom dwell time in seconds  
+- **`data-welding-time="0.5"`** - Custom welding time in seconds  
 - **`data-height="0.03"`** - Custom weld height in mm
 - **`data-spacing="1.5"`** - Custom dot spacing in mm
 
@@ -496,7 +496,7 @@ Customize animation appearance:
 <line x1="10" y1="10" x2="50" y2="10"
       stroke="black"
       data-temp="160"
-      data-dwell="0.3"
+      data-welding-time="0.3"
       data-height="0.025"
       id="weld_001"/>
 
@@ -530,7 +530,7 @@ Customize animation appearance:
 
 #### **Validation**
 - Temperature: 100-300°C (validated against printer limits)
-- Dwell time: 0.1-5.0 seconds (prevents damage)
+- **Welding time**: 0.1-5.0 seconds (prevents damage)
 - Height: 0.01-1.0 mm (prevents crashes)
 - Spacing: 0.1-10.0 mm (reasonable welding density)
 
@@ -874,7 +874,7 @@ When working with bubble film rolls for microfluidic device creation:
 **💡 Pro Tip:**
 Use the `data-temp` attribute in your SVG to fine-tune welding temperature for different areas:
 ```xml
-<line stroke="black" data-temp="165" data-dwell="0.2" />
+<line stroke="black" data-temp="165" data-welding-time="0.2" />
 ```
 
 ## License

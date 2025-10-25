@@ -86,7 +86,7 @@ class SVGParser:
 
                 # Extract custom parameters for the path
                 custom_temp = self._get_float_attr(element, "data-temp")
-                custom_dwell = self._get_float_attr(element, "data-dwell")
+                custom_welding_time = self._get_float_attr(element, "data-welding-time")
                 custom_bed_temp = self._get_float_attr(element, "data-bed-temp")
                 custom_height = self._get_float_attr(element, "data-height")
 
@@ -98,7 +98,7 @@ class SVGParser:
                     element_type=element_type,
                     element_radius=element_radius,
                     custom_temp=custom_temp,
-                    custom_dwell=custom_dwell,
+                    custom_welding_time=custom_welding_time,
                     custom_bed_temp=custom_bed_temp,
                     custom_height=custom_height,
                 )
@@ -232,7 +232,7 @@ class SVGParser:
 
         # Extract custom parameters from line element
         custom_temp = self._get_float_attr(line_element, "data-temp")
-        custom_dwell = self._get_float_attr(line_element, "data-dwell")
+        custom_welding_time = self._get_float_attr(line_element, "data-welding-time")
         custom_bed_temp = self._get_float_attr(line_element, "data-bed-temp")
         custom_height = self._get_float_attr(line_element, "data-height")
 
@@ -242,7 +242,7 @@ class SVGParser:
                 y1,
                 "normal",
                 custom_temp,
-                custom_dwell,
+                custom_welding_time,
                 custom_bed_temp,
                 custom_height,
             ),
@@ -251,7 +251,7 @@ class SVGParser:
                 y2,
                 "normal",
                 custom_temp,
-                custom_dwell,
+                custom_welding_time,
                 custom_bed_temp,
                 custom_height,
             ),

@@ -38,13 +38,13 @@ z_speed = 300
 [normal_welds]
 weld_height = 0.05
 weld_temperature = 200
-spot_dwell_time = 0.5
+welding_time = 0.5
 dot_spacing = 2.0
 
 [light_welds]
 weld_height = 0.05
 weld_temperature = 180
-spot_dwell_time = 0.3
+welding_time = 0.3
 dot_spacing = 3.0
 
 [output]
@@ -216,7 +216,7 @@ z_speed = 300
 [normal_welds]
 weld_height = 0.05
 weld_temperature = 200
-spot_dwell_time = 0.5
+welding_time = 0.5
 dot_spacing = 2.0
 initial_dot_spacing = 8.0
 cooling_time_between_passes = 2.0
@@ -224,7 +224,7 @@ cooling_time_between_passes = 2.0
 [light_welds]
 weld_height = 0.05
 weld_temperature = 180
-spot_dwell_time = 0.3
+welding_time = 0.3
 dot_spacing = 3.0
 initial_dot_spacing = 12.0
 cooling_time_between_passes = 1.5
@@ -285,7 +285,7 @@ z_speed = 300
 [normal_welds]
 weld_height = 0.05
 weld_temperature = 200
-spot_dwell_time = 0.5
+welding_time = 0.5
 dot_spacing = 2.0
 initial_dot_spacing = 8.0
 cooling_time_between_passes = 2.0
@@ -293,7 +293,7 @@ cooling_time_between_passes = 2.0
 [light_welds]
 weld_height = 0.05
 weld_temperature = 180
-spot_dwell_time = 0.3
+welding_time = 0.3
 dot_spacing = 3.0
 initial_dot_spacing = 12.0
 cooling_time_between_passes = 1.5
@@ -339,7 +339,7 @@ z_speed = 300
 [normal_welds]
 weld_height = 0.05
 weld_temperature = 200
-spot_dwell_time = 0.5
+welding_time = 0.5
 dot_spacing = 2.0
 initial_dot_spacing = 8.0
 cooling_time_between_passes = 2.0
@@ -347,7 +347,7 @@ cooling_time_between_passes = 2.0
 [light_welds]
 weld_height = 0.05
 weld_temperature = 180
-spot_dwell_time = 0.3
+welding_time = 0.3
 dot_spacing = 3.0
 initial_dot_spacing = 12.0
 cooling_time_between_passes = 1.5
@@ -393,7 +393,7 @@ z_speed = 300
 [normal_welds]
 weld_height = 0.05
 weld_temperature = 200
-spot_dwell_time = 0.5
+welding_time = 0.5
 dot_spacing = -1.0  # Invalid
 initial_dot_spacing = 8.0
 cooling_time_between_passes = 2.0
@@ -401,7 +401,7 @@ cooling_time_between_passes = 2.0
 [light_welds]
 weld_height = 0.05
 weld_temperature = 180
-spot_dwell_time = 0.3
+welding_time = 0.3
 dot_spacing = 3.0
 initial_dot_spacing = 12.0
 cooling_time_between_passes = 1.5

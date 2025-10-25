@@ -58,7 +58,7 @@ microweldr examples/example.svg --config examples/config.toml
 - Laboratory workflow
 
 **`calibration_test.svg`** - Parameter optimization
-- 48 test conditions (6 temps × 2 dwell times × 4 compressions)
+- 48 test conditions (6 temps × 2 welding times × 4 compressions)
 - Scientific parameter validation
 - Diagonal orientation reference
 
@@ -67,7 +67,7 @@ microweldr examples/example.svg --config examples/config.toml
 **`config.toml`** - Optimized settings template
 - Calibration-validated parameters
 - 130°C temperature (optimal)
-- 0.1s dwell time (fast & effective)
+- 0.1s welding time (fast & effective)
 - 20µm compression (light touch)
 - 600 mm/min Z-speed (maximum safe)
 
@@ -129,7 +129,7 @@ Add custom attributes to any element:
 ```xml
 <line x1="10" y1="10" x2="25" y2="10"
       data-temp="150"
-      data-dwell="0.2"
+      data-welding-time="0.2"
       data-height="0.040"
       stroke="black"/>
 ```

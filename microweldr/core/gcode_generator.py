@@ -288,21 +288,24 @@ class GCodeGenerator:
                 )
                 f.write(f"G1 Z{weld_height:.3f} F{z_speed}\n")
 
-                # Dwell for welding - use custom dwell time if specified (path-level or point-level)
-                dwell_time = (
-                    point.custom_dwell
-                    if point.custom_dwell is not None
+                # Welding time - use custom welding time if specified (path-level or point-level)
+                welding_time = (
+                    point.custom_welding_time
+                    if point.custom_welding_time is not None
                     else (
-                        path.custom_dwell
-                        if path.custom_dwell is not None
-                        else weld_config["spot_dwell_time"]
+                        path.custom_welding_time
+                        if path.custom_welding_time is not None
+                        else weld_config["welding_time"]
                     )
                 )
-                dwell_ms = int(dwell_time * 1000)
-                if point.custom_dwell is not None or path.custom_dwell is not None:
-                    f.write(f"G4 P{dwell_ms} ; Custom dwell time {dwell_time}s\n")
+                welding_ms = int(welding_time * 1000)
+                if (
+                    point.custom_welding_time is not None
+                    or path.custom_welding_time is not None
+                ):
+                    f.write(f"G4 P{welding_ms} ; Custom welding time {welding_time}s\n")
                 else:
-                    f.write(f"G4 P{dwell_ms} ; Dwell for welding\n")
+                    f.write(f"G4 P{welding_ms} ; Welding time at welding height\n")
 
                 # Raise to safe height
                 f.write(f"G1 Z{move_height} F{z_speed}\n")

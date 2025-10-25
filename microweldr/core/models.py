@@ -12,7 +12,7 @@ class WeldPoint:
     y: float
     weld_type: str  # 'normal', 'light', 'stop', or 'pipette'
     custom_temp: Optional[float] = None  # Custom temperature for this point
-    custom_dwell: Optional[float] = None  # Custom dwell time for this point
+    custom_welding_time: Optional[float] = None  # Custom welding time for this point
     custom_bed_temp: Optional[float] = None  # Custom bed temperature
     custom_height: Optional[float] = None  # Custom weld height (compression depth)
 
@@ -33,7 +33,7 @@ class WeldPath:
     element_type: Optional[str] = None  # Original SVG element type (circle, rect, etc.)
     element_radius: Optional[float] = None  # Original radius for circles
     custom_temp: Optional[float] = None  # Custom temperature for this path
-    custom_dwell: Optional[float] = None  # Custom dwell time for this path
+    custom_welding_time: Optional[float] = None  # Custom welding time for this path
     custom_bed_temp: Optional[float] = None  # Custom bed temperature
     custom_height: Optional[float] = None  # Custom weld height (compression depth)
 
