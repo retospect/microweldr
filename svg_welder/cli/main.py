@@ -115,6 +115,11 @@ Examples:
         default=30,
         help="Monitoring check interval in seconds (default: 30)"
     )
+    parser.add_argument(
+        "--no-center",
+        action="store_true",
+        help="Disable automatic centering on bed (use SVG coordinates as-is)"
+    )
 
     return parser
 
@@ -166,8 +171,9 @@ def main() -> None:
 
         config = Config(args.config)
 
-        # Initialize converter
-        converter = SVGToGCodeConverter(config)
+        # Initialize converter with centering option
+        center_on_bed = not args.no_center  # Default to centering unless --no-center is used
+        converter = SVGToGCodeConverter(config, center_on_bed=center_on_bed)
 
         print(f"Processing SVG file: {args.input_svg}")
 

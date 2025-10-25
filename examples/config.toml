@@ -12,7 +12,7 @@ nozzle_temperature = 200  # °C for normal welds
 cooldown_temperature = 50  # °C
 
 [movement]
-move_height = 5.0  # mm - height for safe movement
+move_height = 2.0  # mm - height for safe movement
 travel_speed = 6000  # mm/min
 z_speed = 300  # mm/min
 
