@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "microweldr"
-version = "4.0.0"
+version = "4.1.0"
 description = "Convert SVG files to Prusa Core One G-code for plastic welding"
 authors = ["Your Name <your.email@example.com>"]
 readme = "README.md"
