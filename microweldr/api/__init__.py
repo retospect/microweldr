@@ -26,26 +26,22 @@ from .monitoring import SystemMonitor, HealthStatus
 
 __all__ = [
     # Core API
-    'MicroWeldr',
-    'WeldJob', 
-    'ValidationResult',
-    
+    "MicroWeldr",
+    "WeldJob",
+    "ValidationResult",
     # Printer API
-    'PrinterConnection',
-    'PrinterStatus',
-    
+    "PrinterConnection",
+    "PrinterStatus",
     # Workflow API
-    'WorkflowManager',
-    'WorkflowStep',
-    
+    "WorkflowManager",
+    "WorkflowStep",
     # Validation API
-    'ValidationSuite',
-    
+    "ValidationSuite",
     # Monitoring API
-    'SystemMonitor',
-    'HealthStatus'
+    "SystemMonitor",
+    "HealthStatus",
 ]
 
 # Version info
-__version__ = '3.0.2'
-__author__ = 'MicroWeldr Team'
+__version__ = "3.0.2"
+__author__ = "MicroWeldr Team"

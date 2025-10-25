@@ -96,6 +96,11 @@ class Config:
             # Return default values if section doesn't exist
             return {"skip_base_distance": 5}
 
+    @property
+    def config(self) -> Dict[str, Any]:
+        """Get the full configuration dictionary."""
+        return self._config
+
     def validate(self) -> None:
         """Validate configuration completeness and correctness."""
         required_sections = [

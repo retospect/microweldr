@@ -67,19 +67,30 @@ class GCodeGenerator:
     def _write_initialization(self, f: TextIO, skip_bed_leveling: bool) -> None:
         """Write printer initialization commands."""
         from .constants import (
-            OperatingMode, ConfigSections, ConfigKeys, 
-            WarningMessages, GCodeCommands, get_operating_mode_enum, is_experimental_mode
+            OperatingMode,
+            ConfigSections,
+            ConfigKeys,
+            WarningMessages,
+            GCodeCommands,
+            get_operating_mode_enum,
+            is_experimental_mode,
         )
-        
+
         # Get operating mode using constants
-        mode_str = self.config.get(ConfigSections.PRINTER, ConfigKeys.LAYED_BACK_MODE, False)
+        mode_str = self.config.get(
+            ConfigSections.PRINTER, ConfigKeys.LAYED_BACK_MODE, False
+        )
         operating_mode = OperatingMode.LAYED_BACK if mode_str else OperatingMode.UPRIGHT
 
         if is_experimental_mode(operating_mode):
             # Print warning about experimental mode
             print(WarningMessages.EXPERIMENTAL_MODE)
-            print("⚠️  Known issues: calibration conflicts, Z-axis problems, coordinate issues")
-            print(f"⚠️  Recommendation: Set {ConfigKeys.LAYED_BACK_MODE} = false for reliable operation")
+            print(
+                "⚠️  Known issues: calibration conflicts, Z-axis problems, coordinate issues"
+            )
+            print(
+                f"⚠️  Recommendation: Set {ConfigKeys.LAYED_BACK_MODE} = false for reliable operation"
+            )
             print("⚠️  Continue at your own risk - manual intervention may be required")
             print()
             f.write("; Initialize printer (layed back mode - printer on its back!)\n")
@@ -91,7 +102,9 @@ class GCodeGenerator:
 
             f.write(f"{GCodeCommands.G90} ; Absolute positioning\n")
             f.write(f"{GCodeCommands.M83} ; Relative extruder positioning\n")
-            f.write(f"{GCodeCommands.M84} S0 ; Disable stepper timeout for layed back operation\n")
+            f.write(
+                f"{GCodeCommands.M84} S0 ; Disable stepper timeout for layed back operation\n"
+            )
 
             # Trust X/Y but will home Z during heating
             f.write(

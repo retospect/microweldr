@@ -42,11 +42,11 @@ class TestSVGValidator:
 
     def test_valid_svg(self):
         """Test validation of valid SVG."""
-        svg_content = '''<?xml version="1.0" encoding="UTF-8"?>
+        svg_content = """<?xml version="1.0" encoding="UTF-8"?>
 <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
   <line x1="10" y1="10" x2="50" y2="10" stroke="black" />
-</svg>'''
-        
+</svg>"""
+
         with tempfile.NamedTemporaryFile(mode="w", suffix=".svg", delete=False) as f:
             f.write(svg_content)
             svg_path = f.name
@@ -60,11 +60,11 @@ class TestSVGValidator:
 
     def test_invalid_svg_syntax(self):
         """Test validation of invalid SVG syntax."""
-        invalid_svg = '''<?xml version="1.0" encoding="UTF-8"?>
+        invalid_svg = """<?xml version="1.0" encoding="UTF-8"?>
 <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
   <line x1="10" y1="10" x2="50" y2="10" stroke="black" 
-</svg>'''  # Missing closing bracket
-        
+</svg>"""  # Missing closing bracket
+
         with tempfile.NamedTemporaryFile(mode="w", suffix=".svg", delete=False) as f:
             f.write(invalid_svg)
             svg_path = f.name
@@ -78,15 +78,15 @@ class TestSVGValidator:
 
     def test_svg_with_custom_attributes(self):
         """Test SVG with custom weld attributes."""
-        svg_content = '''<?xml version="1.0" encoding="UTF-8"?>
+        svg_content = """<?xml version="1.0" encoding="UTF-8"?>
 <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
   <line x1="10" y1="10" x2="50" y2="10" 
         stroke="black" 
         data-temp="160"
         data-weld-time="0.3"
         data-weld-height="0.025" />
-</svg>'''
-        
+</svg>"""
+
         with tempfile.NamedTemporaryFile(mode="w", suffix=".svg", delete=False) as f:
             f.write(svg_content)
             svg_path = f.name
@@ -95,7 +95,10 @@ class TestSVGValidator:
             result = SVGValidator.validate(svg_path)
             assert result.is_valid is True
             # Should detect custom attributes
-            assert any("custom attributes" in msg.lower() for msg in result.warnings) or result.is_valid
+            assert (
+                any("custom attributes" in msg.lower() for msg in result.warnings)
+                or result.is_valid
+            )
         finally:
             Path(svg_path).unlink()
 
@@ -107,10 +110,10 @@ class TestSVGValidator:
 
     def test_empty_svg(self):
         """Test validation of empty SVG."""
-        svg_content = '''<?xml version="1.0" encoding="UTF-8"?>
+        svg_content = """<?xml version="1.0" encoding="UTF-8"?>
 <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-</svg>'''
-        
+</svg>"""
+
         with tempfile.NamedTemporaryFile(mode="w", suffix=".svg", delete=False) as f:
             f.write(svg_content)
             svg_path = f.name
@@ -141,7 +144,7 @@ G1 Z5 F600 ; Raise to safe height
 M104 S0 ; Turn off nozzle
 M140 S0 ; Turn off bed
 """
-        
+
         with tempfile.NamedTemporaryFile(mode="w", suffix=".gcode", delete=False) as f:
             f.write(gcode_content)
             gcode_path = f.name
@@ -161,7 +164,7 @@ INVALID_COMMAND ; This is not a valid G-code command
 G1 X Y Z ; Missing values
 M104 ; Missing temperature value
 """
-        
+
         with tempfile.NamedTemporaryFile(mode="w", suffix=".gcode", delete=False) as f:
             f.write(gcode_content)
             gcode_path = f.name
@@ -198,7 +201,7 @@ class TestAnimationValidator:
 
     def test_valid_animation_svg(self):
         """Test validation of valid animation SVG."""
-        animation_content = '''<?xml version="1.0" encoding="UTF-8"?>
+        animation_content = """<?xml version="1.0" encoding="UTF-8"?>
 <svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <style>
@@ -212,8 +215,8 @@ class TestAnimationValidator:
   <circle cx="100" cy="50" r="2" class="weld-point">
     <animate attributeName="opacity" values="0;1;0" dur="0.5s" begin="0.5s"/>
   </circle>
-</svg>'''
-        
+</svg>"""
+
         with tempfile.NamedTemporaryFile(mode="w", suffix=".svg", delete=False) as f:
             f.write(animation_content)
             svg_path = f.name
@@ -227,11 +230,11 @@ class TestAnimationValidator:
 
     def test_animation_svg_missing_elements(self):
         """Test animation SVG missing required elements."""
-        animation_content = '''<?xml version="1.0" encoding="UTF-8"?>
+        animation_content = """<?xml version="1.0" encoding="UTF-8"?>
 <svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
   <!-- No animation elements -->
-</svg>'''
-        
+</svg>"""
+
         with tempfile.NamedTemporaryFile(mode="w", suffix=".svg", delete=False) as f:
             f.write(animation_content)
             svg_path = f.name
@@ -245,13 +248,13 @@ class TestAnimationValidator:
 
     def test_animation_svg_invalid_syntax(self):
         """Test animation SVG with invalid syntax."""
-        invalid_animation = '''<?xml version="1.0" encoding="UTF-8"?>
+        invalid_animation = """<?xml version="1.0" encoding="UTF-8"?>
 <svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
   <circle cx="50" cy="50" r="2" class="weld-point"
     <animate attributeName="opacity" values="0;1;0" dur="0.5s"/>
   </circle>
-</svg>'''  # Missing closing bracket
-        
+</svg>"""  # Missing closing bracket
+
         with tempfile.NamedTemporaryFile(mode="w", suffix=".svg", delete=False) as f:
             f.write(invalid_animation)
             svg_path = f.name
@@ -270,12 +273,12 @@ class TestValidationIntegration:
     def test_validate_complete_workflow(self):
         """Test validation of complete SVG to G-code workflow."""
         # Create input SVG
-        svg_content = '''<?xml version="1.0" encoding="UTF-8"?>
+        svg_content = """<?xml version="1.0" encoding="UTF-8"?>
 <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
   <line x1="10" y1="10" x2="50" y2="10" stroke="black" data-temp="160" />
   <line x1="10" y1="20" x2="50" y2="20" stroke="blue" />
-</svg>'''
-        
+</svg>"""
+
         gcode_content = """
 ; MicroWeldr Generated G-code
 G90 ; Absolute positioning
@@ -287,39 +290,45 @@ G4 P100 ; Weld time
 G1 Z5 F600 ; Safe height
 M104 S0 ; Cool down
 """
-        
-        animation_content = '''<?xml version="1.0" encoding="UTF-8"?>
+
+        animation_content = """<?xml version="1.0" encoding="UTF-8"?>
 <svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
   <circle cx="50" cy="50" r="2" class="weld-point">
     <animate attributeName="opacity" values="0;1;0" dur="0.5s"/>
   </circle>
-</svg>'''
-        
+</svg>"""
+
         # Use static methods
-        
+
         # Create temporary files
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".svg", delete=False) as svg_f:
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".svg", delete=False
+        ) as svg_f:
             svg_f.write(svg_content)
             svg_path = svg_f.name
-            
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".gcode", delete=False) as gcode_f:
+
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".gcode", delete=False
+        ) as gcode_f:
             gcode_f.write(gcode_content)
             gcode_path = gcode_f.name
-            
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".svg", delete=False) as anim_f:
+
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".svg", delete=False
+        ) as anim_f:
             anim_f.write(animation_content)
             anim_path = anim_f.name
-        
+
         try:
             # Validate all components
             svg_result = SVGValidator.validate(svg_path)
             gcode_result = GCodeValidator.validate(gcode_path)
             animation_result = AnimationValidator.validate(anim_path)
-            
+
             assert svg_result.is_valid is True
             assert gcode_result.is_valid is True
             assert animation_result.is_valid is True
-            
+
         finally:
             Path(svg_path).unlink()
             Path(gcode_path).unlink()

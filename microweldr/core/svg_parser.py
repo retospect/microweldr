@@ -117,7 +117,7 @@ class SVGParser:
     def _determine_weld_type(self, element: ET.Element) -> Tuple[str, Optional[str]]:
         """Determine weld type based on element color and extract pause message."""
         from .constants import Colors, WeldType, SVGAttributes, get_color_weld_type
-        
+
         # Check stroke color
         stroke = element.get(SVGAttributes.STROKE, "").lower()
         fill = element.get(SVGAttributes.FILL, "").lower()
@@ -141,7 +141,7 @@ class SVGParser:
                         or None
                     )
                     return WeldType.STOP.value, pause_message
-            
+
             # Check for pipette colors (magenta/pink variants)
             if any(color in color_info for color in Colors.PIPETTE_ALIASES):
                 # Look for pipetting message in various SVG attributes
@@ -154,15 +154,15 @@ class SVGParser:
                     or "Pipette filling required"  # Default message
                 )
                 return WeldType.PIPETTE.value, pipette_message
-            
+
             # Check for light weld colors
             for color_alias in Colors.LIGHT_ALIASES:
                 if color_alias in color_info:
                     return WeldType.LIGHT.value, None
-            
+
             # Default to normal weld (black or other colors)
             return WeldType.NORMAL.value, None
-            
+
         except ValueError:
             # Fallback to normal if color parsing fails
             return WeldType.NORMAL.value, None

@@ -22,10 +22,11 @@ class WeldPoint:
         """Validate weld point data."""
         valid_types = get_valid_weld_types()
         if self.weld_type not in valid_types:
-            raise ValueError(ErrorMessages.INVALID_WELD_TYPE.format(
-                weld_type=self.weld_type,
-                valid_types=", ".join(valid_types)
-            ))
+            raise ValueError(
+                ErrorMessages.INVALID_WELD_TYPE.format(
+                    weld_type=self.weld_type, valid_types=", ".join(valid_types)
+                )
+            )
 
     @property
     def weld_type_enum(self) -> WeldType:
@@ -52,10 +53,11 @@ class WeldPath:
         """Validate weld path data."""
         valid_types = get_valid_weld_types()
         if self.weld_type not in valid_types:
-            raise ValueError(ErrorMessages.INVALID_WELD_TYPE.format(
-                weld_type=self.weld_type,
-                valid_types=", ".join(valid_types)
-            ))
+            raise ValueError(
+                ErrorMessages.INVALID_WELD_TYPE.format(
+                    weld_type=self.weld_type, valid_types=", ".join(valid_types)
+                )
+            )
 
         if not self.points:
             raise ValueError("WeldPath must contain at least one point")
