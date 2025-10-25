@@ -21,6 +21,10 @@ bed_size_x = 250.0
 bed_size_y = 210.0
 max_z_height = 270.0
 
+[nozzle]
+outer_diameter = 1.0
+inner_diameter = 0.2
+
 [temperatures]
 bed_temperature = 60
 nozzle_temperature = 200
@@ -36,12 +40,16 @@ weld_height = 0.2
 weld_temperature = 200
 spot_dwell_time = 0.5
 dot_spacing = 2.0
+initial_dot_spacing = 8.0
+cooling_time_between_passes = 2.0
 
 [light_welds]
 weld_height = 0.5
 weld_temperature = 180
 spot_dwell_time = 0.3
 dot_spacing = 3.0
+initial_dot_spacing = 12.0
+cooling_time_between_passes = 1.5
 
 [output]
 gcode_extension = ".gcode"

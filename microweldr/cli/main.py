@@ -342,7 +342,9 @@ def main() -> None:
                         except Exception as e:
                             print(f"\n⚠️ Monitoring error: {e}")
                     elif args.monitor and not upload_result["auto_started"]:
-                        print("\n⚠️ Monitoring requested but print was not auto-started")
+                        print(
+                            "\n⚠️ Monitoring requested but print was not auto-started"
+                        )
                         print("   Use --auto-start-print to enable monitoring")
 
             except PrusaLinkError as e:

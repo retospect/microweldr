@@ -56,7 +56,7 @@ class TestCodeFormatting:
 
                 error_message = (
                     f"Code formatting check failed. {len(unformatted_files)} files need formatting.\n"
-                    f"Run 'make format' or 'black svg_welder tests' to fix formatting issues.\n\n"
+                    f"Run 'make format' or 'black microweldr tests' to fix formatting issues.\n\n"
                     f"Files that need formatting:\n"
                     + "\n".join(unformatted_files[:10])  # Show first 10 files
                 )
@@ -78,15 +78,15 @@ class TestCodeFormatting:
         python_files = self.get_python_files()
         assert (
             len(python_files) > 0
-        ), "No Python files found in svg_welder or tests directories"
+        ), "No Python files found in microweldr or tests directories"
 
         # Check that we have files in both main package and tests
-        svg_welder_files = [f for f in python_files if "svg_welder" in f.parts]
+        microweldr_files = [f for f in python_files if "microweldr" in f.parts]
         test_files = [f for f in python_files if "tests" in f.parts]
 
         assert (
-            len(svg_welder_files) > 0
-        ), "No Python files found in svg_welder directory"
+            len(microweldr_files) > 0
+        ), "No Python files found in microweldr directory"
         assert len(test_files) > 0, "No Python files found in tests directory"
 
     def test_black_version_compatibility(self):

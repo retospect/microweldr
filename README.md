@@ -430,7 +430,7 @@ Use non-weld colors (orange, purple, green, gray) for text labels and annotation
 **Example:**
 ```xml
 <!-- Pipetting stop with custom message -->
-<circle cx="60" cy="50" r="8" fill="magenta" 
+<circle cx="60" cy="50" r="8" fill="magenta"
         title="Fill with 10μL reagent A using micropipette"/>
 ```
 
