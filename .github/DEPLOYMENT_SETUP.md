@@ -10,7 +10,7 @@ Go to your repository settings → Environments and create:
 
 #### **`testpypi` Environment**
 - **Name**: `testpypi`
-- **Protection rules**: 
+- **Protection rules**:
   - ✅ Required reviewers: Add yourself
   - ✅ Wait timer: 0 minutes
   - ✅ Restrict to selected branches: `master`, `main`

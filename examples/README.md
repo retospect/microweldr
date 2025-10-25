@@ -127,9 +127,9 @@ The `calibration_test.svg` provides comprehensive parameter testing:
 ### Custom Parameters
 Add custom attributes to any element:
 ```xml
-<line x1="10" y1="10" x2="25" y2="10" 
-      data-temp="150" 
-      data-dwell="0.2" 
+<line x1="10" y1="10" x2="25" y2="10"
+      data-temp="150"
+      data-dwell="0.2"
       data-height="0.040"
       stroke="black"/>
 ```

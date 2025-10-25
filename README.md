@@ -493,30 +493,30 @@ Customize animation appearance:
 #### **Complete Example**
 ```xml
 <!-- Normal weld with custom parameters -->
-<line x1="10" y1="10" x2="50" y2="10" 
-      stroke="black" 
-      data-temp="160" 
+<line x1="10" y1="10" x2="50" y2="10"
+      stroke="black"
+      data-temp="160"
       data-dwell="0.3"
       data-height="0.025"
       id="weld_001"/>
 
 <!-- Stop point with custom message and priority -->
-<circle cx="30" cy="30" r="2" 
-        fill="red" 
+<circle cx="30" cy="30" r="2"
+        fill="red"
         data-message="Insert reagent tube and press continue"
         data-priority="5"
         title="Reagent insertion point"/>
 
 <!-- Light weld with custom spacing -->
-<path d="M 60,20 L 80,20 L 80,40 Z" 
-      stroke="blue" 
+<path d="M 60,20 L 80,20 L 80,40 Z"
+      stroke="blue"
       data-spacing="0.8"
       data-animate="true"
       data-color="#00aaff"/>
 
 <!-- Pipetting stop with custom parameters -->
-<rect x="70" y="50" width="5" height="5" 
-      fill="magenta" 
+<rect x="70" y="50" width="5" height="5"
+      fill="magenta"
       data-message="Pipette 5μL sample into chamber"
       data-delay="1.0"
       aria-label="Sample injection point"/>

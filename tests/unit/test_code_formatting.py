@@ -15,8 +15,8 @@ class TestCodeFormatting:
         project_root = Path(__file__).parent.parent.parent
         python_files = []
 
-        # Find all .py files in svg_welder and tests directories
-        for directory in ["svg_welder", "tests"]:
+        # Find all .py files in microweldr and tests directories
+        for directory in ["microweldr", "tests"]:
             dir_path = project_root / directory
             if dir_path.exists():
                 python_files.extend(dir_path.rglob("*.py"))
@@ -27,13 +27,13 @@ class TestCodeFormatting:
         """Test that all Python files comply with black formatting standards."""
         project_root = Path(__file__).parent.parent.parent
 
-        # Run black --check on svg_welder and tests directories
+        # Run black --check on microweldr and tests directories
         cmd = [
             sys.executable,
             "-m",
             "black",
             "--check",
-            str(project_root / "svg_welder"),
+            str(project_root / "microweldr"),
             str(project_root / "tests"),
         ]
 
