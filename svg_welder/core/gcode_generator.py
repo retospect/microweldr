@@ -46,12 +46,15 @@ class GCodeGenerator:
             f.write("; Initialize printer (layed back mode - printer on its back!)\n")
             f.write("; IMPORTANT: Manually position print head before starting!\n")
             f.write("; Expected position: Rear right corner of bed\n")
-            f.write("; No homing performed - printer is chillin' and trusts your positioning\n\n")
+            f.write("; X/Y positioning trusted, but Z-axis will be calibrated\n\n")
             
             f.write("G90 ; Absolute positioning\n")
             f.write("M83 ; Relative extruder positioning\n")
             f.write("M84 S0 ; Disable stepper timeout for layed back operation\n")
-            f.write("G92 X0 Y0 Z0 ; Set current position as origin (manual positioning assumed)\n")
+            
+            # Trust X/Y but calibrate Z-axis
+            f.write("G92 X0 Y0 ; Set current X/Y position as origin (manual positioning trusted)\n")
+            f.write("G28 Z ; Home Z-axis only for proper calibration (critical for weld depth)\n")
             f.write("G1 Z10 F150 ; Move Z to safe position slowly (no rush when layed back)\n\n")
 
             # Always skip bed leveling for layed back operation
