@@ -9,7 +9,7 @@ from ..core.caching import OptimizedSVGParser, optimize_weld_paths
 from ..core.config import Config
 from ..core.gcode_generator import GCodeGenerator
 from ..core.logging_config import LogContext, setup_logging
-from ..core.models import WeldPath, WeldPoint
+from ..core.models import WeldPath
 from ..core.resource_management import TemporaryFileManager, safe_gcode_generation
 from ..core.safety import SafetyError, validate_weld_operation
 from ..core.svg_parser import SVGParser

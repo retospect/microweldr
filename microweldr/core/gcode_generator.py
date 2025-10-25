@@ -72,7 +72,6 @@ class GCodeGenerator:
             GCodeCommands,
             OperatingMode,
             WarningMessages,
-            get_operating_mode_enum,
             is_experimental_mode,
         )
 

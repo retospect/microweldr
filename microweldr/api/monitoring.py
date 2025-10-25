@@ -2,9 +2,8 @@
 
 import logging
 import time
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 
-from ..core.graceful_degradation import check_system_health
 from ..core.health_checks import (
     HealthChecker,
     generate_health_report,

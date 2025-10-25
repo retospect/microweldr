@@ -2,12 +2,9 @@
 
 import logging
 import sys
-import time
 from pathlib import Path
-from typing import Optional
 
 import click
-from tqdm import tqdm
 
 from ..animation.generator import AnimationGenerator
 from ..core.caching import OptimizedSVGParser
@@ -16,7 +13,7 @@ from ..core.gcode_generator import GCodeGenerator
 from ..core.graceful_degradation import ResilientPrusaLinkClient, check_system_health
 from ..core.logging_config import LogContext, setup_logging
 from ..core.progress import progress_context
-from ..core.resource_management import TemporaryFileManager, safe_gcode_generation
+from ..core.resource_management import safe_gcode_generation
 from ..core.safety import SafetyError, validate_weld_operation
 from ..core.security import create_secure_secrets_template, validate_secrets_interactive
 from ..core.svg_parser import SVGParser

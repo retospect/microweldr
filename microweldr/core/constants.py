@@ -1,7 +1,7 @@
 """Constants and enums for MicroWeldr to eliminate magic strings and values."""
 
-from enum import Enum, IntEnum
-from typing import Dict, List, Set
+from enum import Enum
+from typing import List
 
 
 class OperatingMode(Enum):
