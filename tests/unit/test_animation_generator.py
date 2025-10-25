@@ -5,9 +5,9 @@ from pathlib import Path
 
 import pytest
 
-from svg_welder.animation.generator import AnimationGenerator
-from svg_welder.core.config import Config
-from svg_welder.core.models import WeldPath, WeldPoint
+from microweldr.animation.generator import AnimationGenerator
+from microweldr.core.config import Config
+from microweldr.core.models import WeldPath, WeldPoint
 
 
 class TestAnimationGenerator:

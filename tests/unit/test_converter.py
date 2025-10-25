@@ -6,9 +6,9 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from svg_welder.core.config import Config
-from svg_welder.core.converter import SVGToGCodeConverter
-from svg_welder.core.models import WeldPath, WeldPoint
+from microweldr.core.config import Config
+from microweldr.core.converter import SVGToGCodeConverter
+from microweldr.core.models import WeldPath, WeldPoint
 
 
 class TestSVGToGCodeConverter:
@@ -25,6 +25,8 @@ class TestSVGToGCodeConverter:
         config_content = """
 [printer]
 bed_size_x = 250.0
+bed_size_y = 220.0
+max_z_height = 270.0
 
 [nozzle]
 outer_diameter = 1.0
@@ -292,7 +294,7 @@ min_animation_duration = 10.0
 
         try:
             # Test should handle nonexistent file gracefully
-            from svg_welder.core.svg_parser import SVGParseError
+            from microweldr.core.svg_parser import SVGParseError
 
             with pytest.raises(SVGParseError):
                 converter.convert(nonexistent_path, gcode_path)

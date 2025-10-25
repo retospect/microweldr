@@ -5,9 +5,9 @@ from pathlib import Path
 
 import pytest
 
-from svg_welder.animation.generator import AnimationGenerator
-from svg_welder.core.config import Config
-from svg_welder.core.converter import SVGToGCodeConverter
+from microweldr.animation.generator import AnimationGenerator
+from microweldr.core.config import Config
+from microweldr.core.converter import SVGToGCodeConverter
 
 
 class TestFullWorkflow:
@@ -340,7 +340,7 @@ class TestExampleFiles:
             try:
                 converter.generate_gcode(gcode_path)
 
-                from svg_welder.animation.generator import AnimationGenerator
+                from microweldr.animation.generator import AnimationGenerator
 
                 animation_generator = AnimationGenerator(config)
                 animation_generator.generate_file(weld_paths, anim_path)

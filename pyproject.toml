@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "microweldr"
-version = "1.0.1"
+version = "2.0.0"
 description = "Convert SVG files to Prusa Core One G-code for plastic welding"
 authors = ["Your Name <your.email@example.com>"]
 readme = "README.md"
@@ -54,8 +54,8 @@ pre-commit = "^3.0.0"
 
 [tool.poetry.scripts]
 microweldr = "microweldr.cli.main:main"
-test-prusalink = "microweldr.cli.prusalink_test:main"
-printer-control = "microweldr.cli.printer_control:main"
+microweldr-test = "microweldr.cli.prusalink_test:main"
+microweldr-control = "microweldr.cli.printer_control:main"
 
 [build-system]
 requires = ["poetry-core"]

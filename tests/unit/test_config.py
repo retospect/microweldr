@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from svg_welder.core.config import Config, ConfigError
+from microweldr.core.config import Config, ConfigError
 
 
 class TestConfig:

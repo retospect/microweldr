@@ -5,7 +5,7 @@ A Python package that converts SVG files to Prusa Core One G-code for plastic "s
 **Optimized for Prusa Core One**: Includes chamber temperature control (M141/M191), proper bed dimensions (250×220×270mm), CoreXY-specific settings, and **layed back mode** *(currently not working)* - designed for when your printer is positioned on its back (door pointing up) so liquids can be pipetted into pouches and gravity holds them in place before heat sealing.
 
 This allows for rapid microfluidics prototyping with a 3d printer.
-While the edges are not as smooth as a laser weld, the 3d printer is more available than a laser welder. 
+While the edges are not as smooth as a laser weld, the 3d printer is more available than a laser welder.
 
 ## Project Structure
 
@@ -73,12 +73,12 @@ microweldr input.svg --submit-to-printer --monitor --monitor-mode pipetting
 ### **Utility Commands**
 ```bash
 # Printer control tool
-printer-control status                    # Check printer status
-printer-control monitor                   # Monitor current print
-printer-control stop                      # Stop current print
+microweldr-control status                 # Check printer status
+microweldr-control monitor                # Monitor current print
+microweldr-control stop                   # Stop current print
 
 # Test PrusaLink connection
-test-prusalink
+microweldr-test
 ```
 
 ## Configuration
@@ -215,7 +215,7 @@ timeout = 30                   # Connection timeout in seconds
 
 ### 5. Test Connection
 ```bash
-python test_prusalink.py
+microweldr-test
 ```
 
 ### 6. Submit G-code to Printer

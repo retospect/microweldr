@@ -2,7 +2,7 @@
 
 import pytest
 
-from svg_welder.core.models import WeldPath, WeldPoint
+from microweldr.core.models import WeldPath, WeldPoint
 
 
 class TestWeldPoint:

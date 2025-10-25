@@ -5,8 +5,8 @@ from pathlib import Path
 
 import pytest
 
-from svg_welder.core.models import WeldPoint
-from svg_welder.core.svg_parser import SVGParseError, SVGParser
+from microweldr.core.models import WeldPoint
+from microweldr.core.svg_parser import SVGParseError, SVGParser
 
 
 class TestSVGParser:

@@ -6,9 +6,9 @@ from pathlib import Path
 
 import pytest
 
-from svg_welder.core.config import Config
-from svg_welder.core.models import WeldPoint
-from svg_welder.core.svg_parser import SVGParser
+from microweldr.core.config import Config
+from microweldr.core.models import WeldPoint
+from microweldr.core.svg_parser import SVGParser
 
 
 class TestSVGEndpoints:
