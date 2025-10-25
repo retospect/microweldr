@@ -22,13 +22,13 @@ cooldown_temperature = 50  # °C
 [movement]
 move_height = 5.0  # mm - height for safe movement
 travel_speed = 3000  # mm/min - reduced for layed back operation
-z_speed = 300  # mm/min - faster Z movements for efficiency (doubled from 150)
+z_speed = 600  # mm/min - optimized Z speed (near maximum safe limit for Core One)
 
 [normal_welds]
 # Settings for black SVG elements
 weld_height = 0.020  # mm - how low the nozzle goes for welding (20 microns, optimized compression)
-weld_temperature = 160  # °C - optimized from calibration test results
-spot_dwell_time = 0.5  # seconds
+weld_temperature = 130  # °C - optimal from calibration test (first line, best results)
+spot_dwell_time = 0.1  # seconds - optimal from calibration test (first line, best results)
 dot_spacing = 0.9  # mm - final desired spacing (minimal overlap with 1.0mm diameter)
 initial_dot_spacing = 3.6  # mm - spacing for first pass (wider, 4x final spacing)
 cooling_time_between_passes = 2.0  # seconds - time to let plastic cool
