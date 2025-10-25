@@ -258,8 +258,11 @@ class GCodeGenerator:
                     f"G1 X{point.x:.3f} Y{point.y:.3f} Z{move_height} F{travel_speed}\n"
                 )
 
-                # Lower to weld height
-                f.write(f"G1 Z{weld_config['weld_height']:.3f} F{z_speed}\n")
+                # Lower to weld height - use custom height if specified (path-level or point-level)
+                weld_height = (point.custom_height if point.custom_height is not None 
+                              else path.custom_height if path.custom_height is not None 
+                              else weld_config["weld_height"])
+                f.write(f"G1 Z{weld_height:.3f} F{z_speed}\n")
 
                 # Dwell for welding - use custom dwell time if specified (path-level or point-level)
                 dwell_time = (point.custom_dwell if point.custom_dwell is not None 

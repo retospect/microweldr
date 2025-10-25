@@ -88,6 +88,7 @@ class SVGParser:
                 custom_temp = self._get_float_attr(element, "data-temp")
                 custom_dwell = self._get_float_attr(element, "data-dwell")
                 custom_bed_temp = self._get_float_attr(element, "data-bed-temp")
+                custom_height = self._get_float_attr(element, "data-height")
 
                 weld_path = WeldPath(
                     points=points,
@@ -99,6 +100,7 @@ class SVGParser:
                     custom_temp=custom_temp,
                     custom_dwell=custom_dwell,
                     custom_bed_temp=custom_bed_temp,
+                    custom_height=custom_height,
                 )
                 weld_paths.append(weld_path)
 
@@ -232,10 +234,11 @@ class SVGParser:
         custom_temp = self._get_float_attr(line_element, "data-temp")
         custom_dwell = self._get_float_attr(line_element, "data-dwell")
         custom_bed_temp = self._get_float_attr(line_element, "data-bed-temp")
+        custom_height = self._get_float_attr(line_element, "data-height")
 
         points = [
-            WeldPoint(x1, y1, "normal", custom_temp, custom_dwell, custom_bed_temp),
-            WeldPoint(x2, y2, "normal", custom_temp, custom_dwell, custom_bed_temp)
+            WeldPoint(x1, y1, "normal", custom_temp, custom_dwell, custom_bed_temp, custom_height),
+            WeldPoint(x2, y2, "normal", custom_temp, custom_dwell, custom_bed_temp, custom_height)
         ]
 
         return self._interpolate_points(points)
