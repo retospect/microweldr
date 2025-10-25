@@ -1,0 +1,167 @@
+name: Publish to PyPI
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'testpypi'
+        type: choice
+        options:
+          - testpypi
+          - pypi
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build distribution packages
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install build dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build twine
+        
+    - name: Build package
+      run: python -m build
+      
+    - name: Check distribution
+      run: twine check dist/*
+      
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: python-package-distributions
+        path: dist/
+
+  test-package:
+    name: Test package installation
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: python-package-distributions
+        path: dist/
+        
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Test wheel installation
+      run: |
+        pip install dist/*.whl
+        microweldr --help
+        python -c "import microweldr; print(f'MicroWeldr v{microweldr.__version__} imported successfully')"
+
+  publish-to-testpypi:
+    name: Publish to TestPyPI
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'testpypi'
+    needs: [build, test-package]
+    runs-on: ubuntu-latest
+    environment: testpypi
+    
+    permissions:
+      id-token: write  # IMPORTANT: mandatory for trusted publishing
+      
+    steps:
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: python-package-distributions
+        path: dist/
+        
+    - name: Publish to TestPyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        repository-url: https://test.pypi.org/legacy/
+        verbose: true
+
+  publish-to-pypi:
+    name: Publish to PyPI
+    if: github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'pypi')
+    needs: [build, test-package]
+    runs-on: ubuntu-latest
+    environment: pypi
+    
+    permissions:
+      id-token: write  # IMPORTANT: mandatory for trusted publishing
+      
+    steps:
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: python-package-distributions
+        path: dist/
+        
+    - name: Publish to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        verbose: true
+
+  create-github-release:
+    name: Create GitHub Release
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'pypi'
+    needs: publish-to-pypi
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Extract version from pyproject.toml
+      id: version
+      run: |
+        VERSION=$(python -c "import toml; print(toml.load('pyproject.toml')['tool']['poetry']['version'])")
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        
+    - name: Create Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ steps.version.outputs.version }}
+        release_name: MicroWeldr v${{ steps.version.outputs.version }}
+        body: |
+          ## MicroWeldr v${{ steps.version.outputs.version }}
+          
+          ### Installation
+          ```bash
+          pip install microweldr==${{ steps.version.outputs.version }}
+          ```
+          
+          ### Usage
+          ```bash
+          microweldr examples/example.svg
+          microweldr examples/calibration_test.svg --submit-to-printer
+          ```
+          
+          See the [examples directory](https://github.com/retospect/microweldr/tree/main/examples) for complete documentation and sample files.
+          
+          ### Changes
+          - See commit history for detailed changes
+          - Optimized welding parameters from calibration testing
+          - Professional G-code generation for Prusa Core One
+          - Complete microfluidics prototyping workflow
+        draft: false
+        prerelease: false
