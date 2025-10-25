@@ -130,7 +130,7 @@ Add custom attributes to any element:
 <line x1="10" y1="10" x2="25" y2="10"
       data-temp="150"
       data-welding-time="0.2"
-      data-height="0.040"
+      data-welding-height="0.040"
       stroke="black"/>
 ```
 

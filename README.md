@@ -94,7 +94,7 @@ use_chamber_heating = false # Set to false to disable chamber heating (useful if
 
 [movement]
 move_height = 5.0          # mm - safe travel height
-weld_height = 0.2          # mm - welding height
+welding_height = 0.2          # mm - welding height
 
 [normal_welds]
 weld_temperature = 200     # °C
@@ -473,7 +473,7 @@ Override default welding settings per element:
 
 - **`data-temp="180"`** - Custom temperature in °C
 - **`data-welding-time="0.5"`** - Custom welding time in seconds  
-- **`data-height="0.03"`** - Custom weld height in mm
+- **`data-welding-height="0.03"`** - Custom welding height in mm
 - **`data-spacing="1.5"`** - Custom dot spacing in mm
 
 #### **Processing Control**
@@ -497,7 +497,7 @@ Customize animation appearance:
       stroke="black"
       data-temp="160"
       data-welding-time="0.3"
-      data-height="0.025"
+      data-welding-height="0.025"
       id="weld_001"/>
 
 <!-- Stop point with custom message and priority -->

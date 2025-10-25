@@ -88,7 +88,9 @@ class SVGParser:
                 custom_temp = self._get_float_attr(element, "data-temp")
                 custom_welding_time = self._get_float_attr(element, "data-welding-time")
                 custom_bed_temp = self._get_float_attr(element, "data-bed-temp")
-                custom_height = self._get_float_attr(element, "data-height")
+                custom_welding_height = self._get_float_attr(
+                    element, "data-welding-height"
+                )
 
                 weld_path = WeldPath(
                     points=points,
@@ -100,7 +102,7 @@ class SVGParser:
                     custom_temp=custom_temp,
                     custom_welding_time=custom_welding_time,
                     custom_bed_temp=custom_bed_temp,
-                    custom_height=custom_height,
+                    custom_welding_height=custom_welding_height,
                 )
                 weld_paths.append(weld_path)
 
@@ -234,7 +236,9 @@ class SVGParser:
         custom_temp = self._get_float_attr(line_element, "data-temp")
         custom_welding_time = self._get_float_attr(line_element, "data-welding-time")
         custom_bed_temp = self._get_float_attr(line_element, "data-bed-temp")
-        custom_height = self._get_float_attr(line_element, "data-height")
+        custom_welding_height = self._get_float_attr(
+            line_element, "data-welding-height"
+        )
 
         points = [
             WeldPoint(
@@ -244,7 +248,7 @@ class SVGParser:
                 custom_temp,
                 custom_welding_time,
                 custom_bed_temp,
-                custom_height,
+                custom_welding_height,
             ),
             WeldPoint(
                 x2,
@@ -253,7 +257,7 @@ class SVGParser:
                 custom_temp,
                 custom_welding_time,
                 custom_bed_temp,
-                custom_height,
+                custom_welding_height,
             ),
         ]
 

@@ -14,7 +14,9 @@ class WeldPoint:
     custom_temp: Optional[float] = None  # Custom temperature for this point
     custom_welding_time: Optional[float] = None  # Custom welding time for this point
     custom_bed_temp: Optional[float] = None  # Custom bed temperature
-    custom_height: Optional[float] = None  # Custom weld height (compression depth)
+    custom_welding_height: Optional[
+        float
+    ] = None  # Custom weld height (compression depth)
 
     def __post_init__(self) -> None:
         """Validate weld point data."""
@@ -35,7 +37,9 @@ class WeldPath:
     custom_temp: Optional[float] = None  # Custom temperature for this path
     custom_welding_time: Optional[float] = None  # Custom welding time for this path
     custom_bed_temp: Optional[float] = None  # Custom bed temperature
-    custom_height: Optional[float] = None  # Custom weld height (compression depth)
+    custom_welding_height: Optional[
+        float
+    ] = None  # Custom weld height (compression depth)
 
     def __post_init__(self) -> None:
         """Validate weld path data."""

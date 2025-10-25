@@ -41,7 +41,7 @@ travel_speed = 6000
 z_speed = 300
 
 [normal_welds]
-weld_height = 0.05
+welding_height = 0.05
 weld_temperature = 200
 welding_time = 0.5
 dot_spacing = 2.0
@@ -49,7 +49,7 @@ initial_dot_spacing = 8.0
 cooling_time_between_passes = 2.0
 
 [light_welds]
-weld_height = 0.05
+welding_height = 0.05
 weld_temperature = 180
 welding_time = 0.3
 dot_spacing = 3.0

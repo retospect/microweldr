@@ -124,7 +124,7 @@ class Config:
             ],
             "movement": ["move_height", "travel_speed", "z_speed"],
             "normal_welds": [
-                "weld_height",
+                "welding_height",
                 "weld_temperature",
                 "welding_time",
                 "dot_spacing",
@@ -132,7 +132,7 @@ class Config:
                 "cooling_time_between_passes",
             ],
             "light_welds": [
-                "weld_height",
+                "welding_height",
                 "weld_temperature",
                 "welding_time",
                 "dot_spacing",
