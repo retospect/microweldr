@@ -618,6 +618,8 @@ Before starting the welding process:
 
 #### **Material Preparation**
 - [ ] **Plastic sheets ready**: Have your plastic sheets cut to size and ready to insert
+- [ ] **Film securing**: Consider using magnets to hold down bubble film (⚠️ **Warning**: heated bed may be hot!)
+- [ ] **Height clearance**: Ensure travel height (`move_height`) is higher than any magnets to prevent head crashes
 - [ ] **Workspace clear**: Ensure adequate ventilation for plastic welding
 - [ ] **Safety equipment**: Have appropriate safety gear (ventilation, eye protection)
 
