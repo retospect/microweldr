@@ -37,6 +37,58 @@ microweldr/
 - **Proper G-code Structure**: Includes heating, cooling, and safety procedures
 - **PrusaLink Integration**: Direct G-code submission to Prusa MINI via PrusaLink API
 
+## 🔄 **Normal Workflow**
+
+MicroWeldr provides streamlined workflow commands for efficient operation:
+
+### **1. One-time Setup**
+```bash
+# Perform XYZ calibration and store results persistently
+microweldr-workflow calibrate
+```
+
+### **2. For Each Welding Job**
+```bash
+# Step 1: Prepare for film loading
+microweldr-workflow load
+
+# Step 2: Load film and place magnets
+# [Manual step - load your plastic film and secure with magnets]
+
+# Step 3: Check magnet clearance
+microweldr-workflow frame design.svg
+
+# Step 4: Perform welding
+microweldr-workflow weld design.svg
+```
+
+### **Workflow Command Details**
+
+- **`calibrate`** - Performs XYZ calibration and stores results persistently (no SVG file needed)
+- **`load`** - Lowers table 10cm for easy film loading, sets target temperature but doesn't wait
+- **`frame`** - Runs rectangle at move height to check for magnet interference with nozzle path  
+- **`weld`** - Sets bed temperature, waits for it, then runs the complete welding sequence
+
+All commands are **immediately executed** on the printer via PrusaLink.
+
+### **Typical Session**
+```bash
+# One-time calibration
+microweldr-workflow calibrate --verbose
+
+# First design
+microweldr-workflow load
+# [Load film, place magnets]
+microweldr-workflow frame design1.svg
+microweldr-workflow weld design1.svg
+
+# Second design (no calibration needed)
+microweldr-workflow load  
+# [Load new film, adjust magnets]
+microweldr-workflow frame design2.svg
+microweldr-workflow weld design2.svg
+```
+
 ## Installation
 
 ### **From PyPI (Recommended)**
@@ -59,6 +111,17 @@ pip install -e .
 ## Available Commands
 
 After installation, these console commands are available:
+
+### **Workflow Commands (Recommended)**
+```bash
+# One-time calibration
+microweldr-workflow calibrate
+
+# Per-job workflow
+microweldr-workflow load                  # Prepare for film loading
+microweldr-workflow frame design.svg      # Check magnet clearance
+microweldr-workflow weld design.svg       # Perform welding
+```
 
 ### **Main Commands**
 ```bash

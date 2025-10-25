@@ -54,6 +54,7 @@ pre-commit = "^3.0.0"
 
 [tool.poetry.scripts]
 microweldr = "microweldr.cli.main:main"
+microweldr-workflow = "microweldr.cli.workflow:main"
 microweldr-test = "microweldr.cli.prusalink_test:main"
 microweldr-control = "microweldr.cli.printer_control:main"
 
