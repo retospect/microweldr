@@ -287,3 +287,21 @@ class PrusaLinkClient:
             
         except requests.exceptions.RequestException as e:
             raise PrusaLinkConnectionError(f"Connection failed: {e}")
+    
+    def stop_print(self) -> bool:
+        """Stop the current print job."""
+        try:
+            response = self.session.delete(f"{self.base_url}/api/job")
+            
+            if response.status_code == 401:
+                raise PrusaLinkAuthError("Authentication failed. Check your credentials.")
+            elif response.status_code == 409:
+                # No job running or already stopped
+                return True
+            elif response.status_code != 204:
+                raise PrusaLinkConnectionError(f"Failed to stop print: {response.status_code}")
+                
+            return True
+            
+        except requests.exceptions.RequestException as e:
+            raise PrusaLinkConnectionError(f"Connection failed: {e}")

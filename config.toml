@@ -5,7 +5,7 @@
 bed_size_x = 250.0  # mm
 bed_size_y = 220.0  # mm - Core One has 220mm Y axis
 max_z_height = 270.0  # mm
-layed_back_mode = true  # Set to true for layed back printer operation (printer on its back, door pointing up)
+layed_back_mode = false  # Set to true for layed back printer operation (printer on its back, door pointing up)
 
 [nozzle]
 # Nozzle dimensions for animation visualization

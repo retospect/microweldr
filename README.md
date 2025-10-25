@@ -94,14 +94,31 @@ make test
 
 After installation, these console commands are available:
 
+### **Main Commands**
 ```bash
-# Main command (all equivalent)
+# SVG to G-code conversion (all equivalent)
 svg-welder input.svg -o output.gcode
 svg2gcode input.svg -o output.gcode  
 prusa-welder input.svg -o output.gcode
+```
 
+### **Printer Control & Monitoring**
+```bash
 # Test PrusaLink connection
 test-prusalink
+
+# Check current printer status
+printer-status
+printer-status --verbose
+
+# Monitor print progress
+monitor-print
+monitor-print --mode layed-back
+monitor-print --mode pipetting --interval 20
+
+# Stop current print
+stop-print
+stop-print --force
 ```
 
 ## Configuration
