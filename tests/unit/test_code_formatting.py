@@ -49,8 +49,10 @@ class TestCodeFormatting:
             # Black returns 0 if all files are formatted correctly
             if result.returncode != 0:
                 # Get list of files that would be reformatted
+                # Black outputs to stderr, not stdout
                 unformatted_files = []
-                for line in result.stdout.split("\n"):
+                output_text = result.stderr + result.stdout  # Check both
+                for line in output_text.split("\n"):
                     if line.startswith("would reformat"):
                         unformatted_files.append(line)
 
@@ -115,14 +117,14 @@ class TestCodeFormatting:
         """Test that all Python files comply with isort import sorting standards."""
         project_root = Path(__file__).parent.parent.parent
 
-        # Run isort --check-only on svg_welder and tests directories
+        # Run isort --check-only on microweldr and tests directories
         cmd = [
             sys.executable,
             "-m",
             "isort",
             "--check-only",
             "--diff",  # Show what would change
-            str(project_root / "svg_welder"),
+            str(project_root / "microweldr"),
             str(project_root / "tests"),
         ]
 
@@ -135,7 +137,7 @@ class TestCodeFormatting:
             if result.returncode != 0:
                 error_message = (
                     f"Import sorting check failed. Some files have incorrectly sorted imports.\n"
-                    f"Run 'make format' or 'isort svg_welder tests' to fix import sorting.\n\n"
+                    f"Run 'make format' or 'isort microweldr tests' to fix import sorting.\n\n"
                     f"Diff output:\n{result.stdout}"
                 )
                 pytest.fail(error_message)
