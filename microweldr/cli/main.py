@@ -1,4 +1,4 @@
-"""Command line interface for the SVG welder."""
+"""Command line interface for MicroWeldr."""
 
 import argparse
 import sys
@@ -22,7 +22,7 @@ from microweldr.validation.validators import (
 def create_parser() -> argparse.ArgumentParser:
     """Create command line argument parser."""
     parser = argparse.ArgumentParser(
-        description="Convert SVG files to Prusa Core One G-code for plastic welding",
+        description="MicroWeldr: Convert SVG files to Prusa Core One G-code for plastic welding",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
