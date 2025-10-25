@@ -98,7 +98,12 @@ animation_extension = "_animation.svg"
 
             # Should contain pipette-specific styling (magenta/pink colors)
             # Note: The animation may not contain the literal word "pipette" but should have the color
-            assert "magenta" in animation_content or "#ff00ff" in animation_content or "#ff69b4" in animation_content or "pink" in animation_content
+            assert (
+                "magenta" in animation_content
+                or "#ff00ff" in animation_content
+                or "#ff69b4" in animation_content
+                or "pink" in animation_content
+            )
 
             # Should contain pause indication
             assert (

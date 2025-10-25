@@ -63,3 +63,32 @@ run-example:  ## Run with example SVG
 
 run-comprehensive:  ## Run with comprehensive sample
 	poetry run svg-welder examples/comprehensive_sample.svg
+
+# Version bumping targets (DRY approach)
+bump-patch:  ## Bump patch version (4.0.0 -> 4.0.1)
+	python scripts/bump_version.py patch
+
+bump-minor:  ## Bump minor version (4.0.0 -> 4.1.0)
+	python scripts/bump_version.py minor
+
+bump-major:  ## Bump major version (4.0.0 -> 5.0.0)
+	python scripts/bump_version.py major
+
+version:  ## Show current version
+	@bump-my-version show current_version
+
+publish:  ## Build and publish to PyPI
+	poetry build
+	poetry publish
+
+release-patch:  ## Complete patch release workflow
+	$(MAKE) bump-patch
+	$(MAKE) publish
+
+release-minor:  ## Complete minor release workflow
+	$(MAKE) bump-minor
+	$(MAKE) publish
+
+release-major:  ## Complete major release workflow
+	$(MAKE) bump-major
+	$(MAKE) publish
