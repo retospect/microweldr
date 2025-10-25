@@ -6,10 +6,10 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Union
 
-from .core import MicroWeldr, WeldJob, ValidationResult
-from .printer import PrinterConnection, PrinterStatus
 from ..core.logging_config import LogContext
 from ..core.progress import progress_context
+from .core import MicroWeldr, ValidationResult, WeldJob
+from .printer import PrinterConnection, PrinterStatus
 
 logger = logging.getLogger(__name__)
 

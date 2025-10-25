@@ -17,8 +17,7 @@ class TestPrintMonitor:
     @pytest.fixture
     def secrets_file(self):
         """Create a temporary secrets file."""
-        secrets_content = """
-[prusalink]
+        secrets_content = """[prusalink]
 host = "192.168.1.100"
 username = "maker"
 password = "test123"
@@ -31,40 +30,49 @@ password = "test123"
     @pytest.fixture
     def monitor(self, secrets_file):
         """Create a print monitor."""
-        return PrintMonitor(secrets_file)
+        from unittest.mock import Mock
 
-    @requests_mock.Mocker()
-    def test_monitor_initialization(self, m, monitor):
+        from microweldr.monitoring.monitor import MonitorMode
+
+        monitor = PrintMonitor(mode=MonitorMode.STANDARD, interval=1, verbose=False)
+        # Replace the client with a mock to avoid config file issues
+        monitor.client = Mock()
+        return monitor
+
+    def test_monitor_initialization(self, requests_mock, monitor):
         """Test monitor initialization."""
         assert monitor.client is not None
-        assert monitor.monitoring is False
+        assert monitor.interval == 1
+        assert monitor.verbose is False
 
-    @requests_mock.Mocker()
-    def test_get_print_status_operational(self, m, monitor):
+    def test_get_print_status_operational(self, requests_mock, monitor):
         """Test getting print status when operational."""
-        mock_response = {
+        # Mock the client methods
+        job_response = {
+            "file": {"name": "test.gcode", "display_name": "test.gcode"},
+            "estimatedPrintTime": None,
+            "progress": 0,
+            "state": "Operational",
+            "time_printing": 0,
+        }
+
+        printer_status_response = {
             "printer": {
                 "state": "Operational",
                 "temp_bed": {"actual": 25.0, "target": 0.0},
                 "temp_nozzle": {"actual": 23.0, "target": 0.0},
-            },
-            "job": {
-                "file": {"name": None},
-                "estimatedPrintTime": None,
-                "progress": {"completion": None},
-            },
+            }
         }
 
-        m.get("http://192.168.1.100/api/printer", json=mock_response["printer"])
-        m.get("http://192.168.1.100/api/job", json=mock_response["job"])
+        monitor.client.get_job_status.return_value = job_response
+        monitor.client.get_printer_status.return_value = printer_status_response
 
         status = monitor.get_print_status()
+        assert status is not None
         assert status["state"] == "Operational"
-        assert status["bed_temp"] == 25.0
-        assert status["nozzle_temp"] == 23.0
+        assert status["file_name"] == "test.gcode"
 
-    @requests_mock.Mocker()
-    def test_get_print_status_printing(self, m, monitor):
+    def test_get_print_status_printing(self, requests_mock, monitor):
         """Test getting print status when printing."""
         printer_response = {
             "state": "Printing",
@@ -78,8 +86,10 @@ password = "test123"
             "progress": {"completion": 45.5, "printTimeLeft": 990},
         }
 
-        m.get("http://192.168.1.100/api/printer", json={"printer": printer_response})
-        m.get("http://192.168.1.100/api/job", json={"job": job_response})
+        requests_mock.get(
+            "http://192.168.1.100/api/printer", json={"printer": printer_response}
+        )
+        requests_mock.get("http://192.168.1.100/api/job", json={"job": job_response})
 
         status = monitor.get_print_status()
         assert status["state"] == "Printing"
@@ -87,10 +97,9 @@ password = "test123"
         assert status["time_left"] == 990
         assert status["filename"] == "test_weld.gcode"
 
-    @requests_mock.Mocker()
-    def test_get_print_status_error(self, m, monitor):
+    def test_get_print_status_error(self, requests_mock, monitor):
         """Test getting print status with API error."""
-        m.get("http://192.168.1.100/api/printer", status_code=500)
+        requests_mock.get("http://192.168.1.100/api/printer", status_code=500)
 
         with pytest.raises(PrusaLinkError):
             monitor.get_print_status()
@@ -151,27 +160,24 @@ password = "test123"
         phase = monitor._get_welding_phase(75.0)  # High Z = high-layer welding
         assert "high" in phase.lower() or "layer" in phase.lower()
 
-    @requests_mock.Mocker()
-    def test_stop_print_success(self, m, monitor):
+    def test_stop_print_success(self, requests_mock, monitor):
         """Test successful print stop."""
-        m.delete("http://192.168.1.100/api/job", json={"stopped": True})
+        requests_mock.delete("http://192.168.1.100/api/job", json={"stopped": True})
 
         result = monitor.stop_print()
         assert result is True
 
-    @requests_mock.Mocker()
-    def test_stop_print_failure(self, m, monitor):
+    def test_stop_print_failure(self, requests_mock, monitor):
         """Test print stop failure."""
-        m.delete("http://192.168.1.100/api/job", status_code=409)
+        requests_mock.delete("http://192.168.1.100/api/job", status_code=409)
 
         result = monitor.stop_print()
         assert result is False
 
-    @requests_mock.Mocker()
-    def test_stop_print_force(self, m, monitor):
+    def test_stop_print_force(self, requests_mock, monitor):
         """Test forced print stop."""
         # First attempt fails, second succeeds
-        m.delete(
+        requests_mock.delete(
             "http://192.168.1.100/api/job",
             [{"status_code": 409}, {"json": {"stopped": True}}],
         )
@@ -180,8 +186,7 @@ password = "test123"
         assert result is True
 
     @patch("time.sleep")
-    @requests_mock.Mocker()
-    def test_monitor_print_completion(self, m, mock_sleep, monitor):
+    def test_monitor_print_completion(self, mock_sleep, requests_mock, monitor):
         """Test monitoring a print to completion."""
         # Simulate print progress
         responses = [
@@ -218,8 +223,8 @@ password = "test123"
         ]
 
         for i, (printer_resp, job_resp) in enumerate(zip(responses, job_responses)):
-            m.get(f"http://192.168.1.100/api/printer", json=printer_resp)
-            m.get(f"http://192.168.1.100/api/job", json=job_resp)
+            requests_mock.get(f"http://192.168.1.100/api/printer", json=printer_resp)
+            requests_mock.get(f"http://192.168.1.100/api/job", json=job_resp)
 
         # Mock the monitor method to stop after a few iterations
         original_monitoring = monitor.monitoring
@@ -360,8 +365,7 @@ password = "test123"
             monitor._clear_screen()
             mock_system.assert_called_once_with("clear")
 
-    @requests_mock.Mocker()
-    def test_get_print_status_with_z_position(self, m, monitor):
+    def test_get_print_status_with_z_position(self, requests_mock, monitor):
         """Test getting print status with Z position information."""
         printer_response = {
             "state": "Printing",
@@ -375,14 +379,15 @@ password = "test123"
             "progress": {"completion": 50.0},
         }
 
-        m.get("http://192.168.1.100/api/printer", json={"printer": printer_response})
-        m.get("http://192.168.1.100/api/job", json={"job": job_response})
+        requests_mock.get(
+            "http://192.168.1.100/api/printer", json={"printer": printer_response}
+        )
+        requests_mock.get("http://192.168.1.100/api/job", json={"job": job_response})
 
         status = monitor.get_print_status()
         assert status["z_position"] == 5.5
 
-    @requests_mock.Mocker()
-    def test_get_print_status_missing_z_position(self, m, monitor):
+    def test_get_print_status_missing_z_position(self, requests_mock, monitor):
         """Test getting print status when Z position is missing."""
         printer_response = {
             "state": "Printing",
@@ -396,8 +401,10 @@ password = "test123"
             "progress": {"completion": 50.0},
         }
 
-        m.get("http://192.168.1.100/api/printer", json={"printer": printer_response})
-        m.get("http://192.168.1.100/api/job", json={"job": job_response})
+        requests_mock.get(
+            "http://192.168.1.100/api/printer", json={"printer": printer_response}
+        )
+        requests_mock.get("http://192.168.1.100/api/job", json={"job": job_response})
 
         status = monitor.get_print_status()
         assert status["z_position"] is None

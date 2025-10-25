@@ -4,16 +4,16 @@ import logging
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
-from ..core.config import Config
-from ..core.svg_parser import SVGParser
-from ..core.gcode_generator import GCodeGenerator
-from ..core.safety import validate_weld_operation, SafetyError
-from ..core.caching import OptimizedSVGParser, optimize_weld_paths
-from ..core.resource_management import safe_gcode_generation, TemporaryFileManager
-from ..core.logging_config import setup_logging, LogContext
-from ..core.models import WeldPath, WeldPoint
 from ..animation.generator import AnimationGenerator
-from ..validation.validators import SVGValidator, GCodeValidator, AnimationValidator
+from ..core.caching import OptimizedSVGParser, optimize_weld_paths
+from ..core.config import Config
+from ..core.gcode_generator import GCodeGenerator
+from ..core.logging_config import LogContext, setup_logging
+from ..core.models import WeldPath, WeldPoint
+from ..core.resource_management import TemporaryFileManager, safe_gcode_generation
+from ..core.safety import SafetyError, validate_weld_operation
+from ..core.svg_parser import SVGParser
+from ..validation.validators import AnimationValidator, GCodeValidator, SVGValidator
 
 logger = logging.getLogger(__name__)
 

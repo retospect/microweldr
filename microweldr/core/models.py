@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 from typing import List, Optional
 
-from .constants import WeldType, get_valid_weld_types, get_weld_type_enum, ErrorMessages
+from .constants import ErrorMessages, WeldType, get_valid_weld_types, get_weld_type_enum
 
 
 @dataclass

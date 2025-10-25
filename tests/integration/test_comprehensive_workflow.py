@@ -8,23 +8,23 @@ from unittest.mock import Mock, patch
 import pytest
 import requests_mock
 
+from microweldr.animation.generator import AnimationGenerator
+from microweldr.core.caching import OptimizedSVGParser
 from microweldr.core.config import Config
 from microweldr.core.gcode_generator import GCodeGenerator
-from microweldr.core.svg_parser import SVGParser
+from microweldr.core.graceful_degradation import ResilientPrusaLinkClient
+from microweldr.core.progress import progress_context
+from microweldr.core.resource_management import (
+    TemporaryFileManager,
+    safe_gcode_generation,
+)
 from microweldr.core.safety import validate_weld_operation
 from microweldr.core.security import SecretsValidator, validate_secrets_interactive
-from microweldr.core.graceful_degradation import ResilientPrusaLinkClient
-from microweldr.core.resource_management import (
-    safe_gcode_generation,
-    TemporaryFileManager,
-)
-from microweldr.core.progress import progress_context
-from microweldr.core.caching import OptimizedSVGParser
-from microweldr.animation.generator import AnimationGenerator
+from microweldr.core.svg_parser import SVGParser
 from microweldr.validation.validators import (
-    SVGValidator,
-    GCodeValidator,
     AnimationValidator,
+    GCodeValidator,
+    SVGValidator,
 )
 
 
@@ -95,24 +95,24 @@ animation_extension = "_animation.svg"
         svg_content = """<?xml version="1.0" encoding="UTF-8"?>
 <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
   <!-- Normal weld line -->
-  <line x1="10" y1="10" x2="50" y2="10" 
+  <line x1="10" y1="10" x2="50" y2="10"
         stroke="black" stroke-width="1"
-        data-temp="105" 
+        data-temp="105"
         data-weld-time="0.15"
         data-weld-height="0.025" />
-  
+
   <!-- Light weld circle -->
-  <circle cx="30" cy="30" r="5" 
+  <circle cx="30" cy="30" r="5"
           stroke="blue" stroke-width="1" fill="none"
           data-temp="115" />
-  
+
   <!-- Stop point -->
-  <circle cx="70" cy="70" r="2" 
+  <circle cx="70" cy="70" r="2"
           stroke="red" stroke-width="1" fill="red"
           data-pause-message="Insert component here" />
-  
+
   <!-- Path with multiple segments -->
-  <path d="M 20 50 L 40 50 L 40 70 L 60 70" 
+  <path d="M 20 50 L 40 50 L 40 70 L 60 70"
         stroke="black" stroke-width="1" fill="none"
         data-weld-time="0.2" />
 </svg>"""
@@ -423,8 +423,8 @@ timeout = 30
 
     def test_concurrent_workflow(self, test_config, test_svg):
         """Test workflow with concurrent operations."""
-        import threading
         import queue
+        import threading
 
         results_queue = queue.Queue()
         errors_queue = queue.Queue()
@@ -481,8 +481,9 @@ timeout = 30
 
     def test_memory_usage_workflow(self, test_config):
         """Test workflow memory usage with large datasets."""
-        import psutil
         import os
+
+        import psutil
 
         process = psutil.Process(os.getpid())
         initial_memory = process.memory_info().rss

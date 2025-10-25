@@ -8,9 +8,9 @@ from typing import Any, Callable, Dict, List, Optional, Union
 
 from ..prusalink.client import PrusaLinkClient
 from ..prusalink.exceptions import (
-    PrusaLinkError,
-    PrusaLinkConnectionError,
     PrusaLinkAuthError,
+    PrusaLinkConnectionError,
+    PrusaLinkError,
 )
 
 logger = logging.getLogger(__name__)

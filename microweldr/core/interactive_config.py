@@ -573,9 +573,9 @@ def _test_configuration_interactive() -> None:
     test_svg_path.write_text(test_svg_content)
 
     try:
-        from .svg_parser import SVGParser
         from .config import Config
         from .safety import validate_weld_operation
+        from .svg_parser import SVGParser
 
         # Test parsing
         parser = SVGParser()

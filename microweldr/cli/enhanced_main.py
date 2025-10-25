@@ -9,18 +9,18 @@ from typing import Optional
 import click
 from tqdm import tqdm
 
-from ..core.config import Config
-from ..core.svg_parser import SVGParser
-from ..core.gcode_generator import GCodeGenerator
-from ..core.safety import validate_weld_operation, SafetyError
-from ..core.security import validate_secrets_interactive, create_secure_secrets_template
-from ..core.graceful_degradation import ResilientPrusaLinkClient, check_system_health
-from ..core.resource_management import safe_gcode_generation, TemporaryFileManager
-from ..core.progress import progress_context
-from ..core.caching import OptimizedSVGParser
-from ..core.logging_config import setup_logging, LogContext
 from ..animation.generator import AnimationGenerator
-from ..validation.validators import SVGValidator, GCodeValidator
+from ..core.caching import OptimizedSVGParser
+from ..core.config import Config
+from ..core.gcode_generator import GCodeGenerator
+from ..core.graceful_degradation import ResilientPrusaLinkClient, check_system_health
+from ..core.logging_config import LogContext, setup_logging
+from ..core.progress import progress_context
+from ..core.resource_management import TemporaryFileManager, safe_gcode_generation
+from ..core.safety import SafetyError, validate_weld_operation
+from ..core.security import create_secure_secrets_template, validate_secrets_interactive
+from ..core.svg_parser import SVGParser
+from ..validation.validators import GCodeValidator, SVGValidator
 
 
 # Custom click decorators for common options
@@ -603,7 +603,7 @@ def temp_off(
 
         # Get cooldown temperature from config or use provided value
         if cooldown_temp is None:
-            from ..core.constants import ConfigSections, ConfigKeys, DefaultValues
+            from ..core.constants import ConfigKeys, ConfigSections, DefaultValues
 
             cooldown_temp = main_config.get(
                 ConfigSections.TEMPERATURES,
@@ -649,9 +649,9 @@ def temp_off(
                 return
 
         # Connect to printer and execute cooldown
+        from ..core.constants import GCodeCommands
         from ..prusalink.client import PrusaLinkClient
         from ..prusalink.exceptions import PrusaLinkError
-        from ..core.constants import GCodeCommands
 
         try:
             client = PrusaLinkClient(str(secrets_config))
@@ -791,7 +791,7 @@ def temp_on(
         main_config = Config(config_path)
 
         # Get temperatures from config if not provided
-        from ..core.constants import ConfigSections, ConfigKeys, DefaultValues
+        from ..core.constants import ConfigKeys, ConfigSections, DefaultValues
 
         if bed_temp is None:
             bed_temp = main_config.get(
@@ -840,9 +840,9 @@ def temp_on(
                 return
 
         # Connect to printer and execute heating
+        from ..core.constants import GCodeCommands
         from ..prusalink.client import PrusaLinkClient
         from ..prusalink.exceptions import PrusaLinkError
-        from ..core.constants import GCodeCommands
 
         try:
             client = PrusaLinkClient(str(secrets_config))

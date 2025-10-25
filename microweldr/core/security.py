@@ -426,40 +426,40 @@ class SecretsValidator:
 
     def sanitize_filename(self, filename: str) -> str:
         """Sanitize a filename to make it safe for filesystem use.
-        
+
         Args:
             filename: The filename to sanitize
-            
+
         Returns:
             A safe filename with dangerous characters removed/replaced
         """
         if not filename:
             return "unnamed_file"
-        
+
         # Remove path traversal attempts
         filename = filename.replace("..", "")
         filename = filename.replace("/", "_")
         filename = filename.replace("\\", "_")
-        
+
         # Remove or replace dangerous characters
         dangerous_chars = '<>:"|?*\x00-\x1f'
         for char in dangerous_chars:
             filename = filename.replace(char, "_")
-        
+
         # Remove HTML/script tags and dangerous keywords
-        filename = re.sub(r'<[^>]*>', '', filename)
-        filename = re.sub(r'script', '', filename, flags=re.IGNORECASE)
-        filename = re.sub(r'javascript', '', filename, flags=re.IGNORECASE)
-        
+        filename = re.sub(r"<[^>]*>", "", filename)
+        filename = re.sub(r"script", "", filename, flags=re.IGNORECASE)
+        filename = re.sub(r"javascript", "", filename, flags=re.IGNORECASE)
+
         # Limit length and ensure it's not empty
         filename = filename.strip()[:255]
         if not filename:
             filename = "sanitized_file"
-            
+
         # Ensure it doesn't start with dangerous prefixes
-        if filename.startswith(('.', '-')):
-            filename = 'safe_' + filename
-            
+        if filename.startswith((".", "-")):
+            filename = "safe_" + filename
+
         return filename
 
 

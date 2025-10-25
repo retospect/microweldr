@@ -9,7 +9,7 @@ import pytest
 import requests_mock
 
 from microweldr.prusalink.client import PrusaLinkClient
-from microweldr.prusalink.exceptions import PrusaLinkError, PrusaLinkConfigError
+from microweldr.prusalink.exceptions import PrusaLinkConfigError, PrusaLinkError
 
 
 class TestPrusaLinkClient:

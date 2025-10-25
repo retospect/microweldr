@@ -23,16 +23,16 @@ Examples:
   # Check printer status
   printer-control status
   printer-control status --verbose
-  
+
   # Monitor print progress
   printer-control monitor
   printer-control monitor --mode layed-back --interval 20
   printer-control monitor --mode pipetting --verbose
-  
+
   # Stop current print
   printer-control stop
   printer-control stop --force
-  
+
   # Test connection
   printer-control test
   printer-control test --verbose

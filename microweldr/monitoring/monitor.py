@@ -75,7 +75,7 @@ class PrintMonitor:
         """Format time in human readable format."""
         if seconds is None:
             return "Unknown"
-        
+
         seconds = int(seconds)
         if seconds < 60:
             return f"{seconds}s"
@@ -106,20 +106,21 @@ class PrintMonitor:
         state = status.get("state", "Unknown")
         progress = status.get("progress", 0)
         file_name = status.get("file_name", "Unknown")
-        
+
         emoji = self._get_status_emoji(state)
         mode_emoji = self.get_mode_emoji()
-        
+
         print(f"{emoji} {state} | {progress:.1f}% | {mode_emoji} {mode.title()} Mode")
         print(f"📄 File: {file_name}")
-        
+
         if "current_activity" in status:
             print(f"🎯 Activity: {status['current_activity']}")
 
     def _clear_screen(self) -> None:
         """Clear the terminal screen."""
         import os
-        os.system('cls' if os.name == 'nt' else 'clear')
+
+        os.system("cls" if os.name == "nt" else "clear")
 
     def format_time_remaining(self, seconds: Optional[float]) -> str:
         """Format time remaining in human readable format."""

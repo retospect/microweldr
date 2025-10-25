@@ -116,7 +116,7 @@ class SVGParser:
 
     def _determine_weld_type(self, element: ET.Element) -> Tuple[str, Optional[str]]:
         """Determine weld type based on element color and extract pause message."""
-        from .constants import Colors, WeldType, SVGAttributes, get_color_weld_type
+        from .constants import Colors, SVGAttributes, WeldType, get_color_weld_type
 
         # Check stroke color
         stroke = element.get(SVGAttributes.STROKE, "").lower()

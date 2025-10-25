@@ -253,7 +253,9 @@ class OptimizedSVGParser:
             )
 
             # Cache result if enabled and parsing took significant time
-            if self.cache_enabled and parse_time > 0.001:  # 1ms threshold (lowered for tests)
+            if (
+                self.cache_enabled and parse_time > 0.001
+            ):  # 1ms threshold (lowered for tests)
                 self.cache.set(content, weld_paths, "svg_parse")
                 logger.debug(f"Cached SVG parse result for {svg_path.name}")
 

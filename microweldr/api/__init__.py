@@ -5,24 +5,24 @@ exposing all the main functionality that's available from the command line.
 
 Example usage:
     from microweldr.api import MicroWeldr, WeldJob, PrinterConnection
-    
+
     # Create a welding job
     welder = MicroWeldr()
     job = welder.create_job('design.svg')
-    
+
     # Generate G-code
     gcode_path = job.generate_gcode('output.gcode')
-    
+
     # Submit to printer
     printer = PrinterConnection('secrets.toml')
     printer.submit_job(gcode_path, auto_start=True)
 """
 
-from .core import MicroWeldr, WeldJob, ValidationResult
+from .core import MicroWeldr, ValidationResult, WeldJob
+from .monitoring import HealthStatus, SystemMonitor
 from .printer import PrinterConnection, PrinterStatus
-from .workflow import WorkflowManager, WorkflowStep
 from .validation import ValidationSuite
-from .monitoring import SystemMonitor, HealthStatus
+from .workflow import WorkflowManager, WorkflowStep
 
 __all__ = [
     # Core API

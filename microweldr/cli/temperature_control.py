@@ -9,11 +9,11 @@ import click
 
 from ..core.config import Config, ConfigError
 from ..core.constants import (
-    ConfigSections,
     ConfigKeys,
-    GCodeCommands,
+    ConfigSections,
     DefaultValues,
     ErrorMessages,
+    GCodeCommands,
 )
 from ..prusalink.client import PrusaLinkClient
 from ..prusalink.exceptions import PrusaLinkError

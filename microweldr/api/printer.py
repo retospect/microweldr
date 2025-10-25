@@ -5,8 +5,8 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
 from ..core.graceful_degradation import ResilientPrusaLinkClient, check_system_health
-from ..core.security import validate_secrets_interactive
 from ..core.logging_config import LogContext
+from ..core.security import validate_secrets_interactive
 
 logger = logging.getLogger(__name__)
 

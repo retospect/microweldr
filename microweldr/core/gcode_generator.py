@@ -67,11 +67,11 @@ class GCodeGenerator:
     def _write_initialization(self, f: TextIO, skip_bed_leveling: bool) -> None:
         """Write printer initialization commands."""
         from .constants import (
-            OperatingMode,
-            ConfigSections,
             ConfigKeys,
-            WarningMessages,
+            ConfigSections,
             GCodeCommands,
+            OperatingMode,
+            WarningMessages,
             get_operating_mode_enum,
             is_experimental_mode,
         )

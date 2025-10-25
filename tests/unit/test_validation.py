@@ -6,9 +6,9 @@ from pathlib import Path
 import pytest
 
 from microweldr.validation.validators import (
-    SVGValidator,
-    GCodeValidator,
     AnimationValidator,
+    GCodeValidator,
+    SVGValidator,
     ValidationResult,
 )
 
@@ -62,7 +62,7 @@ class TestSVGValidator:
         """Test validation of invalid SVG syntax."""
         invalid_svg = """<?xml version="1.0" encoding="UTF-8"?>
 <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-  <line x1="10" y1="10" x2="50" y2="10" stroke="black" 
+  <line x1="10" y1="10" x2="50" y2="10" stroke="black"
 </svg>"""  # Missing closing bracket
 
         with tempfile.NamedTemporaryFile(mode="w", suffix=".svg", delete=False) as f:
@@ -80,8 +80,8 @@ class TestSVGValidator:
         """Test SVG with custom weld attributes."""
         svg_content = """<?xml version="1.0" encoding="UTF-8"?>
 <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-  <line x1="10" y1="10" x2="50" y2="10" 
-        stroke="black" 
+  <line x1="10" y1="10" x2="50" y2="10"
+        stroke="black"
         data-temp="160"
         data-weld-time="0.3"
         data-weld-height="0.025" />

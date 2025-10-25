@@ -4,14 +4,15 @@ import tempfile
 from pathlib import Path
 
 import pytest
-from hypothesis import given, strategies as st, assume, settings
-from hypothesis.stateful import RuleBasedStateMachine, rule, invariant
+from hypothesis import assume, given, settings
+from hypothesis import strategies as st
+from hypothesis.stateful import RuleBasedStateMachine, invariant, rule
 
-from microweldr.core.models import WeldPoint, WeldPath
-from microweldr.core.safety import SafetyValidator, validate_weld_operation
-from microweldr.core.security import SecretsValidator
 from microweldr.core.caching import optimize_weld_paths
 from microweldr.core.constants import WeldType, get_valid_weld_types
+from microweldr.core.models import WeldPath, WeldPoint
+from microweldr.core.safety import SafetyValidator, validate_weld_operation
+from microweldr.core.security import SecretsValidator
 
 
 class TestSafetyValidation:
