@@ -124,17 +124,17 @@ class Config:
             ],
             "movement": ["move_height", "travel_speed", "z_speed"],
             "normal_welds": [
-                "welding_height",
+                "weld_height",
                 "weld_temperature",
-                "welding_time",
+                "weld_time",
                 "dot_spacing",
                 "initial_dot_spacing",
                 "cooling_time_between_passes",
             ],
             "light_welds": [
-                "welding_height",
+                "weld_height",
                 "weld_temperature",
-                "welding_time",
+                "weld_time",
                 "dot_spacing",
                 "initial_dot_spacing",
                 "cooling_time_between_passes",
@@ -179,8 +179,8 @@ class Config:
                 raise ConfigError(
                     f"{weld_type}.initial_dot_spacing must be greater than dot_spacing"
                 )
-            if weld_config["welding_time"] < 0:
-                raise ConfigError(f"{weld_type}.welding_time must be non-negative")
+            if weld_config["weld_time"] < 0:
+                raise ConfigError(f"{weld_type}.weld_time must be non-negative")
             if weld_config["cooling_time_between_passes"] < 0:
                 raise ConfigError(
                     f"{weld_type}.cooling_time_between_passes must be non-negative"

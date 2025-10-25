@@ -36,15 +36,15 @@ travel_speed = 6000
 z_speed = 300
 
 [normal_welds]
-welding_height = 0.05
+weld_height = 0.05
 weld_temperature = 200
-welding_time = 0.5
+weld_time = 0.5
 dot_spacing = 2.0
 
 [light_welds]
-welding_height = 0.05
+weld_height = 0.05
 weld_temperature = 180
-welding_time = 0.3
+weld_time = 0.3
 dot_spacing = 3.0
 
 [output]
@@ -214,17 +214,17 @@ travel_speed = 6000
 z_speed = 300
 
 [normal_welds]
-welding_height = 0.05
+weld_height = 0.05
 weld_temperature = 200
-welding_time = 0.5
+weld_time = 0.5
 dot_spacing = 2.0
 initial_dot_spacing = 8.0
 cooling_time_between_passes = 2.0
 
 [light_welds]
-welding_height = 0.05
+weld_height = 0.05
 weld_temperature = 180
-welding_time = 0.3
+weld_time = 0.3
 dot_spacing = 3.0
 initial_dot_spacing = 12.0
 cooling_time_between_passes = 1.5
@@ -283,17 +283,17 @@ travel_speed = 6000
 z_speed = 300
 
 [normal_welds]
-welding_height = 0.05
+weld_height = 0.05
 weld_temperature = 200
-welding_time = 0.5
+weld_time = 0.5
 dot_spacing = 2.0
 initial_dot_spacing = 8.0
 cooling_time_between_passes = 2.0
 
 [light_welds]
-welding_height = 0.05
+weld_height = 0.05
 weld_temperature = 180
-welding_time = 0.3
+weld_time = 0.3
 dot_spacing = 3.0
 initial_dot_spacing = 12.0
 cooling_time_between_passes = 1.5
@@ -337,17 +337,17 @@ travel_speed = 6000
 z_speed = 300
 
 [normal_welds]
-welding_height = 0.05
+weld_height = 0.05
 weld_temperature = 200
-welding_time = 0.5
+weld_time = 0.5
 dot_spacing = 2.0
 initial_dot_spacing = 8.0
 cooling_time_between_passes = 2.0
 
 [light_welds]
-welding_height = 0.05
+weld_height = 0.05
 weld_temperature = 180
-welding_time = 0.3
+weld_time = 0.3
 dot_spacing = 3.0
 initial_dot_spacing = 12.0
 cooling_time_between_passes = 1.5
@@ -391,17 +391,17 @@ travel_speed = 6000
 z_speed = 300
 
 [normal_welds]
-welding_height = 0.05
+weld_height = 0.05
 weld_temperature = 200
-welding_time = 0.5
+weld_time = 0.5
 dot_spacing = -1.0  # Invalid
 initial_dot_spacing = 8.0
 cooling_time_between_passes = 2.0
 
 [light_welds]
-welding_height = 0.05
+weld_height = 0.05
 weld_temperature = 180
-welding_time = 0.3
+weld_time = 0.3
 dot_spacing = 3.0
 initial_dot_spacing = 12.0
 cooling_time_between_passes = 1.5

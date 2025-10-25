@@ -283,7 +283,7 @@ class GCodeGenerator:
                     else (
                         path.custom_welding_height
                         if path.custom_welding_height is not None
-                        else weld_config["welding_height"]
+                        else weld_config["weld_height"]
                     )
                 )
                 f.write(f"G1 Z{welding_height:.3f} F{z_speed}\n")
@@ -295,7 +295,7 @@ class GCodeGenerator:
                     else (
                         path.custom_welding_time
                         if path.custom_welding_time is not None
-                        else weld_config["welding_time"]
+                        else weld_config["weld_time"]
                     )
                 )
                 welding_ms = int(welding_time * 1000)

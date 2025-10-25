@@ -157,7 +157,7 @@ use_chamber_heating = false # Set to false to disable chamber heating (useful if
 
 [movement]
 move_height = 5.0          # mm - safe travel height
-welding_height = 0.2          # mm - welding height
+weld_height = 0.2          # mm - welding height
 
 [normal_welds]
 weld_temperature = 200     # °C
@@ -167,7 +167,7 @@ cooling_time_between_passes = 2.0  # seconds - cooling between passes
 
 [light_welds]
 weld_temperature = 180     # °C - lower temperature
-welding_time = 0.3      # seconds - shorter time
+weld_time = 0.3      # seconds - shorter time
 dot_spacing = 0.3          # mm - final desired spacing
 initial_dot_spacing = 12.0 # mm - spacing for first pass (wider)
 cooling_time_between_passes = 1.5  # seconds - cooling between passes

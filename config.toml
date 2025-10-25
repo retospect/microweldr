@@ -26,18 +26,18 @@ z_speed = 600  # mm/min - optimized Z speed (near maximum safe limit for Core On
 
 [normal_welds]
 # Settings for black SVG elements
-welding_height = 0.020  # mm - how low the nozzle goes for welding (20 microns, optimized compression)
+weld_height = 0.020  # mm - how low the nozzle goes for welding (20 microns, optimized compression)
 weld_temperature = 130  # °C - optimal from calibration test (first line, best results)
-welding_time = 0.1  # seconds - optimal from calibration test (first line, best results)
+weld_time = 0.1  # seconds - optimal from calibration test (first line, best results)
 dot_spacing = 0.9  # mm - final desired spacing (minimal overlap with 1.0mm diameter)
 initial_dot_spacing = 3.6  # mm - spacing for first pass (wider, 4x final spacing)
 cooling_time_between_passes = 2.0  # seconds - time to let plastic cool
 
 [light_welds]
 # Settings for blue SVG elements
-welding_height = 0.020  # mm - same precision height for light welds (20 microns, optimized compression)
+weld_height = 0.020  # mm - same precision height for light welds (20 microns, optimized compression)
 weld_temperature = 180  # °C - lower temperature
-welding_time = 0.3  # seconds - shorter welding time
+weld_time = 0.3  # seconds - shorter welding time
 dot_spacing = 0.9  # mm - final desired spacing (minimal overlap with 1.0mm diameter)
 initial_dot_spacing = 3.6  # mm - spacing for first pass (wider, 4x final spacing)
 cooling_time_between_passes = 1.5  # seconds - time to let plastic cool
