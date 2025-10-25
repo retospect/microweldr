@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="120" xmlns="http://www.w3.org/2000/svg">
+  <!-- SVG Welder Temperature and Dwell Time Calibration Test -->
+  <!-- Temperature sweep: 130°C to 180°C in 10°C increments -->
+  <!-- Dwell times: 0.1s and 0.2s for each temperature -->
+  <!-- Test lines: 15mm long, 5mm apart vertically -->
+  
+  <!-- 130°C Tests -->
+  <line x1="10" y1="10" x2="25" y2="10" stroke="black" stroke-width="1" 
+        data-temp="130" data-dwell="0.1" data-bed-temp="60" 
+        title="130°C, 0.1s dwell, 60°C bed"/>
+  <line x1="10" y1="15" x2="25" y2="15" stroke="black" stroke-width="1" 
+        data-temp="130" data-dwell="0.2" data-bed-temp="60" 
+        title="130°C, 0.2s dwell, 60°C bed"/>
+  
+  <!-- 140°C Tests -->
+  <line x1="30" y1="10" x2="45" y2="10" stroke="black" stroke-width="1" 
+        data-temp="140" data-dwell="0.1" data-bed-temp="60" 
+        title="140°C, 0.1s dwell, 60°C bed"/>
+  <line x1="30" y1="15" x2="45" y2="15" stroke="black" stroke-width="1" 
+        data-temp="140" data-dwell="0.2" data-bed-temp="60" 
+        title="140°C, 0.2s dwell, 60°C bed"/>
+  
+  <!-- 150°C Tests -->
+  <line x1="50" y1="10" x2="65" y2="10" stroke="black" stroke-width="1" 
+        data-temp="150" data-dwell="0.1" data-bed-temp="60" 
+        title="150°C, 0.1s dwell, 60°C bed"/>
+  <line x1="50" y1="15" x2="65" y2="15" stroke="black" stroke-width="1" 
+        data-temp="150" data-dwell="0.2" data-bed-temp="60" 
+        title="150°C, 0.2s dwell, 60°C bed"/>
+  
+  <!-- 160°C Tests -->
+  <line x1="70" y1="10" x2="85" y2="10" stroke="black" stroke-width="1" 
+        data-temp="160" data-dwell="0.1" data-bed-temp="60" 
+        title="160°C, 0.1s dwell, 60°C bed"/>
+  <line x1="70" y1="15" x2="85" y2="15" stroke="black" stroke-width="1" 
+        data-temp="160" data-dwell="0.2" data-bed-temp="60" 
+        title="160°C, 0.2s dwell, 60°C bed"/>
+  
+  <!-- 170°C Tests -->
+  <line x1="90" y1="10" x2="105" y2="10" stroke="black" stroke-width="1" 
+        data-temp="170" data-dwell="0.1" data-bed-temp="60" 
+        title="170°C, 0.1s dwell, 60°C bed"/>
+  <line x1="90" y1="15" x2="105" y2="15" stroke="black" stroke-width="1" 
+        data-temp="170" data-dwell="0.2" data-bed-temp="60" 
+        title="170°C, 0.2s dwell, 60°C bed"/>
+  
+  <!-- 180°C Tests -->
+  <line x1="110" y1="10" x2="125" y2="10" stroke="black" stroke-width="1" 
+        data-temp="180" data-dwell="0.1" data-bed-temp="60" 
+        title="180°C, 0.1s dwell, 60°C bed"/>
+  <line x1="110" y1="15" x2="125" y2="15" stroke="black" stroke-width="1" 
+        data-temp="180" data-dwell="0.2" data-bed-temp="60" 
+        title="180°C, 0.2s dwell, 60°C bed"/>
+  
+  <!-- Labels for reference -->
+  <text x="10" y="30" font-family="Arial" font-size="8" fill="blue">130°C</text>
+  <text x="30" y="30" font-family="Arial" font-size="8" fill="blue">140°C</text>
+  <text x="50" y="30" font-family="Arial" font-size="8" fill="blue">150°C</text>
+  <text x="70" y="30" font-family="Arial" font-size="8" fill="blue">160°C</text>
+  <text x="90" y="30" font-family="Arial" font-size="8" fill="blue">170°C</text>
+  <text x="110" y="30" font-family="Arial" font-size="8" fill="blue">180°C</text>
+  
+  <text x="5" y="12" font-family="Arial" font-size="6" fill="green">0.1s</text>
+  <text x="5" y="17" font-family="Arial" font-size="6" fill="green">0.2s</text>
+</svg>

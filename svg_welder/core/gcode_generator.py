@@ -195,13 +195,20 @@ class GCodeGenerator:
             # Get settings for this weld type
             weld_config = self.config.get_section(f"{path.weld_type}_welds")
 
+            # Check for custom temperature on this path
+            target_temp = path.custom_temp if path.custom_temp is not None else weld_config["weld_temperature"]
+            
             # Set temperature if different
-            if weld_config["weld_temperature"] != current_nozzle_temp:
-                current_nozzle_temp = weld_config["weld_temperature"]
-                f.write(
-                    f"M104 S{current_nozzle_temp} ; Set temperature for {path.weld_type} welds\n"
-                )
-                f.write(f"M109 S{current_nozzle_temp} ; Wait for temperature\n")
+            if target_temp != current_nozzle_temp:
+                current_nozzle_temp = target_temp
+                if path.custom_temp is not None:
+                    f.write(f"M104 S{current_nozzle_temp} ; Set custom temperature {current_nozzle_temp}°C\n")
+                    f.write(f"M109 S{current_nozzle_temp} ; Wait for custom temperature\n\n")
+                else:
+                    f.write(
+                        f"M104 S{current_nozzle_temp} ; Set temperature for {path.weld_type} welds\n"
+                    )
+                    f.write(f"M109 S{current_nozzle_temp} ; Wait for temperature\n\n")
 
             # Process path with multi-pass welding
             self._write_multipass_welding(
@@ -254,9 +261,15 @@ class GCodeGenerator:
                 # Lower to weld height
                 f.write(f"G1 Z{weld_config['weld_height']:.3f} F{z_speed}\n")
 
-                # Dwell for welding
-                dwell_ms = int(weld_config["spot_dwell_time"] * 1000)
-                f.write(f"G4 P{dwell_ms} ; Dwell for welding\n")
+                # Dwell for welding - use custom dwell time if specified (path-level or point-level)
+                dwell_time = (point.custom_dwell if point.custom_dwell is not None 
+                             else path.custom_dwell if path.custom_dwell is not None 
+                             else weld_config["spot_dwell_time"])
+                dwell_ms = int(dwell_time * 1000)
+                if point.custom_dwell is not None or path.custom_dwell is not None:
+                    f.write(f"G4 P{dwell_ms} ; Custom dwell time {dwell_time}s\n")
+                else:
+                    f.write(f"G4 P{dwell_ms} ; Dwell for welding\n")
 
                 # Raise to safe height
                 f.write(f"G1 Z{move_height} F{z_speed}\n")

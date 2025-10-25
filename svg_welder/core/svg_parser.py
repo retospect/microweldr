@@ -84,6 +84,11 @@ class SVGParser:
                 if element_type == "circle":
                     element_radius = float(element.get("r", 1))
 
+                # Extract custom parameters for the path
+                custom_temp = self._get_float_attr(element, "data-temp")
+                custom_dwell = self._get_float_attr(element, "data-dwell")
+                custom_bed_temp = self._get_float_attr(element, "data-bed-temp")
+
                 weld_path = WeldPath(
                     points=points,
                     weld_type=weld_type,
@@ -91,6 +96,9 @@ class SVGParser:
                     pause_message=pause_message,
                     element_type=element_type,
                     element_radius=element_radius,
+                    custom_temp=custom_temp,
+                    custom_dwell=custom_dwell,
+                    custom_bed_temp=custom_bed_temp,
                 )
                 weld_paths.append(weld_path)
 
@@ -159,6 +167,16 @@ class SVGParser:
         else:
             return "normal", None  # Default for black or other colors
 
+    def _get_float_attr(self, element: ET.Element, attr_name: str) -> Optional[float]:
+        """Extract float attribute from element, return None if not found or invalid."""
+        attr_value = element.get(attr_name)
+        if attr_value:
+            try:
+                return float(attr_value)
+            except ValueError:
+                pass
+        return None
+
     def _parse_element(self, element_type: str, element: ET.Element) -> List[WeldPoint]:
         """Parse individual SVG element."""
         if element_type == "path":
@@ -210,7 +228,15 @@ class SVGParser:
         x2 = float(line_element.get("x2", 0))
         y2 = float(line_element.get("y2", 0))
 
-        points = [WeldPoint(x1, y1, "normal"), WeldPoint(x2, y2, "normal")]
+        # Extract custom parameters from line element
+        custom_temp = self._get_float_attr(line_element, "data-temp")
+        custom_dwell = self._get_float_attr(line_element, "data-dwell")
+        custom_bed_temp = self._get_float_attr(line_element, "data-bed-temp")
+
+        points = [
+            WeldPoint(x1, y1, "normal", custom_temp, custom_dwell, custom_bed_temp),
+            WeldPoint(x2, y2, "normal", custom_temp, custom_dwell, custom_bed_temp)
+        ]
 
         return self._interpolate_points(points)
 
