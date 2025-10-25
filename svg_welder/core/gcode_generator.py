@@ -46,15 +46,14 @@ class GCodeGenerator:
             f.write("; Initialize printer (layed back mode - printer on its back!)\n")
             f.write("; IMPORTANT: Manually position print head before starting!\n")
             f.write("; Expected position: Rear right corner of bed\n")
-            f.write("; All positioning trusted - no homing performed (fully manual setup)\n\n")
+            f.write("; Z-axis will be homed while bed heats up (efficient timing)\n\n")
             
             f.write("G90 ; Absolute positioning\n")
             f.write("M83 ; Relative extruder positioning\n")
             f.write("M84 S0 ; Disable stepper timeout for layed back operation\n")
             
-            # Trust X/Y and assume Z position (fully manual positioning)
-            f.write("G92 X0 Y0 Z0 ; Set current position as origin (manual positioning trusted)\n")
-            f.write("G1 Z10 F150 ; Move Z to safe position slowly (no rush when layed back)\n\n")
+            # Trust X/Y but will home Z during heating
+            f.write("G92 X0 Y0 ; Set current X/Y position as origin (manual positioning trusted)\n\n")
 
             # Always skip bed leveling for layed back operation
             f.write("; Bed leveling disabled for layed back operation\n")
@@ -79,6 +78,7 @@ class GCodeGenerator:
         nozzle_temp = self.config.get("temperatures", "nozzle_temperature")
         use_chamber_heating = self.config.get("temperatures", "use_chamber_heating", True)
         chamber_temp = self.config.get("temperatures", "chamber_temperature", 35)  # Default 35°C
+        layed_back_mode = self.config.get("printer", "layed_back_mode", True)
 
         # Chamber heating (optional)
         if use_chamber_heating:
@@ -88,10 +88,21 @@ class GCodeGenerator:
         else:
             f.write("; Chamber heating disabled (sensor not available)\n\n")
 
-        f.write(f"; Heat bed to {bed_temp}°C\n")
-        f.write(f"M140 S{bed_temp} ; Set bed temperature\n")
+        # Start bed heating (don't wait yet)
+        f.write(f"; Start heating bed to {bed_temp}°C\n")
+        f.write(f"M140 S{bed_temp} ; Set bed temperature (start heating)\n\n")
+
+        # Home Z-axis while bed heats up (layed back mode only)
+        if layed_back_mode:
+            f.write("; Home Z-axis while bed heats up (efficient timing)\n")
+            f.write("G28 Z ; Home Z-axis only (X/Y position trusted)\n")
+            f.write("G1 Z10 F150 ; Move Z to safe position slowly (no rush when layed back)\n\n")
+
+        # Now wait for bed temperature
+        f.write(f"; Wait for bed to reach target temperature\n")
         f.write(f"M190 S{bed_temp} ; Wait for bed temperature\n\n")
 
+        # Heat nozzle
         f.write(f"; Heat nozzle to {nozzle_temp}°C\n")
         f.write(f"M104 S{nozzle_temp} ; Set nozzle temperature\n")
         f.write(f"M109 S{nozzle_temp} ; Wait for nozzle temperature\n\n")
