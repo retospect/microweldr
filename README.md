@@ -64,27 +64,34 @@ svg-welder/
    poetry shell
    ```
 
-### Using pip
+## Installation
 
+### **From PyPI (Recommended)**
 ```bash
-# Install the package
+# Basic installation
 pip install svg-welder
 
-# Install with validation support (optional)
+# With optional validation features
 pip install svg-welder[validation]
+
+# With all features (validation + development tools)
+pip install svg-welder[validation,dev]
 ```
 
-### **From Source**
+### **Development Installation**
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/svg-welder.git
-cd svg-welder
+git clone <repository-url>
+cd PrusaWelder
 
-# Install with poetry
+# Install with poetry (recommended for development)
 poetry install
 
-# Or install with pip
+# Or install with pip (editable mode)
 pip install -e .
+
+# Install with validation features
+pip install -e .[validation]
 
 # Run tests
 make test

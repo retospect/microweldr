@@ -26,6 +26,7 @@ python = "^3.8.1"
 toml = "^0.10.2"
 requests = "^2.28.0"
 
+# Optional validation dependencies
 lxml = {version = "^5.0.0", optional = true}
 xmlschema = {version = "^2.0.0", optional = true}
 gcodeparser = {version = "^0.2.0", optional = true}

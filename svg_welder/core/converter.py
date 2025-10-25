@@ -27,6 +27,7 @@ class SVGToGCodeConverter:
         self.weld_paths: List[WeldPath] = []
         self.offset_x = 0.0
         self.offset_y = 0.0
+        self.margin_info = None
 
     def parse_svg(self, svg_path: str | Path) -> List[WeldPath]:
         """Parse SVG file and return weld paths."""
@@ -75,10 +76,30 @@ class SVGToGCodeConverter:
         self.offset_x = bed_center_x - design_center_x
         self.offset_y = bed_center_y - design_center_y
         
+        # Calculate final position after centering
+        final_min_x = min_x + self.offset_x
+        final_max_x = max_x + self.offset_x
+        final_min_y = min_y + self.offset_y
+        final_max_y = max_y + self.offset_y
+        
+        # Calculate margins from bed edges
+        margin_left = final_min_x
+        margin_right = bed_size_x - final_max_x
+        margin_front = final_min_y  # Front is Y=0 side
+        margin_back = bed_size_y - final_max_y  # Back is Y=max side
+        
         print(f"📐 Design bounds: ({min_x:.1f}, {min_y:.1f}) to ({max_x:.1f}, {max_y:.1f})")
         print(f"📐 Design size: {design_width:.1f} × {design_height:.1f} mm")
         print(f"🎯 Centering offset: ({self.offset_x:.1f}, {self.offset_y:.1f}) mm")
-        print(f"🎯 Centered position: ({min_x + self.offset_x:.1f}, {min_y + self.offset_y:.1f}) to ({max_x + self.offset_x:.1f}, {max_y + self.offset_y:.1f})")
+        print(f"🎯 Centered position: ({final_min_x:.1f}, {final_min_y:.1f}) to ({final_max_x:.1f}, {final_max_y:.1f})")
+        print(f"📏 Bed margins: Front/Back: {margin_front/10:.1f}/{margin_back/10:.1f}cm, Left/Right: {margin_left/10:.1f}/{margin_right/10:.1f}cm")
+        
+        # Store margin info for use in G-code generation
+        self.margin_info = {
+            'front_back': f"{margin_front/10:.1f}/{margin_back/10:.1f}cm",
+            'left_right': f"{margin_left/10:.1f}/{margin_right/10:.1f}cm",
+            'design_size': f"{design_width:.0f}×{design_height:.0f}mm"
+        }
     
     def _apply_centering_offset(self) -> None:
         """Apply the centering offset to all weld points."""
@@ -101,6 +122,7 @@ class SVGToGCodeConverter:
             weld_paths=self.weld_paths,
             output_path=output_path,
             skip_bed_leveling=skip_bed_leveling,
+            margin_info=self.margin_info,
         )
 
     def convert(

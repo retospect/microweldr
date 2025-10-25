@@ -20,6 +20,7 @@ class GCodeGenerator:
         weld_paths: List[WeldPath],
         output_path: str | Path,
         skip_bed_leveling: bool = False,
+        margin_info: dict = None,
     ) -> None:
         """Generate G-code file from weld paths."""
         output_path = Path(output_path)
@@ -28,7 +29,7 @@ class GCodeGenerator:
             self._write_header(f, weld_paths)
             self._write_initialization(f, skip_bed_leveling)
             self._write_heating(f)
-            self._write_user_pause(f)
+            self._write_user_pause(f, margin_info)
             self._write_welding_sequence(f, weld_paths)
             self._write_cooldown(f)
 
@@ -109,10 +110,20 @@ class GCodeGenerator:
         f.write(f"M104 S{nozzle_temp} ; Set nozzle temperature\n")
         f.write(f"M109 S{nozzle_temp} ; Wait for nozzle temperature\n\n")
 
-    def _write_user_pause(self, f: TextIO) -> None:
+    def _write_user_pause(self, f: TextIO, margin_info: dict = None) -> None:
         """Write user pause for plastic sheet insertion."""
         f.write("; Pause for user to insert plastic sheets\n")
-        f.write("M117 Insert plastic sheets and press continue\n")
+        
+        # Create message with margin information if available
+        if margin_info:
+            message = f"Place film (margins F/B:{margin_info['front_back']}, L/R:{margin_info['left_right']})"
+            # Truncate if too long for LCD
+            if len(message) > 64:
+                message = f"Place film (F/B:{margin_info['front_back']}, L/R:{margin_info['left_right']})"
+        else:
+            message = "Insert plastic sheets and press continue"
+        
+        f.write(f"M117 {message}\n")
         f.write("M0 ; Pause - Insert plastic sheets and press continue\n")
         f.write("M117 Starting welding sequence...\n\n")
 
