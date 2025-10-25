@@ -674,7 +674,7 @@ The script generates an enhanced animated SVG file showing:
 
 ## Validation Features
 
-When validation libraries are installed, the script automatically validates:
+MicroWeldr automatically validates all inputs and outputs:
 
 ### Input SVG Validation
 - **Structure Check**: Verifies proper SVG root element and namespace
