@@ -1,5 +1,30 @@
 # MicroWeldr
 
+<!-- Core Project Info -->
+[![PyPI version](https://badge.fury.io/py/microweldr.svg)](https://badge.fury.io/py/microweldr)
+[![Python versions](https://img.shields.io/pypi/pyversions/microweldr.svg)](https://pypi.org/project/microweldr/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub release](https://img.shields.io/github/release/retospect/microweldr.svg)](https://github.com/retospect/microweldr/releases)
+
+<!-- Quality & Testing -->
+[![Tests](https://github.com/retospect/microweldr/workflows/Tests/badge.svg)](https://github.com/retospect/microweldr/actions)
+[![Coverage](https://codecov.io/gh/retospect/microweldr/branch/master/graph/badge.svg)](https://codecov.io/gh/retospect/microweldr)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Type checked: mypy](https://img.shields.io/badge/type%20checked-mypy-blue)](http://mypy-lang.org/)
+[![Security: bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
+
+<!-- Platform & Application -->
+[![Supported Platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)](https://github.com/retospect/microweldr)
+[![Prusa Printer](https://img.shields.io/badge/printer-Prusa%20Core%20One-orange)](https://www.prusa3d.com/)
+[![Microfluidics](https://img.shields.io/badge/application-microfluidics-blue)](https://github.com/retospect/microweldr)
+[![SVG to G-code](https://img.shields.io/badge/conversion-SVG%20to%20G--code-purple)](https://github.com/retospect/microweldr)
+
+<!-- Documentation & Community -->
+[![Documentation Status](https://readthedocs.org/projects/microweldr/badge/?version=latest)](https://microweldr.readthedocs.io/en/latest/?badge=latest)
+[![Downloads](https://pepy.tech/badge/microweldr)](https://pepy.tech/project/microweldr)
+[![GitHub last commit](https://img.shields.io/github/last-commit/retospect/microweldr.svg)](https://github.com/retospect/microweldr/commits)
+[![GitHub stars](https://img.shields.io/github/stars/retospect/microweldr.svg?style=social&label=Star)](https://github.com/retospect/microweldr)
+
 A Python package that converts SVG files to Prusa Core One G-code for plastic "spot" welding applications. The package processes SVG vector graphics and generates G-code that creates weld spots along the paths without extruding any plastic material.
 
 **Optimized for Prusa Core One**: Includes chamber temperature control (M141/M191), proper bed dimensions (250×220×270mm), CoreXY-specific settings, and **layed back mode** *(currently not working)* - designed for when your printer is positioned on its back (door pointing up) so liquids can be pipetted into pouches and gravity holds them in place before heat sealing.
