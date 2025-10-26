@@ -62,3 +62,8 @@ pass_spacing_multiplier = 0.6  # Multiplier for spacing between passes (0.6 = 40
 time_between_welds = 0.1  # seconds - time between each weld point appearing
 pause_time = 3.0  # seconds - how long pause messages are displayed
 min_animation_duration = 10.0  # seconds - minimum total animation time
+
+[ui]
+# User interface settings
+status_update_interval = 2.0  # seconds - how often to update printer status and temperatures
+connection_retry_interval = 5.0  # seconds - how often to retry connection when disconnected

@@ -47,10 +47,14 @@ class TestMicroWeldrUI:
     def test_status_monitoring_lifecycle(self):
         """Test starting and stopping status monitoring."""
         ui = MicroWeldrUI()
-        ui.printer_connected = False  # No connection, should not start thread
+        ui.printer_connected = (
+            False  # No connection, but should still start monitoring thread
+        )
 
         ui.start_status_monitoring()
-        assert ui.status_thread is None
+        assert (
+            ui.status_thread is not None
+        )  # Thread should start regardless of connection
 
         ui.stop_status_monitoring()
         assert ui.running is False

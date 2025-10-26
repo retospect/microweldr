@@ -100,8 +100,16 @@ class MicroWeldrUI:
             self.travel_speed = self.config.get("movement", "travel_speed", 3000)
             self.z_speed = self.config.get("movement", "z_speed", 600)
 
+            # UI settings
+            self.status_update_interval = self.config.get(
+                "ui", "status_update_interval", 2.0
+            )
+            self.connection_retry_interval = self.config.get(
+                "ui", "connection_retry_interval", 5.0
+            )
+
             self.logger.info(
-                f"Loaded config: bed_temp={self.target_bed_temp}°C, nozzle_temp={self.nozzle_temp}°C"
+                f"Loaded config: bed_temp={self.target_bed_temp}°C, nozzle_temp={self.nozzle_temp}°C, update_interval={self.status_update_interval}s"
             )
 
         except Exception as e:
@@ -195,19 +203,40 @@ class MicroWeldrUI:
 
     def start_status_monitoring(self):
         """Start background thread for printer status monitoring."""
-        if not self.printer_connected or self.status_thread:
+        if self.status_thread:
             return
 
         def monitor_status():
-            while self.running and self.printer_connected:
+            retry_counter = 0
+            while self.running:
                 try:
-                    if self.printer_client:
+                    # If connected, update status
+                    if self.printer_connected and self.printer_client:
                         self.printer_status = self.printer_client.get_status()
                         self.last_update = datetime.now()
+                        retry_counter = 0  # Reset retry counter on success
+                        sleep_interval = getattr(self, "status_update_interval", 2.0)
+
+                    # If not connected, try to reconnect periodically
+                    elif not self.printer_connected:
+                        retry_counter += 1
+                        if retry_counter >= int(
+                            getattr(self, "connection_retry_interval", 5.0)
+                            / getattr(self, "status_update_interval", 2.0)
+                        ):
+                            self.logger.info("Attempting to reconnect to printer...")
+                            self._initialize_printer_connection()
+                            retry_counter = 0
+                        sleep_interval = getattr(self, "status_update_interval", 2.0)
+                    else:
+                        sleep_interval = getattr(self, "status_update_interval", 2.0)
+
                 except Exception as e:
                     self.logger.warning(f"Status update failed: {e}")
                     self.printer_connected = False
-                time.sleep(2)  # Update every 2 seconds
+                    sleep_interval = getattr(self, "status_update_interval", 2.0)
+
+                time.sleep(sleep_interval)
 
         self.status_thread = threading.Thread(target=monitor_status, daemon=True)
         self.status_thread.start()
