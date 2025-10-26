@@ -6,6 +6,12 @@ bed_size_x = 250.0  # mm
 bed_size_y = 220.0  # mm - Core One has 220mm Y axis
 max_z_height = 270.0  # mm
 
+# PrusaLink connection settings (optional - can also use secrets.toml)
+# host = "192.168.1.100"  # Printer IP address
+# username = "maker"      # Usually "maker"
+# password = ""           # LCD password from printer display
+# timeout = 30            # Connection timeout in seconds
+
 [temperatures]
 bed_temperature = 60  # °C
 nozzle_temperature = 200  # °C for normal welds

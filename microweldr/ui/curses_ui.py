@@ -67,14 +67,7 @@ class MicroWeldrUI:
             self._load_printer_settings()
 
             # Initialize printer client
-            try:
-                secrets_file = Path("secrets.toml")
-                if secrets_file.exists():
-                    self.printer_client = PrusaLinkClient.from_config(str(secrets_file))
-                    self.printer_connected = True
-            except Exception as e:
-                self.logger.warning(f"Failed to connect to printer: {e}")
-                self.printer_connected = False
+            self._initialize_printer_connection()
 
         except Exception as e:
             self.logger.error(f"Initialization failed: {e}")
@@ -114,6 +107,74 @@ class MicroWeldrUI:
         except Exception as e:
             self.logger.warning(f"Failed to load printer settings from config: {e}")
             # Keep defaults
+
+    def _initialize_printer_connection(self):
+        """Initialize printer connection using secrets.toml or config.toml."""
+        self.printer_connected = False
+
+        try:
+            # Method 1: Try secrets.toml first (preferred for security)
+            secrets_file = Path("secrets.toml")
+            if secrets_file.exists():
+                self.printer_client = PrusaLinkClient.from_config(str(secrets_file))
+                self.printer_connected = True
+                self.logger.info("Connected to printer using secrets.toml")
+                return
+
+        except Exception as e:
+            self.logger.warning(f"Failed to connect using secrets.toml: {e}")
+
+        try:
+            # Method 2: Try config.toml printer connection settings
+            if self.config and self._has_printer_connection_config():
+                self.printer_client = self._create_client_from_config()
+                self.printer_connected = True
+                self.logger.info("Connected to printer using config.toml")
+                return
+
+        except Exception as e:
+            self.logger.warning(f"Failed to connect using config.toml: {e}")
+
+        # No connection available
+        self.logger.info(
+            "No printer connection configured (secrets.toml or config.toml)"
+        )
+
+    def _has_printer_connection_config(self) -> bool:
+        """Check if config has printer connection settings."""
+        try:
+            host = self.config.get("printer", "host", None)
+            username = self.config.get("printer", "username", None)
+            password = self.config.get("printer", "password", None)
+            return host is not None and username is not None and password is not None
+        except:
+            return False
+
+    def _create_client_from_config(self):
+        """Create PrusaLinkClient from main config file."""
+        # Create a temporary config dict in the format expected by PrusaLinkClient
+        printer_config = {
+            "host": self.config.get("printer", "host"),
+            "username": self.config.get("printer", "username"),
+            "password": self.config.get("printer", "password"),
+            "timeout": self.config.get("printer", "timeout", 30),
+        }
+
+        # Create client directly with config dict
+        from ..prusalink.client import PrusaLinkClient
+
+        client = PrusaLinkClient.__new__(PrusaLinkClient)
+        client.config = printer_config
+        client.base_url = f"http://{printer_config['host']}"
+
+        from requests.auth import HTTPDigestAuth
+
+        client.auth = HTTPDigestAuth(
+            printer_config["username"], printer_config["password"]
+        )
+        client.timeout = printer_config["timeout"]
+
+        return client
 
     def load_svg(self, svg_path: Path):
         """Load and convert SVG file."""
