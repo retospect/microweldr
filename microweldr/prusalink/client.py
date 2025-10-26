@@ -337,7 +337,7 @@ class PrusaLinkClient:
             # PrusaLink API endpoint for sending G-code commands
             # Note: This is a simplified implementation - actual PrusaLink API
             # may require different endpoints or formatting
-            response = self.session.post(
+            response = requests.post(
                 f"{self.base_url}/api/printer/command",
                 json={"command": command},
                 auth=self.auth,

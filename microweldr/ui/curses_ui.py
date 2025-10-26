@@ -337,27 +337,33 @@ class MicroWeldrUI:
                 y += 1
 
             if self.printer_status:
-                # Temperature info
-                if "temperature" in self.printer_status:
-                    temp_info = self.printer_status["temperature"]
-                    if "bed" in temp_info:
-                        bed_temp = temp_info["bed"].get("actual", 0)
-                        bed_target = temp_info["bed"].get("target", 0)
-                        stdscr.addstr(
-                            y, 2, f"Bed Temp: {bed_temp:.1f}°C / {bed_target:.1f}°C"
-                        )
-                        y += 1
+                # Temperature info from printer section
+                if "printer" in self.printer_status:
+                    printer_info = self.printer_status["printer"]
+                    bed_temp = printer_info.get("temp_bed", 0)
+                    bed_target = printer_info.get("target_bed", 0)
+                    nozzle_temp = printer_info.get("temp_nozzle", 0)
+                    nozzle_target = printer_info.get("target_nozzle", 0)
+
+                    stdscr.addstr(
+                        y, 2, f"Bed Temp: {bed_temp:.1f}°C / {bed_target:.1f}°C"
+                    )
+                    y += 1
+                    stdscr.addstr(
+                        y,
+                        2,
+                        f"Nozzle Temp: {nozzle_temp:.1f}°C / {nozzle_target:.1f}°C",
+                    )
+                    y += 1
 
                 # Position info
                 if "printer" in self.printer_status:
                     printer_info = self.printer_status["printer"]
-                    if "axes" in printer_info:
-                        axes = printer_info["axes"]
-                        x = axes.get("x", {}).get("value", 0)
-                        y_pos = axes.get("y", {}).get("value", 0)
-                        z = axes.get("z", {}).get("value", 0)
-                        stdscr.addstr(y, 2, f"Position: X{x:.1f} Y{y_pos:.1f} Z{z:.1f}")
-                        y += 1
+                    x = printer_info.get("axis_x", 0)
+                    y_pos = printer_info.get("axis_y", 0)
+                    z = printer_info.get("axis_z", 0)
+                    stdscr.addstr(y, 2, f"Position: X{x:.1f} Y{y_pos:.1f} Z{z:.1f}")
+                    y += 1
         else:
             stdscr.addstr(y, 2, "Connection: ❌ Disconnected", curses.color_pair(1))
             y += 1
@@ -370,9 +376,8 @@ class MicroWeldrUI:
             return 0.0
 
         try:
-            temp_info = self.printer_status.get("temperature", {})
-            bed_info = temp_info.get("bed", {})
-            return bed_info.get("actual", 0.0)
+            printer_info = self.printer_status.get("printer", {})
+            return printer_info.get("temp_bed", 0.0)
         except:
             return 0.0
 
@@ -382,9 +387,8 @@ class MicroWeldrUI:
             return
 
         try:
-            temp_info = self.printer_status.get("temperature", {})
-            bed_info = temp_info.get("bed", {})
-            target_temp = bed_info.get("target", 0.0)
+            printer_info = self.printer_status.get("printer", {})
+            target_temp = printer_info.get("target_bed", 0.0)
 
             # Update heater state based on target temperature
             self.plate_heater_on = target_temp > 0
@@ -395,9 +399,6 @@ class MicroWeldrUI:
 
     def get_bed_temperature_display(self) -> str:
         """Get formatted bed temperature display for menu."""
-        # Update heater state from printer first
-        self.update_heater_state_from_printer()
-
         current_temp = self.get_current_bed_temperature()
 
         if self.plate_heater_on:
