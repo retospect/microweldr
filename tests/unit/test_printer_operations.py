@@ -20,10 +20,12 @@ class TestPrinterOperations:
     def test_send_gcode_success(self):
         """Test successful G-code sending."""
         mock_client = Mock(spec=PrusaLinkClient)
+        mock_client.send_gcode.return_value = True
         ops = PrinterOperations(mock_client)
 
         result = ops.send_gcode("G28")
         assert result is True
+        mock_client.send_gcode.assert_called_once_with("G28")
 
     def test_calibrate_printer(self):
         """Test printer calibration."""

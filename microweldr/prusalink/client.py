@@ -320,3 +320,36 @@ class PrusaLinkClient:
 
         except requests.exceptions.RequestException as e:
             raise PrusaLinkConnectionError(f"Connection failed: {e}")
+
+    def send_gcode(self, command: str) -> bool:
+        """Send a single G-code command to the printer.
+
+        Args:
+            command: G-code command to send (e.g., "G28", "M140 S60")
+
+        Returns:
+            True if command was sent successfully, False otherwise
+
+        Raises:
+            PrusaLinkConnectionError: If connection fails
+        """
+        try:
+            # PrusaLink API endpoint for sending G-code commands
+            # Note: This is a simplified implementation - actual PrusaLink API
+            # may require different endpoints or formatting
+            response = self.session.post(
+                f"{self.base_url}/api/printer/command",
+                json={"command": command},
+                auth=self.auth,
+                timeout=self.timeout,
+            )
+
+            if response.status_code == 200:
+                return True
+            else:
+                raise PrusaLinkConnectionError(
+                    f"G-code command failed: HTTP {response.status_code}"
+                )
+
+        except requests.exceptions.RequestException as e:
+            raise PrusaLinkConnectionError(f"Failed to send G-code '{command}': {e}")

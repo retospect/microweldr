@@ -27,10 +27,9 @@ class PrinterOperations:
             True if successful, False otherwise
         """
         try:
-            # For now, we'll use a simple approach - this can be enhanced later
-            # The PrusaLinkClient doesn't have a direct send_gcode method yet
-            logger.info(f"Would send G-code: {command}")
-            return True
+            result = self.client.send_gcode(command)
+            logger.info(f"Sent G-code: {command}")
+            return result
         except Exception as e:
             logger.error(f"Failed to send G-code '{command}': {e}")
             return False
