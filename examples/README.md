@@ -62,6 +62,12 @@ microweldr examples/example.svg --config examples/config.toml
 - Scientific parameter validation
 - Diagonal orientation reference
 
+**`square-circle.svg`** - Basic geometric shapes
+- 15mm square with normal weld type
+- 13mm diameter circle with light weld type
+- Perfect for testing different weld settings
+- Demonstrates nested geometry welding
+
 ## ⚙️ Configuration
 
 **`config.toml`** - Optimized settings template
