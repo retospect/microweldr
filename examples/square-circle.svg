@@ -22,10 +22,10 @@
           data-weld-type="light"/>
 
   <!-- Visual reference markers (not welded) -->
-  <g id="reference_markers" stroke="gray" stroke-width="0.1" fill="none" opacity="0.3">
+  <g id="reference_markers" stroke="gray" stroke-width="0.1" fill="none" opacity="0.3" data-weld-type="none">
     <!-- Center cross -->
-    <line x1="10.5" y1="12.5" x2="14.5" y2="12.5"/>
-    <line x1="12.5" y1="10.5" x2="12.5" y2="14.5"/>
+    <line x1="10.5" y1="12.5" x2="14.5" y2="12.5" data-weld-type="none"/>
+    <line x1="12.5" y1="10.5" x2="12.5" y2="14.5" data-weld-type="none"/>
 
     <!-- Dimension annotations -->
     <text x="12.5" y="3" text-anchor="middle" font-size="1.5" fill="gray">15mm square</text>

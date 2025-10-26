@@ -36,7 +36,7 @@ class MicroWeldrUI:
         self.last_update = None
         self.calibrated = False
         self.plate_heater_on = False
-        self.target_bed_temp = 60
+        self.target_bed_temp = 60  # Default, will be updated from config
 
         # UI state
         self.stdscr = None
@@ -63,6 +63,9 @@ class MicroWeldrUI:
 
             self.converter = SVGToGCodeConverter(self.config)
 
+            # Load printer settings from config
+            self._load_printer_settings()
+
             # Initialize printer client
             try:
                 secrets_file = Path("secrets.toml")
@@ -76,6 +79,41 @@ class MicroWeldrUI:
         except Exception as e:
             self.logger.error(f"Initialization failed: {e}")
             raise
+
+    def _load_printer_settings(self):
+        """Load printer settings from config file."""
+        if not self.config:
+            return
+
+        try:
+            # Load bed temperature from config
+            self.target_bed_temp = self.config.get(
+                "temperatures", "bed_temperature", 60
+            )
+
+            # Load other useful settings
+            self.nozzle_temp = self.config.get(
+                "temperatures", "nozzle_temperature", 200
+            )
+            self.chamber_temp = self.config.get(
+                "temperatures", "chamber_temperature", 35
+            )
+            self.use_chamber = self.config.get(
+                "temperatures", "use_chamber_heating", False
+            )
+
+            # Movement settings
+            self.move_height = self.config.get("movement", "move_height", 5.0)
+            self.travel_speed = self.config.get("movement", "travel_speed", 3000)
+            self.z_speed = self.config.get("movement", "z_speed", 600)
+
+            self.logger.info(
+                f"Loaded config: bed_temp={self.target_bed_temp}°C, nozzle_temp={self.nozzle_temp}°C"
+            )
+
+        except Exception as e:
+            self.logger.warning(f"Failed to load printer settings from config: {e}")
+            # Keep defaults
 
     def load_svg(self, svg_path: Path):
         """Load and convert SVG file."""
@@ -306,14 +344,19 @@ class MicroWeldrUI:
 
         try:
             min_x, min_y, max_x, max_y = self.get_bounds_info()
-            fly_height = 5  # mm above bed
+            fly_height = getattr(
+                self, "move_height", 5.0
+            )  # Use config value or default
 
             # Move to fly height
-            self.printer_client.send_gcode(f"G1 Z{fly_height} F3000")
+            travel_speed = getattr(
+                self, "travel_speed", 3000
+            )  # Use config value or default
+            self.printer_client.send_gcode(f"G1 Z{fly_height} F{travel_speed}")
 
             # Draw rectangle
             commands = [
-                f"G1 X{min_x} Y{min_y} F3000",  # Bottom left
+                f"G1 X{min_x} Y{min_y} F{travel_speed}",  # Bottom left
                 f"G1 X{max_x} Y{min_y}",  # Bottom right
                 f"G1 X{max_x} Y{max_y}",  # Top right
                 f"G1 X{min_x} Y{max_y}",  # Top left
@@ -343,7 +386,8 @@ class MicroWeldrUI:
 
             # Drop 5cm
             new_z = current_z - 50
-            self.printer_client.send_gcode(f"G1 Z{new_z} F1000")
+            z_speed = getattr(self, "z_speed", 600)  # Use config value or default
+            self.printer_client.send_gcode(f"G1 Z{new_z} F{z_speed}")
 
             self.logger.info(
                 f"Plate lowered by 50mm for loading (Z: {current_z} -> {new_z})"
