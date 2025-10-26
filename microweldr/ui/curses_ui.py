@@ -116,7 +116,7 @@ class MicroWeldrUI:
             # Method 1: Try secrets.toml first (preferred for security)
             secrets_file = Path("secrets.toml")
             if secrets_file.exists():
-                self.printer_client = PrusaLinkClient.from_config(str(secrets_file))
+                self.printer_client = PrusaLinkClient(str(secrets_file))
                 self.printer_connected = True
                 self.logger.info("Connected to printer using secrets.toml")
                 return
