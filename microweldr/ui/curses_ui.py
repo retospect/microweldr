@@ -11,6 +11,7 @@ from typing import Optional, Tuple
 from ..core.config import Config
 from ..core.converter import SVGToGCodeConverter
 from ..core.models import WeldPath
+from ..core.printer_operations import PrinterOperations
 from ..prusalink.client import PrusaLinkClient
 from ..prusalink.exceptions import PrusaLinkError
 
@@ -37,6 +38,7 @@ class MicroWeldrUI:
         self.calibrated = False
         self.plate_heater_on = False
         self.target_bed_temp = 60  # Default, will be updated from config
+        self.printer_ops = None  # Will be initialized when printer connects
 
         # UI state
         self.stdscr = None
@@ -126,6 +128,7 @@ class MicroWeldrUI:
             if secrets_file.exists():
                 self.printer_client = PrusaLinkClient(str(secrets_file))
                 self.printer_connected = True
+                self._create_printer_operations()
                 self.logger.info("Connected to printer using secrets.toml")
                 return
 
@@ -137,6 +140,7 @@ class MicroWeldrUI:
             if self.config and self._has_printer_connection_config():
                 self.printer_client = self._create_client_from_config()
                 self.printer_connected = True
+                self._create_printer_operations()
                 self.logger.info("Connected to printer using config.toml")
                 return
 
@@ -147,6 +151,12 @@ class MicroWeldrUI:
         self.logger.info(
             "No printer connection configured (secrets.toml or config.toml)"
         )
+
+    def _create_printer_operations(self):
+        """Create PrinterOperations instance when printer connects."""
+        if self.printer_client:
+            self.printer_ops = PrinterOperations(self.printer_client)
+            self.logger.info("PrinterOperations instance created")
 
     def _has_printer_connection_config(self) -> bool:
         """Check if config has printer connection settings."""
@@ -212,7 +222,7 @@ class MicroWeldrUI:
                 try:
                     # If connected, update status
                     if self.printer_connected and self.printer_client:
-                        self.printer_status = self.printer_client.get_status()
+                        self.printer_status = self.printer_client.get_printer_status()
                         self.last_update = datetime.now()
                         retry_counter = 0  # Reset retry counter on success
                         sleep_interval = getattr(self, "status_update_interval", 2.0)
@@ -233,7 +243,12 @@ class MicroWeldrUI:
 
                 except Exception as e:
                     self.logger.warning(f"Status update failed: {e}")
-                    self.printer_connected = False
+                    # Don't immediately disconnect - could be temporary network issue
+                    # Only disconnect after multiple consecutive failures
+                    retry_counter += 1
+                    if retry_counter >= 3:  # Disconnect after 3 consecutive failures
+                        self.printer_connected = False
+                        retry_counter = 0
                     sleep_interval = getattr(self, "status_update_interval", 2.0)
 
                 time.sleep(sleep_interval)
@@ -433,97 +448,70 @@ class MicroWeldrUI:
 
     def handle_calibrate(self):
         """Handle calibration process."""
-        if not self.printer_connected:
+        if not self.printer_connected or not self.printer_ops:
             return False
 
         try:
-            # Send calibration G-code commands
-            self.printer_client.send_gcode("G28")  # Home all axes
-            self.printer_client.send_gcode("G29")  # Auto bed leveling
-            self.calibrated = True
-            self.logger.info("Calibration completed")
-            return True
+            result = self.printer_ops.calibrate_printer()
+            if result:
+                self.calibrated = True
+                self.logger.info("Calibration completed")
+            return result
         except Exception as e:
             self.logger.error(f"Calibration failed: {e}")
             return False
 
     def handle_plate_heater(self):
         """Toggle plate heater on/off."""
-        if not self.printer_connected:
+        if not self.printer_connected or not self.printer_ops:
             return False
 
         try:
             if self.plate_heater_on:
                 # Turn off heater
-                self.printer_client.send_gcode("M140 S0")
-                self.plate_heater_on = False
-                self.logger.info("Plate heater turned OFF")
+                result = self.printer_ops.turn_off_bed_heater()
+                if result:
+                    self.plate_heater_on = False
+                    self.logger.info("Plate heater turned OFF")
             else:
                 # Turn on heater
-                self.printer_client.send_gcode(f"M140 S{self.target_bed_temp}")
-                self.plate_heater_on = True
-                self.logger.info(f"Plate heater turned ON ({self.target_bed_temp}°C)")
-            return True
+                result = self.printer_ops.set_bed_temperature(self.target_bed_temp)
+                if result:
+                    self.plate_heater_on = True
+                    self.logger.info(
+                        f"Plate heater turned ON ({self.target_bed_temp}°C)"
+                    )
+            return result
         except Exception as e:
             self.logger.error(f"Heater control failed: {e}")
             return False
 
     def handle_bounding_box(self):
         """Draw bounding box at fly height."""
-        if not self.printer_connected or not self.weld_paths:
+        if not self.printer_connected or not self.weld_paths or not self.printer_ops:
             return False
 
         try:
             min_x, min_y, max_x, max_y = self.get_bounds_info()
-            fly_height = getattr(
-                self, "move_height", 5.0
-            )  # Use config value or default
+            fly_height = getattr(self, "move_height", 5.0)
+            travel_speed = getattr(self, "travel_speed", 3000)
 
-            # Move to fly height
-            travel_speed = getattr(
-                self, "travel_speed", 3000
-            )  # Use config value or default
-            self.printer_client.send_gcode(f"G1 Z{fly_height} F{travel_speed}")
-
-            # Draw rectangle
-            commands = [
-                f"G1 X{min_x} Y{min_y} F{travel_speed}",  # Bottom left
-                f"G1 X{max_x} Y{min_y}",  # Bottom right
-                f"G1 X{max_x} Y{max_y}",  # Top right
-                f"G1 X{min_x} Y{max_y}",  # Top left
-                f"G1 X{min_x} Y{min_y}",  # Back to start
-            ]
-
-            for cmd in commands:
-                self.printer_client.send_gcode(cmd)
-
-            self.logger.info("Bounding box preview completed")
-            return True
+            result = self.printer_ops.draw_bounding_box(
+                min_x, min_y, max_x, max_y, fly_height, travel_speed
+            )
+            return result
         except Exception as e:
             self.logger.error(f"Bounding box preview failed: {e}")
             return False
 
     def handle_load_unload(self):
         """Drop plate 5cm for loading/unloading."""
-        if not self.printer_connected:
+        if not self.printer_connected or not self.printer_ops:
             return False
 
         try:
-            # Get current Z position
-            status = self.printer_client.get_status()
-            current_z = 0
-            if "printer" in status and "axes" in status["printer"]:
-                current_z = status["printer"]["axes"].get("z", {}).get("value", 0)
-
-            # Drop 5cm
-            new_z = current_z - 50
-            z_speed = getattr(self, "z_speed", 600)  # Use config value or default
-            self.printer_client.send_gcode(f"G1 Z{new_z} F{z_speed}")
-
-            self.logger.info(
-                f"Plate lowered by 50mm for loading (Z: {current_z} -> {new_z})"
-            )
-            return True
+            result = self.printer_ops.load_unload_plate(drop_distance=50.0)
+            return result
         except Exception as e:
             self.logger.error(f"Load/unload failed: {e}")
             return False
