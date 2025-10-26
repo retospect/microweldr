@@ -320,6 +320,47 @@ class MicroWeldrUI:
 
         return y + 1
 
+    def get_current_bed_temperature(self) -> float:
+        """Get current bed temperature from printer status."""
+        if not self.printer_connected or not self.printer_status:
+            return 0.0
+
+        try:
+            temp_info = self.printer_status.get("temperature", {})
+            bed_info = temp_info.get("bed", {})
+            return bed_info.get("actual", 0.0)
+        except:
+            return 0.0
+
+    def update_heater_state_from_printer(self):
+        """Update heater state based on printer status."""
+        if not self.printer_connected or not self.printer_status:
+            return
+
+        try:
+            temp_info = self.printer_status.get("temperature", {})
+            bed_info = temp_info.get("bed", {})
+            target_temp = bed_info.get("target", 0.0)
+
+            # Update heater state based on target temperature
+            self.plate_heater_on = target_temp > 0
+            if target_temp > 0:
+                self.target_bed_temp = int(target_temp)
+        except:
+            pass
+
+    def get_bed_temperature_display(self) -> str:
+        """Get formatted bed temperature display for menu."""
+        # Update heater state from printer first
+        self.update_heater_state_from_printer()
+
+        current_temp = self.get_current_bed_temperature()
+
+        if self.plate_heater_on:
+            return f"is {current_temp:.0f}°C set to {self.target_bed_temp}°C"
+        else:
+            return f"is {current_temp:.0f}°C heater off"
+
     def draw_menu(self, stdscr, y: int) -> int:
         """Draw the main menu options."""
         stdscr.addstr(y, 0, "🎛️  Controls:", curses.A_BOLD)
@@ -330,7 +371,7 @@ class MicroWeldrUI:
             (1, "Calibrate", "✅" if self.calibrated else "⏸️"),
             (
                 2,
-                f"Plate Heater ({'ON' if self.plate_heater_on else 'OFF'}) ({self.target_bed_temp}°C)",
+                f"Plate Heater ({self.get_bed_temperature_display()})",
                 "🔥" if self.plate_heater_on else "❄️",
             ),
             (3, "Bounding Box Preview", "📐"),
