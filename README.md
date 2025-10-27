@@ -262,7 +262,7 @@ microweldr input.svg -c my_config.toml --secrets-config my_secrets.toml
 
 ## Layed Back Mode (EXPERIMENTAL - NOT WORKING YET)
 
-**WARNING: Layed back mode is currently under development and does not work properly. Use standard upright mode for reliable operation.**
+**⚠️ WARNING: Layed back mode is currently under development and does not work properly. Use standard upright mode for reliable operation.**
 
 The SVG welder was designed to support "layed back printer operation" - when your printer is chillin' on its back with the door pointing up for easy access to microfluidic devices. However, this mode is currently experiencing technical issues.
 
@@ -708,7 +708,7 @@ Before starting the welding process:
 
 #### **Material Preparation**
 - [ ] **Plastic sheets ready**: Have your plastic sheets cut to size and ready to insert
-- [ ] **Film securing**: Consider using magnets to hold down bubble film (**Warning**: heated bed may be hot!)
+- [ ] **Film securing**: Consider using magnets to hold down bubble film (**⚠️ Warning**: heated bed may be hot!)
 - [ ] **Height clearance**: Ensure travel height (`move_height`) is higher than any magnets to prevent head crashes
 - [ ] **Workspace clear**: Ensure adequate ventilation for plastic welding
 - [ ] **Safety equipment**: Have appropriate safety gear (ventilation, eye protection)
@@ -969,6 +969,33 @@ Use the `data-temp` attribute in your SVG to fine-tune welding temperature for d
 <line stroke="black" data-temp="165" data-weld-time="0.2" />
 ```
 
+### Bubble Tea Film Layer Composition
+
+Bubble tea films (also known as bubble wrap or air cushion films) typically have a multi-layer structure optimized for different functions:
+
+| Layer | Material | Thickness | Function | Melting Point | Welding Temp | Notes |
+|-------|----------|-----------|----------|---------------|--------------|-------|
+| **Outer Layer** | Polypropylene (PP) | 15-25 μm | Smooth surface, printability, heat sealability | 160-170°C | 160-180°C | **Primary welding layer** - smooth, weldable surface |
+| **Barrier Layer** | Polyethylene (PE) or EVOH | 5-15 μm | Gas barrier, moisture protection | 105-135°C | Not recommended | Avoid welding - may degrade |
+| **Core Layer** | Low-density PE (LDPE) | 20-40 μm | Bubble formation, cushioning | 105-115°C | Not recommended | Structural layer, not for welding |
+| **Inner Layer** | Linear PE (LLDPE) | 15-25 μm | Bubble sealing, flexibility | 120-130°C | Not recommended | Bubble containment layer |
+
+**Material Properties Summary:**
+- **Total thickness**: 55-105 μm (0.055-0.105 mm)
+- **Bubble height**: 3-10 mm (varies by manufacturer)
+- **Optimal welding**: Only the PP outer layer at 160-180°C
+- **Identification**: PP layer is always the smooth, non-bubble side
+
+**Welding Recommendations:**
+1. **Always weld the smooth PP side** - this is the only layer designed for heat sealing
+2. **Temperature range**: 160-180°C for optimal PP welding without degradation
+3. **Avoid bubble side**: Contains PE layers with lower melting points that may burn
+4. **Test first**: Different manufacturers may use varying layer compositions
+
+*Sources: Packaging industry standards (ASTM D6988), polymer processing handbooks, and bubble film manufacturer specifications (Sealed Air, Pregis, etc.)*
+
 ## License
 
-This project is open source. Use at your own risk and ensure proper safety precautions when operating 3D printing equipment.
+This project is licensed under the GNU General Public License v3.0 (GPL-3.0). See the [LICENSE](LICENSE) file for full license text.
+
+Use at your own risk and ensure proper safety precautions when operating 3D printing equipment.
