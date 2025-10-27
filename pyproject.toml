@@ -106,6 +106,7 @@ minversion = "6.0"
 markers = [
     "integration: marks tests as integration tests (requires printer connection)",
     "slow: marks tests as slow running",
+    "hardware: marks tests as requiring physical hardware (printer connection)",
 ]
 testpaths = ["tests"]
 addopts = "-ra -q --strict-markers --cov=microweldr --cov-report=term-missing"

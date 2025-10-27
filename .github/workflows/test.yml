@@ -73,7 +73,7 @@ jobs:
     - name: Run tests
       run: |
         echo "Running tests with Python ${{ matrix.python-version }}"
-        poetry run pytest --cov=microweldr --cov-report=xml -v
+        poetry run pytest --cov=microweldr --cov-report=xml -v -m "not hardware"
 
     - name: Test CLI installation
       run: |

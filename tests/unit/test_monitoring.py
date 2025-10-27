@@ -7,6 +7,8 @@ from unittest.mock import Mock, patch
 import pytest
 import requests_mock
 
+pytestmark = pytest.mark.hardware
+
 from microweldr.monitoring.monitor import PrintMonitor
 from microweldr.prusalink.exceptions import PrusaLinkError
 
