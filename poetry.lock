@@ -12,9 +12,6 @@ files = [
     {file = "annotated_types-0.7.0.tar.gz", hash = "sha256:aff07c09a53a08bc8cfccb9c85b05f1aa9a2a6f23728d790723543408344ce89"},
 ]
 
-[package.dependencies]
-typing-extensions = {version = ">=4.0.0", markers = "python_version < \"3.9\""}
-
 [[package]]
 name = "anyio"
 version = "4.5.2"
@@ -1724,5 +1721,5 @@ docs = ["Sphinx", "elementpath (>=4.1.5,<5.0.0)", "jinja2", "sphinx-rtd-theme"]
 
 [metadata]
 lock-version = "2.1"
-python-versions = "^3.8.1"
-content-hash = "57f881c4d587d7c8a9f7d459aff21b13167e58d14239daef2a70d72b10faaf70"
+python-versions = "^3.9"
+content-hash = "bcc8e3d50dc862659e1b9939db7de457b6a48fbce99bbe8ca5ef3eebb77dce77"
