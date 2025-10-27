@@ -457,7 +457,7 @@ description = "Backport of PEP 654 (exception groups)"
 optional = false
 python-versions = ">=3.7"
 groups = ["main", "dev"]
-markers = "python_version < \"3.11\""
+markers = "python_version == \"3.10\""
 files = [
     {file = "exceptiongroup-1.3.0-py3-none-any.whl", hash = "sha256:4d111e6e0c13d0644cad6ddaa7ed0261a0b36971f6d23e7ec9b4b9097da78a10"},
     {file = "exceptiongroup-1.3.0.tar.gz", hash = "sha256:b241f5885f560bc56a59ee63ca4c6a8bfa46ae4ad651af316d4e81817bb9fd88"},
@@ -1721,5 +1721,5 @@ docs = ["Sphinx", "elementpath (>=4.1.5,<5.0.0)", "jinja2", "sphinx-rtd-theme"]
 
 [metadata]
 lock-version = "2.1"
-python-versions = "^3.9"
-content-hash = "bcc8e3d50dc862659e1b9939db7de457b6a48fbce99bbe8ca5ef3eebb77dce77"
+python-versions = "^3.10"
+content-hash = "6089d6df64cdd14a7b12c4efac59c4ddb3da07080c02bacbb156cb7b4833fa88"
