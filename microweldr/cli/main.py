@@ -139,7 +139,7 @@ def create_parser() -> argparse.ArgumentParser:
         "--verbose", "-v", action="store_true", help="Verbose output"
     )
 
-    # Also support SVG file as first argument (default to weld)
+    # Support SVG file as first argument (default to weld) - handled in main()
     parser.add_argument(
         "svg_file", nargs="?", help="Input SVG file (defaults to weld command)"
     )
@@ -535,21 +535,21 @@ def cmd_frame(args):
             for warning in svg_result.warnings:
                 print(f"  • {warning}")
 
-        # Create converter
+        # Create converter and parse SVG
         converter = SVGToGCodeConverter(config)
+        converter.parse_svg(svg_path)
 
         # Get SVG bounds for frame
-        from microweldr.core.svg_parser import SVGParser
+        bounds = converter.get_bounds()
 
-        parser = SVGParser()
-        svg_data = parser.parse_file(svg_path)
-        bounds = svg_data.get_bounds()
-
-        if not bounds:
+        if not bounds or bounds == (0.0, 0.0, 0.0, 0.0):
             print("❌ Could not determine SVG bounds for frame")
             return False
 
-        print(f"✓ SVG bounds: {bounds.width:.1f}x{bounds.height:.1f}mm")
+        min_x, min_y, max_x, max_y = bounds
+        width = max_x - min_x
+        height = max_y - min_y
+        print(f"✓ SVG bounds: {width:.1f}x{height:.1f}mm")
 
         # Generate frame G-code
         print("🔧 Generating frame G-code...")
@@ -558,12 +558,12 @@ def cmd_frame(args):
         margin = 5.0  # 5mm margin around design
         frame_commands = [
             "G90  ; Absolute positioning",
-            f"G1 X{bounds.min_x - margin} Y{bounds.min_y - margin} F3000  ; Move to start",
+            f"G1 X{min_x - margin} Y{min_y - margin} F3000  ; Move to start",
             "G1 Z0.2 F1000  ; Lower to drawing height",
-            f"G1 X{bounds.max_x + margin} Y{bounds.min_y - margin} F1000  ; Bottom edge",
-            f"G1 X{bounds.max_x + margin} Y{bounds.max_y + margin} F1000  ; Right edge",
-            f"G1 X{bounds.min_x - margin} Y{bounds.max_y + margin} F1000  ; Top edge",
-            f"G1 X{bounds.min_x - margin} Y{bounds.min_y - margin} F1000  ; Left edge",
+            f"G1 X{max_x + margin} Y{min_y - margin} F1000  ; Bottom edge",
+            f"G1 X{max_x + margin} Y{max_y + margin} F1000  ; Right edge",
+            f"G1 X{min_x - margin} Y{max_y + margin} F1000  ; Top edge",
+            f"G1 X{min_x - margin} Y{min_y - margin} F1000  ; Left edge",
             "G1 Z10 F1000  ; Lift up",
             "M117 Frame complete",
         ]
@@ -755,7 +755,25 @@ def cmd_weld(args):
 def main():
     """Main entry point."""
     parser = create_parser()
-    args = parser.parse_args()
+
+    # Handle the argument parsing conflict between global and subcommand svg_file
+    import sys
+
+    if len(sys.argv) > 1 and sys.argv[1] in ["frame", "weld"] and len(sys.argv) > 2:
+        # For subcommands that take svg_file, parse differently
+        args = parser.parse_args()
+        # The svg_file should be in the remaining arguments after the command
+        if (
+            args.command in ["frame", "weld"]
+            and not hasattr(args, "svg_file")
+            or args.svg_file is None
+        ):
+            # Try to get the svg_file from the command line manually
+            cmd_index = sys.argv.index(args.command)
+            if cmd_index + 1 < len(sys.argv):
+                args.svg_file = sys.argv[cmd_index + 1]
+    else:
+        args = parser.parse_args()
 
     # Handle default behavior (SVG file without command = weld)
     if args.svg_file and not args.command:
