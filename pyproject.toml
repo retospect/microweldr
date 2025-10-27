@@ -59,11 +59,6 @@ bump-my-version = "^1.2.0"
 
 [tool.poetry.scripts]
 microweldr = "microweldr.cli.main:main"
-microweldr-workflow = "microweldr.cli.workflow:main"
-microweldr-test = "microweldr.cli.prusalink_test:main"
-microweldr-ui = "microweldr.cli.ui_main:main"
-microweldr-control = "microweldr.cli.printer_control:main"
-microweldr-calibrate = "microweldr.cli.printer_control:calibrate_main"
 
 [build-system]
 requires = ["poetry-core"]

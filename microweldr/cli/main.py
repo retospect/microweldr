@@ -1,4 +1,4 @@
-"""Command line interface for MicroWeldr."""
+"""Consolidated command line interface for MicroWeldr."""
 
 import argparse
 import sys
@@ -8,6 +8,7 @@ from pathlib import Path
 from microweldr.animation.generator import AnimationGenerator
 from microweldr.core.config import Config, ConfigError
 from microweldr.core.converter import SVGToGCodeConverter
+from microweldr.core.printer_operations import PrinterOperations
 from microweldr.core.svg_parser import SVGParseError
 from microweldr.monitoring import MonitorMode, PrintMonitor
 from microweldr.prusalink.client import PrusaLinkClient
@@ -22,330 +23,521 @@ from microweldr.validation.validators import (
 def create_parser() -> argparse.ArgumentParser:
     """Create command line argument parser."""
     parser = argparse.ArgumentParser(
-        description="MicroWeldr: Convert SVG files to Prusa Core One G-code for plastic welding",
+        description="MicroWeldr: SVG to G-code conversion and printer control for plastic welding",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog="""
-Examples:
-  %(prog)s input.svg -o output.gcode
-  %(prog)s input.svg --skip-bed-leveling
-  %(prog)s input.svg --weld-sequence skip
-  %(prog)s input.svg -c custom_config.toml
-  %(prog)s input.svg --submit-to-printer
-  %(prog)s input.svg --submit-to-printer --auto-start-print
-  %(prog)s input.svg --submit-to-printer --queue-only
-        """,
     )
 
-    parser.add_argument("input_svg", help="Input SVG file path")
-    parser.add_argument(
-        "-o", "--output", help="Output G-code file path (default: input_name.gcode)"
+    subparsers = parser.add_subparsers(dest="command", help="Available commands")
+
+    # Test command
+    test_parser = subparsers.add_parser(
+        "test", help="Test PrusaLink connection and printer status"
     )
-    parser.add_argument(
-        "-c",
-        "--config",
-        default="config.toml",
-        help="Configuration file path (default: config.toml)",
+
+    # Home command
+    home_parser = subparsers.add_parser("home", help="Home printer axes")
+    home_parser.add_argument(
+        "axes", nargs="?", default="XYZ", help="Axes to home (default: XYZ)"
     )
-    parser.add_argument(
-        "--skip-bed-leveling", action="store_true", help="Skip automatic bed leveling"
+    home_parser.add_argument(
+        "--verbose", "-v", action="store_true", help="Verbose output"
     )
-    parser.add_argument(
-        "--no-animation", action="store_true", help="Skip generating animation SVG"
+
+    # Bed level command
+    bed_level_parser = subparsers.add_parser("bed-level", help="Run bed leveling only")
+    bed_level_parser.add_argument(
+        "--verbose", "-v", action="store_true", help="Verbose output"
     )
-    parser.add_argument(
-        "--no-validation", action="store_true", help="Skip validation steps"
+    bed_level_parser.add_argument(
+        "--print-gcode", action="store_true", help="Print G-code"
     )
-    parser.add_argument(
-        "--verbose", "-v", action="store_true", help="Enable verbose output"
+    bed_level_parser.add_argument(
+        "--keep-file", action="store_true", help="Keep temp files"
     )
-    parser.add_argument(
-        "--weld-sequence",
-        choices=["linear", "binary", "farthest", "skip"],
-        default="skip",
-        help="Welding sequence algorithm: linear (1,2,3...), binary (binary subdivision), farthest (greedy farthest-point traversal), skip (every Nth dot first, then fill gaps, default)",
+
+    # Calibrate command (home + bed level)
+    calibrate_parser = subparsers.add_parser(
+        "calibrate", help="Full calibration (home + bed leveling)"
     )
-    parser.add_argument(
-        "--submit-to-printer",
-        action="store_true",
-        help="Submit G-code to PrusaLink after generation",
+    calibrate_parser.add_argument(
+        "--verbose", "-v", action="store_true", help="Verbose output"
     )
-    parser.add_argument(
-        "--secrets-config",
-        default="secrets.toml",
-        help="Path to secrets configuration file (default: secrets.toml)",
+    calibrate_parser.add_argument(
+        "--home-only", action="store_true", help="Home axes only"
     )
-    parser.add_argument(
-        "--printer-storage",
-        choices=["local", "usb"],
-        help="Target storage on printer (overrides config default)",
+    calibrate_parser.add_argument(
+        "--print-gcode", action="store_true", help="Print G-code"
     )
-    parser.add_argument(
-        "--auto-start-print",
-        action="store_true",
-        help="Automatically start printing after upload (overrides config default)",
+    calibrate_parser.add_argument(
+        "--keep-file", action="store_true", help="Keep temp files"
     )
-    parser.add_argument(
-        "--no-auto-start",
-        action="store_true",
-        help="Do not start printing after upload (overrides config default)",
+
+    # Frame command (requires SVG)
+    frame_parser = subparsers.add_parser(
+        "frame", help="Draw frame around SVG design (no welding)"
     )
-    parser.add_argument(
-        "--queue-only",
-        action="store_true",
-        help="Queue the file without starting (same as --no-auto-start, but clearer intent)",
+    frame_parser.add_argument("svg_file", help="Input SVG file")
+    frame_parser.add_argument(
+        "-c", "--config", default="config.toml", help="Config file"
     )
-    parser.add_argument(
-        "--timestamp",
-        action="store_true",
-        help="Add timestamp (yy-mm-dd-hh-mm-ss) to output filename for uniqueness",
+    frame_parser.add_argument(
+        "--verbose", "-v", action="store_true", help="Verbose output"
     )
-    parser.add_argument(
-        "--monitor",
-        action="store_true",
-        help="Monitor print progress after submission until completion",
+    frame_parser.add_argument("--submit", action="store_true", help="Submit to printer")
+
+    # Weld command (default - requires SVG)
+    weld_parser = subparsers.add_parser(
+        "weld", help="Convert SVG to G-code and weld (default command)"
     )
-    parser.add_argument(
-        "--monitor-mode",
-        choices=["standard", "layed-back", "pipetting"],
-        default="standard",
-        help="Monitoring mode when --monitor is used (default: standard)",
+    weld_parser.add_argument("svg_file", help="Input SVG file")
+    weld_parser.add_argument("-o", "--output", help="Output G-code file")
+    weld_parser.add_argument(
+        "-c", "--config", default="config.toml", help="Config file"
     )
-    parser.add_argument(
-        "--monitor-interval",
-        type=int,
-        default=30,
-        help="Monitoring check interval in seconds (default: 30)",
+    weld_parser.add_argument(
+        "--skip-bed-leveling", action="store_true", help="Skip bed leveling"
     )
-    parser.add_argument(
-        "--no-center",
-        action="store_true",
-        help="Disable automatic centering on bed (use SVG coordinates as-is)",
+    weld_parser.add_argument(
+        "--no-calibrate", action="store_true", help="Skip calibration"
     )
+    weld_parser.add_argument("--submit", action="store_true", help="Submit to printer")
+    weld_parser.add_argument(
+        "--auto-start", action="store_true", help="Auto-start print"
+    )
+    weld_parser.add_argument("--queue-only", action="store_true", help="Queue only")
+    weld_parser.add_argument(
+        "--no-animation", action="store_true", help="Skip animation"
+    )
+    weld_parser.add_argument(
+        "--verbose", "-v", action="store_true", help="Verbose output"
+    )
+
+    # Also support SVG file as first argument (default to weld)
+    parser.add_argument(
+        "svg_file", nargs="?", help="Input SVG file (defaults to weld command)"
+    )
+    parser.add_argument("-o", "--output", help="Output G-code file")
+    parser.add_argument("-c", "--config", default="config.toml", help="Config file")
+    parser.add_argument(
+        "--skip-bed-leveling", action="store_true", help="Skip bed leveling"
+    )
+    parser.add_argument("--no-calibrate", action="store_true", help="Skip calibration")
+    parser.add_argument("--submit", action="store_true", help="Submit to printer")
+    parser.add_argument("--auto-start", action="store_true", help="Auto-start print")
+    parser.add_argument("--queue-only", action="store_true", help="Queue only")
+    parser.add_argument("--no-animation", action="store_true", help="Skip animation")
+    parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
 
     return parser
 
 
-def print_validation_result(result, verbose: bool = False) -> None:
-    """Print validation result."""
-    if result.is_valid:
-        print(f"✓ {result.message}")
-    else:
-        print(f"✗ {result.message}")
-
-    if verbose and result.warnings:
-        for warning in result.warnings:
-            print(f"  Warning: {warning}")
-
-
-def main() -> None:
-    """Main entry point."""
-    parser = create_parser()
-    args = parser.parse_args()
-
-    # Validate input file
-    input_path = Path(args.input_svg)
-    if not input_path.exists():
-        print(f"Error: Input SVG file '{args.input_svg}' not found.")
-        sys.exit(1)
-
-    # Determine output paths
-    if args.output:
-        output_gcode = Path(args.output)
-    else:
-        base_name = input_path.stem
-        if args.timestamp:
-            timestamp = datetime.now().strftime("%y-%m-%d-%H-%M-%S")
-            base_name = f"{base_name}_{timestamp}"
-        output_gcode = input_path.with_name(base_name + ".gcode")
-
-    # Animation path (always use timestamped name if timestamp option is used)
-    animation_base = input_path.stem
-    if args.timestamp:
-        timestamp = datetime.now().strftime("%y-%m-%d-%H-%M-%S")
-        animation_base = f"{animation_base}_{timestamp}"
-    output_animation = input_path.with_name(animation_base + "_animation.svg")
+def cmd_test(args):
+    """Test PrusaLink connection."""
+    print("Testing PrusaLink integration...")
+    print("=" * 50)
 
     try:
-        # Initialize configuration
-        if args.verbose:
-            print(f"Loading configuration from: {args.config}")
+        print("1. Loading configuration...")
+        client = PrusaLinkClient()
+        print("   ✓ Configuration loaded")
 
-        config = Config(args.config)
+        print("2. Testing connection...")
+        if client.test_connection():
+            print("   ✓ Connection successful")
+        else:
+            print("   ✗ Connection failed")
+            return False
 
-        # Initialize converter with centering option
-        center_on_bed = (
-            not args.no_center
-        )  # Default to centering unless --no-center is used
-        converter = SVGToGCodeConverter(config, center_on_bed=center_on_bed)
+        print("3. Getting printer information...")
+        try:
+            status = client.get_printer_status()
+            printer_info = status.get("printer", {})
+            print(f"   ✓ Printer: {printer_info.get('state', 'Unknown')}")
+        except Exception as e:
+            print(f"   ⚠ Could not get printer info: {e}")
 
-        print(f"Processing SVG file: {args.input_svg}")
+        print("4. Getting storage information...")
+        try:
+            storage = client.get_storage_info()
+            if storage:
+                print(f"   ✓ Available storage: {storage.get('name', 'Unknown')}")
+            else:
+                print("   ⚠ No storage information available")
+        except Exception as e:
+            print(f"   ⚠ Could not get storage info: {e}")
 
-        # Validate input SVG
-        if not args.no_validation:
-            if args.verbose:
-                print("Validating input SVG...")
-            result = SVGValidator.validate(args.input_svg)
-            print_validation_result(result, args.verbose)
-            if not result.is_valid:
-                print("Warning: SVG validation failed, but continuing processing...")
+        print("5. Getting job status...")
+        try:
+            job = client.get_job_status()
+            if job:
+                file_name = job.get("file", {}).get("name", "Unknown")
+                state = job.get("state", "Unknown")
+                print(f"   ✓ Current job: {file_name}")
+                print(f"   ✓ Status: {state}")
+            else:
+                print("   ✓ No job currently running")
+        except Exception as e:
+            print(f"   ⚠ Could not get job status: {e}")
+
+        print("\n✓ All tests completed successfully!")
+        print("\nYour PrusaLink integration is ready!")
+        return True
+
+    except PrusaLinkError as e:
+        print(f"   ✗ PrusaLink error: {e}")
+        return False
+    except Exception as e:
+        print(f"   ✗ Unexpected error: {e}")
+        return False
+
+
+def cmd_home(args):
+    """Home printer axes."""
+    print(f"🏠 Homing {args.axes} axes...")
+    print("=" * 40)
+
+    try:
+        client = PrusaLinkClient()
+        printer_ops = PrinterOperations(client)
+
+        print("1. Connecting to printer...")
+        if not client.test_connection():
+            print("   ✗ Connection failed")
+            return False
+        print("   ✓ Connected to printer")
+
+        print("2. Checking printer status...")
+        status = client.get_printer_status()
+        printer_info = status.get("printer", {})
+        state = printer_info.get("state", "Unknown")
+        print(f"   ✓ Printer state: {state}")
+
+        if state.upper() == "PRINTING":
+            print("   ⚠ Printer is currently printing - cannot home")
+            return False
+
+        print(f"3. Homing {args.axes} axes...")
+        success = printer_ops.home_axes(axes=args.axes)
+
+        if success:
+            print("   ✓ Homing completed successfully")
+            return True
+        else:
+            print("   ✗ Homing failed")
+            return False
+
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        return False
+
+
+def cmd_bed_level(args):
+    """Run bed leveling only."""
+    print("🛏️ Bed Leveling")
+    print("=" * 40)
+
+    try:
+        client = PrusaLinkClient()
+        printer_ops = PrinterOperations(client)
+
+        print("1. Connecting to printer...")
+        if not client.test_connection():
+            print("   ✗ Connection failed")
+            return False
+        print("   ✓ Connected to printer")
+
+        print("2. Checking printer status...")
+        status = client.get_printer_status()
+        printer_info = status.get("printer", {})
+        state = printer_info.get("state", "Unknown")
+        print(f"   ✓ Printer state: {state}")
+
+        if state.upper() == "PRINTING":
+            print("   ⚠ Printer is currently printing - cannot level bed")
+            return False
+
+        print("3. Running bed leveling...")
+        print("   • This may take up to 3 minutes...")
+
+        kwargs = {
+            "print_to_stdout": getattr(args, "print_gcode", False),
+            "keep_temp_file": getattr(args, "keep_file", False),
+        }
+
+        success = client.send_and_run_gcode(
+            commands=["G29  ; Bed leveling", "M117 Bed leveling complete"],
+            job_name="bed_leveling",
+            **kwargs,
+        )
+
+        if success:
+            print("   ✓ Bed leveling completed successfully")
+            return True
+        else:
+            print("   ✗ Bed leveling failed")
+            return False
+
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        return False
+
+
+def cmd_calibrate(args):
+    """Full calibration (home + bed leveling)."""
+    print("🎯 Printer Calibration")
+    print("=" * 40)
+
+    try:
+        client = PrusaLinkClient()
+        printer_ops = PrinterOperations(client)
+
+        print("1. Connecting to printer...")
+        if not client.test_connection():
+            print("   ✗ Connection failed")
+            return False
+        print("   ✓ Connected to printer")
+
+        print("2. Checking printer status...")
+        status = client.get_printer_status()
+        printer_info = status.get("printer", {})
+        state = printer_info.get("state", "Unknown")
+        print(f"   ✓ Printer state: {state}")
+
+        if state.upper() == "PRINTING":
+            print("   ⚠ Printer is currently printing - cannot calibrate")
+            return False
+
+        kwargs = {
+            "print_to_stdout": getattr(args, "print_gcode", False),
+            "keep_temp_file": getattr(args, "keep_file", False),
+        }
+
+        if args.home_only:
+            print("3. Homing all axes...")
+            success = printer_ops.home_axes(**kwargs)
+            if success:
+                print("   ✓ Homing completed successfully")
+            else:
+                print("   ✗ Homing failed")
+                return False
+        else:
+            print("3. Starting full calibration (home + bed leveling)...")
+            print("   • This may take up to 5 minutes...")
+            success = printer_ops.calibrate_printer(**kwargs)
+            if success:
+                print("   ✓ Full calibration completed successfully")
+            else:
+                print("   ✗ Calibration failed")
+                return False
+
+        print("4. Verifying calibration...")
+        final_status = client.get_printer_status()
+        final_printer = final_status.get("printer", {})
+        final_state = final_printer.get("state", "Unknown")
+        x_pos = final_printer.get("axis_x", 0)
+        y_pos = final_printer.get("axis_y", 0)
+        z_pos = final_printer.get("axis_z", 0)
+
+        print(f"   ✓ Final position: X{x_pos} Y{y_pos} Z{z_pos}")
+        print(f"   ✓ Printer ready: {final_state}")
+
+        print("\n🎉 Calibration completed successfully!")
+        print("Your printer is now calibrated and ready for welding operations.")
+        return True
+
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        return False
+
+
+def cmd_frame(args):
+    """Draw frame around SVG design."""
+    print("🖼️ Drawing Frame")
+    print("=" * 40)
+
+    try:
+        # Load configuration
+        config = Config.from_file(args.config)
+        print(f"✓ Configuration loaded from {args.config}")
 
         # Parse SVG
-        try:
-            weld_paths = converter.parse_svg(args.input_svg)
-            print(f"Found {len(weld_paths)} weld paths")
+        svg_path = Path(args.svg_file)
+        if not svg_path.exists():
+            print(f"❌ SVG file not found: {args.svg_file}")
+            return False
 
+        print(f"✓ SVG file found: {args.svg_file}")
+
+        # Create converter
+        converter = SVGToGCodeConverter(config)
+
+        # Get SVG bounds for frame
+        from microweldr.core.svg_parser import SVGParser
+
+        parser = SVGParser()
+        svg_data = parser.parse_file(svg_path)
+        bounds = svg_data.get_bounds()
+
+        if not bounds:
+            print("❌ Could not determine SVG bounds for frame")
+            return False
+
+        print(f"✓ SVG bounds: {bounds.width:.1f}x{bounds.height:.1f}mm")
+
+        # Generate frame G-code
+        print("🔧 Generating frame G-code...")
+
+        # Create a simple frame path
+        margin = 5.0  # 5mm margin around design
+        frame_commands = [
+            "G90  ; Absolute positioning",
+            f"G1 X{bounds.min_x - margin} Y{bounds.min_y - margin} F3000  ; Move to start",
+            "G1 Z0.2 F1000  ; Lower to drawing height",
+            f"G1 X{bounds.max_x + margin} Y{bounds.min_y - margin} F1000  ; Bottom edge",
+            f"G1 X{bounds.max_x + margin} Y{bounds.max_y + margin} F1000  ; Right edge",
+            f"G1 X{bounds.min_x - margin} Y{bounds.max_y + margin} F1000  ; Top edge",
+            f"G1 X{bounds.min_x - margin} Y{bounds.min_y - margin} F1000  ; Left edge",
+            "G1 Z10 F1000  ; Lift up",
+            "M117 Frame complete",
+        ]
+
+        if args.submit:
+            print("📤 Submitting frame to printer...")
+            client = PrusaLinkClient()
+            success = client.send_and_run_gcode(
+                commands=frame_commands,
+                job_name=f"frame_{svg_path.stem}",
+                wait_for_completion=False,
+            )
+            if success:
+                print("✅ Frame job submitted successfully!")
+            else:
+                print("❌ Failed to submit frame job")
+                return False
+        else:
+            print("📄 Frame G-code generated (use --submit to send to printer)")
             if args.verbose:
-                bounds = converter.get_bounds()
-                print(
-                    f"Bounds: ({bounds[0]:.1f}, {bounds[1]:.1f}) to ({bounds[2]:.1f}, {bounds[3]:.1f})"
-                )
+                print("\nGenerated G-code:")
+                for cmd in frame_commands:
+                    print(f"  {cmd}")
 
-        except SVGParseError as e:
-            print(f"Error parsing SVG: {e}")
-            sys.exit(1)
+        return True
 
-        # Generate G-code
-        print(f"Generating G-code: {output_gcode}")
-        try:
-            converter.generate_gcode(output_gcode, args.skip_bed_leveling)
-        except Exception as e:
-            print(f"Error generating G-code: {e}")
-            sys.exit(1)
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        return False
 
-        # Validate generated G-code
-        if not args.no_validation:
-            if args.verbose:
-                print("Validating generated G-code...")
-            result = GCodeValidator.validate(output_gcode)
-            print_validation_result(result, args.verbose)
 
-        # Generate animation
+def cmd_weld(args):
+    """Convert SVG to G-code and weld (main functionality)."""
+    print("🔥 MicroWeldr - SVG to G-code Conversion")
+    print("=" * 50)
+
+    try:
+        # Load configuration
+        config = Config.from_file(args.config)
+        if args.verbose:
+            print(f"✓ Configuration loaded from {args.config}")
+
+        # Validate SVG file
+        svg_path = Path(args.svg_file)
+        if not svg_path.exists():
+            print(f"❌ SVG file not found: {args.svg_file}")
+            return False
+
+        if args.verbose:
+            print(f"✓ SVG file found: {args.svg_file}")
+
+        # Validate SVG content
+        svg_validator = SVGValidator()
+        svg_issues = svg_validator.validate_file(svg_path)
+        if svg_issues:
+            print("⚠️ SVG validation warnings:")
+            for issue in svg_issues:
+                print(f"  • {issue}")
+
+        # Set up output paths
+        if args.output:
+            output_gcode = Path(args.output)
+        else:
+            output_gcode = svg_path.with_suffix(".gcode")
+
+        output_animation = output_gcode.with_suffix(".html")
+
+        print(f"📄 Output G-code: {output_gcode}")
         if not args.no_animation:
-            print(f"Generating animation: {output_animation}")
-            try:
-                animation_generator = AnimationGenerator(config)
-                animation_generator.generate_file(
-                    weld_paths, output_animation, args.weld_sequence
-                )
+            print(f"🎬 Output animation: {output_animation}")
 
-                # Validate generated animation
-                if not args.no_validation:
-                    if args.verbose:
-                        print("Validating animation SVG...")
-                    result = AnimationValidator.validate(output_animation)
-                    print_validation_result(result, args.verbose)
+        # Create converter and generate G-code
+        print("🔧 Converting SVG to G-code...")
+        converter = SVGToGCodeConverter(config)
 
-            except Exception as e:
-                print(f"Error generating animation: {e}")
-                # Don't exit on animation errors, just warn
+        # Handle calibration options
+        skip_bed_leveling = args.skip_bed_leveling or args.no_calibrate
+
+        gcode_content = converter.convert_file(
+            svg_path, skip_bed_leveling=skip_bed_leveling
+        )
+
+        # Validate G-code
+        gcode_validator = GCodeValidator()
+        gcode_issues = gcode_validator.validate_content(gcode_content)
+        if gcode_issues:
+            print("⚠️ G-code validation warnings:")
+            for issue in gcode_issues:
+                print(f"  • {issue}")
+
+        # Write G-code file
+        with open(output_gcode, "w") as f:
+            f.write(gcode_content)
+        print(f"✅ G-code written to {output_gcode}")
+
+        # Generate animation if requested
+        if not args.no_animation:
+            print("🎬 Generating animation...")
+            animation_generator = AnimationGenerator(config)
+            animation_content = animation_generator.generate_from_gcode(
+                gcode_content, svg_path.name
+            )
+
+            # Validate animation
+            animation_validator = AnimationValidator()
+            animation_issues = animation_validator.validate_content(animation_content)
+            if animation_issues:
+                print("⚠️ Animation validation warnings:")
+                for issue in animation_issues:
+                    print(f"  • {issue}")
+
+            with open(output_animation, "w") as f:
+                f.write(animation_content)
+            print(f"✅ Animation written to {output_animation}")
 
         # Submit to printer if requested
-        if args.submit_to_printer:
+        if args.submit:
+            print("📤 Submitting to printer...")
             try:
-                print("\nSubmitting G-code to printer...")
-                client = PrusaLinkClient(args.secrets_config)
+                client = PrusaLinkClient()
 
-                # Test connection first
-                if not client.test_connection():
-                    print(
-                        "Warning: Could not connect to printer. Check your configuration."
-                    )
+                # Upload and optionally start print
+                upload_success = client.upload_gcode_file(
+                    output_gcode, auto_start=args.auto_start, queue_only=args.queue_only
+                )
+
+                if upload_success:
+                    if args.auto_start:
+                        print("✅ G-code uploaded and print started!")
+
+                        # Monitor print if requested
+                        if not args.queue_only:
+                            print("📊 Starting print monitor...")
+                            monitor = PrintMonitor(client, MonitorMode.BASIC)
+                            monitor.start_monitoring()
+                    elif args.queue_only:
+                        print("✅ G-code queued successfully!")
+                    else:
+                        print("✅ G-code uploaded successfully!")
                 else:
-                    if args.verbose:
-                        printer_info = client.get_printer_info()
-                        print(
-                            f"Connected to: {printer_info.get('name', 'Unknown printer')}"
-                        )
-
-                    # Determine auto-start behavior
-                    if args.no_auto_start or args.queue_only:
-                        will_auto_start = False
-                        auto_start_override = False
-                        queue_mode = args.queue_only
-                    elif args.auto_start_print:
-                        will_auto_start = True
-                        auto_start_override = True
-                        queue_mode = False
-                    else:
-                        will_auto_start = client.config.get("auto_start_print", False)
-                        auto_start_override = None
-                        queue_mode = False
-
-                    if queue_mode:
-                        print("📋 Queue mode: File will be uploaded but not started")
-                    elif will_auto_start:
-                        if client.is_printer_ready():
-                            print(
-                                "✓ Printer is ready - will start printing immediately"
-                            )
-                        else:
-                            print(
-                                "⚠ Warning: Printer may not be ready (check if it's busy or has errors)"
-                            )
-                            if not args.verbose:
-                                print("  Use --verbose to see printer status details")
-                    else:
-                        print("📁 File will be uploaded without auto-starting")
-
-                    # Upload G-code
-                    upload_result = client.upload_gcode(
-                        str(output_gcode),
-                        storage=args.printer_storage,
-                        auto_start=auto_start_override,
-                        overwrite=True,  # Always overwrite for immediate printing
-                    )
-
-                    print(
-                        f"✓ G-code uploaded successfully: {upload_result['filename']}"
-                    )
-                    if upload_result["auto_started"]:
-                        print("🚀 Print started immediately - welding in progress!")
-                        if not args.monitor:
-                            print("  Monitor your printer to ensure proper operation")
-                    elif queue_mode:
-                        print(
-                            "📋 File queued successfully - ready to print when you are"
-                        )
-                        print(
-                            "  Start the print from your printer's interface or web UI"
-                        )
-                    else:
-                        print(
-                            "📁 File uploaded - use your printer's interface to start the print"
-                        )
-
-                    # Start monitoring if requested and print was started
-                    if args.monitor and upload_result["auto_started"]:
-                        print("\n" + "=" * 60)
-                        print("🔍 Starting print monitoring...")
-
-                        mode_map = {
-                            "standard": MonitorMode.STANDARD,
-                            "layed-back": MonitorMode.LAYED_BACK,
-                            "pipetting": MonitorMode.PIPETTING,
-                        }
-
-                        monitor = PrintMonitor(
-                            mode=mode_map[args.monitor_mode],
-                            interval=args.monitor_interval,
-                            verbose=args.verbose,
-                        )
-
-                        try:
-                            success = monitor.monitor_until_complete()
-                            if success:
-                                print("\n✅ Print monitoring completed successfully!")
-                            else:
-                                print("\n❌ Print monitoring ended with issues")
-                        except KeyboardInterrupt:
-                            print("\n🛑 Monitoring stopped by user")
-                        except Exception as e:
-                            print(f"\n⚠️ Monitoring error: {e}")
-                    elif args.monitor and not upload_result["auto_started"]:
-                        print(
-                            "\n⚠️ Monitoring requested but print was not auto-started"
-                        )
-                        print("   Use --auto-start-print to enable monitoring")
+                    print("❌ Failed to upload G-code")
 
             except PrusaLinkError as e:
                 print(f"Printer submission failed: {e}")
@@ -354,7 +546,7 @@ def main() -> None:
                 print(f"Unexpected error during printer submission: {e}")
                 print("G-code file was still generated successfully.")
 
-        print("\nConversion complete!")
+        print("\n🎉 Conversion complete!")
 
         if args.verbose:
             print(f"Output files:")
@@ -362,18 +554,64 @@ def main() -> None:
             if not args.no_animation:
                 print(f"  Animation: {output_animation}")
 
+        return True
+
     except ConfigError as e:
         print(f"Configuration error: {e}")
-        sys.exit(1)
-    except KeyboardInterrupt:
-        print("\nOperation cancelled by user.")
-        sys.exit(1)
+        return False
+    except SVGParseError as e:
+        print(f"SVG parsing error: {e}")
+        return False
     except Exception as e:
         print(f"Unexpected error: {e}")
         if args.verbose:
             import traceback
 
             traceback.print_exc()
+        return False
+
+
+def main():
+    """Main entry point."""
+    parser = create_parser()
+    args = parser.parse_args()
+
+    # Handle default behavior (SVG file without command = weld)
+    if args.svg_file and not args.command:
+        args.command = "weld"
+
+    # Show help if no command provided
+    if not args.command:
+        parser.print_help()
+        print("\nQuick start:")
+        print("  microweldr your_design.svg           # Convert and generate G-code")
+        print("  microweldr weld your_design.svg      # Same as above")
+        print("  microweldr test                      # Test printer connection")
+        print("  microweldr calibrate                 # Calibrate printer")
+        print("  microweldr frame your_design.svg     # Draw frame only")
+        sys.exit(1)
+
+    # Dispatch to command handlers
+    command_handlers = {
+        "test": cmd_test,
+        "home": cmd_home,
+        "bed-level": cmd_bed_level,
+        "calibrate": cmd_calibrate,
+        "frame": cmd_frame,
+        "weld": cmd_weld,
+    }
+
+    handler = command_handlers.get(args.command)
+    if handler:
+        try:
+            success = handler(args)
+            sys.exit(0 if success else 1)
+        except KeyboardInterrupt:
+            print("\nOperation cancelled by user.")
+            sys.exit(1)
+    else:
+        print(f"Unknown command: {args.command}")
+        parser.print_help()
         sys.exit(1)
 
 

@@ -163,11 +163,34 @@ Add custom attributes to any element:
 
 ### Workflow Commands
 ```bash
-microweldr-test                          # Test PrusaLink connection and printer status
-microweldr-calibrate                     # Run full printer calibration (home + bed leveling)
-microweldr-control home XYZ              # Home printer axes before operations
-microweldr your_design.svg --submit      # Generate G-code and print (includes auto-calibration)
-microweldr your_design.svg --no-calibrate --submit  # Print without calibration (faster)
+microweldr test                          # Test PrusaLink connection and printer status
+microweldr home [XYZ]                    # Home printer axes (default: all axes)
+microweldr bed-level                     # Run bed leveling only
+microweldr calibrate                     # Full calibration (home + bed leveling)
+microweldr calibrate --home-only         # Home axes only (skip bed leveling)
+microweldr frame your_design.svg         # Draw frame around design (no welding)
+microweldr weld your_design.svg          # Convert SVG and weld (default command)
+microweldr your_design.svg               # Same as weld (shortcut)
+microweldr your_design.svg --submit      # Generate G-code and print
+microweldr your_design.svg --no-calibrate --submit  # Print without calibration
+```
+
+### Command Options
+```bash
+# All commands support:
+--verbose, -v                            # Show detailed output
+--help, -h                              # Show command help
+
+# Printer commands support:
+--print-gcode                           # Show generated G-code
+--keep-file                             # Keep temporary files on printer
+
+# Weld/frame commands support:
+--config, -c config.toml                # Use custom config file
+--output, -o output.gcode               # Specify output file
+--submit                                # Submit to printer
+--auto-start                            # Auto-start print after upload
+--no-animation                          # Skip HTML animation generation
 ```
 
 Happy welding! 🔥

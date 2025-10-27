@@ -4,7 +4,7 @@
 
 A Python package that converts SVG files to Prusa Core One G-code for plastic "spot" welding applications. The package processes SVG vector graphics and generates G-code that creates weld spots along the paths without extruding any plastic material.
 
-**🖥️ NEW: Interactive Terminal UI** - Use `microweldr-ui` for real-time printer control with live status monitoring, calibration, heater control, and interactive welding operations.
+**🖥️ NEW: Unified Command Interface** - All functionality consolidated into a single `microweldr` command with subcommands for testing, calibration, framing, and welding operations.
 
 **Optimized for Prusa Core One**: Includes chamber temperature control (M141/M191), proper bed dimensions (250×220×270mm), CoreXY-specific settings, and **layed back mode** *(currently not working)* - designed for when your printer is positioned on its back (door pointing up) so liquids can be pipetted into pouches and gravity holds them in place before heat sealing.
 
@@ -46,11 +46,11 @@ microweldr/
 For the best user experience, use the interactive terminal interface:
 
 ```bash
-# Launch UI with SVG file
-microweldr-ui my_design.svg
+# Quick start - convert and weld SVG
+microweldr my_design.svg
 
-# Or launch and load file later
-microweldr-ui
+# Or use explicit weld command
+microweldr weld my_design.svg
 ```
 
 **Features:**
@@ -70,22 +70,22 @@ For automation and scripting, use the command line tools:
 ### **1. One-time Setup**
 ```bash
 # Perform XYZ calibration and store results persistently
-microweldr-workflow calibrate
+microweldr calibrate
 ```
 
 ### **2. For Each Welding Job**
 ```bash
-# Step 1: Prepare for film loading
-microweldr-workflow load
+# Step 1: Prepare for film loading (home axes)
+microweldr home
 
 # Step 2: Load film and place magnets
 # [Manual step - load your plastic film and secure with magnets]
 
 # Step 3: Check magnet clearance
-microweldr-workflow frame design.svg
+microweldr frame design.svg
 
 # Step 4: Perform welding
-microweldr-workflow weld design.svg
+microweldr weld design.svg
 ```
 
 ### **Workflow Command Details**
@@ -100,19 +100,19 @@ All commands are **immediately executed** on the printer via PrusaLink.
 ### **Typical Session**
 ```bash
 # One-time calibration
-microweldr-workflow calibrate --verbose
+microweldr calibrate --verbose
 
 # First design
-microweldr-workflow load
+microweldr home
 # [Load film, place magnets]
-microweldr-workflow frame design1.svg
-microweldr-workflow weld design1.svg
+microweldr frame design1.svg
+microweldr weld design1.svg
 
 # Second design (no calibration needed)
-microweldr-workflow load
+microweldr home
 # [Load new film, adjust magnets]
-microweldr-workflow frame design2.svg
-microweldr-workflow weld design2.svg
+microweldr frame design2.svg
+microweldr weld design2.svg
 ```
 
 ## Installation
@@ -141,12 +141,12 @@ After installation, these console commands are available:
 ### **Workflow Commands (Recommended)**
 ```bash
 # One-time calibration
-microweldr-workflow calibrate
+microweldr calibrate
 
 # Per-job workflow
-microweldr-workflow load                  # Prepare for film loading
-microweldr-workflow frame design.svg      # Check magnet clearance
-microweldr-workflow weld design.svg       # Perform welding
+microweldr home                          # Prepare for film loading
+microweldr frame design.svg              # Check magnet clearance
+microweldr weld design.svg               # Perform welding
 ```
 
 ### **Main Commands**
@@ -161,13 +161,14 @@ microweldr input.svg --submit-to-printer --monitor --monitor-mode pipetting
 
 ### **Utility Commands**
 ```bash
-# Printer control tool
-microweldr-control status                 # Check printer status
-microweldr-control monitor                # Monitor current print
-microweldr-control stop                   # Stop current print
-
 # Test PrusaLink connection
-microweldr-test
+microweldr test
+
+# Printer calibration options
+microweldr calibrate                     # Full calibration (home + bed leveling)
+microweldr calibrate --home-only         # Home axes only
+microweldr bed-level                     # Bed leveling only
+microweldr home [XYZ]                    # Home specific axes
 ```
 
 ## Configuration
@@ -355,7 +356,7 @@ timeout = 30                   # Connection timeout in seconds
 
 ### 5. Test Connection
 ```bash
-microweldr-test
+microweldr test
 ```
 
 ### 6. Submit G-code to Printer
