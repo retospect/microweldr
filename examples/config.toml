@@ -21,6 +21,7 @@ cooldown_temperature = 50  # °C
 
 [movement]
 move_height = 5.0  # mm - height for safe movement
+frame_height = 10.0  # mm - height for frame drawing (clearance check)
 travel_speed = 3000  # mm/min - reduced for layed back operation
 z_speed = 600  # mm/min - optimized Z speed (near maximum safe limit for Core One)
 

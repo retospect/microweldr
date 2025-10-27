@@ -554,17 +554,24 @@ def cmd_frame(args):
         # Generate frame G-code
         print("🔧 Generating frame G-code...")
 
+        # Get frame height from config
+        frame_height = config.get("movement", "frame_height", 10.0)
+        travel_speed = config.get("movement", "travel_speed", 3000)
+        z_speed = config.get("movement", "z_speed", 600)
+
         # Create a simple frame path
         margin = 5.0  # 5mm margin around design
+        print(f"📏 Frame height: {frame_height}mm (clearance check)")
+
         frame_commands = [
             "G90  ; Absolute positioning",
-            f"G1 X{min_x - margin} Y{min_y - margin} F3000  ; Move to start",
-            "G1 Z0.2 F1000  ; Lower to drawing height",
-            f"G1 X{max_x + margin} Y{min_y - margin} F1000  ; Bottom edge",
-            f"G1 X{max_x + margin} Y{max_y + margin} F1000  ; Right edge",
-            f"G1 X{min_x - margin} Y{max_y + margin} F1000  ; Top edge",
-            f"G1 X{min_x - margin} Y{min_y - margin} F1000  ; Left edge",
-            "G1 Z10 F1000  ; Lift up",
+            f"G1 X{min_x - margin} Y{min_y - margin} F{travel_speed}  ; Move to start",
+            f"G1 Z{frame_height} F{z_speed}  ; Lower to frame height",
+            f"G1 X{max_x + margin} Y{min_y - margin} F{travel_speed}  ; Bottom edge",
+            f"G1 X{max_x + margin} Y{max_y + margin} F{travel_speed}  ; Right edge",
+            f"G1 X{min_x - margin} Y{max_y + margin} F{travel_speed}  ; Top edge",
+            f"G1 X{min_x - margin} Y{min_y - margin} F{travel_speed}  ; Left edge",
+            f"G1 Z{config.get('movement', 'move_height', 5.0)} F{z_speed}  ; Lift to safe height",
             "M117 Frame complete",
         ]
 

@@ -14,13 +14,14 @@ inner_diameter = 0.2  # mm - nozzle inner diameter (opening)
 
 [temperatures]
 bed_temperature = 60  # °C
-nozzle_temperature = 200  # °C for normal welds
+nozzle_temperature = 160  # °C for normal welds
 chamber_temperature = 35  # °C - Core One chamber temperature for plastic welding
 use_chamber_heating = false  # Set to false to disable chamber heating (useful if sensor is not working)
 cooldown_temperature = 50  # °C
 
 [movement]
 move_height = 5.0  # mm - height for safe movement
+frame_height = 10.0  # mm - height for frame drawing (clearance check)
 travel_speed = 3000  # mm/min - reduced for layed back operation
 z_speed = 600  # mm/min - optimized Z speed (near maximum safe limit for Core One)
 
