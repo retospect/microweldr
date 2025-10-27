@@ -67,7 +67,7 @@ jobs:
         poetry run isort --check-only .
 
     - name: Run flake8 (non-blocking)
-      run: poetry run flake8 microweldr/cli/ || true
+      run: poetry run flake8 microweldr/ || true
       continue-on-error: true
 
     - name: Run type checking (non-blocking)
