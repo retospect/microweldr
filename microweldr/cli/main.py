@@ -610,6 +610,71 @@ def cmd_frame(args):
         return False
 
 
+def validate_welding_temperature(config):
+    """Validate that nozzle temperature matches expected welding temperatures."""
+    try:
+        from microweldr.prusalink.client import PrusaLinkClient
+
+        client = PrusaLinkClient()
+        printer_info = client.get_printer_info()
+
+        # Get current nozzle temperature
+        # Note: This is a simplified check - actual implementation may need different API calls
+        print("   • Getting current nozzle temperature...")
+
+        # Get expected temperatures from config
+        normal_weld_temp = config.get("normal_welds", "weld_temperature", 130)
+        light_weld_temp = config.get("light_welds", "weld_temperature", 180)
+        temp_tolerance = config.get("temperatures", "temp_tolerance", 10)
+
+        # For now, we'll check against normal weld temperature
+        # In a full implementation, we'd analyze the SVG to see which weld types are used
+        expected_temp = normal_weld_temp
+
+        # Get actual temperature from printer status
+        try:
+            status = client.get_printer_status()
+            printer_data = status.get("printer", {})
+            current_temp = printer_data.get("temp_nozzle", 0)
+            target_temp = printer_data.get("target_nozzle", 0)
+
+            print(f"   • Current nozzle temperature: {current_temp}°C")
+            print(f"   • Target nozzle temperature: {target_temp}°C")
+            print(f"   • Expected welding temperature: {expected_temp}°C")
+            print(f"   • Tolerance: ±{temp_tolerance}°C")
+
+            # Check if current temperature matches expected welding temperature
+            temp_diff = abs(current_temp - expected_temp)
+
+            if temp_diff <= temp_tolerance:
+                print(
+                    f"   ✓ Temperature is within acceptable range ({temp_diff:.1f}°C difference)"
+                )
+                return True
+            else:
+                print(f"   ❌ Temperature difference too large: {temp_diff:.1f}°C")
+                if current_temp > expected_temp + temp_tolerance:
+                    print(
+                        f"   🔥 Nozzle is too hot! Current: {current_temp}°C, Expected: {expected_temp}°C"
+                    )
+                else:
+                    print(
+                        f"   🧊 Nozzle is too cold! Current: {current_temp}°C, Expected: {expected_temp}°C"
+                    )
+                print(f"   📋 Please set nozzle temperature to {expected_temp}°C")
+                print(f"   💡 Use: microweldr temp-nozzle {expected_temp}")
+                return False
+
+        except Exception as e:
+            print(f"   ⚠️ Could not read current temperature: {e}")
+            print("   📋 Please manually verify nozzle temperature is correct")
+            return True  # Don't block if we can't read temperature
+
+    except Exception as e:
+        print(f"   ❌ Temperature validation error: {e}")
+        return False
+
+
 def cmd_weld(args):
     """Convert SVG to G-code and weld (main functionality)."""
     print("🔥 MicroWeldr - SVG to G-code Conversion")
@@ -666,6 +731,13 @@ def cmd_weld(args):
             print("📋 Skipping calibration (--submit assumes printer is ready)")
         elif skip_bed_leveling:
             print("📋 Skipping calibration as requested")
+
+        # Temperature validation check before welding
+        if args.submit:
+            print("🌡️ Checking nozzle temperature matches welding requirements...")
+            if not validate_welding_temperature(config):
+                print("❌ Temperature validation failed - aborting weld operation")
+                return False
 
         # Convert SVG to G-code
         weld_paths = converter.convert(

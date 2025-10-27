@@ -19,6 +19,11 @@ chamber_temperature = 35  # °C - Core One chamber temperature for plastic weldi
 use_chamber_heating = false  # Set to false to disable chamber heating (useful if sensor is not working)
 cooldown_temperature = 50  # °C
 
+# Temperature safety ranges for welding
+min_safe_nozzle_temp = 100  # °C - minimum safe temperature for welding
+max_safe_nozzle_temp = 250  # °C - maximum safe temperature to prevent damage
+temp_tolerance = 10  # °C - allowed temperature deviation from target
+
 [movement]
 move_height = 5.0  # mm - height for safe movement
 frame_height = 10.0  # mm - height for frame drawing (clearance check)
