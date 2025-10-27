@@ -653,9 +653,14 @@ def cmd_weld(args):
         # Handle calibration options
         skip_bed_leveling = args.skip_bed_leveling or args.no_calibrate
 
-        gcode_content = converter.convert_file(
-            svg_path, skip_bed_leveling=skip_bed_leveling
+        # Convert SVG to G-code
+        weld_paths = converter.convert(
+            svg_path, output_gcode, skip_bed_leveling=skip_bed_leveling
         )
+
+        # Read the generated G-code content for validation
+        with open(output_gcode, "r") as f:
+            gcode_content = f.read()
 
         # Validate G-code
         gcode_validator = GCodeValidator()
@@ -679,11 +684,12 @@ def cmd_weld(args):
         if not args.no_animation:
             print("🎬 Generating animation...")
             animation_generator = AnimationGenerator(config)
-            animation_content = animation_generator.generate_from_gcode(
-                gcode_content, svg_path.name
-            )
+            animation_generator.generate_file(weld_paths, output_animation)
 
-            # Validate animation
+            # Validate animation by reading the generated file
+            with open(output_animation, "r") as f:
+                animation_content = f.read()
+
             animation_validator = AnimationValidator()
             animation_result = animation_validator.validate_content(animation_content)
 
@@ -696,8 +702,6 @@ def cmd_weld(args):
                 for warning in animation_result.warnings:
                     print(f"  • {warning}")
 
-            with open(output_animation, "w") as f:
-                f.write(animation_content)
             print(f"✅ Animation written to {output_animation}")
 
         # Submit to printer if requested
