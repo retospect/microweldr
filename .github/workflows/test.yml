@@ -98,6 +98,18 @@ jobs:
         flags: unittests
         name: codecov-umbrella
 
+    - name: Upload test artifacts
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results-${{ matrix.python-version }}
+        path: |
+          coverage.xml
+          test_output.gcode
+          test_output.html
+          .coverage
+        retention-days: 30
+
   build-test:
     name: Test package build
     runs-on: ubuntu-latest
@@ -127,3 +139,13 @@ jobs:
         pip install dist/*.whl
         microweldr --help
         python -c "import microweldr; print(f'MicroWeldr v{microweldr.__version__} imported successfully')"
+
+    - name: Upload build artifacts
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-artifacts
+        path: |
+          dist/
+          *.log
+        retention-days: 30
