@@ -368,6 +368,18 @@ def cmd_frame(args):
 
         print(f"✓ SVG file found: {args.svg_file}")
 
+        # Validate SVG content
+        svg_validator = SVGValidator()
+        svg_result = svg_validator.validate_file(svg_path)
+
+        if not svg_result.is_valid:
+            raise SVGParseError(f"SVG validation failed: {svg_result.message}")
+
+        if svg_result.warnings:
+            print("⚠️ SVG validation warnings:")
+            for warning in svg_result.warnings:
+                print(f"  • {warning}")
+
         # Create converter
         converter = SVGToGCodeConverter(config)
 
@@ -450,11 +462,15 @@ def cmd_weld(args):
 
         # Validate SVG content
         svg_validator = SVGValidator()
-        svg_issues = svg_validator.validate_file(svg_path)
-        if svg_issues:
+        svg_result = svg_validator.validate_file(svg_path)
+
+        if not svg_result.is_valid:
+            raise SVGParseError(f"SVG validation failed: {svg_result.message}")
+
+        if svg_result.warnings:
             print("⚠️ SVG validation warnings:")
-            for issue in svg_issues:
-                print(f"  • {issue}")
+            for warning in svg_result.warnings:
+                print(f"  • {warning}")
 
         # Set up output paths
         if args.output:
@@ -481,11 +497,16 @@ def cmd_weld(args):
 
         # Validate G-code
         gcode_validator = GCodeValidator()
-        gcode_issues = gcode_validator.validate_content(gcode_content)
-        if gcode_issues:
+        gcode_result = gcode_validator.validate_content(gcode_content)
+
+        if not gcode_result.is_valid:
+            print(f"❌ G-code validation failed: {gcode_result.message}")
+            print("Generated G-code may not work properly!")
+
+        if gcode_result.warnings:
             print("⚠️ G-code validation warnings:")
-            for issue in gcode_issues:
-                print(f"  • {issue}")
+            for warning in gcode_result.warnings:
+                print(f"  • {warning}")
 
         # Write G-code file
         with open(output_gcode, "w") as f:
@@ -502,11 +523,16 @@ def cmd_weld(args):
 
             # Validate animation
             animation_validator = AnimationValidator()
-            animation_issues = animation_validator.validate_content(animation_content)
-            if animation_issues:
+            animation_result = animation_validator.validate_content(animation_content)
+
+            if not animation_result.is_valid:
+                print(f"❌ Animation validation failed: {animation_result.message}")
+                print("Generated animation may not display properly!")
+
+            if animation_result.warnings:
                 print("⚠️ Animation validation warnings:")
-                for issue in animation_issues:
-                    print(f"  • {issue}")
+                for warning in animation_result.warnings:
+                    print(f"  • {warning}")
 
             with open(output_animation, "w") as f:
                 f.write(animation_content)

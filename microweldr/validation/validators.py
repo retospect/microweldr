@@ -87,6 +87,11 @@ class SVGValidator:
                 warnings=[str(e)],
             )
 
+    @staticmethod
+    def validate_file(svg_path: str | Path) -> ValidationResult:
+        """Validate SVG file structure and syntax (alias for validate)."""
+        return SVGValidator.validate(svg_path)
+
 
 class GCodeValidator:
     """Validator for G-code files."""
@@ -158,6 +163,67 @@ class GCodeValidator:
                 warnings=[str(e)],
             )
 
+    @staticmethod
+    def validate_content(gcode_content: str) -> ValidationResult:
+        """Validate G-code content string."""
+        if not GCODEPARSER_AVAILABLE:
+            return ValidationResult(
+                is_valid=True,
+                message="G-code validation skipped - gcodeparser not available",
+                warnings=["Install gcodeparser for comprehensive G-code validation"],
+            )
+
+        try:
+            # Parse with gcodeparser
+            parser = GcodeParser(gcode_content, include_comments=True)
+            lines = parser.lines
+
+            # Basic validation checks
+            has_init = False
+            has_home = False
+            has_temp_commands = False
+            has_movement = False
+
+            for line in lines:
+                if hasattr(line, "command") and line.command:
+                    cmd_letter, cmd_number = line.command
+
+                    if cmd_letter == "G":
+                        if cmd_number == 28:  # Home
+                            has_home = True
+                        elif cmd_number == 90:  # Absolute positioning
+                            has_init = True
+                        elif cmd_number in [0, 1]:  # Movement
+                            has_movement = True
+                    elif cmd_letter == "M":
+                        if cmd_number in [104, 109, 140, 190]:  # Temperature commands
+                            has_temp_commands = True
+
+            # Validation results
+            warnings = []
+            if not has_init:
+                warnings.append("Missing initialization commands (G90)")
+            if not has_home:
+                warnings.append("Missing home command (G28)")
+            if not has_temp_commands:
+                warnings.append("Missing temperature commands")
+            if not has_movement:
+                warnings.append("Missing movement commands")
+
+            is_valid = len(warnings) == 0
+            message = f"G-code validation {'passed' if is_valid else 'completed with warnings'}"
+
+            return ValidationResult(
+                is_valid=is_valid, message=message, warnings=warnings
+            )
+
+        except Exception as e:
+            return ValidationResult(
+                is_valid=True,  # Continue despite validation issues
+                message=f"G-code validation warning: {e}",
+                warnings=[str(e)],
+            )
+
 
 class AnimationValidator:
     """Validator for animation SVG files."""
@@ -196,6 +262,51 @@ class AnimationValidator:
 
             is_valid = len(warnings) == 0
             message = f"Animation SVG validation {'passed' if is_valid else 'completed with warnings'}: {svg_path}"
+            if is_valid:
+                message += f" ({len(animations)} animations, {len(circles)} circles)"
+
+            return ValidationResult(
+                is_valid=is_valid, message=message, warnings=warnings
+            )
+
+        except Exception as e:
+            return ValidationResult(
+                is_valid=True,
+                message=f"Animation SVG validation warning: {e}",
+                warnings=[str(e)],
+            )
+
+    @staticmethod
+    def validate_content(animation_content: str) -> ValidationResult:
+        """Validate animation content string."""
+        if not LXML_AVAILABLE:
+            return ValidationResult(
+                is_valid=True,
+                message="Animation validation skipped - lxml not available",
+                warnings=["Install lxml for comprehensive animation validation"],
+            )
+
+        try:
+            # Parse animation content
+            doc = etree.fromstring(animation_content.encode())
+
+            # Check for animation elements
+            animations = doc.xpath(
+                "//svg:animate", namespaces={"svg": "http://www.w3.org/2000/svg"}
+            )
+            circles = doc.xpath(
+                "//svg:circle", namespaces={"svg": "http://www.w3.org/2000/svg"}
+            )
+
+            warnings = []
+            if len(animations) == 0:
+                warnings.append("No animation elements found in output SVG")
+
+            if len(circles) == 0:
+                warnings.append("No circle elements found in animation SVG")
+
+            is_valid = len(warnings) == 0
+            message = f"Animation SVG validation {'passed' if is_valid else 'completed with warnings'}"
             if is_valid:
                 message += f" ({len(animations)} animations, {len(circles)} circles)"
 
