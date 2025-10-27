@@ -58,10 +58,14 @@ jobs:
       run: |
         poetry run black --check .
         poetry run isort --check-only .
-        poetry run flake8 microweldr/cli/ || echo "⚠️ Flake8 issues found but not blocking"
 
-    - name: Run type checking
-      run: poetry run mypy microweldr/ || echo "⚠️ Type checking issues found but not blocking"
+    - name: Run flake8 (non-blocking)
+      run: poetry run flake8 microweldr/cli/ || true
+      continue-on-error: true
+
+    - name: Run type checking (non-blocking)
+      run: poetry run mypy microweldr/ || true
+      continue-on-error: true
 
     - name: Run tests
       run: |
