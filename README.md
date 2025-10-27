@@ -1,6 +1,7 @@
 # MicroWeldr
 
 [![PyPI version](https://badge.fury.io/py/microweldr.svg)](https://badge.fury.io/py/microweldr)
+[![Test Suite](https://github.com/retospect/microweldr/actions/workflows/test.yml/badge.svg)](https://github.com/retospect/microweldr/actions/workflows/test.yml)
 
 A Python package that converts SVG files to Prusa Core One G-code for plastic "spot" welding applications. The package processes SVG vector graphics and generates G-code that creates weld spots along the paths without extruding any plastic material.
 
