@@ -357,7 +357,7 @@ def cmd_frame(args):
 
     try:
         # Load configuration
-        config = Config.from_file(args.config)
+        config = Config(args.config)
         print(f"✓ Configuration loaded from {args.config}")
 
         # Parse SVG
@@ -447,7 +447,7 @@ def cmd_weld(args):
 
     try:
         # Load configuration
-        config = Config.from_file(args.config)
+        config = Config(args.config)
         if args.verbose:
             print(f"✓ Configuration loaded from {args.config}")
 
