@@ -4,7 +4,7 @@
 
 A Python package that converts SVG files to Prusa Core One G-code for plastic "spot" welding applications. The package processes SVG vector graphics and generates G-code that creates weld spots along the paths without extruding any plastic material.
 
-**🖥️ NEW: Unified Command Interface** - All functionality consolidated into a single `microweldr` command with subcommands for testing, calibration, framing, and welding operations.
+**NEW: Unified Command Interface** - All functionality consolidated into a single `microweldr` command with subcommands for testing, calibration, framing, and welding operations.
 
 **Optimized for Prusa Core One**: Includes chamber temperature control (M141/M191), proper bed dimensions (250×220×270mm), CoreXY-specific settings, and **layed back mode** *(currently not working)* - designed for when your printer is positioned on its back (door pointing up) so liquids can be pipetted into pouches and gravity holds them in place before heat sealing.
 
@@ -41,7 +41,7 @@ microweldr/
 - **Proper G-code Structure**: Includes heating, cooling, and safety procedures
 - **PrusaLink Integration**: Direct G-code submission to Prusa MINI via PrusaLink API
 
-## 🖥️ **Interactive UI (Recommended)**
+## Interactive UI (Recommended)
 
 For the best user experience, use the interactive terminal interface:
 
@@ -54,16 +54,16 @@ microweldr weld my_design.svg
 ```
 
 **Features:**
-- 🔄 Real-time printer status (connection, temps, position)
-- 📐 Live bounds display and weld path visualization
-- 🎛️ Interactive controls: calibrate, heater, preview, load/unload, print
-- 📊 Background monitoring with 2-second updates
-- 🔥 Bed heater control with live temperature display
-- ⚙️ All operations accessible via numbered menu (1-6)
+- Real-time printer status (connection, temps, position)
+- Live bounds display and weld path visualization
+- Interactive controls: calibrate, heater, preview, load/unload, print
+- Background monitoring with 2-second updates
+- Bed heater control with live temperature display
+- All operations accessible via numbered menu (1-6)
 
 See [UI_README.md](UI_README.md) for complete documentation.
 
-## 🔄 **Command Line Workflow**
+## Command Line Workflow
 
 For automation and scripting, use the command line tools:
 
@@ -260,17 +260,17 @@ microweldr input.svg -c my_config.toml --secrets-config my_secrets.toml
 - **Invalid config**: Falls back to defaults with warnings
 - **Partial config**: Missing sections use defaults
 
-## Layed Back Mode (⚠️ EXPERIMENTAL - NOT WORKING YET)
+## Layed Back Mode (EXPERIMENTAL - NOT WORKING YET)
 
-**⚠️ WARNING: Layed back mode is currently under development and does not work properly. Use standard upright mode for reliable operation.**
+**WARNING: Layed back mode is currently under development and does not work properly. Use standard upright mode for reliable operation.**
 
 The SVG welder was designed to support "layed back printer operation" - when your printer is chillin' on its back with the door pointing up for easy access to microfluidic devices. However, this mode is currently experiencing technical issues.
 
 ### **Known Issues:**
-- ❌ Calibration conflicts with manual positioning
-- ❌ Z-axis homing issues when printer is on its back
-- ❌ Coordinate system needs adjustment for inverted orientation
-- ❌ Safety features need refinement for this configuration
+- Calibration conflicts with manual positioning
+- Z-axis homing issues when printer is on its back
+- Coordinate system needs adjustment for inverted orientation
+- Safety features need refinement for this configuration
 
 ### **Current Recommendation:**
 ```toml
@@ -284,22 +284,22 @@ Once the issues are resolved, layed back mode will provide:
 - Manual positioning with trusted coordinates
 - Optimized G-code for inverted printer orientation
 
-### **📍 Manual Positioning Required**
+### **Manual Positioning Required**
 **IMPORTANT**: Before starting any print (your printer is trusting you completely!):
 1. **Manually position** the print head to the **rear right corner** of the bed
 2. **Set Z-height manually** - position nozzle at desired starting height above bed
 3. **All positioning trusted** - the printer is chillin' and trusts your complete setup
 4. **G92 X0 Y0 Z0** sets all axes as origin (no automatic homing performed)
 
-### **🛡️ Safety Features for Layed Back Mode**
-- ✅ **No automatic homing** (prevents all endpoint errors when printer is on its back)
-- ✅ **Fully manual positioning** (complete trust in your setup for all axes)
-- ✅ **No bed leveling** (too risky when printer is layed back)
-- ✅ **Slower movements** (3000 mm/min travel, 150 mm/min Z-axis - no rush!)
-- ✅ **Disabled stepper timeout** (M84 S0 - printer stays relaxed)
-- ✅ **Gentle Z positioning** (slow movements to avoid crashes)
+### **Safety Features for Layed Back Mode**
+- **No automatic homing** (prevents all endpoint errors when printer is on its back)
+- **Fully manual positioning** (complete trust in your setup for all axes)
+- **No bed leveling** (too risky when printer is layed back)
+- **Manual Z-axis control** (you position the nozzle height manually)
+- **Disabled stepper timeout** (M84 S0 - printer stays relaxed)
+- **Gentle Z positioning** (slow movements to avoid crashes)
 
-### **⚙️ Standard Mode (For Uptight Printers)**
+### **Standard Mode (For Upright Printers)**
 Set `layed_back_mode = false` for normal upright printer operation with full homing and bed leveling.
 
 ## PrusaLink Configuration
@@ -381,7 +381,7 @@ microweldr input.svg --submit-to-printer --queue-only
 
 The SVG welder supports three different printing modes when submitting to your printer:
 
-### **🚀 Immediate Printing** (Default)
+### **Immediate Printing** (Default)
 Files are uploaded and printing starts immediately:
 ```bash
 microweldr input.svg --submit-to-printer
@@ -389,7 +389,7 @@ microweldr input.svg --submit-to-printer
 microweldr input.svg --submit-to-printer --auto-start-print
 ```
 
-### **📋 Queue Mode**
+### **Queue Mode**
 Files are uploaded and queued for later printing:
 ```bash
 microweldr input.svg --submit-to-printer --queue-only
@@ -399,7 +399,7 @@ Use this when:
 - The printer is currently busy
 - You want to review the file before printing
 
-### **📁 Upload Only**
+### **Upload Only**
 Files are uploaded without any automatic behavior:
 ```bash
 microweldr input.svg --submit-to-printer --no-auto-start
@@ -708,7 +708,7 @@ Before starting the welding process:
 
 #### **Material Preparation**
 - [ ] **Plastic sheets ready**: Have your plastic sheets cut to size and ready to insert
-- [ ] **Film securing**: Consider using magnets to hold down bubble film (⚠️ **Warning**: heated bed may be hot!)
+- [ ] **Film securing**: Consider using magnets to hold down bubble film (**Warning**: heated bed may be hot!)
 - [ ] **Height clearance**: Ensure travel height (`move_height`) is higher than any magnets to prevent head crashes
 - [ ] **Workspace clear**: Ensure adequate ventilation for plastic welding
 - [ ] **Safety equipment**: Have appropriate safety gear (ventilation, eye protection)
@@ -944,26 +944,26 @@ microweldr examples/example.svg -c my_config.toml
 
 When working with bubble film rolls for microfluidic device creation:
 
-**🔍 Identifying the Polypropylene Side:**
+**Identifying the Polypropylene Side:**
 - **Smooth side**: This is the **polypropylene layer** - use this side for welding
 - **Bubble side**: This is typically polyethylene - **do not weld this side**
 
-**📏 Proper Orientation:**
+**Proper Orientation:**
 - Place bubble film with **smooth side UP** on the printer bed
 - The welding nozzle should contact the **smooth polypropylene surface**
 - Bubbles should face **DOWN** toward the bed
 
-**🌡️ Temperature Guidelines:**
+**Temperature Guidelines:**
 - **Polypropylene welding**: 160-180°C (use light welds for thin films)
 - **Test first**: Always test weld parameters on scrap material
 - **Avoid overheating**: Polypropylene can degrade above 200°C
 
-**⚠️ Safety Notes:**
+**Safety Notes:**
 - Ensure adequate ventilation when welding plastics
 - Test weld strength before using for critical applications
 - Different bubble film manufacturers may use different material combinations
 
-**💡 Pro Tip:**
+**Pro Tip:**
 Use the `data-temp` attribute in your SVG to fine-tune welding temperature for different areas:
 ```xml
 <line stroke="black" data-temp="165" data-weld-time="0.2" />
