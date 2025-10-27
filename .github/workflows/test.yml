@@ -29,19 +29,24 @@ jobs:
 
     - name: Install Poetry
       run: |
-        curl -sSL https://install.python-poetry.org | python3 -
+        curl -sSL https://install.python-poetry.org | POETRY_VERSION=1.7.1 python3 -
         echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+    - name: Verify Poetry installation
+      run: |
+        poetry --version
+        which poetry
 
     - name: Configure Poetry
       run: |
         poetry config virtualenvs.create true
-        poetry config virtualenvs.in-project true
+        poetry config virtualenvs.in-project false
 
     - name: Load cached venv
       id: cached-poetry-dependencies
       uses: actions/cache@v3
       with:
-        path: .venv
+        path: ~/.cache/pypoetry/virtualenvs
         key: venv-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}
 
     - name: Install dependencies
