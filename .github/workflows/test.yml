@@ -49,6 +49,11 @@ jobs:
     - name: Install project
       run: poetry install --no-interaction
 
+    - name: Verify installation
+      run: |
+        poetry run python -c "import microweldr; print(f'MicroWeldr v{microweldr.__version__} imported successfully')"
+        poetry show
+
     - name: Run linting
       run: |
         poetry run black --check .
@@ -59,7 +64,9 @@ jobs:
       run: poetry run mypy microweldr/ || echo "⚠️ Type checking issues found but not blocking"
 
     - name: Run tests
-      run: poetry run pytest --cov=microweldr --cov-report=xml
+      run: |
+        echo "Running tests with Python ${{ matrix.python-version }}"
+        poetry run pytest --cov=microweldr --cov-report=xml -v
 
     - name: Test CLI installation
       run: |
