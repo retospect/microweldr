@@ -710,25 +710,38 @@ def cmd_weld(args):
             try:
                 client = PrusaLinkClient()
 
-                # Upload and optionally start print
-                upload_result = client.upload_gcode(
-                    gcode_path=str(output_gcode),
-                    auto_start=args.auto_start if not args.queue_only else False,
+                # Read G-code file and convert to command list
+                with open(output_gcode, "r") as f:
+                    gcode_lines = f.readlines()
+
+                # Clean up G-code lines (remove empty lines and comments)
+                gcode_commands = []
+                for line in gcode_lines:
+                    line = line.strip()
+                    if line and not line.startswith(";"):
+                        gcode_commands.append(line)
+
+                # Send G-code using the same method as frame command
+                success = client.send_and_run_gcode(
+                    commands=gcode_commands,
+                    job_name=f"weld_{svg_path.stem}",
+                    wait_for_completion=False,
+                    keep_temp_file=not args.queue_only,
                 )
 
-                # If we get here, upload was successful (no exception thrown)
-                if upload_result.get("auto_started", False):
-                    print("✅ G-code uploaded and print started!")
+                if success:
+                    if args.auto_start or not args.queue_only:
+                        print("✅ G-code uploaded and print started!")
 
-                    # Monitor print if requested
-                    if not args.queue_only:
-                        print("📊 Starting print monitor...")
-                        monitor = PrintMonitor(client, MonitorMode.BASIC)
-                        monitor.start_monitoring()
-                elif args.queue_only:
-                    print("✅ G-code queued successfully!")
+                        # Monitor print if requested
+                        if not args.queue_only:
+                            print("📊 Starting print monitor...")
+                            monitor = PrintMonitor(client, MonitorMode.STANDARD)
+                            monitor.start_monitoring()
+                    else:
+                        print("✅ G-code uploaded successfully!")
                 else:
-                    print("✅ G-code uploaded successfully!")
+                    print("❌ Failed to upload G-code")
 
             except PrusaLinkError as e:
                 print(f"Printer submission failed: {e}")
