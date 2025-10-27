@@ -30,32 +30,32 @@ class TestPrinterOperations:
     def test_calibrate_printer(self):
         """Test printer calibration."""
         mock_client = Mock(spec=PrusaLinkClient)
+        mock_client.calibrate_printer.return_value = True
         ops = PrinterOperations(mock_client)
 
-        with patch.object(ops, "send_gcode", return_value=True) as mock_send:
-            result = ops.calibrate_printer()
-            assert result is True
-            assert mock_send.call_count == 2  # G28 and G29
+        result = ops.calibrate_printer()
+        assert result is True
+        mock_client.calibrate_printer.assert_called_once()
 
     def test_set_bed_temperature(self):
         """Test setting bed temperature."""
         mock_client = Mock(spec=PrusaLinkClient)
+        mock_client.set_bed_temperature.return_value = True
         ops = PrinterOperations(mock_client)
 
-        with patch.object(ops, "send_gcode", return_value=True) as mock_send:
-            result = ops.set_bed_temperature(60)
-            assert result is True
-            mock_send.assert_called_once()
+        result = ops.set_bed_temperature(60)
+        assert result is True
+        mock_client.set_bed_temperature.assert_called_once_with(60, wait=False)
 
     def test_turn_off_bed_heater(self):
         """Test turning off bed heater."""
         mock_client = Mock(spec=PrusaLinkClient)
+        mock_client.set_bed_temperature.return_value = True
         ops = PrinterOperations(mock_client)
 
-        with patch.object(ops, "set_bed_temperature", return_value=True) as mock_set:
-            result = ops.turn_off_bed_heater()
-            assert result is True
-            mock_set.assert_called_once_with(0)
+        result = ops.turn_off_bed_heater()
+        assert result is True
+        mock_client.set_bed_temperature.assert_called_once_with(0)
 
     def test_move_to_position(self):
         """Test moving to position."""

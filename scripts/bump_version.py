@@ -7,7 +7,7 @@ across all files in the project, maintaining DRY principles.
 
 Usage:
     python scripts/bump_version.py patch    # 4.0.0 -> 4.0.1
-    python scripts/bump_version.py minor    # 4.0.0 -> 4.1.0  
+    python scripts/bump_version.py minor    # 4.0.0 -> 4.1.0
     python scripts/bump_version.py major    # 4.0.0 -> 5.0.0
 """
 
@@ -37,25 +37,25 @@ def main():
     if len(sys.argv) != 2:
         print("Usage: python scripts/bump_version.py [patch|minor|major]")
         sys.exit(1)
-    
+
     bump_type = sys.argv[1].lower()
-    if bump_type not in ['patch', 'minor', 'major']:
+    if bump_type not in ["patch", "minor", "major"]:
         print("❌ Invalid bump type. Use: patch, minor, or major")
         sys.exit(1)
-    
+
     # Get project root
     project_root = Path(__file__).parent.parent
-    
+
     print(f"🚀 Bumping {bump_type} version...")
-    
+
     # Run bump-my-version
     cmd = f"bump-my-version bump {bump_type}"
     if not run_command(cmd, cwd=project_root):
         print("❌ Version bump failed!")
         sys.exit(1)
-    
+
     print("✅ Version bumped successfully!")
-    
+
     # Show the new version
     try:
         result = subprocess.run(
@@ -63,12 +63,12 @@ def main():
             shell=True,
             capture_output=True,
             text=True,
-            cwd=project_root
+            cwd=project_root,
         )
         if result.returncode == 0:
             new_version = result.stdout.strip()
             print(f"📦 New version: {new_version}")
-        
+
         # Show what files were updated
         print("\n📝 Files updated:")
         print("  - pyproject.toml")
@@ -78,16 +78,16 @@ def main():
         print("  - microweldr/api/core.py")
         print("  - microweldr/cli/enhanced_main.py")
         print("  - CHANGELOG.md")
-        
+
         print(f"\n🏷️  Git tag created: v{new_version}")
         print("💾 Changes committed automatically")
-        
+
         print("\n🎯 Next steps:")
         print("  1. Review the changes: git show")
         print("  2. Push to remote: git push && git push --tags")
         print("  3. Build package: poetry build")
         print("  4. Publish: poetry publish")
-        
+
     except Exception as e:
         print(f"⚠️  Could not get new version: {e}")
 

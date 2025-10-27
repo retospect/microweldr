@@ -159,4 +159,15 @@ Add custom attributes to any element:
 - Monitor first prints closely to verify weld quality
 - Adjust parameters based on material thickness and type
 
+## 🛠️ Command Reference
+
+### Workflow Commands
+```bash
+microweldr-test                          # Test PrusaLink connection and printer status
+microweldr-calibrate                     # Run full printer calibration (home + bed leveling)
+microweldr-control home XYZ              # Home printer axes before operations
+microweldr your_design.svg --submit      # Generate G-code and print (includes auto-calibration)
+microweldr your_design.svg --no-calibrate --submit  # Print without calibration (faster)
+```
+
 Happy welding! 🔥

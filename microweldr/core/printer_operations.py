@@ -28,71 +28,120 @@ class PrinterOperations:
         """
         try:
             result = self.client.send_gcode(command)
-            logger.info(f"Sent G-code: {command}")
+            logger.info(f"Successfully sent G-code: {command}")
             return result
         except Exception as e:
-            logger.warning(f"G-code sending not fully implemented yet: {command}")
-            logger.warning(f"Error: {e}")
-            # For now, return True to allow UI testing - TODO: Fix PrusaLink API
-            return True
+            logger.error(f"Failed to send G-code '{command}': {e}")
+            return False
 
-    def calibrate_printer(self) -> bool:
-        """Perform printer calibration (home + bed leveling).
+    def calibrate_printer(self, bed_leveling: bool = True, **kwargs) -> bool:
+        """Perform printer calibration (home + optional bed leveling).
+
+        Args:
+            bed_leveling: Whether to include bed leveling
+            **kwargs: Additional options (print_to_stdout, keep_temp_file, etc.)
 
         Returns:
             True if successful, False otherwise
         """
         try:
             logger.info("Starting printer calibration...")
-
-            # Home all axes
-            if not self.send_gcode(GCodeCommands.G28):
-                return False
-
-            # Auto bed leveling
-            if not self.send_gcode(GCodeCommands.G29):
-                return False
-
-            logger.info("Printer calibration completed")
-            return True
-
+            result = self.client.calibrate_printer(bed_leveling=bed_leveling, **kwargs)
+            if result:
+                logger.info("Printer calibration completed successfully")
+            return result
         except Exception as e:
             logger.error(f"Calibration failed: {e}")
             return False
 
-    def set_bed_temperature(self, temperature: int, wait: bool = False) -> bool:
+    def set_bed_temperature(
+        self, temperature: int, wait: bool = False, **kwargs
+    ) -> bool:
         """Set bed temperature.
 
         Args:
             temperature: Target temperature in Celsius
             wait: Whether to wait for temperature to be reached
+            **kwargs: Additional options (print_to_stdout, keep_temp_file, etc.)
 
         Returns:
             True if successful, False otherwise
         """
         try:
-            command = (
-                f"{GCodeCommands.M190 if wait else GCodeCommands.M140} S{temperature}"
-            )
-            result = self.send_gcode(command)
-
-            if result:
-                action = "set and waiting for" if wait else "set to"
-                logger.info(f"Bed temperature {action} {temperature}°C")
-
-            return result
-
+            logger.info(f"Setting bed temperature to {temperature}°C...")
+            return self.client.set_bed_temperature(temperature, wait=wait, **kwargs)
         except Exception as e:
             logger.error(f"Failed to set bed temperature: {e}")
             return False
 
-    def turn_off_bed_heater(self) -> bool:
-        """Turn off bed heater.
+    def set_nozzle_temperature(
+        self, temperature: int, wait: bool = False, **kwargs
+    ) -> bool:
+        """Set nozzle temperature.
+
+        Args:
+            temperature: Target temperature in Celsius
+            wait: Whether to wait for temperature to be reached
+            **kwargs: Additional options (print_to_stdout, keep_temp_file, etc.)
 
         Returns:
             True if successful, False otherwise
         """
-        return self.set_bed_temperature(0)
+        try:
+            logger.info(f"Setting nozzle temperature to {temperature}°C...")
+            return self.client.set_nozzle_temperature(temperature, wait=wait, **kwargs)
+        except Exception as e:
+            logger.error(f"Failed to set nozzle temperature: {e}")
+            return False
+
+    def turn_off_bed_heater(self, **kwargs) -> bool:
+        """Turn off bed heater.
+
+        Args:
+            **kwargs: Additional options (print_to_stdout, keep_temp_file, etc.)
+
+        Returns:
+            True if successful, False otherwise
+        """
+        try:
+            logger.info("Turning off bed heater...")
+            return self.client.set_bed_temperature(0, **kwargs)
+        except Exception as e:
+            logger.error(f"Failed to turn off bed heater: {e}")
+            return False
+
+    def turn_off_all_heaters(self, **kwargs) -> bool:
+        """Turn off all heaters.
+
+        Args:
+            **kwargs: Additional options (print_to_stdout, keep_temp_file, etc.)
+
+        Returns:
+            True if successful, False otherwise
+        """
+        try:
+            logger.info("Turning off all heaters...")
+            return self.client.turn_off_heaters(**kwargs)
+        except Exception as e:
+            logger.error(f"Failed to turn off heaters: {e}")
+            return False
+
+    def home_axes(self, axes: str = "XYZ", **kwargs) -> bool:
+        """Home specified axes.
+
+        Args:
+            axes: Axes to home ("X", "Y", "Z", "XY", "XYZ", etc.)
+            **kwargs: Additional options (print_to_stdout, keep_temp_file, etc.)
+
+        Returns:
+            True if successful, False otherwise
+        """
+        try:
+            logger.info(f"Homing {axes} axes...")
+            return self.client.home_axes(axes=axes, **kwargs)
+        except Exception as e:
+            logger.error(f"Failed to home axes: {e}")
+            return False
 
     def move_to_position(
         self,

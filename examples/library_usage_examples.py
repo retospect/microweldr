@@ -9,16 +9,16 @@ from pathlib import Path
 
 # Import the MicroWeldr library API
 from microweldr.api import (
+    HealthStatus,
     MicroWeldr,
-    WeldJob,
-    ValidationResult,
     PrinterConnection,
     PrinterStatus,
+    SystemMonitor,
+    ValidationResult,
+    ValidationSuite,
+    WeldJob,
     WorkflowManager,
     WorkflowStep,
-    ValidationSuite,
-    SystemMonitor,
-    HealthStatus,
 )
 
 

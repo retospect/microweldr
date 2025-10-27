@@ -8,7 +8,19 @@ class PrusaLinkError(Exception):
 
 
 class PrusaLinkConnectionError(PrusaLinkError):
-    """Exception raised when connection to PrusaLink fails."""
+    """Raised when connection to PrusaLink fails."""
+
+    pass
+
+
+class PrusaLinkValidationError(PrusaLinkError):
+    """Raised when command parameters are invalid."""
+
+    pass
+
+
+class PrusaLinkOperationError(PrusaLinkError):
+    """Raised when a printer operation fails or is rejected."""
 
     pass
 

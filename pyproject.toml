@@ -63,6 +63,7 @@ microweldr-workflow = "microweldr.cli.workflow:main"
 microweldr-test = "microweldr.cli.prusalink_test:main"
 microweldr-ui = "microweldr.cli.ui_main:main"
 microweldr-control = "microweldr.cli.printer_control:main"
+microweldr-calibrate = "microweldr.cli.printer_control:calibrate_main"
 
 [build-system]
 requires = ["poetry-core"]
@@ -109,8 +110,12 @@ strict_equality = true
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "-ra -q --strict-markers --cov=microweldr --cov-report=term-missing"
+markers = [
+    "integration: marks tests as integration tests (requires printer connection)",
+    "slow: marks tests as slow running",
+]
 testpaths = ["tests"]
+addopts = "-ra -q --strict-markers --cov=microweldr --cov-report=term-missing"
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
