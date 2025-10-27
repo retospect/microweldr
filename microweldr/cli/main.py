@@ -72,6 +72,33 @@ def create_parser() -> argparse.ArgumentParser:
         "--keep-file", action="store_true", help="Keep temp files"
     )
 
+    # Temperature control commands
+    temp_bed_parser = subparsers.add_parser("temp-bed", help="Set bed temperature")
+    temp_bed_parser.add_argument(
+        "temperature", type=float, help="Target bed temperature in °C (0 to turn off)"
+    )
+    temp_bed_parser.add_argument(
+        "--verbose", "-v", action="store_true", help="Verbose output"
+    )
+    temp_bed_parser.add_argument(
+        "--wait", action="store_true", help="Wait for temperature to be reached"
+    )
+
+    temp_nozzle_parser = subparsers.add_parser(
+        "temp-nozzle", help="Set nozzle temperature"
+    )
+    temp_nozzle_parser.add_argument(
+        "temperature",
+        type=float,
+        help="Target nozzle temperature in °C (0 to turn off)",
+    )
+    temp_nozzle_parser.add_argument(
+        "--verbose", "-v", action="store_true", help="Verbose output"
+    )
+    temp_nozzle_parser.add_argument(
+        "--wait", action="store_true", help="Wait for temperature to be reached"
+    )
+
     # Frame command (requires SVG)
     frame_parser = subparsers.add_parser(
         "frame", help="Draw frame around SVG design (no welding)"
@@ -344,6 +371,134 @@ def cmd_calibrate(args):
         print("\n🎉 Calibration completed successfully!")
         print("Your printer is now calibrated and ready for welding operations.")
         return True
+
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        return False
+
+
+def cmd_temp_bed(args):
+    """Set bed temperature."""
+    print(f"🌡️ Setting Bed Temperature to {args.temperature}°C")
+    print("=" * 40)
+
+    try:
+        client = PrusaLinkClient()
+
+        print("1. Connecting to printer...")
+        if not client.test_connection():
+            print("   ✗ Connection failed")
+            return False
+        print("   ✓ Connected to printer")
+
+        print("2. Checking printer status...")
+        status = client.get_printer_status()
+        printer_info = status.get("printer", {})
+        state = printer_info.get("state", "Unknown")
+        current_bed = printer_info.get("temp_bed", 0)
+        print(f"   ✓ Printer state: {state}")
+        print(f"   ✓ Current bed temperature: {current_bed}°C")
+
+        print(f"3. Setting bed temperature to {args.temperature}°C...")
+        success = client.set_bed_temperature(args.temperature)
+
+        if success:
+            print("   ✓ Temperature command sent successfully")
+
+            if args.wait and args.temperature > 0:
+                print("   • Waiting for temperature to be reached...")
+                import time
+
+                timeout = 300  # 5 minutes timeout
+                start_time = time.time()
+
+                while time.time() - start_time < timeout:
+                    status = client.get_printer_status()
+                    current_temp = status.get("printer", {}).get("temp_bed", 0)
+                    target_temp = status.get("printer", {}).get("target_bed", 0)
+
+                    if args.verbose:
+                        print(
+                            f"   • Current: {current_temp}°C, Target: {target_temp}°C"
+                        )
+
+                    if abs(current_temp - args.temperature) <= 2:  # Within 2°C
+                        print(f"   ✓ Target temperature reached: {current_temp}°C")
+                        break
+
+                    time.sleep(5)
+                else:
+                    print("   ⚠ Timeout waiting for temperature")
+
+            return True
+        else:
+            print("   ✗ Failed to set temperature")
+            return False
+
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        return False
+
+
+def cmd_temp_nozzle(args):
+    """Set nozzle temperature."""
+    print(f"🌡️ Setting Nozzle Temperature to {args.temperature}°C")
+    print("=" * 40)
+
+    try:
+        client = PrusaLinkClient()
+
+        print("1. Connecting to printer...")
+        if not client.test_connection():
+            print("   ✗ Connection failed")
+            return False
+        print("   ✓ Connected to printer")
+
+        print("2. Checking printer status...")
+        status = client.get_printer_status()
+        printer_info = status.get("printer", {})
+        state = printer_info.get("state", "Unknown")
+        current_nozzle = printer_info.get("temp_nozzle", 0)
+        print(f"   ✓ Printer state: {state}")
+        print(f"   ✓ Current nozzle temperature: {current_nozzle}°C")
+
+        print(f"3. Setting nozzle temperature to {args.temperature}°C...")
+        success = client.set_nozzle_temperature(args.temperature)
+
+        if success:
+            print("   ✓ Temperature command sent successfully")
+
+            if args.wait and args.temperature > 0:
+                print("   • Waiting for temperature to be reached...")
+                import time
+
+                timeout = 300  # 5 minutes timeout
+                start_time = time.time()
+
+                while time.time() - start_time < timeout:
+                    status = client.get_printer_status()
+                    current_temp = status.get("printer", {}).get("temp_nozzle", 0)
+                    target_temp = status.get("printer", {}).get("target_nozzle", 0)
+
+                    if args.verbose:
+                        print(
+                            f"   • Current: {current_temp}°C, Target: {target_temp}°C"
+                        )
+
+                    if (
+                        abs(current_temp - args.temperature) <= 3
+                    ):  # Within 3°C for nozzle
+                        print(f"   ✓ Target temperature reached: {current_temp}°C")
+                        break
+
+                    time.sleep(5)
+                else:
+                    print("   ⚠ Timeout waiting for temperature")
+
+            return True
+        else:
+            print("   ✗ Failed to set temperature")
+            return False
 
     except Exception as e:
         print(f"❌ Error: {e}")
@@ -623,6 +778,8 @@ def main():
         "home": cmd_home,
         "bed-level": cmd_bed_level,
         "calibrate": cmd_calibrate,
+        "temp-bed": cmd_temp_bed,
+        "temp-nozzle": cmd_temp_nozzle,
         "frame": cmd_frame,
         "weld": cmd_weld,
     }

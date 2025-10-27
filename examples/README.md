@@ -168,6 +168,10 @@ microweldr home [XYZ]                    # Home printer axes (default: all axes)
 microweldr bed-level                     # Run bed leveling only
 microweldr calibrate                     # Full calibration (home + bed leveling)
 microweldr calibrate --home-only         # Home axes only (skip bed leveling)
+microweldr temp-bed 80                   # Set bed temperature to 80°C
+microweldr temp-bed 0                    # Turn off bed heater
+microweldr temp-nozzle 200               # Set nozzle temperature to 200°C
+microweldr temp-nozzle 0                 # Turn off nozzle heater
 microweldr frame your_design.svg         # Draw frame around design (no welding)
 microweldr weld your_design.svg          # Convert SVG and weld (default command)
 microweldr your_design.svg               # Same as weld (shortcut)
@@ -184,6 +188,10 @@ microweldr your_design.svg --no-calibrate --submit  # Print without calibration
 # Printer commands support:
 --print-gcode                           # Show generated G-code
 --keep-file                             # Keep temporary files on printer
+
+# Temperature commands support:
+--wait                                  # Wait for temperature to be reached
+--verbose                               # Show current/target temperatures
 
 # Weld/frame commands support:
 --config, -c config.toml                # Use custom config file
