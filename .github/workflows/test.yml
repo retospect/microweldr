@@ -70,10 +70,6 @@ jobs:
       run: poetry run flake8 microweldr/ || true
       continue-on-error: true
 
-    - name: Run type checking (non-blocking)
-      run: poetry run mypy microweldr/ || true
-      continue-on-error: true
-
     - name: Run tests
       run: |
         echo "Running tests with Python ${{ matrix.python-version }}"
