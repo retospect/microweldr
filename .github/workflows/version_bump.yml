@@ -25,45 +25,45 @@ jobs:
   bump-version:
     name: Bump version and create release
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        
+
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.11'
-        
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install poetry toml
-        
+
     - name: Configure git
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        
+
     - name: Bump version
       id: version
       run: |
         # Get current version
         CURRENT_VERSION=$(python -c "import toml; print(toml.load('pyproject.toml')['tool']['poetry']['version'])")
         echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
-        
+
         # Bump version using poetry
         poetry version ${{ github.event.inputs.version_type }}
-        
+
         # Get new version
         NEW_VERSION=$(python -c "import toml; print(toml.load('pyproject.toml')['tool']['poetry']['version'])")
         echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
-        
+
         # Update __init__.py version
         sed -i "s/__version__ = \".*\"/__version__ = \"$NEW_VERSION\"/" microweldr/__init__.py
-        
+
     - name: Commit version bump
       run: |
         git add pyproject.toml microweldr/__init__.py
@@ -71,45 +71,43 @@ jobs:
         git tag -a "v${{ steps.version.outputs.new_version }}" -m "Version ${{ steps.version.outputs.new_version }}"
         git push origin master
         git push origin "v${{ steps.version.outputs.new_version }}"
-        
+
     - name: Create GitHub Release
       if: github.event.inputs.create_release == 'true'
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: softprops/action-gh-release@v1
       with:
         tag_name: v${{ steps.version.outputs.new_version }}
-        release_name: MicroWeldr v${{ steps.version.outputs.new_version }}
+        name: MicroWeldr v${{ steps.version.outputs.new_version }}
         body: |
           ## MicroWeldr v${{ steps.version.outputs.new_version }}
-          
+
           ### Installation
           ```bash
           pip install microweldr==${{ steps.version.outputs.new_version }}
           ```
-          
+
           ### Usage
           ```bash
           microweldr examples/example.svg
           microweldr examples/calibration_test.svg --submit-to-printer
           ```
-          
+
           ### Quick Start
           ```bash
           # Clone and install
           git clone https://github.com/retospect/microweldr.git
           cd microweldr
           pip install -e .
-          
+
           # Run calibration test
           microweldr examples/calibration_test.svg --submit-to-printer
-          
+
           # Create your own designs
           microweldr your_design.svg --config examples/config.toml
           ```
-          
+
           See the [examples directory](https://github.com/retospect/microweldr/tree/main/examples) for complete documentation and sample files.
-          
+
           ### Features
           - 🔬 Scientific parameter calibration system
           - 🚀 Optimized for Prusa Core One (130°C, 0.1s, 20µm)
@@ -118,8 +116,10 @@ jobs:
           - 📊 Comprehensive calibration test matrix
           - 🔧 Professional G-code generation
           - 🖨️ Direct printer integration via PrusaLink
-          
+
           ### Changes
           - See commit history for detailed changes since v${{ steps.version.outputs.current_version }}
         draft: false
         prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
