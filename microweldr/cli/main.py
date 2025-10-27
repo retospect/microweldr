@@ -127,7 +127,11 @@ def create_parser() -> argparse.ArgumentParser:
     weld_parser.add_argument(
         "--no-calibrate", action="store_true", help="Skip calibration"
     )
-    weld_parser.add_argument("--submit", action="store_true", help="Submit to printer")
+    weld_parser.add_argument(
+        "--submit",
+        action="store_true",
+        help="Submit to printer (skips calibration - assumes printer is ready)",
+    )
     weld_parser.add_argument(
         "--auto-start", action="store_true", help="Auto-start print"
     )
@@ -149,7 +153,11 @@ def create_parser() -> argparse.ArgumentParser:
         "--skip-bed-leveling", action="store_true", help="Skip bed leveling"
     )
     parser.add_argument("--no-calibrate", action="store_true", help="Skip calibration")
-    parser.add_argument("--submit", action="store_true", help="Submit to printer")
+    parser.add_argument(
+        "--submit",
+        action="store_true",
+        help="Submit to printer (skips calibration - assumes printer is ready)",
+    )
     parser.add_argument("--auto-start", action="store_true", help="Auto-start print")
     parser.add_argument("--queue-only", action="store_true", help="Queue only")
     parser.add_argument("--no-animation", action="store_true", help="Skip animation")
@@ -651,7 +659,13 @@ def cmd_weld(args):
         converter = SVGToGCodeConverter(config)
 
         # Handle calibration options
-        skip_bed_leveling = args.skip_bed_leveling or args.no_calibrate
+        # Skip calibration when submitting to printer (user has already prepared it)
+        skip_bed_leveling = args.skip_bed_leveling or args.no_calibrate or args.submit
+
+        if args.submit and not (args.skip_bed_leveling or args.no_calibrate):
+            print("📋 Skipping calibration (--submit assumes printer is ready)")
+        elif skip_bed_leveling:
+            print("📋 Skipping calibration as requested")
 
         # Convert SVG to G-code
         weld_paths = converter.convert(
@@ -736,8 +750,8 @@ def cmd_weld(args):
                         # Monitor print if requested
                         if not args.queue_only:
                             print("📊 Starting print monitor...")
-                            monitor = PrintMonitor(client, MonitorMode.STANDARD)
-                            monitor.start_monitoring()
+                            monitor = PrintMonitor(MonitorMode.STANDARD)
+                            monitor.monitor_until_complete()
                     else:
                         print("✅ G-code uploaded successfully!")
                 else:
