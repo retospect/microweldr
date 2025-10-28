@@ -40,6 +40,47 @@ class GCodeGenerator:
         f.write("; Prusa Core One Plastic Welding G-code\n")
         f.write(f"; Total paths: {len(weld_paths)}\n\n")
 
+    def _set_bed_temperature(self, f: TextIO, temp: int, wait: bool = False) -> None:
+        """Set bed temperature with optional waiting."""
+        if wait:
+            f.write(f"; Heat bed to {temp}°C and wait\n")
+            f.write(f"M140 S{temp} ; Set bed temperature\n")
+            f.write(f"M190 S{temp} ; Wait for bed temperature\n\n")
+        else:
+            f.write(f"; Start heating bed to {temp}°C (heating during calibration)\n")
+            f.write(f"M140 S{temp} ; Set bed temperature (start heating)\n\n")
+
+    def _set_nozzle_temperature(self, f: TextIO, temp: int, wait: bool = False) -> None:
+        """Set nozzle temperature with optional waiting."""
+        if wait:
+            f.write(f"; Heat nozzle to {temp}°C and wait\n")
+            f.write(f"M104 S{temp} ; Set nozzle temperature\n")
+            f.write(f"M109 S{temp} ; Wait for nozzle temperature\n\n")
+        else:
+            f.write(f"; Start heating nozzle to {temp}°C\n")
+            f.write(f"M104 S{temp} ; Set nozzle temperature\n\n")
+
+    def _wait_for_bed_temperature(self, f: TextIO, temp: int) -> None:
+        """Wait for bed to reach target temperature."""
+        f.write(f"; Wait for bed to reach target temperature\n")
+        f.write(f"M190 S{temp} ; Wait for bed temperature\n\n")
+
+    def _wait_for_nozzle_temperature(self, f: TextIO, temp: int) -> None:
+        """Wait for nozzle to reach target temperature."""
+        f.write(f"M109 S{temp} ; Wait for nozzle temperature\n\n")
+
+    def _set_chamber_temperature(
+        self, f: TextIO, temp: int, wait: bool = False
+    ) -> None:
+        """Set chamber temperature with optional waiting."""
+        if wait:
+            f.write(f"; Heat chamber to {temp}°C (Core One) and wait\n")
+            f.write(f"M141 S{temp} ; Set chamber temperature\n")
+            f.write(f"M191 S{temp} ; Wait for chamber temperature\n\n")
+        else:
+            f.write(f"; Start heating chamber to {temp}°C (Core One)\n")
+            f.write(f"M141 S{temp} ; Set chamber temperature\n\n")
+
     def _write_pre_calibration_heating(self, f: TextIO) -> None:
         """Start bed heating before calibration for efficiency."""
         bed_temp = self.config.get("temperatures", "bed_temperature")
@@ -54,15 +95,12 @@ class GCodeGenerator:
 
         # Chamber heating (optional)
         if use_chamber_heating:
-            f.write(f"; Heat chamber to {chamber_temp}°C (Core One)\n")
-            f.write(f"M141 S{chamber_temp} ; Set chamber temperature\n")
-            f.write(f"M191 S{chamber_temp} ; Wait for chamber temperature\n\n")
+            self._set_chamber_temperature(f, chamber_temp, wait=True)
         else:
             f.write("; Chamber heating disabled (sensor not available)\n\n")
 
         # Start bed heating (don't wait yet - let it heat during calibration)
-        f.write(f"; Start heating bed to {bed_temp}°C (heating during calibration)\n")
-        f.write(f"M140 S{bed_temp} ; Set bed temperature (start heating)\n\n")
+        self._set_bed_temperature(f, bed_temp, wait=False)
 
     def _write_initialization(self, f: TextIO, skip_bed_leveling: bool = False) -> None:
         """Write printer initialization commands."""
@@ -87,13 +125,10 @@ class GCodeGenerator:
         nozzle_temp = self.config.get("temperatures", "nozzle_temperature")
 
         # Wait for bed temperature
-        f.write(f"; Wait for bed to reach target temperature\n")
-        f.write(f"M190 S{bed_temp} ; Wait for bed temperature\n\n")
+        self._wait_for_bed_temperature(f, bed_temp)
 
-        # Heat nozzle
-        f.write(f"; Heat nozzle to {nozzle_temp}°C\n")
-        f.write(f"M104 S{nozzle_temp} ; Set nozzle temperature\n")
-        f.write(f"M109 S{nozzle_temp} ; Wait for nozzle temperature\n\n")
+        # Heat nozzle and wait
+        self._set_nozzle_temperature(f, nozzle_temp, wait=True)
 
     def _write_user_pause(self, f: TextIO, margin_info: dict = None) -> None:
         """Write user pause for plastic sheet insertion."""
@@ -405,19 +440,13 @@ class GCodeGenerator:
 
         # Chamber heating (optional)
         if use_chamber_heating:
-            f.write(f"; Heat chamber to {chamber_temp}°C (Core One)\n")
-            f.write(f"M141 S{chamber_temp} ; Set chamber temperature\n")
-            f.write(f"M191 S{chamber_temp} ; Wait for chamber temperature\n\n")
+            self._set_chamber_temperature(f, chamber_temp, wait=True)
         else:
             f.write("; Chamber heating disabled\n\n")
 
         # Heat bed and wait
-        f.write(f"; Heat bed to {bed_temp}°C and wait\n")
-        f.write(f"M140 S{bed_temp} ; Set bed temperature\n")
-        f.write(f"M190 S{bed_temp} ; Wait for bed temperature\n\n")
+        self._set_bed_temperature(f, bed_temp, wait=True)
 
         # Heat nozzle and wait
-        f.write(f"; Heat nozzle to {nozzle_temp}°C and wait\n")
-        f.write(f"M104 S{nozzle_temp} ; Set nozzle temperature\n")
-        f.write(f"M109 S{nozzle_temp} ; Wait for nozzle temperature\n")
+        self._set_nozzle_temperature(f, nozzle_temp, wait=True)
         f.write("M117 Ready for welding!\n\n")
