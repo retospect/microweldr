@@ -5,7 +5,7 @@
 
 A Python package that converts SVG files to Prusa Core One G-code for **continuous plastic line welding**. The package processes SVG vector graphics and generates G-code that creates **waterproof welded lines** by placing many precise weld "dots" in sequence along the paths, without extruding any plastic material.
 
-**NEW: Unified Command Interface** - All functionality consolidated into a single `microweldr` command with subcommands for testing, calibration, framing, and welding operations.
+**Unified Command Interface** - All functionality consolidated into a single `microweldr` command with subcommands for testing, calibration, framing, and welding operations.
 
 **Optimized for Prusa Core One**: Includes chamber temperature control (M141/M191), proper bed dimensions (250×220×270mm), and CoreXY-specific settings for reliable plastic welding operations.
 
