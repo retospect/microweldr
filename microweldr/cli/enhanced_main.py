@@ -410,11 +410,11 @@ def status(ctx, secrets, verbose, quiet, config, log_file):
                 emoji = (
                     "🟢"
                     if state == "Operational"
-                    else "🔥"
-                    if state == "Printing"
-                    else "⏸️"
-                    if state == "Paused"
-                    else "❌"
+                    else (
+                        "🔥"
+                        if state == "Printing"
+                        else "⏸️" if state == "Paused" else "❌"
+                    )
                 )
                 click.echo(f"\n🖨️  Printer: {emoji} {state}")
 

@@ -82,11 +82,10 @@ class TestPrinterOperations:
         mock_client = Mock(spec=PrusaLinkClient)
         ops = PrinterOperations(mock_client)
 
-        with patch.object(
-            ops, "send_gcode", return_value=True
-        ) as mock_send, patch.object(
-            ops, "move_to_position", return_value=True
-        ) as mock_move:
+        with (
+            patch.object(ops, "send_gcode", return_value=True) as mock_send,
+            patch.object(ops, "move_to_position", return_value=True) as mock_move,
+        ):
             result = ops.load_unload_plate()
             assert result is True
             assert mock_send.call_count == 2  # G91 and G90

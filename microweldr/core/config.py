@@ -17,7 +17,7 @@ class Config:
 
     def __init__(self, config_path: str | Path | None = None) -> None:
         """Initialize configuration from TOML file with fallback system.
-        
+
         Args:
             config_path: Path to configuration file. If None, searches for config files
                         in multiple locations and falls back to defaults if not found.
@@ -30,7 +30,7 @@ class Config:
         """Find configuration file using fallback system."""
         if config_path is not None:
             return Path(config_path)
-        
+
         # Search locations in order of preference
         search_locations = [
             Path.cwd() / "config.toml",  # Current directory
@@ -38,11 +38,11 @@ class Config:
             Path.home() / "config.toml",  # User home directory (legacy)
             Path(__file__).parent.parent.parent / "config.toml",  # Project root
         ]
-        
+
         for location in search_locations:
             if location.exists() and location.is_file():
                 return location
-        
+
         # No config file found - will use defaults
         return None
 
@@ -107,15 +107,15 @@ class Config:
             # No config file found, use defaults
             self._config = self._get_default_config()
             return
-            
+
         try:
             with open(self.config_path, "r") as f:
                 loaded_config = toml.load(f)
-                
+
             # Merge loaded config with defaults to ensure all keys exist
             self._config = self._get_default_config()
             self._merge_config(self._config, loaded_config)
-            
+
         except FileNotFoundError:
             raise ConfigError(f"Configuration file '{self.config_path}' not found.")
         except toml.TomlDecodeError as e:

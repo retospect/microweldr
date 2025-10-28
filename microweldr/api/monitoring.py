@@ -402,12 +402,12 @@ class SystemMonitor:
         return {
             "monitoring_active": self._monitoring_active,
             "secrets_configured": self.secrets_path is not None,
-            "last_check_time": self._last_health_check.timestamp
-            if self._last_health_check
-            else None,
-            "last_status": str(self._last_health_check)
-            if self._last_health_check
-            else None,
+            "last_check_time": (
+                self._last_health_check.timestamp if self._last_health_check else None
+            ),
+            "last_status": (
+                str(self._last_health_check) if self._last_health_check else None
+            ),
         }
 
 

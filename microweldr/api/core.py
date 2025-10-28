@@ -253,9 +253,11 @@ class WeldJob:
             "weld_types": weld_types,
             "gcode_generated": self.gcode_path is not None,
             "animation_generated": self.animation_path is not None,
-            "validation_status": str(self.validation_result)
-            if self.validation_result
-            else "Not validated",
+            "validation_status": (
+                str(self.validation_result)
+                if self.validation_result
+                else "Not validated"
+            ),
         }
 
     def cleanup(self) -> None:
@@ -435,9 +437,9 @@ class MicroWeldr:
                         {
                             "file": str(svg_path),
                             "gcode": str(gcode_path),
-                            "animation": str(animation_path)
-                            if animation_path
-                            else None,
+                            "animation": (
+                                str(animation_path) if animation_path else None
+                            ),
                             "points": stats["total_points"],
                         }
                     )

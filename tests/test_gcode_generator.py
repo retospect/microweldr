@@ -185,7 +185,7 @@ class TestGCodeStructure:
 
         # Create sample paths
         test_points = [WeldPoint(x=10.0, y=10.0, weld_type="normal")]
-        test_paths = [WeldPath(points=test_points, path_id="test")]
+        test_paths = [WeldPath(points=test_points, weld_type="normal", svg_id="test")]
 
         # Test header generation
         output = StringIO()

@@ -65,7 +65,9 @@ def upload_to_testpypi():
     if result.returncode == 0:
         print("✅ Successfully uploaded to TestPyPI!")
         print("🔗 Check: https://test.pypi.org/project/microweldr/")
-        print("📦 Test install: pip install -i https://test.pypi.org/simple/ microweldr")
+        print(
+            "📦 Test install: pip install -i https://test.pypi.org/simple/ microweldr"
+        )
         return True
     else:
         print("❌ TestPyPI upload failed")

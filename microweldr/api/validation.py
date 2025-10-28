@@ -174,9 +174,9 @@ class ValidationSuite:
                     "svg_structure",
                     svg_result.is_valid,
                     svg_result.message,
-                    warnings=svg_result.warnings
-                    if hasattr(svg_result, "warnings")
-                    else [],
+                    warnings=(
+                        svg_result.warnings if hasattr(svg_result, "warnings") else []
+                    ),
                     errors=[svg_result.message] if not svg_result.is_valid else [],
                 )
 
@@ -287,9 +287,11 @@ class ValidationSuite:
                     "gcode_structure",
                     gcode_result.is_valid,
                     gcode_result.message,
-                    warnings=gcode_result.warnings
-                    if hasattr(gcode_result, "warnings")
-                    else [],
+                    warnings=(
+                        gcode_result.warnings
+                        if hasattr(gcode_result, "warnings")
+                        else []
+                    ),
                     errors=[gcode_result.message] if not gcode_result.is_valid else [],
                 )
 
@@ -342,12 +344,16 @@ class ValidationSuite:
                     "animation_structure",
                     animation_result.is_valid,
                     animation_result.message,
-                    warnings=animation_result.warnings
-                    if hasattr(animation_result, "warnings")
-                    else [],
-                    errors=[animation_result.message]
-                    if not animation_result.is_valid
-                    else [],
+                    warnings=(
+                        animation_result.warnings
+                        if hasattr(animation_result, "warnings")
+                        else []
+                    ),
+                    errors=(
+                        [animation_result.message]
+                        if not animation_result.is_valid
+                        else []
+                    ),
                 )
 
             except Exception as e:

@@ -284,7 +284,10 @@ class MicroWeldrUI:
         stdscr.addstr(y, 0, "═" * (curses.COLS - 1), curses.A_BOLD)
         y += 1
         stdscr.addstr(
-            y, 0, "🔧 MicroWeldr UI - Interactive Plastic Welding Control", curses.A_BOLD
+            y,
+            0,
+            "🔧 MicroWeldr UI - Interactive Plastic Welding Control",
+            curses.A_BOLD,
         )
         y += 1
         stdscr.addstr(y, 0, "═" * (curses.COLS - 1), curses.A_BOLD)

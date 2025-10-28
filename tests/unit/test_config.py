@@ -245,8 +245,8 @@ min_animation_duration = 10.0
         finally:
             config_path.unlink()
 
-    def test_validation_missing_section_raises_error(self):
-        """Test validation with missing required section."""
+    def test_validation_missing_section_uses_defaults(self):
+        """Test that missing sections are filled with defaults."""
         config_content = """
 [temperatures]
 bed_temperature = 60
@@ -256,15 +256,18 @@ bed_temperature = 60
         try:
             config = Config(config_path)
 
-            with pytest.raises(
-                ConfigError, match="Missing required configuration section"
-            ):
-                config.validate()
+            # Should not raise error - defaults are used
+            config.validate()
+
+            # Verify defaults are present
+            assert "printer" in config.config
+            assert "nozzle" in config.config
+            assert config.printer["bed_size_x"] == 250.0  # Default value
         finally:
             config_path.unlink()
 
-    def test_validation_missing_key_raises_error(self):
-        """Test validation with missing required key."""
+    def test_validation_missing_key_uses_defaults(self):
+        """Test that missing keys are filled with defaults."""
         config_content = """
 [printer]
 bed_size_x = 250.0
@@ -275,7 +278,7 @@ inner_diameter = 0.2
 
 [temperatures]
 bed_temperature = 60
-# Missing nozzle_temperature and cooldown_temperature
+# Missing nozzle_temperature and cooldown_temperature - should use defaults
 
 [movement]
 move_height = 5.0
@@ -311,8 +314,12 @@ min_animation_duration = 10.0
         try:
             config = Config(config_path)
 
-            with pytest.raises(ConfigError, match="Missing required key"):
-                config.validate()
+            # Should not raise error - defaults fill missing keys
+            config.validate()
+
+            # Verify defaults are used for missing keys
+            assert config.temperatures["nozzle_temperature"] == 170  # Default value
+            assert config.temperatures["cooldown_temperature"] == 50  # Default value
         finally:
             config_path.unlink()
 

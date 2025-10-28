@@ -216,9 +216,11 @@ password = "test123"
 
         monitor.client.get_job_status.side_effect = mock_get_job_status
 
-        with patch.object(monitor, "print_header"), patch.object(
-            monitor, "print_status_update"
-        ), patch("time.sleep"):
+        with (
+            patch.object(monitor, "print_header"),
+            patch.object(monitor, "print_status_update"),
+            patch("time.sleep"),
+        ):
             result = monitor.monitor_until_complete()
 
         assert result is True

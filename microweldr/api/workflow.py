@@ -173,9 +173,9 @@ class WorkflowStep:
             "attempts": self.attempts,
             "duration": self.duration,
             "error": str(self.error) if self.error else None,
-            "result_type": type(self.result).__name__
-            if self.result is not None
-            else None,
+            "result_type": (
+                type(self.result).__name__ if self.result is not None else None
+            ),
         }
 
 
@@ -523,9 +523,9 @@ class WorkflowManager:
             "completed_steps": len(completed_steps),
             "failed_steps": len(failed_steps),
             "skipped_steps": len(skipped_steps),
-            "success_rate": len(completed_steps) / len(self.steps) * 100
-            if self.steps
-            else 0,
+            "success_rate": (
+                len(completed_steps) / len(self.steps) * 100 if self.steps else 0
+            ),
             "context": self.context.copy(),
             "step_details": [step.to_dict() for step in self.steps],
         }

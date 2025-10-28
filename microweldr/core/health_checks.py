@@ -172,9 +172,9 @@ class HealthChecker:
         test_paths = [
             Path.cwd(),  # Current directory
             Path.cwd() / "logs",  # Logs directory
-            Path("/tmp")
-            if platform.system() != "Windows"
-            else Path.cwd() / "temp",  # Temp directory
+            (
+                Path("/tmp") if platform.system() != "Windows" else Path.cwd() / "temp"
+            ),  # Temp directory
         ]
 
         access_issues = []
