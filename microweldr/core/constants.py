@@ -4,12 +4,6 @@ from enum import Enum
 from typing import List
 
 
-class OperatingMode(Enum):
-    """Printer operating modes."""
-
-    UPRIGHT = "upright"
-
-
 class WeldType(Enum):
     """Types of welding operations."""
 
@@ -322,9 +316,6 @@ class ErrorMessages:
 class WarningMessages:
     """Standard warning messages."""
 
-    EXPERIMENTAL_MODE = (
-        "⚠️  WARNING: Layed back mode is EXPERIMENTAL and may not work properly!"
-    )
     LOW_TEMPERATURE = "{param} {temp}°C is below recommended minimum of {limit}°C"
     HIGH_FILE_SIZE = "Large file size: {size}MB may cause performance issues"
     DEPRECATED_ATTRIBUTE = "Deprecated SVG attribute '{old}' used, please use '{new}'"
@@ -397,40 +388,6 @@ def get_color_weld_type(color: str) -> WeldType:
         return WeldType.PIPETTE
     else:
         raise ValueError(f"Unknown color for weld type: {color}")
-
-
-def get_operating_mode_enum(mode_str: str) -> OperatingMode:
-    """Convert string to OperatingMode enum.
-
-    Args:
-        mode_str: String representation of operating mode
-
-    Returns:
-        OperatingMode enum value
-
-    Raises:
-        ValueError: If operating mode is invalid
-    """
-    try:
-        return OperatingMode(mode_str.lower())
-    except ValueError:
-        valid_modes = [mode.value for mode in OperatingMode]
-        raise ValueError(
-            f"Invalid operating mode: {mode_str}. Must be one of: {', '.join(valid_modes)}"
-        )
-
-
-def is_experimental_mode(mode: OperatingMode) -> bool:
-    """
-    Check if the given operating mode is experimental.
-
-    Args:
-        mode: Operating mode to check
-
-    Returns:
-        True if mode is experimental, False otherwise
-    """
-    return False  # No experimental modes currently
 
 
 # Configuration validation helpers

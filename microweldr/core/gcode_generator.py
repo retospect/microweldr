@@ -64,16 +64,9 @@ class GCodeGenerator:
         f.write(f"; Start heating bed to {bed_temp}°C (heating during calibration)\n")
         f.write(f"M140 S{bed_temp} ; Set bed temperature (start heating)\n\n")
 
-    def _write_initialization(self, f: TextIO, skip_bed_leveling: bool) -> None:
+    def _write_initialization(self, f: TextIO, skip_bed_leveling: bool = False) -> None:
         """Write printer initialization commands."""
-        from .constants import (
-            ConfigKeys,
-            ConfigSections,
-            GCodeCommands,
-            OperatingMode,
-            WarningMessages,
-            is_experimental_mode,
-        )
+        from .constants import GCodeCommands
 
         # Standard operation mode
         f.write("; Initialize printer (standard operation mode)\n")
@@ -388,14 +381,7 @@ class GCodeGenerator:
 
     def _write_full_weld_initialization(self, f: TextIO) -> None:
         """Write full initialization with heating and calibration."""
-        from .constants import (
-            ConfigKeys,
-            ConfigSections,
-            GCodeCommands,
-            OperatingMode,
-            WarningMessages,
-            is_experimental_mode,
-        )
+        from .constants import GCodeCommands
 
         # Standard operation mode with full calibration
         f.write("; Initialize printer (standard upright operation)\n")
