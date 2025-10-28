@@ -19,55 +19,55 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
-      
+      uses: actions/checkout@v5
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v6
       with:
         python-version: ${{ matrix.python-version }}
-        
+
     - name: Install Poetry
       uses: snok/install-poetry@v1
       with:
         version: latest
         virtualenvs-create: true
         virtualenvs-in-project: true
-        
+
     - name: Add Poetry to PATH (Windows)
       if: runner.os == 'Windows'
       run: echo "$env:USERPROFILE\.local\bin" >> $env:GITHUB_PATH
       shell: powershell
-      
+
     - name: Install Poetry via pip (Windows fallback)
       if: failure() && runner.os == 'Windows'
       run: |
         python -m pip install --user poetry
         echo "$env:USERPROFILE\AppData\Roaming\Python\Scripts" >> $env:GITHUB_PATH
       shell: powershell
-      
+
     - name: Verify Poetry installation
       run: poetry --version
-      
+
     - name: Load cached venv
       id: cached-poetry-dependencies
       uses: actions/cache@v4
       with:
         path: .venv
         key: venv-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}
-        
+
     - name: Install dependencies
       if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
       run: poetry install --no-interaction --with dev
-      
+
     - name: Run linting tests
       run: poetry run pytest tests/test_linting.py -v
-      
+
     - name: Run unit tests
       run: poetry run pytest tests/ --cov=microweldr --cov-report=xml --cov-report=term-missing -v
-      
+
     - name: Run Bandit security scan
       run: poetry run bandit -r microweldr/ -f json -o bandit-report.json || true
-      
+
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
       if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
@@ -76,9 +76,9 @@ jobs:
         flags: unittests
         name: codecov-umbrella
         fail_ci_if_error: false
-        
+
     - name: Upload security reports
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       if: always()
       with:
         name: security-reports-${{ matrix.os }}-${{ matrix.python-version }}
@@ -87,7 +87,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: actions/setup-python@v6
       with:
         python-version: '3.11'
@@ -101,7 +101,7 @@ jobs:
   security:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: actions/setup-python@v6
       with:
         python-version: '3.11'
