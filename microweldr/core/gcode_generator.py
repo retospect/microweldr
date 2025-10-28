@@ -73,7 +73,10 @@ class GCodeGenerator:
         self, f: TextIO, temp: int, wait: bool = False
     ) -> None:
         """Set chamber temperature with optional waiting."""
-        if wait:
+        if temp == 0:
+            f.write(f"; Turn off chamber heating\n")
+            f.write(f"M141 S0 ; Turn off chamber heating\n\n")
+        elif wait:
             f.write(f"; Heat chamber to {temp}°C (Core One) and wait\n")
             f.write(f"M141 S{temp} ; Set chamber temperature\n")
             f.write(f"M191 S{temp} ; Wait for chamber temperature\n\n")
@@ -368,7 +371,7 @@ class GCodeGenerator:
         f.write(f"M140 S{cooldown_temp} ; Cool bed\n")
 
         if use_chamber_heating:
-            f.write(f"M141 S0 ; Turn off chamber heating\n")
+            self._set_chamber_temperature(f, 0, wait=False)
 
         # Home X and Y axes
         f.write("G28 X Y ; Home X and Y\n")
