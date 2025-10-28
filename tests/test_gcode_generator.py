@@ -2,14 +2,15 @@
 Tests for the G-code generator functionality.
 """
 
-import pytest
-from pathlib import Path
 from io import StringIO
+from pathlib import Path
 from unittest.mock import Mock, patch
 
+import pytest
+
+from microweldr.core.config import Config
 from microweldr.core.gcode_generator import GCodeGenerator
 from microweldr.core.models import WeldPath, WeldPoint
-from microweldr.core.config import Config
 
 
 class TestGCodeGenerator:
@@ -17,7 +18,8 @@ class TestGCodeGenerator:
 
     def test_generator_initialization(self):
         """Test generator can be initialized."""
-        config = Config()
+        config_path = Path(__file__).parent / "fixtures" / "test_config.toml"
+        config = Config(config_path)
         generator = GCodeGenerator(config)
         assert generator is not None
         assert generator.config is config
@@ -25,7 +27,8 @@ class TestGCodeGenerator:
     def test_generator_with_custom_config(self, tmp_path):
         """Test generator with custom configuration."""
         config_file = tmp_path / "test_config.toml"
-        config_file.write_text("""
+        config_file.write_text(
+            """
 [temperatures]
 bed_temperature = 120
 nozzle_temperature = 170
@@ -33,8 +36,9 @@ nozzle_temperature = 170
 [normal_welds]
 weld_time = 0.1
 dot_spacing = 0.5
-""")
-        
+"""
+        )
+
         config = Config(str(config_file))
         generator = GCodeGenerator(config)
         assert generator is not None
@@ -43,24 +47,24 @@ dot_spacing = 0.5
         """Test DRY temperature helper methods."""
         config = Config()
         generator = GCodeGenerator(config)
-        
+
         # Test that helper methods exist
-        assert hasattr(generator, '_set_bed_temperature')
-        assert hasattr(generator, '_set_nozzle_temperature')
-        assert hasattr(generator, '_set_chamber_temperature')
-        assert hasattr(generator, '_wait_for_bed_temperature')
-        assert hasattr(generator, '_wait_for_nozzle_temperature')
+        assert hasattr(generator, "_set_bed_temperature")
+        assert hasattr(generator, "_set_nozzle_temperature")
+        assert hasattr(generator, "_set_chamber_temperature")
+        assert hasattr(generator, "_wait_for_bed_temperature")
+        assert hasattr(generator, "_wait_for_nozzle_temperature")
 
     def test_bed_temperature_helper(self):
         """Test bed temperature helper method."""
         config = Config()
         generator = GCodeGenerator(config)
-        
+
         # Test bed temperature setting
         output = StringIO()
         generator._set_bed_temperature(output, 120, wait=False)
         gcode = output.getvalue()
-        
+
         assert "M140 S120" in gcode
         assert "bed" in gcode.lower()
 
@@ -68,12 +72,12 @@ dot_spacing = 0.5
         """Test bed temperature helper with waiting."""
         config = Config()
         generator = GCodeGenerator(config)
-        
+
         # Test bed temperature setting with wait
         output = StringIO()
         generator._set_bed_temperature(output, 120, wait=True)
         gcode = output.getvalue()
-        
+
         assert "M140 S120" in gcode
         assert "M190 S120" in gcode
         assert "wait" in gcode.lower()
@@ -82,12 +86,12 @@ dot_spacing = 0.5
         """Test nozzle temperature helper method."""
         config = Config()
         generator = GCodeGenerator(config)
-        
+
         # Test nozzle temperature setting
         output = StringIO()
         generator._set_nozzle_temperature(output, 170, wait=False)
         gcode = output.getvalue()
-        
+
         assert "M104 S170" in gcode
         assert "nozzle" in gcode.lower()
 
@@ -95,12 +99,12 @@ dot_spacing = 0.5
         """Test nozzle temperature helper with waiting."""
         config = Config()
         generator = GCodeGenerator(config)
-        
+
         # Test nozzle temperature setting with wait
         output = StringIO()
         generator._set_nozzle_temperature(output, 170, wait=True)
         gcode = output.getvalue()
-        
+
         assert "M104 S170" in gcode
         assert "M109 S170" in gcode
         assert "wait" in gcode.lower()
@@ -109,12 +113,12 @@ dot_spacing = 0.5
         """Test chamber temperature helper method."""
         config = Config()
         generator = GCodeGenerator(config)
-        
+
         # Test chamber temperature setting
         output = StringIO()
         generator._set_chamber_temperature(output, 35, wait=False)
         gcode = output.getvalue()
-        
+
         assert "M141 S35" in gcode
         assert "chamber" in gcode.lower()
 
@@ -122,12 +126,12 @@ dot_spacing = 0.5
         """Test chamber temperature helper with waiting."""
         config = Config()
         generator = GCodeGenerator(config)
-        
+
         # Test chamber temperature setting with wait
         output = StringIO()
         generator._set_chamber_temperature(output, 35, wait=True)
         gcode = output.getvalue()
-        
+
         assert "M141 S35" in gcode
         assert "M191 S35" in gcode
         assert "wait" in gcode.lower()
@@ -136,12 +140,12 @@ dot_spacing = 0.5
         """Test chamber temperature helper for turning off."""
         config = Config()
         generator = GCodeGenerator(config)
-        
+
         # Test chamber temperature off
         output = StringIO()
         generator._set_chamber_temperature(output, 0, wait=False)
         gcode = output.getvalue()
-        
+
         assert "M141 S0" in gcode
         assert "Turn off" in gcode or "turn off" in gcode.lower()
 
@@ -149,12 +153,12 @@ dot_spacing = 0.5
         """Test wait for bed temperature helper."""
         config = Config()
         generator = GCodeGenerator(config)
-        
+
         # Test waiting for bed temperature
         output = StringIO()
         generator._wait_for_bed_temperature(output, 120)
         gcode = output.getvalue()
-        
+
         assert "M190 S120" in gcode
         assert "wait" in gcode.lower()
 
@@ -162,12 +166,12 @@ dot_spacing = 0.5
         """Test wait for nozzle temperature helper."""
         config = Config()
         generator = GCodeGenerator(config)
-        
+
         # Test waiting for nozzle temperature
         output = StringIO()
         generator._wait_for_nozzle_temperature(output, 170)
         gcode = output.getvalue()
-        
+
         assert "M109 S170" in gcode
 
 
@@ -178,16 +182,16 @@ class TestGCodeStructure:
         """Test G-code header generation."""
         config = Config()
         generator = GCodeGenerator(config)
-        
+
         # Create sample paths
         test_points = [WeldPoint(x=10.0, y=10.0, weld_type="normal")]
         test_paths = [WeldPath(points=test_points, path_id="test")]
-        
+
         # Test header generation
         output = StringIO()
         generator._write_header(output, test_paths)
         gcode = output.getvalue()
-        
+
         assert "Generated by MicroWeldr" in gcode
         assert "Total paths: 1" in gcode
 
@@ -195,12 +199,12 @@ class TestGCodeStructure:
         """Test G-code initialization commands."""
         config = Config()
         generator = GCodeGenerator(config)
-        
+
         # Test initialization
         output = StringIO()
         generator._write_initialization(output)
         gcode = output.getvalue()
-        
+
         assert "G90" in gcode  # Absolute positioning
         assert "M83" in gcode  # Relative extruder positioning
         assert "G28" in gcode  # Home all axes
@@ -209,24 +213,24 @@ class TestGCodeStructure:
         """Test G-code initialization with bed leveling."""
         config = Config()
         generator = GCodeGenerator(config)
-        
+
         # Test initialization with bed leveling
         output = StringIO()
         generator._write_initialization(output, skip_bed_leveling=False)
         gcode = output.getvalue()
-        
+
         assert "G29" in gcode  # Auto bed leveling
 
     def test_gcode_initialization_skip_bed_leveling(self):
         """Test G-code initialization skipping bed leveling."""
         config = Config()
         generator = GCodeGenerator(config)
-        
+
         # Test initialization without bed leveling
         output = StringIO()
         generator._write_initialization(output, skip_bed_leveling=True)
         gcode = output.getvalue()
-        
+
         assert "G29" not in gcode  # No auto bed leveling
         assert "disabled" in gcode.lower()
 
@@ -238,12 +242,12 @@ class TestGCodeTemperatureIntegration:
         """Test pre-calibration heating sequence."""
         config = Config()
         generator = GCodeGenerator(config)
-        
+
         # Test pre-calibration heating
         output = StringIO()
         generator._write_pre_calibration_heating(output)
         gcode = output.getvalue()
-        
+
         # Should contain bed temperature setting
         assert "M140" in gcode  # Set bed temperature
         assert "efficient timing" in gcode.lower()
@@ -252,12 +256,12 @@ class TestGCodeTemperatureIntegration:
         """Test final heating sequence."""
         config = Config()
         generator = GCodeGenerator(config)
-        
+
         # Test final heating
         output = StringIO()
         generator._write_final_heating(output)
         gcode = output.getvalue()
-        
+
         # Should contain both bed and nozzle temperature commands
         assert "M190" in gcode  # Wait for bed temperature
         assert "M104" in gcode  # Set nozzle temperature
@@ -267,12 +271,12 @@ class TestGCodeTemperatureIntegration:
         """Test full weld heating sequence."""
         config = Config()
         generator = GCodeGenerator(config)
-        
+
         # Test full weld heating
         output = StringIO()
         generator._write_full_weld_heating(output)
         gcode = output.getvalue()
-        
+
         # Should contain comprehensive heating sequence
         assert "HEATING SEQUENCE" in gcode
         assert "M140" in gcode  # Set bed temperature
@@ -289,12 +293,12 @@ class TestGCodeUserInteraction:
         """Test basic user pause generation."""
         config = Config()
         generator = GCodeGenerator(config)
-        
+
         # Test user pause
         output = StringIO()
         generator._write_user_pause(output)
         gcode = output.getvalue()
-        
+
         assert "M0" in gcode  # Pause command
         assert "M117" in gcode  # Display message
         assert "plastic" in gcode.lower()
@@ -303,13 +307,13 @@ class TestGCodeUserInteraction:
         """Test user pause with margin information."""
         config = Config()
         generator = GCodeGenerator(config)
-        
+
         # Test user pause with margin info
         margin_info = {"front_back": "10.2/10.2cm", "left_right": "11.8/11.8cm"}
         output = StringIO()
         generator._write_user_pause(output, margin_info)
         gcode = output.getvalue()
-        
+
         assert "M0" in gcode  # Pause command
         assert "M117" in gcode  # Display message
         assert "10.2" in gcode  # Margin information
@@ -334,10 +338,10 @@ class TestGCodeErrorHandling:
         """Test generator handles invalid temperatures."""
         config = Config()
         generator = GCodeGenerator(config)
-        
+
         # Test with invalid temperature values
         output = StringIO()
-        
+
         # Should handle negative temperatures gracefully
         try:
             generator._set_bed_temperature(output, -10, wait=False)
@@ -353,7 +357,8 @@ class TestGCodeErrorHandling:
 def sample_config_with_temperatures(tmp_path):
     """Provide a sample configuration with temperature settings."""
     config_file = tmp_path / "temp_config.toml"
-    config_file.write_text("""
+    config_file.write_text(
+        """
 [temperatures]
 bed_temperature = 120
 nozzle_temperature = 170
@@ -364,22 +369,25 @@ use_chamber_heating = true
 weld_time = 0.1
 dot_spacing = 0.5
 weld_height = 0.020
-""")
+"""
+    )
     return Config(str(config_file))
 
 
 class TestGCodeConfigurationIntegration:
     """Test G-code generator with different configurations."""
 
-    def test_generator_with_chamber_heating_enabled(self, sample_config_with_temperatures):
+    def test_generator_with_chamber_heating_enabled(
+        self, sample_config_with_temperatures
+    ):
         """Test generator with chamber heating enabled."""
         generator = GCodeGenerator(sample_config_with_temperatures)
-        
+
         # Test pre-calibration heating with chamber
         output = StringIO()
         generator._write_pre_calibration_heating(output)
         gcode = output.getvalue()
-        
+
         # Should include chamber heating commands
         assert "M141" in gcode  # Set chamber temperature
         assert "M191" in gcode  # Wait for chamber temperature
@@ -387,21 +395,23 @@ class TestGCodeConfigurationIntegration:
     def test_generator_with_chamber_heating_disabled(self, tmp_path):
         """Test generator with chamber heating disabled."""
         config_file = tmp_path / "no_chamber_config.toml"
-        config_file.write_text("""
+        config_file.write_text(
+            """
 [temperatures]
 bed_temperature = 120
 nozzle_temperature = 170
 use_chamber_heating = false
-""")
-        
+"""
+        )
+
         config = Config(str(config_file))
         generator = GCodeGenerator(config)
-        
+
         # Test pre-calibration heating without chamber
         output = StringIO()
         generator._write_pre_calibration_heating(output)
         gcode = output.getvalue()
-        
+
         # Should not include chamber heating commands
         assert "M141" not in gcode
         assert "M191" not in gcode
@@ -410,12 +420,12 @@ use_chamber_heating = false
     def test_generator_temperature_values(self, sample_config_with_temperatures):
         """Test generator uses correct temperature values."""
         generator = GCodeGenerator(sample_config_with_temperatures)
-        
+
         # Test that correct temperature values are used
         output = StringIO()
         generator._write_final_heating(output)
         gcode = output.getvalue()
-        
+
         # Should use configured temperatures
         assert "S120" in gcode  # Bed temperature
         assert "S170" in gcode  # Nozzle temperature

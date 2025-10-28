@@ -2,9 +2,10 @@
 Tests for the core API functionality.
 """
 
-import pytest
 from pathlib import Path
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import MagicMock, Mock, patch
+
+import pytest
 
 from microweldr.api.core import MicroWeldr
 from microweldr.core.models import WeldPath, WeldPoint
@@ -21,16 +22,18 @@ class TestMicroWeldrAPI:
     def test_api_initialization_with_config(self, tmp_path):
         """Test API initialization with custom config."""
         config_file = tmp_path / "test_config.toml"
-        config_file.write_text("""
+        config_file.write_text(
+            """
 [temperatures]
 bed_temperature = 100
 nozzle_temperature = 200
-""")
-        
+"""
+        )
+
         api = MicroWeldr(config_path=str(config_file))
         assert api is not None
 
-    @patch('microweldr.api.core.setup_logging')
+    @patch("microweldr.api.core.setup_logging")
     def test_api_initialization_with_logging(self, mock_setup_logging):
         """Test API initialization sets up logging."""
         api = MicroWeldr(log_level="DEBUG")
@@ -54,23 +57,23 @@ class TestAPIIntegration:
     def test_api_workflow_basic(self):
         """Test basic API workflow without actual hardware."""
         api = MicroWeldr()
-        
+
         # Create a simple test path
         test_points = [
             WeldPoint(x=10.0, y=10.0, weld_type="normal"),
             WeldPoint(x=20.0, y=10.0, weld_type="normal"),
             WeldPoint(x=20.0, y=20.0, weld_type="normal"),
         ]
-        test_path = WeldPath(points=test_points, path_id="test_path")
-        
+        test_path = WeldPath(points=test_points, weld_type="normal", svg_id="test_path")
+
         # This should not raise an exception
         assert len(test_path.points) == 3
-        assert test_path.path_id == "test_path"
+        assert test_path.svg_id == "test_path"
 
     def test_api_error_handling(self):
         """Test API handles errors gracefully."""
         api = MicroWeldr()
-        
+
         # Test with invalid config path
         with pytest.raises((FileNotFoundError, Exception)):
             MicroWeldr(config_path="/nonexistent/path/config.toml")
@@ -90,7 +93,7 @@ class TestAPIConfiguration:
         # Create invalid config
         config_file = tmp_path / "invalid_config.toml"
         config_file.write_text("invalid toml content [[[")
-        
+
         # Should handle invalid config gracefully
         try:
             api = MicroWeldr(config_path=str(config_file))
@@ -108,7 +111,7 @@ class TestAPIUtilities:
     def test_api_path_validation(self):
         """Test API validates file paths."""
         api = MicroWeldr()
-        
+
         # Test with valid path
         valid_path = Path(__file__).parent / "fixtures" / "simple.svg"
         # This is just testing the API exists and can be called
@@ -125,10 +128,10 @@ class TestAPIUtilities:
 @pytest.fixture
 def sample_svg_content():
     """Provide sample SVG content for testing."""
-    return '''<?xml version="1.0" encoding="UTF-8"?>
+    return """<?xml version="1.0" encoding="UTF-8"?>
 <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
   <rect x="10" y="10" width="80" height="80" fill="none" stroke="black" stroke-width="1"/>
-</svg>'''
+</svg>"""
 
 
 @pytest.fixture
@@ -145,7 +148,7 @@ class TestAPIFileHandling:
     def test_api_svg_file_validation(self, temp_svg_file):
         """Test API can validate SVG files."""
         api = MicroWeldr()
-        
+
         # Test that file exists
         assert temp_svg_file.exists()
         assert temp_svg_file.suffix == ".svg"
@@ -153,7 +156,7 @@ class TestAPIFileHandling:
     def test_api_output_path_handling(self, tmp_path):
         """Test API handles output paths correctly."""
         api = MicroWeldr()
-        
+
         output_path = tmp_path / "output.gcode"
         # Test path handling
         assert output_path.parent.exists()
