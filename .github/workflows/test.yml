@@ -96,7 +96,7 @@ jobs:
 
     - name: Upload test artifacts
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: test-results-${{ matrix.python-version }}
         path: |
@@ -138,7 +138,7 @@ jobs:
 
     - name: Upload build artifacts
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: build-artifacts
         path: |
