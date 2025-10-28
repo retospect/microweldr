@@ -1,0 +1,70 @@
+name: Version Bump
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump_type:
+        description: 'Type of version bump'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+        - patch
+        - minor
+        - major
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+    
+    - name: Install dependencies
+      run: poetry install --with dev
+    
+    - name: Run tests before version bump
+      run: |
+        poetry run pytest --cov=microweldr --cov-report=term-missing
+        poetry run bandit -r microweldr/
+    
+    - name: Configure git
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+    
+    - name: Bump version
+      run: |
+        # Get current version
+        CURRENT_VERSION=$(poetry version -s)
+        echo "Current version: $CURRENT_VERSION"
+        
+        # Bump version using Poetry
+        poetry version ${{ github.event.inputs.bump_type }}
+        NEW_VERSION=$(poetry version -s)
+        echo "New version: $NEW_VERSION"
+        
+        # Commit version bump
+        git add pyproject.toml
+        git commit -m "Bump version from $CURRENT_VERSION to $NEW_VERSION"
+        git tag "v$NEW_VERSION"
+        
+        # Push changes
+        git push origin main
+        git push origin "v$NEW_VERSION"
+        
+        echo "Version bumped from $CURRENT_VERSION to $NEW_VERSION"

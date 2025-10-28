@@ -1,57 +1,66 @@
 [tool.poetry]
 name = "microweldr"
 version = "5.0.2"
-description = "Convert SVG files to Prusa Core One G-code for plastic welding"
-authors = ["Your Name <your.email@example.com>"]
+description = "Convert SVG files to Prusa Core One G-code for plastic welding applications - microfluidics prototyping with 3D printers"
+authors = ["Reto Stamm <reto@retospect.ch>"]
+maintainers = ["Reto Stamm <reto@retospect.ch>"]
 readme = "README.md"
 packages = [{include = "microweldr"}]
 license = "MIT"
+homepage = "https://github.com/retospect/microweldr"
 repository = "https://github.com/retospect/microweldr"
-keywords = ["svg", "gcode", "3d-printing", "welding", "prusa"]
+documentation = "https://github.com/retospect/microweldr/blob/main/README.md"
+keywords = [
+    "svg", "gcode", "3d-printing", "welding", "prusa", "microfluidics", 
+    "plastic-welding", "core-one", "manufacturing", "automation", "cad", 
+    "prototyping", "lab-on-chip", "bioengineering"
+]
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Manufacturing",
+    "Intended Audience :: Science/Research", 
+    "Intended Audience :: Healthcare Industry",
     "Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)",
+    "Topic :: Scientific/Engineering :: Medical Science Apps.",
+    "Topic :: System :: Hardware :: Hardware Drivers",
+    "Topic :: Multimedia :: Graphics :: Graphics Conversion",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.11", 
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3 :: Only",
+    "Operating System :: OS Independent",
+    "Environment :: Console",
+    "Typing :: Typed",
 ]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = ">=3.10"
 toml = "^0.10.2"
 requests = "^2.28.0"
-
-# Validation dependencies (included by default)
 lxml = "^5.0.0"
 xmlschema = "^2.0.0"
 gcodeparser = "^0.2.0"
 pygcode = "^0.2.0"
-
-# Development dependencies (included by default)
-pytest = "^7.0.0"
-pytest-cov = "^4.0.0"
-black = "^23.0.0"
-isort = "^5.12.0"
-flake8 = "^6.0.0"
-mypy = "^1.0.0"
-pre-commit = "^3.0.0"
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^7.0.0"
-pytest-cov = "^4.0.0"
-black = "^23.0.0"
-isort = "^5.12.0"
-flake8 = "^6.0.0"
-mypy = "^1.0.0"
-pre-commit = "^3.0.0"
-hypothesis = "^6.0.0"
-requests-mock = "^1.12.0"
 click = "^8.0.0"
 tqdm = "^4.65.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = ">=7.4.0,<9.0.0"
+pytest-cov = ">=4.1.0,<6.0.0"
+black = ">=23.0.0,<25.0.0"
+isort = ">=5.12.0,<6.0.0"
+flake8 = ">=6.0.0,<8.0.0"
+mypy = ">=1.5.0,<2.0.0"
+pre-commit = ">=3.4.0,<4.0.0"
+bandit = ">=1.7.5,<2.0.0"
+hypothesis = "^6.0.0"
+requests-mock = "^1.12.0"
 bump-my-version = "^1.2.0"
+types-requests = "^2.31.0"
+types-toml = "^0.10.8"
 
 # All features included by default - no optional extras needed
 
@@ -64,7 +73,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.black]
 line-length = 88
-target-version = ['py38']
+target-version = ['py310', 'py311', 'py312']
 include = '\.pyi?$'
 extend-exclude = '''
 /(
@@ -131,3 +140,10 @@ exclude_lines = [
     "class .*\\bProtocol\\):",
     "@(abc\\.)?abstractmethod",
 ]
+
+[tool.bandit]
+exclude_dirs = ["tests", "build", "dist"]
+skips = ["B101", "B601"]  # Skip assert_used and shell_injection_process_args for test files
+
+[tool.bandit.assert_used]
+skips = ["**/test_*.py", "**/tests/*.py"]

@@ -1,0 +1,32 @@
+[temperatures]
+bed_temperature = 120
+nozzle_temperature = 170
+chamber_temperature = 35
+use_chamber_heating = false
+cooldown_temperature = 50
+
+[normal_welds]
+weld_time = 0.1
+dot_spacing = 0.5
+weld_height = 0.020
+weld_temperature = 170
+
+[light_welds]
+weld_time = 0.3
+dot_spacing = 0.5
+weld_height = 0.020
+weld_temperature = 160
+
+[movement]
+move_height = 5.0
+travel_speed = 3000
+z_speed = 600
+
+[printer]
+bed_size_x = 250.0
+bed_size_y = 220.0
+max_z_height = 270.0
+
+[nozzle]
+outer_diameter = 1.1
+inner_diameter = 0.2
