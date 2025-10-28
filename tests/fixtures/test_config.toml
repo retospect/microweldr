@@ -10,12 +10,16 @@ weld_time = 0.1
 dot_spacing = 0.5
 weld_height = 0.020
 weld_temperature = 170
+initial_dot_spacing = 3.6
+cooling_time_between_passes = 2.0
 
 [light_welds]
 weld_time = 0.3
 dot_spacing = 0.5
 weld_height = 0.020
 weld_temperature = 160
+initial_dot_spacing = 3.6
+cooling_time_between_passes = 1.5
 
 [movement]
 move_height = 5.0
@@ -30,3 +34,15 @@ max_z_height = 270.0
 [nozzle]
 outer_diameter = 1.1
 inner_diameter = 0.2
+
+[output]
+gcode_extension = ".gcode"
+animation_extension = "_animation.svg"
+
+[sequencing]
+skip_base_distance = 5
+
+[animation]
+time_between_welds = 0.1
+pause_time = 3.0
+min_animation_duration = 10.0

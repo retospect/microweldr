@@ -16,7 +16,8 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from microweldr.prusalink.client import PrusaLinkClient
+# Import after path modification
+from microweldr.prusalink.client import PrusaLinkClient  # noqa: E402
 
 
 def check_printer_available():
