@@ -8,9 +8,10 @@ This document outlines the comprehensive DRY improvements made to eliminate magi
 **Before:** Hardcoded strings scattered throughout code
 ```python
 # OLD - Magic strings everywhere
-layed_back_mode = self.config.get("printer", "layed_back_mode", False)
-if layed_back_mode:
-    print("⚠️  WARNING: Layed back mode is EXPERIMENTAL...")
+# Example of old hardcoded strings
+mode = self.config.get("printer", "mode", "standard")
+if mode == "experimental":
+    print("⚠️  WARNING: Experimental mode...")
 ```
 
 **After:** Centralized enum and constants
@@ -18,8 +19,8 @@ if layed_back_mode:
 # NEW - Using enums and constants
 from .constants import OperatingMode, ConfigSections, ConfigKeys, WarningMessages
 
-mode_str = self.config.get(ConfigSections.PRINTER, ConfigKeys.LAYED_BACK_MODE, False)
-operating_mode = OperatingMode.LAYED_BACK if mode_str else OperatingMode.UPRIGHT
+mode_str = self.config.get(ConfigSections.PRINTER, ConfigKeys.OPERATING_MODE, "standard")
+operating_mode = OperatingMode.UPRIGHT
 
 if is_experimental_mode(operating_mode):
     print(WarningMessages.EXPERIMENTAL_MODE)
@@ -101,7 +102,7 @@ f.write(f"{GCodeCommands.G28} ; Home all axes\n")
 # OLD - Magic configuration strings
 bed_temp = self.config.get("temperatures", "bed_temperature")
 weld_temp = self.config.get("normal_welds", "weld_temperature")
-layed_back = self.config.get("printer", "layed_back_mode", False)
+mode = self.config.get("printer", "operating_mode", "standard")
 ```
 
 **After:** Centralized configuration constants
@@ -111,7 +112,7 @@ from .constants import ConfigSections, ConfigKeys
 
 bed_temp = self.config.get(ConfigSections.TEMPERATURES, ConfigKeys.BED_TEMPERATURE)
 weld_temp = self.config.get(ConfigSections.NORMAL_WELDS, ConfigKeys.WELD_TEMPERATURE)
-layed_back = self.config.get(ConfigSections.PRINTER, ConfigKeys.LAYED_BACK_MODE, False)
+mode = self.config.get(ConfigSections.PRINTER, ConfigKeys.OPERATING_MODE, "standard")
 ```
 
 ### 6. **SVG Attributes** ✅ FIXED
@@ -138,7 +139,7 @@ message = element.get(SVGAttributes.DATA_PAUSE_MESSAGE)
 Created comprehensive `microweldr/core/constants.py` with:
 
 ### **Enums for Type Safety:**
-- `OperatingMode` - Printer operating modes (upright, layed_back)
+- `OperatingMode` - Printer operating modes (upright)
 - `WeldType` - Welding operation types (normal, light, stop, pipette)
 - `PrinterState` - Printer operational states
 - `ValidationStatus` - Validation result statuses
@@ -226,7 +227,7 @@ Additional areas that could benefit from DRY principles:
 ## ✅ **Verification Checklist**
 
 - [x] No hardcoded weld types (`"normal"`, `"light"`, etc.)
-- [x] No hardcoded operating modes (`"layed_back_mode"`)
+- [x] No hardcoded operating modes (`"experimental_mode"`)
 - [x] No hardcoded color values (`"red"`, `"#ff0000"`, etc.)
 - [x] No hardcoded G-code commands (`"G90"`, `"M83"`, etc.)
 - [x] No hardcoded config section names (`"printer"`, `"temperatures"`)

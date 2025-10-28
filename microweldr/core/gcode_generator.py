@@ -75,81 +75,25 @@ class GCodeGenerator:
             is_experimental_mode,
         )
 
-        # Get operating mode using constants
-        mode_str = self.config.get(
-            ConfigSections.PRINTER, ConfigKeys.LAYED_BACK_MODE, False
-        )
-        operating_mode = OperatingMode.LAYED_BACK if mode_str else OperatingMode.UPRIGHT
+        # Standard operation mode
+        f.write("; Initialize printer (standard operation mode)\n")
+        f.write(f"{GCodeCommands.G90} ; Absolute positioning\n")
+        f.write(f"{GCodeCommands.M83} ; Relative extruder positioning\n")
+        f.write(f"{GCodeCommands.G28} ; Home all axes\n\n")
 
-        if is_experimental_mode(operating_mode):
-            # Print warning about experimental mode
-            print(WarningMessages.EXPERIMENTAL_MODE)
-            print(
-                "⚠️  Known issues: calibration conflicts, Z-axis problems, coordinate issues"
-            )
-            print(
-                f"⚠️  Recommendation: Set {ConfigKeys.LAYED_BACK_MODE} = false for reliable operation"
-            )
-            print("⚠️  Continue at your own risk - manual intervention may be required")
-            print()
-            f.write("; Initialize printer (layed back mode - printer on its back!)\n")
-            f.write("; IMPORTANT: Manually position print head before starting!\n")
-            f.write("; Expected position: Rear right corner of bed\n")
-            f.write(
-                "; All positioning fully manual - no homing to avoid X/Y conflicts\n\n"
-            )
-
-            f.write(f"{GCodeCommands.G90} ; Absolute positioning\n")
-            f.write(f"{GCodeCommands.M83} ; Relative extruder positioning\n")
-            f.write(
-                f"{GCodeCommands.M84} S0 ; Disable stepper timeout for layed back operation\n"
-            )
-
-            # Trust X/Y but will home Z during heating
-            f.write(
-                "G92 X0 Y0 ; Set current X/Y position as origin (manual positioning trusted)\n\n"
-            )
-
-            # Always skip bed leveling for layed back operation
-            f.write("; Bed leveling disabled for layed back operation\n")
-            f.write("; Manual bed preparation required (printer is relaxing)\n\n")
+        # Bed leveling (optional)
+        if not skip_bed_leveling:
+            f.write("; Bed leveling\n")
+            f.write("G29 ; Auto bed leveling\n\n")
         else:
-            # Standard operation mode
-            f.write("; Initialize printer (standard operation mode)\n")
-            f.write(f"{GCodeCommands.G90} ; Absolute positioning\n")
-            f.write(f"{GCodeCommands.M83} ; Relative extruder positioning\n")
-            f.write(f"{GCodeCommands.G28} ; Home all axes\n\n")
-
-            # Bed leveling (optional)
-            if not skip_bed_leveling:
-                f.write("; Bed leveling\n")
-                f.write("G29 ; Auto bed leveling\n\n")
-            else:
-                f.write("; Bed leveling disabled\n\n")
+            f.write("; Bed leveling disabled\n\n")
 
     def _write_final_heating(self, f: TextIO) -> None:
         """Wait for bed temperature and heat nozzle."""
         bed_temp = self.config.get("temperatures", "bed_temperature")
         nozzle_temp = self.config.get("temperatures", "nozzle_temperature")
-        layed_back_mode = self.config.get("printer", "layed_back_mode", False)
 
-        # Z-axis calibration while bed heats up (layed back mode only)
-        if layed_back_mode:
-            f.write("; Z-axis calibration while bed heats up (efficient timing)\n")
-            f.write(
-                "; IMPORTANT: Manually position Z-axis at desired height before starting\n"
-            )
-            f.write(
-                "; Skipping automatic Z-homing to avoid X/Y conflicts in layed back mode\n"
-            )
-            f.write(
-                "G92 Z0 ; Set current Z position as zero reference (trust manual positioning)\n"
-            )
-            f.write(
-                "G1 Z10 F150 ; Move Z to safe position slowly (no rush when layed back)\n\n"
-            )
-
-        # Now wait for bed temperature (should be ready or nearly ready)
+        # Wait for bed temperature
         f.write(f"; Wait for bed to reach target temperature\n")
         f.write(f"M190 S{bed_temp} ; Wait for bed temperature\n\n")
 
@@ -390,7 +334,6 @@ class GCodeGenerator:
         use_chamber_heating = self.config.get(
             "temperatures", "use_chamber_heating", True
         )
-        layed_back_mode = self.config.get("printer", "layed_back_mode", True)
 
         f.write("; Cool down (Core One)\n")
         f.write(f"M104 S{cooldown_temp} ; Cool nozzle\n")
@@ -399,11 +342,8 @@ class GCodeGenerator:
         if use_chamber_heating:
             f.write(f"M141 S0 ; Turn off chamber heating\n")
 
-        # Skip homing in layed back mode to avoid conflicts
-        if not layed_back_mode:
-            f.write("G28 X Y ; Home X and Y\n")
-        else:
-            f.write("; Skipping X/Y homing in layed back mode (avoid conflicts)\n")
+        # Home X and Y axes
+        f.write("G28 X Y ; Home X and Y\n")
 
         f.write("M84 ; Disable steppers\n")
         f.write("; End of G-code\n")
@@ -457,38 +397,13 @@ class GCodeGenerator:
             is_experimental_mode,
         )
 
-        # Get operating mode using constants
-        mode_str = self.config.get(
-            ConfigSections.PRINTER, ConfigKeys.LAYED_BACK_MODE, False
-        )
-        operating_mode = OperatingMode.LAYED_BACK if mode_str else OperatingMode.UPRIGHT
-
-        if is_experimental_mode(operating_mode):
-            f.write("; WARNING: Layed back mode is experimental!\n")
-            f.write("; IMPORTANT: Manually position print head before starting!\n")
-            f.write("; Expected position: Rear right corner of bed\n")
-            f.write(
-                "; All positioning fully manual - no homing to avoid X/Y conflicts\n\n"
-            )
-
-            f.write(f"{GCodeCommands.G90} ; Absolute positioning\n")
-            f.write(f"{GCodeCommands.M83} ; Relative extruder positioning\n")
-            f.write(
-                f"{GCodeCommands.M84} S0 ; Disable stepper timeout for layed back operation\n"
-            )
-            f.write(
-                "G92 X0 Y0 ; Set current X/Y position as origin (manual positioning trusted)\n\n"
-            )
-            f.write("; Bed leveling disabled for layed back operation\n")
-            f.write("; Manual bed preparation required\n\n")
-        else:
-            # Standard operation mode with full calibration
-            f.write("; Initialize printer (standard upright operation)\n")
-            f.write(f"{GCodeCommands.G90} ; Absolute positioning\n")
-            f.write(f"{GCodeCommands.M83} ; Relative extruder positioning\n")
-            f.write(f"{GCodeCommands.G28} ; Home all axes\n\n")
-            f.write("; Automatic bed leveling\n")
-            f.write("G29 ; Auto bed leveling\n\n")
+        # Standard operation mode with full calibration
+        f.write("; Initialize printer (standard upright operation)\n")
+        f.write(f"{GCodeCommands.G90} ; Absolute positioning\n")
+        f.write(f"{GCodeCommands.M83} ; Relative extruder positioning\n")
+        f.write(f"{GCodeCommands.G28} ; Home all axes\n\n")
+        f.write("; Automatic bed leveling\n")
+        f.write("G29 ; Auto bed leveling\n\n")
 
     def _write_full_weld_heating(self, f: TextIO) -> None:
         """Write heating sequence with waiting."""
@@ -498,7 +413,6 @@ class GCodeGenerator:
             "temperatures", "use_chamber_heating", True
         )
         chamber_temp = self.config.get("temperatures", "chamber_temperature", 35)
-        layed_back_mode = self.config.get("printer", "layed_back_mode", False)
 
         f.write("; HEATING SEQUENCE - Set temperatures and wait\n")
         f.write("M117 Heating up for welding...\n")
@@ -515,13 +429,6 @@ class GCodeGenerator:
         f.write(f"; Heat bed to {bed_temp}°C and wait\n")
         f.write(f"M140 S{bed_temp} ; Set bed temperature\n")
         f.write(f"M190 S{bed_temp} ; Wait for bed temperature\n\n")
-
-        # Z-axis calibration for layed back mode
-        if layed_back_mode:
-            f.write("; Z-axis calibration (layed back mode)\n")
-            f.write("; IMPORTANT: Manually position Z-axis at desired height\n")
-            f.write("G92 Z0 ; Set current Z position as zero reference\n")
-            f.write("G1 Z10 F150 ; Move Z to safe position slowly\n\n")
 
         # Heat nozzle and wait
         f.write(f"; Heat nozzle to {nozzle_temp}°C and wait\n")

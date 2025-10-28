@@ -7,7 +7,7 @@ A Python package that converts SVG files to Prusa Core One G-code for plastic "s
 
 **NEW: Unified Command Interface** - All functionality consolidated into a single `microweldr` command with subcommands for testing, calibration, framing, and welding operations.
 
-**Optimized for Prusa Core One**: Includes chamber temperature control (M141/M191), proper bed dimensions (250×220×270mm), CoreXY-specific settings, and **layed back mode** *(currently not working)* - designed for when your printer is positioned on its back (door pointing up) so liquids can be pipetted into pouches and gravity holds them in place before heat sealing.
+**Optimized for Prusa Core One**: Includes chamber temperature control (M141/M191), proper bed dimensions (250×220×270mm), and CoreXY-specific settings for reliable plastic welding operations.
 
 This allows for rapid microfluidics prototyping with a 3d printer.
 While the edges are not as smooth as a laser weld, the 3d printer is more available than a laser welder.
@@ -261,47 +261,6 @@ microweldr input.svg -c my_config.toml --secrets-config my_secrets.toml
 - **Invalid config**: Falls back to defaults with warnings
 - **Partial config**: Missing sections use defaults
 
-## Layed Back Mode (EXPERIMENTAL - NOT WORKING YET)
-
-**⚠️ WARNING: Layed back mode is currently under development and does not work properly. Use standard upright mode for reliable operation.**
-
-The SVG welder was designed to support "layed back printer operation" - when your printer is chillin' on its back with the door pointing up for easy access to microfluidic devices. However, this mode is currently experiencing technical issues.
-
-### **Known Issues:**
-- Calibration conflicts with manual positioning
-- Z-axis homing issues when printer is on its back
-- Coordinate system needs adjustment for inverted orientation
-- Safety features need refinement for this configuration
-
-### **Current Recommendation:**
-```toml
-[printer]
-layed_back_mode = false  # Use standard upright mode for now
-```
-
-### **Future Development:**
-Once the issues are resolved, layed back mode will provide:
-- Easy access for pipetting and microfluidic operations
-- Manual positioning with trusted coordinates
-- Optimized G-code for inverted printer orientation
-
-### **Manual Positioning Required**
-**IMPORTANT**: Before starting any print (your printer is trusting you completely!):
-1. **Manually position** the print head to the **rear right corner** of the bed
-2. **Set Z-height manually** - position nozzle at desired starting height above bed
-3. **All positioning trusted** - the printer is chillin' and trusts your complete setup
-4. **G92 X0 Y0 Z0** sets all axes as origin (no automatic homing performed)
-
-### **Safety Features for Layed Back Mode**
-- **No automatic homing** (prevents all endpoint errors when printer is on its back)
-- **Fully manual positioning** (complete trust in your setup for all axes)
-- **No bed leveling** (too risky when printer is layed back)
-- **Manual Z-axis control** (you position the nozzle height manually)
-- **Disabled stepper timeout** (M84 S0 - printer stays relaxed)
-- **Gentle Z positioning** (slow movements to avoid crashes)
-
-### **Standard Mode (For Upright Printers)**
-Set `layed_back_mode = false` for normal upright printer operation with full homing and bed leveling.
 
 ## PrusaLink Configuration
 

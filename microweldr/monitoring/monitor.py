@@ -15,7 +15,6 @@ class MonitorMode(Enum):
     """Monitoring modes for different print types."""
 
     STANDARD = "standard"
-    LAYED_BACK = "layed-back"
     PIPETTING = "pipetting"
 
 
@@ -33,7 +32,7 @@ class PrintMonitor:
         Initialize print monitor.
 
         Args:
-            mode: Monitoring mode (standard, layed-back, pipetting)
+            mode: Monitoring mode (standard, pipetting)
             interval: Check interval in seconds
             verbose: Show detailed output
             status_callback: Optional callback for status updates
@@ -51,7 +50,6 @@ class PrintMonitor:
         """Get emoji for current monitoring mode."""
         mode_emojis = {
             MonitorMode.STANDARD: "🏗️",
-            MonitorMode.LAYED_BACK: "🛋️",
             MonitorMode.PIPETTING: "🧪",
         }
         return mode_emojis.get(self.mode, "📊")
@@ -144,9 +142,7 @@ class PrintMonitor:
         print("=" * 60)
         print(f"⏱️ Started: {datetime.datetime.now().strftime('%H:%M:%S')}")
 
-        if self.mode == MonitorMode.LAYED_BACK:
-            print("🛋️ Printer: Chillin' on its back (door pointing up)")
-        elif self.mode == MonitorMode.PIPETTING:
+        if self.mode == MonitorMode.PIPETTING:
             print("🧪 Features: Pipetting stops for microfluidic devices")
         elif self.mode == MonitorMode.STANDARD:
             print("⬆️ Mode: Standard upright operation")
@@ -249,9 +245,6 @@ class PrintMonitor:
             if self.mode == MonitorMode.PIPETTING:
                 print("    🧪 PIPETTING PAUSE - Check LCD for instructions!")
                 print("    💉 Fill pouches as directed, then press continue")
-            elif self.mode == MonitorMode.LAYED_BACK:
-                print("    🛋️ PAUSE - Check LCD for instructions!")
-                print("    📋 Complete the required action, then press continue")
             else:
                 print("    ⏸️ PAUSED - Check printer LCD for instructions")
 

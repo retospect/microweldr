@@ -5,7 +5,6 @@
 bed_size_x = 250.0  # mm
 bed_size_y = 220.0  # mm - Core One has 220mm Y axis
 max_z_height = 270.0  # mm
-layed_back_mode = false  # Set to true for layed back printer operation (printer on its back, door pointing up)
 
 [nozzle]
 # Nozzle dimensions for animation visualization
@@ -27,7 +26,7 @@ temp_tolerance = 10  # °C - allowed temperature deviation from target
 [movement]
 move_height = 5.0  # mm - height for safe movement
 frame_height = 10.0  # mm - height for frame drawing (clearance check)
-travel_speed = 3000  # mm/min - reduced for layed back operation
+travel_speed = 3000  # mm/min - travel speed for movements
 z_speed = 600  # mm/min - optimized Z speed (near maximum safe limit for Core One)
 
 [normal_welds]

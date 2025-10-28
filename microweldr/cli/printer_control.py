@@ -32,7 +32,7 @@ Examples:
 
   # Monitor print progress
   printer-control monitor
-  printer-control monitor --mode layed-back --interval 20
+  printer-control monitor --mode pipetting --interval 20
   printer-control monitor --mode pipetting --verbose
 
   # Stop current print
@@ -45,7 +45,6 @@ Examples:
 
 Monitoring Modes:
   standard    - Standard upright printer operation
-  layed-back  - Printer on its back (door pointing up)
   pipetting   - Microfluidic device with pipetting stops
         """,
     )
@@ -66,7 +65,7 @@ Monitoring Modes:
     monitor_parser = subparsers.add_parser("monitor", help="Monitor print progress")
     monitor_parser.add_argument(
         "--mode",
-        choices=["standard", "layed-back", "pipetting"],
+        choices=["standard", "pipetting"],
         default="standard",
         help="Monitoring mode (default: standard)",
     )
@@ -303,7 +302,6 @@ def cmd_monitor(args):
     try:
         mode_map = {
             "standard": MonitorMode.STANDARD,
-            "layed-back": MonitorMode.LAYED_BACK,
             "pipetting": MonitorMode.PIPETTING,
         }
 

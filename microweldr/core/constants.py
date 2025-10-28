@@ -8,7 +8,6 @@ class OperatingMode(Enum):
     """Printer operating modes."""
 
     UPRIGHT = "upright"
-    LAYED_BACK = "layed_back"  # Experimental mode for gravity-assisted operations
 
 
 class WeldType(Enum):
@@ -93,7 +92,6 @@ class ConfigKeys:
     BED_SIZE_X = "bed_size_x"
     BED_SIZE_Y = "bed_size_y"
     BED_SIZE_Z = "bed_size_z"
-    LAYED_BACK_MODE = "layed_back_mode"
 
     # Nozzle settings
     OUTER_DIAMETER = "outer_diameter"
@@ -423,15 +421,16 @@ def get_operating_mode_enum(mode_str: str) -> OperatingMode:
 
 
 def is_experimental_mode(mode: OperatingMode) -> bool:
-    """Check if operating mode is experimental.
+    """
+    Check if the given operating mode is experimental.
 
     Args:
-        mode: OperatingMode enum value
+        mode: Operating mode to check
 
     Returns:
         True if mode is experimental, False otherwise
     """
-    return mode == OperatingMode.LAYED_BACK
+    return False  # No experimental modes currently
 
 
 # Configuration validation helpers

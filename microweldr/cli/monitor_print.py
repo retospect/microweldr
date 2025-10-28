@@ -27,7 +27,7 @@ def create_parser():
     )
     parser.add_argument(
         "--mode",
-        choices=["standard", "layed-back", "pipetting"],
+        choices=["standard", "pipetting"],
         default="standard",
         help="Monitoring mode for different print types",
     )
@@ -50,7 +50,7 @@ def format_time_remaining(seconds):
 
 def get_mode_emoji(mode):
     """Get emoji for monitoring mode."""
-    mode_emojis = {"standard": "🏗️", "layed-back": "🛋️", "pipetting": "🧪"}
+    mode_emojis = {"standard": "🏢️", "pipetting": "🧪"}
     return mode_emojis.get(mode, "📊")
 
 
@@ -63,9 +63,7 @@ def print_header(mode):
     print("=" * 60)
     print(f"⏱️ Started: {datetime.datetime.now().strftime('%H:%M:%S')}")
 
-    if mode == "layed-back":
-        print("🛋️ Printer: Chillin' on its back (door pointing up)")
-    elif mode == "pipetting":
+    if mode == "pipetting":
         print("🧪 Features: Pipetting stops for microfluidic devices")
     elif mode == "standard":
         print("⬆️ Mode: Standard upright operation")
@@ -102,9 +100,6 @@ def print_status_update(job, elapsed_min, mode, verbose):
         if mode == "pipetting":
             print("    🧪 PIPETTING PAUSE - Check LCD for instructions!")
             print("    💉 Fill pouches as directed, then press continue")
-        elif mode == "layed-back":
-            print("    🛋️ PAUSE - Check LCD for instructions!")
-            print("    📋 Complete the required action, then press continue")
         else:
             print("    ⏸️ PAUSED - Check printer LCD for instructions")
 
