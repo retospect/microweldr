@@ -143,6 +143,26 @@ def create_parser() -> argparse.ArgumentParser:
         "--verbose", "-v", action="store_true", help="Verbose output"
     )
 
+    # Full-weld command - generates self-contained G-code
+    full_weld_parser = subparsers.add_parser(
+        "full-weld",
+        help="Generate self-contained G-code with all heating, calibration, and prompts built-in",
+    )
+    full_weld_parser.add_argument("svg_file", help="Input SVG file")
+    full_weld_parser.add_argument("-o", "--output", help="Output G-code file")
+    full_weld_parser.add_argument(
+        "-c", "--config", default="config.toml", help="Config file"
+    )
+    full_weld_parser.add_argument(
+        "--no-animation", action="store_true", help="Skip animation"
+    )
+    full_weld_parser.add_argument(
+        "--verbose", "-v", action="store_true", help="Verbose output"
+    )
+    full_weld_parser.add_argument(
+        "--submit", action="store_true", help="Submit to printer and start immediately"
+    )
+
     # Support SVG file as first argument (default to weld) - handled in main()
     parser.add_argument(
         "svg_file", nargs="?", help="Input SVG file (defaults to weld command)"
@@ -861,6 +881,137 @@ def cmd_weld(args):
         return False
 
 
+def cmd_full_weld(args):
+    """Generate self-contained G-code with all heating, calibration, and prompts built-in."""
+    print("🔥 MicroWeldr - Full Self-Contained Welding G-code")
+    print("=" * 55)
+
+    try:
+        # Load configuration
+        config = Config(args.config)
+        if args.verbose:
+            print(f"✓ Configuration loaded from {args.config}")
+
+        # Validate SVG file
+        svg_path = Path(args.svg_file)
+        if not svg_path.exists():
+            print(f"❌ SVG file not found: {args.svg_file}")
+            return False
+
+        if args.verbose:
+            print(f"✓ SVG file found: {args.svg_file}")
+
+        # Validate SVG content
+        svg_validator = SVGValidator()
+        svg_result = svg_validator.validate_file(svg_path)
+
+        if not svg_result.is_valid:
+            raise SVGParseError(f"SVG validation failed: {svg_result.message}")
+
+        if svg_result.warnings:
+            print("⚠️ SVG validation warnings:")
+            for warning in svg_result.warnings:
+                print(f"  • {warning}")
+
+        # Set up output paths
+        if args.output:
+            output_gcode = Path(args.output)
+        else:
+            output_gcode = svg_path.with_suffix(".gcode")
+
+        output_animation = output_gcode.with_suffix(".html")
+
+        print(f"📄 Output G-code: {output_gcode}")
+        if not args.no_animation:
+            print(f"🎬 Output animation: {output_animation}")
+
+        # Create converter and generate G-code
+        print("🔧 Converting SVG to self-contained G-code...")
+        converter = SVGToGCodeConverter(config)
+
+        # Convert SVG to G-code with self-contained mode
+        weld_paths = converter.convert_full_weld(svg_path, output_gcode)
+
+        print(f"✅ Self-contained G-code written to {output_gcode}")
+
+        # Generate animation if requested
+        if not args.no_animation:
+            print("🎬 Generating animation...")
+            animation_generator = AnimationGenerator(config)
+            animation_generator.generate_file(weld_paths, output_animation)
+            print(f"✅ Animation written to {output_animation}")
+
+        # Submit to printer if requested
+        if args.submit:
+            print("📤 Submitting to printer...")
+            try:
+                client = PrusaLinkClient()
+
+                # Read G-code file and convert to command list
+                with open(output_gcode, "r") as f:
+                    gcode_lines = f.readlines()
+
+                # Clean up G-code lines (remove empty lines and comments)
+                gcode_commands = []
+                for line in gcode_lines:
+                    line = line.strip()
+                    if line and not line.startswith(";"):
+                        gcode_commands.append(line)
+
+                # Send G-code using the same method as other commands
+                success = client.send_and_run_gcode(
+                    commands=gcode_commands,
+                    job_name=f"full_weld_{svg_path.stem}",
+                    wait_for_completion=False,
+                    keep_temp_file=False,
+                )
+
+                if success:
+                    print("✅ Self-contained G-code uploaded and started!")
+                    print("🎯 The printer will now handle everything automatically:")
+                    print("   • Set temperatures and wait")
+                    print("   • Home axes and level bed")
+                    print("   • Prompt for plastic insertion")
+                    print("   • Perform welding sequence")
+                    print("   • Cool down and finish")
+                else:
+                    print("❌ Failed to upload G-code")
+
+            except PrusaLinkError as e:
+                print(f"Printer submission failed: {e}")
+                print("G-code file was still generated successfully.")
+            except Exception as e:
+                print(f"Unexpected error during printer submission: {e}")
+                print("G-code file was still generated successfully.")
+
+        print("\n🎉 Self-contained welding G-code ready!")
+        print("📋 This G-code includes:")
+        print("   ✓ Temperature setup and waiting")
+        print("   ✓ Axis homing and bed leveling")
+        print("   ✓ User prompts for plastic insertion")
+        print("   ✓ Complete welding sequence")
+        print("   ✓ Automatic cooldown")
+        print(
+            "\n💡 Just upload to printer and press start - no external monitoring needed!"
+        )
+
+        return True
+
+    except ConfigError as e:
+        print(f"Configuration error: {e}")
+        return False
+    except SVGParseError as e:
+        print(f"SVG parsing error: {e}")
+        return False
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        if args.verbose:
+            import traceback
+
+            traceback.print_exc()
+        return False
+
+
 def main():
     """Main entry point."""
     parser = create_parser()
@@ -868,12 +1019,16 @@ def main():
     # Handle the argument parsing conflict between global and subcommand svg_file
     import sys
 
-    if len(sys.argv) > 1 and sys.argv[1] in ["frame", "weld"] and len(sys.argv) > 2:
+    if (
+        len(sys.argv) > 1
+        and sys.argv[1] in ["frame", "weld", "full-weld"]
+        and len(sys.argv) > 2
+    ):
         # For subcommands that take svg_file, parse differently
         args = parser.parse_args()
         # The svg_file should be in the remaining arguments after the command
         if (
-            args.command in ["frame", "weld"]
+            args.command in ["frame", "weld", "full-weld"]
             and not hasattr(args, "svg_file")
             or args.svg_file is None
         ):
@@ -891,9 +1046,12 @@ def main():
     # Show help if no command provided
     if not args.command:
         parser.print_help()
-        print("\nQuick start:")
+        print("Quick start:")
         print("  microweldr your_design.svg           # Convert and generate G-code")
         print("  microweldr weld your_design.svg      # Same as above")
+        print(
+            "  microweldr full-weld your_design.svg # Self-contained G-code (recommended)"
+        )
         print("  microweldr test                      # Test printer connection")
         print("  microweldr calibrate                 # Calibrate printer")
         print("  microweldr frame your_design.svg     # Draw frame only")
@@ -909,6 +1067,7 @@ def main():
         "temp-nozzle": cmd_temp_nozzle,
         "frame": cmd_frame,
         "weld": cmd_weld,
+        "full-weld": cmd_full_weld,
     }
 
     handler = command_handlers.get(args.command)

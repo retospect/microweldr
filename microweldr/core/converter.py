@@ -131,6 +131,17 @@ class SVGToGCodeConverter:
             margin_info=self.margin_info,
         )
 
+    def generate_full_weld_gcode(self, output_path: str | Path) -> None:
+        """Generate self-contained G-code file with all heating, calibration, and prompts."""
+        if not self.weld_paths:
+            raise ValueError("No weld paths available. Parse SVG file first.")
+
+        self.gcode_generator.generate_full_weld_file(
+            weld_paths=self.weld_paths,
+            output_path=output_path,
+            margin_info=self.margin_info,
+        )
+
     def convert(
         self,
         svg_path: str | Path,
@@ -140,6 +151,16 @@ class SVGToGCodeConverter:
         """Complete conversion from SVG to G-code."""
         weld_paths = self.parse_svg(svg_path)
         self.generate_gcode(gcode_path, skip_bed_leveling)
+        return weld_paths
+
+    def convert_full_weld(
+        self,
+        svg_path: str | Path,
+        gcode_path: str | Path,
+    ) -> List[WeldPath]:
+        """Complete conversion to self-contained G-code with all heating, calibration, and prompts."""
+        weld_paths = self.parse_svg(svg_path)
+        self.generate_full_weld_gcode(gcode_path)
         return weld_paths
 
     @property

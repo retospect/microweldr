@@ -13,8 +13,8 @@ max_z_height = 270.0  # mm
 # timeout = 30            # Connection timeout in seconds
 
 [temperatures]
-bed_temperature = 60  # °C
-nozzle_temperature = 200  # °C for normal welds
+bed_temperature = 120  # °C - at safety limit, 50°C below weld temp
+nozzle_temperature = 170  # °C for normal welds - upper end of PP melt range
 chamber_temperature = 35  # °C - Core One chamber temperature for plastic welding
 use_chamber_heating = false  # Set to false to disable chamber heating (useful if sensor is not working)
 cooldown_temperature = 50  # °C
@@ -33,7 +33,7 @@ z_speed = 600  # mm/min - optimized Z speed (near maximum safe limit for Core On
 [normal_welds]
 # Settings for black SVG elements
 weld_height = 0.020  # mm - how low the nozzle goes for welding (20 microns, optimized compression)
-weld_temperature = 130  # °C - optimal from calibration test (first line, best results)
+weld_temperature = 170  # °C - upper end of PP melt range for testing
 weld_time = 0.1  # seconds - optimal from calibration test (first line, best results)
 dot_spacing = 0.9  # mm - final desired spacing (minimal overlap with 1.0mm diameter)
 initial_dot_spacing = 3.6  # mm - spacing for first pass (wider, 4x final spacing)
@@ -42,7 +42,7 @@ cooling_time_between_passes = 2.0  # seconds - time to let plastic cool
 [light_welds]
 # Settings for blue SVG elements
 weld_height = 0.020  # mm - same precision height for light welds (20 microns, optimized compression)
-weld_temperature = 180  # °C - lower temperature
+weld_temperature = 160  # °C - slightly lower temp for light welds
 weld_time = 0.3  # seconds - shorter welding time
 dot_spacing = 0.9  # mm - final desired spacing (minimal overlap with 1.0mm diameter)
 initial_dot_spacing = 3.6  # mm - spacing for first pass (wider, 4x final spacing)
