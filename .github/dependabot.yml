@@ -1,12 +1,10 @@
 version: 2
 updates:
-  # Enable version updates for Python dependencies
+  # Enable version updates for Python dependencies (Poetry)
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "04:00"
+      interval: "daily"
     open-pull-requests-limit: 10
     reviewers:
       - "retospect"
