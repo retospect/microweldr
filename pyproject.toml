@@ -44,7 +44,7 @@ lxml = "^5.0.0"
 xmlschema = "^2.0.0"
 gcodeparser = "^0.2.0"
 pygcode = "^0.2.0"
-click = "^8.0.0"
+click = "^8.3.0"
 tqdm = "^4.65.0"
 
 [tool.poetry.group.dev.dependencies]
