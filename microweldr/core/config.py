@@ -15,21 +15,119 @@ class ConfigError(Exception):
 class Config:
     """Configuration manager for the SVG welder."""
 
-    def __init__(self, config_path: str | Path) -> None:
-        """Initialize configuration from TOML file."""
-        self.config_path = Path(config_path)
+    def __init__(self, config_path: str | Path | None = None) -> None:
+        """Initialize configuration from TOML file with fallback system.
+        
+        Args:
+            config_path: Path to configuration file. If None, searches for config files
+                        in multiple locations and falls back to defaults if not found.
+        """
+        self.config_path = self._find_config_file(config_path)
         self._config: Dict[str, Any] = {}
         self.load()
 
+    def _find_config_file(self, config_path: str | Path | None) -> Path | None:
+        """Find configuration file using fallback system."""
+        if config_path is not None:
+            return Path(config_path)
+        
+        # Search locations in order of preference
+        search_locations = [
+            Path.cwd() / "config.toml",  # Current directory
+            Path.home() / ".microweldr" / "config.toml",  # User home directory
+            Path.home() / "config.toml",  # User home directory (legacy)
+            Path(__file__).parent.parent.parent / "config.toml",  # Project root
+        ]
+        
+        for location in search_locations:
+            if location.exists() and location.is_file():
+                return location
+        
+        # No config file found - will use defaults
+        return None
+
+    @classmethod
+    def _get_default_config(cls) -> Dict[str, Any]:
+        """Get default configuration values."""
+        return {
+            "printer": {
+                "bed_size_x": 250.0,
+                "bed_size_y": 220.0,
+                "max_z_height": 270.0,
+            },
+            "nozzle": {
+                "outer_diameter": 1.1,
+                "inner_diameter": 0.2,
+            },
+            "temperatures": {
+                "bed_temperature": 120,
+                "nozzle_temperature": 170,
+                "chamber_temperature": 35,
+                "use_chamber_heating": False,
+                "cooldown_temperature": 50,
+            },
+            "movement": {
+                "move_height": 5.0,
+                "travel_speed": 3000,
+                "z_speed": 600,
+            },
+            "normal_welds": {
+                "weld_height": 0.020,
+                "weld_temperature": 170,
+                "weld_time": 0.1,
+                "dot_spacing": 0.5,
+                "initial_dot_spacing": 3.6,
+                "cooling_time_between_passes": 2.0,
+            },
+            "light_welds": {
+                "weld_height": 0.020,
+                "weld_temperature": 160,
+                "weld_time": 0.3,
+                "dot_spacing": 0.5,
+                "initial_dot_spacing": 3.6,
+                "cooling_time_between_passes": 1.5,
+            },
+            "output": {
+                "gcode_extension": ".gcode",
+                "animation_extension": "_animation.svg",
+            },
+            "sequencing": {
+                "skip_base_distance": 5,
+            },
+            "animation": {
+                "time_between_welds": 0.1,
+                "pause_time": 3.0,
+                "min_animation_duration": 10.0,
+            },
+        }
+
     def load(self) -> None:
-        """Load configuration from TOML file."""
+        """Load configuration from TOML file or use defaults."""
+        if self.config_path is None:
+            # No config file found, use defaults
+            self._config = self._get_default_config()
+            return
+            
         try:
             with open(self.config_path, "r") as f:
-                self._config = toml.load(f)
+                loaded_config = toml.load(f)
+                
+            # Merge loaded config with defaults to ensure all keys exist
+            self._config = self._get_default_config()
+            self._merge_config(self._config, loaded_config)
+            
         except FileNotFoundError:
             raise ConfigError(f"Configuration file '{self.config_path}' not found.")
         except toml.TomlDecodeError as e:
             raise ConfigError(f"Invalid TOML configuration: {e}")
+
+    def _merge_config(self, base: Dict[str, Any], override: Dict[str, Any]) -> None:
+        """Recursively merge override config into base config."""
+        for key, value in override.items():
+            if key in base and isinstance(base[key], dict) and isinstance(value, dict):
+                self._merge_config(base[key], value)
+            else:
+                base[key] = value
 
     def get(self, section: str, key: str, default: Any = None) -> Any:
         """Get a configuration value."""

@@ -290,7 +290,7 @@ class MicroWeldr:
         if config_path:
             self.config = Config(str(config_path))
         else:
-            self.config = Config()
+            self.config = Config()  # Will use fallback system
 
         logger.info("MicroWeldr library initialized")
 
