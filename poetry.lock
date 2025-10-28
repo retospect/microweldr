@@ -144,18 +144,18 @@ files = [
 
 [[package]]
 name = "bump-my-version"
-version = "1.2.4"
+version = "1.2.2"
 description = "Version bump your Python project"
 optional = false
 python-versions = ">=3.8"
 groups = ["dev"]
 files = [
-    {file = "bump_my_version-1.2.4-py3-none-any.whl", hash = "sha256:b60ac52c8972c5a7e1e478d0334015a993ba5c27fad1b04bde558d25c667b0f5"},
-    {file = "bump_my_version-1.2.4.tar.gz", hash = "sha256:998abb4f3774cf96137a77034a5a12a722b109b26a3afa044ec14622a0180fa3"},
+    {file = "bump_my_version-1.2.2-py3-none-any.whl", hash = "sha256:d8d2a2cddb2dae54f902f05b65f3fea6afd5e332218608360d7c92a4b9e51f57"},
+    {file = "bump_my_version-1.2.2.tar.gz", hash = "sha256:76292bf9f827bf0c039f351a00f8aa74f5348cb796d0d7b2d7d59755f403093c"},
 ]
 
 [package.dependencies]
-click = "<8.2.2"
+click = "*"
 httpx = ">=0.28.1"
 pydantic = ">=2.0.0"
 pydantic-settings = "*"
@@ -314,14 +314,14 @@ files = [
 
 [[package]]
 name = "click"
-version = "8.2.1"
+version = "8.3.0"
 description = "Composable command line interface toolkit"
 optional = false
 python-versions = ">=3.10"
 groups = ["main", "dev"]
 files = [
-    {file = "click-8.2.1-py3-none-any.whl", hash = "sha256:61a3265b914e850b85317d0b3109c7f8cd35a670f963866005d6ef1d5175a12b"},
-    {file = "click-8.2.1.tar.gz", hash = "sha256:27c491cc05d968d271d5a1db13e3b5a184636d9d930f148c50b038f0d0646202"},
+    {file = "click-8.3.0-py3-none-any.whl", hash = "sha256:9b9f285302c6e3064f4330c05f05b81945b2a39544279343e6e7c5f27a9baddc"},
+    {file = "click-8.3.0.tar.gz", hash = "sha256:e7b8232224eba16f4ebe410c25ced9f7875cb5f3263ffc93cc3e8da705e229c4"},
 ]
 
 [package.dependencies]
@@ -1846,4 +1846,4 @@ docs = ["Sphinx", "elementpath (>=4.1.5,<5.0.0)", "jinja2", "sphinx-rtd-theme"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10"
-content-hash = "8d6740932d92ee32fcad0d7edc84b3cdefbde19b3afb2c148353fe3d63790bf5"
+content-hash = "c23de22411d89993f7010e1348495dcd9104db2f48c197585c9a011b7c4d0b6f"
