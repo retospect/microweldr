@@ -8,7 +8,7 @@ max_z_height = 270.0  # mm
 
 [nozzle]
 # Nozzle dimensions for animation visualization
-outer_diameter = 1.0  # mm - nozzle outer diameter
+outer_diameter = 1.1  # mm - effective nozzle diameter (plastic melting zone)
 inner_diameter = 0.2  # mm - nozzle inner diameter (opening)
 
 [temperatures]
@@ -34,7 +34,7 @@ z_speed = 600  # mm/min - optimized Z speed (near maximum safe limit for Core On
 weld_height = 0.020  # mm - how low the nozzle goes for welding (20 microns, optimized compression)
 weld_temperature = 170  # °C - upper end of PP melt range for testing
 weld_time = 0.1  # seconds - optimal from calibration test (first line, best results)
-dot_spacing = 0.9  # mm - final desired spacing (minimal overlap with 1.0mm diameter)
+dot_spacing = 0.5  # mm - final desired spacing (double density, ~50% overlap with 1.1mm effective diameter)
 initial_dot_spacing = 3.6  # mm - spacing for first pass (wider, 4x final spacing)
 cooling_time_between_passes = 2.0  # seconds - time to let plastic cool
 
@@ -43,7 +43,7 @@ cooling_time_between_passes = 2.0  # seconds - time to let plastic cool
 weld_height = 0.020  # mm - same precision height for light welds (20 microns, optimized compression)
 weld_temperature = 160  # °C - slightly lower temp for light welds
 weld_time = 0.3  # seconds - shorter welding time
-dot_spacing = 0.9  # mm - final desired spacing (minimal overlap with 1.0mm diameter)
+dot_spacing = 0.5  # mm - final desired spacing (double density, ~50% overlap with 1.1mm effective diameter)
 initial_dot_spacing = 3.6  # mm - spacing for first pass (wider, 4x final spacing)
 cooling_time_between_passes = 1.5  # seconds - time to let plastic cool
 

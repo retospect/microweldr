@@ -12,6 +12,17 @@ A Python package that converts SVG files to Prusa Core One G-code for plastic "s
 This allows for rapid microfluidics prototyping with a 3d printer.
 While the edges are not as smooth as a laser weld, the 3d printer is more available than a laser welder.
 
+## ⚠️ **Important Material Orientation Finding**
+
+**CRITICAL**: When using plastic films from rolls, **material orientation matters significantly** for weld success:
+
+- ✅ **Use PP surfaces for welding** - The inner/concave side of the roll (that faced the roll center)
+- ❌ **Avoid non-PP surfaces** - The outer/convex side of the roll (that faced outward) does not weld properly
+
+Many plastic films are **laminated or coated materials** with different properties on each side. Always ensure the weldable surfaces (typically PP) are placed together for successful bonding.
+
+📊 **See detailed experimental validation**: [experimental_validation.md](experimental_validation.md)
+
 ## Project Structure
 
 ```
@@ -105,13 +116,13 @@ microweldr calibrate --verbose
 
 # First design
 microweldr home
-# [Load film, place magnets]
+# [Load film with PP surfaces together, place magnets]
 microweldr frame design1.svg
 microweldr weld design1.svg
 
 # Second design (no calibration needed)
 microweldr home
-# [Load new film, adjust magnets]
+# [Load new film with PP surfaces together, adjust magnets]
 microweldr frame design2.svg
 microweldr weld design2.svg
 ```
