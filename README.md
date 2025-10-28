@@ -3,14 +3,14 @@
 [![PyPI version](https://badge.fury.io/py/microweldr.svg)](https://badge.fury.io/py/microweldr)
 [![Test Suite](https://github.com/retospect/microweldr/actions/workflows/test.yml/badge.svg)](https://github.com/retospect/microweldr/actions/workflows/test.yml)
 
-A Python package that converts SVG files to Prusa Core One G-code for plastic "spot" welding applications. The package processes SVG vector graphics and generates G-code that creates weld spots along the paths without extruding any plastic material.
+A Python package that converts SVG files to Prusa Core One G-code for **continuous plastic line welding**. The package processes SVG vector graphics and generates G-code that creates **waterproof welded lines** by placing many precise weld "dots" in sequence along the paths, without extruding any plastic material.
 
 **NEW: Unified Command Interface** - All functionality consolidated into a single `microweldr` command with subcommands for testing, calibration, framing, and welding operations.
 
 **Optimized for Prusa Core One**: Includes chamber temperature control (M141/M191), proper bed dimensions (250×220×270mm), and CoreXY-specific settings for reliable plastic welding operations.
 
-This allows for rapid microfluidics prototyping with a 3d printer.
-While the edges are not as smooth as a laser weld, the 3d printer is more available than a laser welder.
+This enables rapid **microfluidics prototyping** with a 3D printer by creating **sealed, waterproof channels and barriers**. Each SVG path becomes a continuous welded line through precisely controlled sequential dot placement.
+While the edges are not as smooth as a laser weld, the 3D printer is more accessible than a laser welder and produces reliable waterproof seals.
 
 ## Project Structure
 
@@ -31,7 +31,7 @@ microweldr/
 
 ## Features
 
-- **SVG Processing**: Converts SVG paths, lines, circles, and rectangles to weld points
+- **Continuous Line Welding**: Converts SVG paths, lines, circles, and rectangles into waterproof welded lines by placing sequential weld dots
 - **Color-based Weld Types**:
   - Black elements → Normal welds
   - Blue elements → Light welds (lower temperature, shorter welding time)
