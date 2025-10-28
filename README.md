@@ -12,17 +12,6 @@ A Python package that converts SVG files to Prusa Core One G-code for plastic "s
 This allows for rapid microfluidics prototyping with a 3d printer.
 While the edges are not as smooth as a laser weld, the 3d printer is more available than a laser welder.
 
-## ⚠️ **Important Material Orientation Finding**
-
-**CRITICAL**: When using plastic films from rolls, **material orientation matters significantly** for weld success:
-
-- ✅ **Use PP surfaces for welding** - The inner/concave side of the roll (that faced the roll center)
-- ❌ **Avoid non-PP surfaces** - The outer/convex side of the roll (that faced outward) does not weld properly
-
-Many plastic films are **laminated or coated materials** with different properties on each side. Always ensure the weldable surfaces (typically PP) are placed together for successful bonding.
-
-📊 **See detailed experimental validation**: [experimental_validation.md](experimental_validation.md)
-
 ## Project Structure
 
 ```
@@ -182,6 +171,27 @@ microweldr calibrate --home-only         # Home axes only
 microweldr bed-level                     # Bed leveling only
 microweldr home [XYZ]                    # Home specific axes
 ```
+
+## Physical Setup and Use
+
+### ⚠️ **Critical Material Orientation**
+
+**IMPORTANT**: When using plastic films from rolls, **material orientation matters significantly** for weld success:
+
+- ✅ **Use PP surfaces for welding** - The inner/concave side of the roll (that faced the roll center)
+- ❌ **Avoid non-PP surfaces** - The outer/convex side of the roll (that faced outward) does not weld properly
+
+Many plastic films are **laminated or coated materials** with different properties on each side. Always ensure the weldable surfaces (typically PP) are placed together for successful bonding.
+
+📊 **See detailed experimental validation**: [experimental_validation.md](experimental_validation.md)
+
+### Physical Setup Requirements
+
+- **Printer**: Prusa Core One with satin powder-coated print sheet
+- **Film Positioning**: Lay plastic films as flat as possible on heated bed
+- **Securing Method**: Use small neodymium magnets (2mm height × 6mm diameter) to hold films in place
+- **Magnet Placement**: Position magnets strategically to avoid interference with nozzle path
+- **Temperature**: Bed heated to 120°C, nozzle to 170°C for PP welding
 
 ## Configuration
 
