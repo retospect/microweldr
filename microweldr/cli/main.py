@@ -792,6 +792,11 @@ def cmd_weld(args):
             animation_generator = AnimationGenerator(config)
             animation_generator.generate_file(weld_paths, output_animation)
 
+            # Generate animated PNG as well
+            output_png = output_animation.with_suffix('.png')
+            print(f"🎬 Generating animated PNG...")
+            animation_generator.generate_png_file(weld_paths, output_png)
+
             # Validate animation by reading the generated file
             with open(output_animation, "r") as f:
                 animation_content = f.read()
@@ -939,7 +944,14 @@ def cmd_full_weld(args):
             print("🎬 Generating animation...")
             animation_generator = AnimationGenerator(config)
             animation_generator.generate_file(weld_paths, output_animation)
+            
+            # Generate animated PNG as well
+            output_png = output_animation.with_suffix('.png')
+            print(f"🎬 Generating animated PNG...")
+            animation_generator.generate_png_file(weld_paths, output_png)
+            
             print(f"✅ Animation written to {output_animation}")
+            print(f"✅ Animated PNG written to {output_png}")
 
         # Submit to printer if requested
         if args.submit:
