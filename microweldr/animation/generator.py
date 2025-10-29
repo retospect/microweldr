@@ -106,7 +106,6 @@ class AnimationGenerator:
         )
         f.write('  <rect width="100%" height="100%" fill="white"/>\n')
 
-
     def _write_animation_elements(
         self,
         f: TextIO,
@@ -177,7 +176,9 @@ class AnimationGenerator:
                 point = path.points[point_index]
                 # Adjust coordinates with scale factor
                 x = (point.x - min_x + padding) * scale_factor
-                y = (point.y - min_y + padding) * scale_factor  # No header offset needed
+                y = (
+                    point.y - min_y + padding
+                ) * scale_factor  # No header offset needed
 
                 # Create realistic nozzle ring animation
                 self._write_nozzle_ring(
@@ -567,7 +568,7 @@ class AnimationGenerator:
     def _write_scale_bar(self, f: TextIO, width: float, height: float) -> None:
         """Write scale bar below the content."""
         scale_factor = 3.0
-        
+
         # Position scale bar at bottom center of canvas
         scale_bar_length = 30  # 10mm represented as 30 pixels (3x scale)
         scale_bar_height = 3  # 1mm represented as 3 pixels (10:1 ratio)
@@ -582,7 +583,6 @@ class AnimationGenerator:
             f'  <text x="{scale_bar_x + scale_bar_length/2}" y="{scale_bar_y + 18}" text-anchor="middle" '
             f'font-family="Arial" font-size="10" fill="black">10mm</text>\n'
         )
-
 
     def _write_svg_footer(self, f: TextIO) -> None:
         """Write SVG footer."""
