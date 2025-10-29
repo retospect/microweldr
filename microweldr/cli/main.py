@@ -187,7 +187,9 @@ def create_parser() -> argparse.ArgumentParser:
     parser.add_argument("--auto-start", action="store_true", help="Auto-start print")
     parser.add_argument("--queue-only", action="store_true", help="Queue only")
     parser.add_argument("--no-animation", action="store_true", help="Skip animation")
-    parser.add_argument("--png", action="store_true", help="Generate animated PNG (slower)")
+    parser.add_argument(
+        "--png", action="store_true", help="Generate animated PNG (slower)"
+    )
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
 
     return parser
