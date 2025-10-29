@@ -118,9 +118,8 @@ skip_base_distance = 5
             assert "animate" in content
             assert "circle" in content
 
-            # Check for title and timing info
-            assert "SVG Welding Animation" in content
-            assert "Duration:" in content
+            # Check for scale bar (replaces title and timing info)
+            assert "10mm" in content  # Scale bar text
 
         finally:
             if output_path.exists():
@@ -227,12 +226,9 @@ skip_base_distance = 5
 
             content = output_path.read_text()
 
-            # Check for legend elements
-            assert "Legend:" in content
-            assert "Normal Welds" in content
-            assert "Light Welds" in content
-            assert "Stop Points" in content
-            assert "10mm" in content  # Scale bar
+            # Check for scale bar (legend removed per user request)
+            assert "10mm" in content  # Scale bar text
+            # Legend elements removed - now just scale bar
 
         finally:
             if output_path.exists():
@@ -260,10 +256,9 @@ skip_base_distance = 5
 
             content = output_path.read_text()
 
-            # Check for message box
-            assert 'id="message-box"' in content
-            assert "Notifications:" in content
-            assert "No active notifications" in content
+            # Check for scale bar (message box removed per user request)
+            assert "10mm" in content  # Scale bar text
+            # Message box removed - now just scale bar
 
         finally:
             if output_path.exists():

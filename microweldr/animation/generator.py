@@ -41,12 +41,12 @@ class AnimationGenerator:
         bounds = self._calculate_bounds(weld_paths)
         min_x, min_y, max_x, max_y = bounds
 
-        # Add padding and scale up canvas (triple size)
-        padding = 60  # Increased padding for larger canvas
+        # Add 2mm boundary around SVG content
+        padding = 2.0  # 2mm boundary as requested
         base_width = max_x - min_x + 2 * padding
         base_height = (
-            max_y - min_y + 2 * padding + 120
-        )  # Extra space for messages, legend, and scale bar
+            max_y - min_y + 2 * padding + 30
+        )  # Space for scale bar below content
 
         # Triple the canvas size for better text visibility
         width = base_width * 3
@@ -66,9 +66,7 @@ class AnimationGenerator:
 
         with open(output_path, "w") as f:
             self._write_svg_header(f, width, height)
-            self._write_title_and_info(
-                f, width, animation_duration, time_between_welds, pause_time
-            )
+            # Title and timing info removed per user request
             self._write_animation_elements(
                 f,
                 weld_paths,
@@ -79,8 +77,7 @@ class AnimationGenerator:
                 pause_time,
                 weld_sequence,
             )
-            self._write_legend(f, height)
-            self._write_message_box(f, width, height)
+            self._write_scale_bar(f, width, height)
             self._write_svg_footer(f)
 
     def _calculate_bounds(
@@ -109,27 +106,6 @@ class AnimationGenerator:
         )
         f.write('  <rect width="100%" height="100%" fill="white"/>\n')
 
-    def _write_title_and_info(
-        self,
-        f: TextIO,
-        width: float,
-        animation_duration: float,
-        time_between_welds: float,
-        pause_time: float,
-    ) -> None:
-        """Write title and timing information."""
-        scale_factor = 3.0
-
-        f.write(
-            f'  <text x="{width/2}" y="{20*scale_factor}" text-anchor="middle" font-family="Arial" '
-            f'font-size="{8*scale_factor}" fill="black">SVG Welding Animation</text>\n'
-        )
-
-        f.write(
-            f'  <text x="{width/2}" y="{35*scale_factor}" text-anchor="middle" font-family="Arial" '
-            f'font-size="{6*scale_factor}" fill="gray">Duration: {animation_duration:.1f}s | '
-            f"Weld interval: {time_between_welds}s | Pause time: {pause_time}s</text>\n"
-        )
 
     def _write_animation_elements(
         self,
@@ -201,7 +177,7 @@ class AnimationGenerator:
                 point = path.points[point_index]
                 # Adjust coordinates with scale factor
                 x = (point.x - min_x + padding) * scale_factor
-                y = (point.y - min_y + padding + 40) * scale_factor  # Offset for header
+                y = (point.y - min_y + padding) * scale_factor  # No header offset needed
 
                 # Create realistic nozzle ring animation
                 self._write_nozzle_ring(
@@ -388,7 +364,7 @@ class AnimationGenerator:
         """Write stop point as red circle with immediate user message display."""
         point = path.points[0]
         x = (point.x - min_x + padding) * scale_factor
-        y = (point.y - min_y + padding + 40) * scale_factor  # Offset for header
+        y = (point.y - min_y + padding) * scale_factor  # No header offset needed
 
         # Use original radius if it's a circle, otherwise use default
         if path.element_type == "circle" and path.element_radius is not None:
@@ -467,7 +443,7 @@ class AnimationGenerator:
         """Write pipette point as pink/magenta circle with pipetting message display."""
         point = path.points[0]
         x = (point.x - min_x + padding) * scale_factor
-        y = (point.y - min_y + padding + 40) * scale_factor  # Offset for header
+        y = (point.y - min_y + padding) * scale_factor  # No header offset needed
 
         # Use element radius if available, otherwise default
         if path.element_type == "circle" and path.element_radius:
@@ -588,20 +564,15 @@ class AnimationGenerator:
         else:
             return "#FF6347"  # Tomato red for normal welds (hot zone)
 
-    def _write_legend(self, f: TextIO, height: float) -> None:
-        """Write legend explaining weld types with nozzle ring examples and scale bar."""
+    def _write_scale_bar(self, f: TextIO, width: float, height: float) -> None:
+        """Write scale bar below the content."""
         scale_factor = 3.0
-        legend_start_y = height - 140  # More space for scale bar at top
-        font_size = 2.5 * scale_factor
-        row_height = 20  # Space between legend rows
-        icon_x = 30 * scale_factor  # X position for icons
-        text_x = icon_x + 30  # X position for text (30px after icon)
-
-        # Scale bar at the top - black rectangle with 10:1 aspect ratio
+        
+        # Position scale bar at bottom center of canvas
         scale_bar_length = 30  # 10mm represented as 30 pixels (3x scale)
         scale_bar_height = 3  # 1mm represented as 3 pixels (10:1 ratio)
-        scale_bar_x = icon_x
-        scale_bar_y = legend_start_y
+        scale_bar_x = (width - scale_bar_length) / 2  # Center horizontally
+        scale_bar_y = height - 25  # 25 pixels from bottom
 
         f.write(
             f'  <rect x="{scale_bar_x}" y="{scale_bar_y}" width="{scale_bar_length}" height="{scale_bar_height}" '
@@ -612,98 +583,6 @@ class AnimationGenerator:
             f'font-family="Arial" font-size="10" fill="black">10mm</text>\n'
         )
 
-        # Legend title (moved down to accommodate scale bar)
-        legend_title_y = scale_bar_y + 35
-        f.write(
-            f'  <text x="{icon_x}" y="{legend_title_y}" font-family="Arial" font-size="{font_size}" '
-            f'fill="gray">Legend:</text>\n'
-        )
-
-        # Legend table group
-        f.write(f'  <g id="legend-table">\n')
-
-        # Row 1: Normal welds - larger dots for better color perception
-        row1_y = legend_title_y + row_height
-        dot_radius = 6  # Larger radius for better color visibility
-        f.write(f'    <g id="normal-welds-row">\n')
-        f.write(
-            f'      <circle cx="{icon_x}" cy="{row1_y-6}" r="{dot_radius}" fill="black" stroke="black" stroke-width="1" opacity="0.9"/>\n'
-        )
-        f.write(
-            f'      <text x="{text_x}" y="{row1_y}" font-family="Arial" font-size="{font_size*0.8}" '
-            f'fill="gray">Normal Welds (Hot)</text>\n'
-        )
-        f.write(f"    </g>\n")
-
-        # Row 2: Light welds - larger dots for better color perception
-        row2_y = row1_y + row_height
-        f.write(f'    <g id="light-welds-row">\n')
-        f.write(
-            f'      <circle cx="{icon_x}" cy="{row2_y-6}" r="{dot_radius}" fill="blue" stroke="blue" stroke-width="1" opacity="0.9"/>\n'
-        )
-        f.write(
-            f'      <text x="{text_x}" y="{row2_y}" font-family="Arial" font-size="{font_size*0.8}" '
-            f'fill="gray">Light Welds (Warm)</text>\n'
-        )
-        f.write(f"    </g>\n")
-
-        # Row 3: Stop points - larger for consistency
-        row3_y = row2_y + row_height
-        f.write(f'    <g id="stop-points-row">\n')
-        f.write(
-            f'      <circle cx="{icon_x}" cy="{row3_y-6}" r="{dot_radius}" fill="red" stroke="red" stroke-width="1" opacity="0.9"/>\n'
-        )
-        f.write(
-            f'      <text x="{text_x}" y="{row3_y}" font-family="Arial" font-size="{font_size*0.8}" '
-            f'fill="gray">Stop Points (Pause)</text>\n'
-        )
-        f.write(f"    </g>\n")
-
-        f.write(f"  </g>\n")
-
-        # Nozzle info - positioned below legend table
-        nozzle_info_y = row3_y + 30
-        outer_diameter = self.config.get("nozzle", "outer_diameter", 0.4)
-        inner_diameter = self.config.get("nozzle", "inner_diameter", 0.2)
-        f.write(
-            f'  <text x="{icon_x}" y="{nozzle_info_y}" font-family="Arial" font-size="8" '
-            f'fill="gray">Nozzle: {outer_diameter}mm OD, {inner_diameter}mm ID (actual scale)</text>\n'
-        )
-
-    def _write_message_box(self, f: TextIO, width: float, height: float) -> None:
-        """Write static message box near the legend for pause notifications."""
-        # Message box positioned with proper margins to stay within canvas
-        box_width = 350
-        box_height = 60
-        margin = 10  # Small margin from canvas edge
-
-        # Position box in bottom right with margin from actual canvas width
-        box_x = width - box_width - margin
-        box_y = height - box_height - margin
-
-        # Static message box background
-        f.write(
-            f'  <rect id="message-box" x="{box_x}" y="{box_y}" width="{box_width}" height="{box_height}" '
-            f'fill="#f0f8ff" stroke="#4682b4" stroke-width="2" rx="8" ry="8" opacity="0.9"/>\n'
-        )
-
-        # Message box title
-        f.write(
-            f'  <text x="{box_x + 10}" y="{box_y + 20}" font-family="Arial" font-size="12" '
-            f'font-weight="bold" fill="#2c3e50">Notifications:</text>\n'
-        )
-
-        # Default message (will be updated by pause messages)
-        f.write(
-            f'  <text id="message-text-default" x="{box_x + 10}" y="{box_y + 45}" font-family="Arial" '
-            f'font-size="11" fill="#7f8c8d">No active notifications</text>\n'
-        )
-
-        # Dynamic message text for pause notifications (initially hidden)
-        f.write(
-            f'  <text id="message-text-active" x="{box_x + 10}" y="{box_y + 45}" font-family="Arial" '
-            f'font-size="11" fill="#e74c3c" opacity="0">⚠ Pause message will appear here</text>\n'
-        )
 
     def _write_svg_footer(self, f: TextIO) -> None:
         """Write SVG footer."""

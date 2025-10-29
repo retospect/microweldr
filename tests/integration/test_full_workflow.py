@@ -165,8 +165,7 @@ min_animation_duration = 10.0
             assert "<svg" in anim_content
             assert "<animate" in anim_content
             assert "<circle" in anim_content
-            assert "SVG Welding Animation" in anim_content
-            assert "Duration:" in anim_content
+            assert "10mm" in anim_content  # Scale bar text
 
             # Clean up animation file
             anim_path.unlink()
