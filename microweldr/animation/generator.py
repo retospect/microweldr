@@ -4,10 +4,10 @@ import io
 from pathlib import Path
 from typing import List, TextIO
 
-import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-from matplotlib.animation import PillowWriter
+import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.animation import PillowWriter
 from PIL import Image
 
 from microweldr.core.config import Config
@@ -110,25 +110,25 @@ class AnimationGenerator:
 
         # Add 2mm boundary around SVG content
         padding = 2.0  # 2mm boundary as requested
-        
+
         # Calculate content dimensions in mm
         content_width_mm = max_x - min_x + 2 * padding
         content_height_mm = max_y - min_y + 2 * padding
-        
+
         # Set up matplotlib figure with proper aspect ratio
         dpi = 100
         fig_width = content_width_mm / 25.4 * 2  # Convert mm to inches, scale up 2x
         fig_height = content_height_mm / 25.4 * 2
-        
+
         fig, ax = plt.subplots(figsize=(fig_width, fig_height), dpi=dpi)
         ax.set_xlim(min_x - padding, max_x + padding)
         ax.set_ylim(min_y - padding, max_y + padding)
-        ax.set_aspect('equal')
-        ax.axis('off')  # Remove axes for clean appearance
-        
+        ax.set_aspect("equal")
+        ax.axis("off")  # Remove axes for clean appearance
+
         # Set white background
-        fig.patch.set_facecolor('white')
-        
+        fig.patch.set_facecolor("white")
+
         # Calculate total animation time
         total_weld_points = sum(
             len(path.points)
@@ -140,17 +140,23 @@ class AnimationGenerator:
         )
         calculated_duration = total_weld_points * time_between_welds + total_pause_time
         animation_duration = max(min_animation_duration, calculated_duration)
-        
+
         # Generate animation frames
         frames = self._generate_png_frames(
-            weld_paths, bounds, padding, animation_duration, 
-            time_between_welds, pause_time, weld_sequence, ax
+            weld_paths,
+            bounds,
+            padding,
+            animation_duration,
+            time_between_welds,
+            pause_time,
+            weld_sequence,
+            ax,
         )
-        
+
         # Create animated PNG
         fps = 10  # 10 frames per second
         frame_duration = 1000 / fps  # Duration in milliseconds
-        
+
         # Save as animated PNG using Pillow
         if frames:
             frames[0].save(
@@ -159,9 +165,9 @@ class AnimationGenerator:
                 append_images=frames[1:],
                 duration=frame_duration,
                 loop=0,  # Loop forever
-                optimize=True
+                optimize=True,
             )
-        
+
         plt.close(fig)
 
     def _calculate_bounds(
@@ -688,32 +694,32 @@ class AnimationGenerator:
         time_between_welds: float,
         pause_time: float,
         weld_sequence: str,
-        ax
+        ax,
     ) -> List[Image.Image]:
         """Generate PNG frames for animated PNG."""
         frames = []
         min_x, min_y, max_x, max_y = bounds
         current_time = 0.0
-        
+
         # Calculate total frames needed
         fps = 10
         total_frames = int(animation_duration * fps)
         frame_duration = animation_duration / total_frames
-        
+
         # Track which points have been welded at each frame
         welded_points = set()
-        
+
         for frame_idx in range(total_frames):
             ax.clear()
             ax.set_xlim(min_x - padding, max_x + padding)
             ax.set_ylim(min_y - padding, max_y + padding)
-            ax.set_aspect('equal')
-            ax.axis('off')
-            ax.set_facecolor('white')
-            
+            ax.set_aspect("equal")
+            ax.axis("off")
+            ax.set_facecolor("white")
+
             # Add scale bar
             self._add_scale_bar_to_plot(ax, bounds, padding)
-            
+
             # Process each weld path
             path_time = 0.0
             for path in weld_paths:
@@ -721,10 +727,15 @@ class AnimationGenerator:
                     # Handle pause points
                     if path_time <= current_time < path_time + pause_time:
                         point = path.points[0]
-                        color = 'red' if path.weld_type == 'stop' else 'magenta'
+                        color = "red" if path.weld_type == "stop" else "magenta"
                         radius = 3.0
-                        circle = patches.Circle((point.x, point.y), radius, 
-                                              color=color, alpha=0.8, zorder=10)
+                        circle = patches.Circle(
+                            (point.x, point.y),
+                            radius,
+                            color=color,
+                            alpha=0.8,
+                            zorder=10,
+                        )
                         ax.add_patch(circle)
                     path_time += pause_time
                 else:
@@ -733,46 +744,73 @@ class AnimationGenerator:
                     for point_index in weld_order:
                         if path_time <= current_time:
                             point = path.points[point_index]
-                            color = 'blue' if path.weld_type == 'light' else 'black'
+                            color = "blue" if path.weld_type == "light" else "black"
                             radius = 1.5
-                            circle = patches.Circle((point.x, point.y), radius,
-                                                  color=color, alpha=0.8, zorder=5)
+                            circle = patches.Circle(
+                                (point.x, point.y),
+                                radius,
+                                color=color,
+                                alpha=0.8,
+                                zorder=5,
+                            )
                             ax.add_patch(circle)
                         path_time += time_between_welds
-            
+
             # Convert plot to PIL Image
             buf = io.BytesIO()
-            plt.savefig(buf, format='png', dpi=100, bbox_inches='tight', 
-                       facecolor='white', edgecolor='none')
+            plt.savefig(
+                buf,
+                format="png",
+                dpi=100,
+                bbox_inches="tight",
+                facecolor="white",
+                edgecolor="none",
+            )
             buf.seek(0)
             frame = Image.open(buf)
             frames.append(frame.copy())
             buf.close()
-            
+
             current_time += frame_duration
-        
+
         return frames
 
-    def _add_scale_bar_to_plot(self, ax, bounds: tuple[float, float, float, float], padding: float) -> None:
+    def _add_scale_bar_to_plot(
+        self, ax, bounds: tuple[float, float, float, float], padding: float
+    ) -> None:
         """Add red scale bar to matplotlib plot."""
         min_x, min_y, max_x, max_y = bounds
-        
+
         # Position scale bar (same logic as SVG version but in plot coordinates)
         scale_bar_length = 10.0  # 10mm in real coordinates
-        scale_bar_height = 1.0   # 1mm in real coordinates
-        
+        scale_bar_height = 1.0  # 1mm in real coordinates
+
         # Position just below the content bounding box
         scale_bar_x = min_x - padding + 2  # Align with left edge of content
-        scale_bar_y = min_y - padding - 5   # Below content area
-        
+        scale_bar_y = min_y - padding - 5  # Below content area
+
         # Add scale bar rectangle
-        rect = patches.Rectangle((scale_bar_x, scale_bar_y), scale_bar_length, scale_bar_height,
-                               facecolor='red', edgecolor='red', zorder=15)
+        rect = patches.Rectangle(
+            (scale_bar_x, scale_bar_y),
+            scale_bar_length,
+            scale_bar_height,
+            facecolor="red",
+            edgecolor="red",
+            zorder=15,
+        )
         ax.add_patch(rect)
-        
+
         # Add scale bar text
-        ax.text(scale_bar_x + scale_bar_length/2, scale_bar_y - 2, '10mm',
-               ha='center', va='top', fontsize=8, color='red', zorder=15)
+        ax.text(
+            scale_bar_x + scale_bar_length / 2,
+            scale_bar_y - 2,
+            "10mm",
+            ha="center",
+            va="top",
+            fontsize=8,
+            color="red",
+            zorder=15,
+        )
 
     def _write_svg_footer(self, f: TextIO) -> None:
         """Write SVG footer."""

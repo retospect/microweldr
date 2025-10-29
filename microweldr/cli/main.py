@@ -140,6 +140,9 @@ def create_parser() -> argparse.ArgumentParser:
         "--no-animation", action="store_true", help="Skip animation"
     )
     weld_parser.add_argument(
+        "--png", action="store_true", help="Generate animated PNG (slower)"
+    )
+    weld_parser.add_argument(
         "--verbose", "-v", action="store_true", help="Verbose output"
     )
 
@@ -155,6 +158,9 @@ def create_parser() -> argparse.ArgumentParser:
     )
     full_weld_parser.add_argument(
         "--no-animation", action="store_true", help="Skip animation"
+    )
+    full_weld_parser.add_argument(
+        "--png", action="store_true", help="Generate animated PNG (slower)"
     )
     full_weld_parser.add_argument(
         "--verbose", "-v", action="store_true", help="Verbose output"
@@ -792,10 +798,12 @@ def cmd_weld(args):
             animation_generator = AnimationGenerator(config)
             animation_generator.generate_file(weld_paths, output_animation)
 
-            # Generate animated PNG as well
-            output_png = output_animation.with_suffix('.png')
-            print(f"🎬 Generating animated PNG...")
-            animation_generator.generate_png_file(weld_paths, output_png)
+            # Generate animated PNG if requested
+            if args.png:
+                output_png = output_animation.with_suffix(".png")
+                print(f"🎬 Generating animated PNG...")
+                animation_generator.generate_png_file(weld_paths, output_png)
+                print(f"✅ Animated PNG written to {output_png}")
 
             # Validate animation by reading the generated file
             with open(output_animation, "r") as f:
@@ -944,14 +952,15 @@ def cmd_full_weld(args):
             print("🎬 Generating animation...")
             animation_generator = AnimationGenerator(config)
             animation_generator.generate_file(weld_paths, output_animation)
-            
-            # Generate animated PNG as well
-            output_png = output_animation.with_suffix('.png')
-            print(f"🎬 Generating animated PNG...")
-            animation_generator.generate_png_file(weld_paths, output_png)
-            
+
+            # Generate animated PNG if requested
+            if args.png:
+                output_png = output_animation.with_suffix(".png")
+                print(f"🎬 Generating animated PNG...")
+                animation_generator.generate_png_file(weld_paths, output_png)
+                print(f"✅ Animated PNG written to {output_png}")
+
             print(f"✅ Animation written to {output_animation}")
-            print(f"✅ Animated PNG written to {output_png}")
 
         # Submit to printer if requested
         if args.submit:
