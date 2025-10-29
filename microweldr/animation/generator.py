@@ -77,7 +77,7 @@ class AnimationGenerator:
                 pause_time,
                 weld_sequence,
             )
-            self._write_scale_bar(f, width, height)
+            self._write_scale_bar(f, width, height, bounds, padding)
             self._write_svg_footer(f)
 
     def _calculate_bounds(
@@ -565,23 +565,27 @@ class AnimationGenerator:
         else:
             return "#FF6347"  # Tomato red for normal welds (hot zone)
 
-    def _write_scale_bar(self, f: TextIO, width: float, height: float) -> None:
-        """Write scale bar below the content."""
+    def _write_scale_bar(self, f: TextIO, width: float, height: float, bounds: tuple[float, float, float, float], padding: float) -> None:
+        """Write red scale bar right outside the bounding box margin."""
         scale_factor = 3.0
+        min_x, min_y, max_x, max_y = bounds
 
-        # Position scale bar at bottom center of canvas
+        # Position scale bar right outside the bounding box (below content area)
         scale_bar_length = 30  # 10mm represented as 30 pixels (3x scale)
         scale_bar_height = 3  # 1mm represented as 3 pixels (10:1 ratio)
-        scale_bar_x = (width - scale_bar_length) / 2  # Center horizontally
-        scale_bar_y = height - 25  # 25 pixels from bottom
+        
+        # Position just below the content bounding box (outside the 2mm margin)
+        content_bottom_y = (max_y - min_y + padding) * scale_factor
+        scale_bar_x = padding * scale_factor  # Align with left edge of content
+        scale_bar_y = content_bottom_y + 10  # 10 pixels below content area
 
         f.write(
             f'  <rect x="{scale_bar_x}" y="{scale_bar_y}" width="{scale_bar_length}" height="{scale_bar_height}" '
-            f'fill="black"/>\n'
+            f'fill="red"/>\n'
         )
         f.write(
             f'  <text x="{scale_bar_x + scale_bar_length/2}" y="{scale_bar_y + 18}" text-anchor="middle" '
-            f'font-family="Arial" font-size="10" fill="black">10mm</text>\n'
+            f'font-family="Arial" font-size="10" fill="red">10mm</text>\n'
         )
 
     def _write_svg_footer(self, f: TextIO) -> None:
