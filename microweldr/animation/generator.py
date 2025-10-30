@@ -617,7 +617,7 @@ class AnimationGenerator:
         # Get nozzle dimensions from config (these are diameters, not radii)
         outer_diameter = self.config.get("nozzle", "outer_diameter", 1.1)  # mm
         inner_diameter = self.config.get("nozzle", "inner_diameter", 0.2)  # mm
-        
+
         # Convert to radius
         outer_radius = outer_diameter / 2
         inner_radius = inner_diameter / 2
@@ -782,20 +782,36 @@ class AnimationGenerator:
 
         # Position scale bar (same logic as SVG version but in plot coordinates)
         scale_bar_length = 10.0  # 10mm in real coordinates
-        scale_bar_height = 2.0   # 2mm in real coordinates (make it more visible)
+        scale_bar_height = 2.0  # 2mm in real coordinates (make it more visible)
 
-        # Position just outside the content bounding box (within plot area)
+        # Position with proper clearance from content area
         scale_bar_x = min_x - padding + 1  # Align with left edge of content
-        scale_bar_y = max_y + padding - 8   # Above content area, within bounds
+        scale_bar_y = max_y + padding + 5   # Well above content area with clearance
 
         # Add scale bar rectangle with thicker appearance
-        rect = patches.Rectangle((scale_bar_x, scale_bar_y), scale_bar_length, scale_bar_height,
-                               facecolor='red', edgecolor='darkred', linewidth=1, zorder=15)
+        rect = patches.Rectangle(
+            (scale_bar_x, scale_bar_y),
+            scale_bar_length,
+            scale_bar_height,
+            facecolor="red",
+            edgecolor="darkred",
+            linewidth=1,
+            zorder=15,
+        )
         ax.add_patch(rect)
 
         # Add scale bar text
-        ax.text(scale_bar_x + scale_bar_length/2, scale_bar_y + scale_bar_height + 1, '10mm',
-               ha='center', va='bottom', fontsize=10, color='red', weight='bold', zorder=15)
+        ax.text(
+            scale_bar_x + scale_bar_length / 2,
+            scale_bar_y + scale_bar_height + 1,
+            "10mm",
+            ha="center",
+            va="bottom",
+            fontsize=10,
+            color="red",
+            weight="bold",
+            zorder=15,
+        )
 
     def _write_svg_footer(self, f: TextIO) -> None:
         """Write SVG footer."""
