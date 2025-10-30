@@ -750,7 +750,9 @@ class AnimationGenerator:
                         if point_time <= current_time:
                             color = "blue" if path.weld_type == "light" else "black"
                             # Use actual nozzle diameter from config
-                            nozzle_diameter = self.config.get("nozzle", "outer_diameter", 1.1)
+                            nozzle_diameter = self.config.get(
+                                "nozzle", "outer_diameter", 1.1
+                            )
                             radius = nozzle_diameter / 2  # Convert diameter to radius
                             circle = patches.Circle(
                                 (point.x, point.y),
