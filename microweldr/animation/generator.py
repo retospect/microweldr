@@ -260,7 +260,9 @@ class AnimationGenerator:
             color = "blue" if path.weld_type == "light" else "black"
 
             # Process weld points using multi-pass logic to match G-code execution
-            multipass_points = self._generate_multipass_points_for_animation(path.points, path.weld_type)
+            multipass_points = self._generate_multipass_points_for_animation(
+                path.points, path.weld_type
+            )
 
             for point in multipass_points:
                 # Adjust coordinates with scale factor
@@ -738,7 +740,9 @@ class AnimationGenerator:
                     path_time += pause_time
                 else:
                     # Handle weld points - use multi-pass logic to match G-code execution
-                    multipass_points = self._generate_multipass_points_for_animation(path.points, path.weld_type)
+                    multipass_points = self._generate_multipass_points_for_animation(
+                        path.points, path.weld_type
+                    )
                     for point in multipass_points:
                         if path_time <= current_time:
                             color = "blue" if path.weld_type == "light" else "black"
@@ -775,56 +779,58 @@ class AnimationGenerator:
     def _generate_multipass_points_for_animation(self, original_points, weld_type):
         """Generate points for animation that match G-code multi-pass execution order."""
         import math
+
         from ..core.models import WeldPoint
-        
+
         # Get config values for multi-pass welding
         config_section = "light_welds" if weld_type == "light" else "normal_welds"
-        final_spacing = self.config.get(config_section, "dot_spacing", 0.5)  # mm
+        # Use coarser spacing for animation to avoid performance issues
+        final_spacing = max(2.0, self.config.get(config_section, "dot_spacing", 0.5) * 4)  # mm
         num_passes = self.config.get("sequencing", "passes", 3)
-        
+
         if num_passes == 1:
             return original_points
-        
+
         # Create interpolated points at final spacing (same as G-code)
         all_path_points = []
         for i in range(len(original_points) - 1):
             start = original_points[i]
             end = original_points[i + 1]
-            
+
             # Calculate distance
             dx = end.x - start.x
             dy = end.y - start.y
             distance = math.sqrt(dx * dx + dy * dy)
-            
+
             if distance == 0:
                 continue
-                
+
             # Generate points at final spacing along this segment
             num_points = max(1, int(distance / final_spacing))
-            
+
             for j in range(num_points + 1):
                 t = j / num_points if num_points > 0 else 0
                 x = start.x + t * dx
                 y = start.y + t * dy
                 all_path_points.append(WeldPoint(x, y, start.weld_type))
-        
+
         # Distribute points across passes using binary subdivision (same as G-code)
         execution_order = []
-        
+
         # First pass: every 2^(num_passes-1) point
         step = 2 ** (num_passes - 1)
         for i in range(0, len(all_path_points), step):
             execution_order.append(all_path_points[i])
-        
+
         # Subsequent passes: fill in between previous pass points
         for pass_num in range(1, num_passes):
             step = 2 ** (num_passes - 1 - pass_num)
             offset = step
-            
+
             for i in range(offset, len(all_path_points), step * 2):
                 if i < len(all_path_points):
                     execution_order.append(all_path_points[i])
-        
+
         return execution_order
 
     def _add_scale_bar_to_plot(
