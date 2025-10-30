@@ -712,7 +712,9 @@ class AnimationGenerator:
         for frame_idx in range(total_frames):
             ax.clear()
             ax.set_xlim(min_x - padding, max_x + padding)
-            ax.set_ylim(min_y - padding, max_y + padding + 20)  # Extra space for scale bar
+            ax.set_ylim(
+                min_y - padding, max_y + padding + 20
+            )  # Extra space for scale bar
             ax.set_aspect("equal")
             ax.axis("off")
             ax.set_facecolor("white")
@@ -747,11 +749,15 @@ class AnimationGenerator:
                         point_time = path_time + (i * time_between_welds)
                         if point_time <= current_time:
                             color = "blue" if path.weld_type == "light" else "black"
-                            radius = 1.5
+                            # Use actual nozzle diameter from config
+                            nozzle_diameter = self.config.get("nozzle", "outer_diameter", 1.1)
+                            radius = nozzle_diameter / 2  # Convert diameter to radius
                             circle = patches.Circle(
                                 (point.x, point.y),
                                 radius,
-                                color=color,
+                                facecolor=color,
+                                edgecolor="darkgray",
+                                linewidth=0.5,
                                 alpha=0.8,
                                 zorder=5,
                             )
