@@ -784,9 +784,9 @@ class AnimationGenerator:
         scale_bar_length = 10.0  # 10mm in real coordinates
         scale_bar_height = 2.0  # 2mm in real coordinates (make it more visible)
 
-        # Position with proper clearance from content area
+        # Position with significant clearance from content area to avoid overlap
         scale_bar_x = min_x - padding + 1  # Align with left edge of content
-        scale_bar_y = max_y + padding + 5   # Well above content area with clearance
+        scale_bar_y = max_y + padding + 15  # Far above content area with large clearance
 
         # Add scale bar rectangle with thicker appearance
         rect = patches.Rectangle(
