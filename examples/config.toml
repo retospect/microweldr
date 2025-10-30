@@ -36,7 +36,7 @@ weld_height = 0.020  # mm - how low the nozzle goes for welding (20 microns, opt
 weld_temperature = 170  # °C - upper end of PP melt range for testing
 weld_time = 0.1  # seconds - optimal from calibration test (first line, best results)
 dot_spacing = 0.5  # mm - final desired spacing (double density, ~50% overlap with 1.1mm effective diameter)
-initial_dot_spacing = 6.0  # mm - spacing for first pass (wider, 12x final spacing for clear demo)
+initial_dot_spacing = 8.0  # mm - spacing for first pass (wider, 12x final spacing for clear demo)
 cooling_time_between_passes = 2.0  # seconds - time to let plastic cool
 
 [light_welds]
@@ -45,7 +45,7 @@ weld_height = 0.020  # mm - same precision height for light welds (20 microns, o
 weld_temperature = 160  # °C - slightly lower temp for light welds
 weld_time = 0.3  # seconds - shorter welding time
 dot_spacing = 0.5  # mm - final desired spacing (double density, ~50% overlap with 1.1mm effective diameter)
-initial_dot_spacing = 6.0  # mm - spacing for first pass (wider, 12x final spacing for clear demo)
+initial_dot_spacing = 8.0  # mm - spacing for first pass (wider, 12x final spacing for clear demo)
 cooling_time_between_passes = 1.5  # seconds - time to let plastic cool
 
 [output]

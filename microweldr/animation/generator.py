@@ -758,10 +758,10 @@ class AnimationGenerator:
                                 (point.x, point.y),
                                 radius,
                                 facecolor=color,
-                                edgecolor="darkgray",
-                                linewidth=0.5,
+                                edgecolor="none",
                                 alpha=0.8,
                                 zorder=5,
+                                antialiased=False,
                             )
                             ax.add_patch(circle)
                     path_time += len(multipass_points) * time_between_welds
@@ -771,7 +771,7 @@ class AnimationGenerator:
             plt.savefig(
                 buf,
                 format="png",
-                dpi=100,
+                dpi=300,
                 bbox_inches="tight",
                 facecolor="white",
                 edgecolor="none",
