@@ -712,7 +712,7 @@ class AnimationGenerator:
         for frame_idx in range(total_frames):
             ax.clear()
             ax.set_xlim(min_x - padding, max_x + padding)
-            ax.set_ylim(min_y - padding, max_y + padding)
+            ax.set_ylim(min_y - padding, max_y + padding + 20)  # Extra space for scale bar
             ax.set_aspect("equal")
             ax.axis("off")
             ax.set_facecolor("white")
@@ -743,8 +743,9 @@ class AnimationGenerator:
                     multipass_points = self._generate_multipass_points_for_animation(
                         path.points, path.weld_type
                     )
-                    for point in multipass_points:
-                        if path_time <= current_time:
+                    for i, point in enumerate(multipass_points):
+                        point_time = path_time + (i * time_between_welds)
+                        if point_time <= current_time:
                             color = "blue" if path.weld_type == "light" else "black"
                             radius = 1.5
                             circle = patches.Circle(
@@ -755,7 +756,7 @@ class AnimationGenerator:
                                 zorder=5,
                             )
                             ax.add_patch(circle)
-                        path_time += time_between_welds
+                    path_time += len(multipass_points) * time_between_welds
 
             # Convert plot to PIL Image
             buf = io.BytesIO()
@@ -785,7 +786,9 @@ class AnimationGenerator:
         # Get config values for multi-pass welding
         config_section = "light_welds" if weld_type == "light" else "normal_welds"
         # Use coarser spacing for animation to avoid performance issues
-        final_spacing = max(2.0, self.config.get(config_section, "dot_spacing", 0.5) * 4)  # mm
+        final_spacing = max(
+            2.0, self.config.get(config_section, "dot_spacing", 0.5) * 4
+        )  # mm
         num_passes = self.config.get("sequencing", "passes", 3)
 
         if num_passes == 1:
