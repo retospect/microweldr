@@ -4,7 +4,7 @@ from microweldr.core.constants import (
     ErrorMessages,
     WeldType,
     get_valid_weld_types,
-    get_weld_type_enum,
+    get_weld_type_enum
 )
 
 

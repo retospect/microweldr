@@ -13,7 +13,7 @@ from ..core.constants import (
     ConfigSections,
     DefaultValues,
     ErrorMessages,
-    GCodeCommands,
+    GCodeCommands
 )
 from ..prusalink.client import PrusaLinkClient
 from ..prusalink.exceptions import PrusaLinkError

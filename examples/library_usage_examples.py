@@ -18,7 +18,7 @@ from microweldr.api import (
     ValidationSuite,
     WeldJob,
     WorkflowManager,
-    WorkflowStep,
+    WorkflowStep
 )
 
 

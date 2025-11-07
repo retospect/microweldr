@@ -42,6 +42,23 @@ microweldr/
 - **Proper G-code Structure**: Includes heating, cooling, and safety procedures
 - **PrusaLink Integration**: Direct G-code submission to Prusa MINI via PrusaLink API
 
+## Visual Examples
+
+### Basic Welding Pattern
+![Basic Example Animation](examples/example.gif)
+
+*Simple square with normal welds (black) and light welds (blue)*
+
+### Advanced Microfluidics with Pipetting
+![Pipetting Example Animation](examples/pipetting_example.gif)
+
+*Complex microfluidic design with automated pipetting stops (magenta circles) for reagent injection*
+
+### Multi-Shape Design
+![Square-Circle Animation](examples/square-circle.gif)
+
+*Combined geometric shapes demonstrating precise path planning and thermal management*
+
 ## Interactive UI (Recommended)
 
 For the best user experience, use the interactive terminal interface:

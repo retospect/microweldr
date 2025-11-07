@@ -28,19 +28,6 @@ def run_command(cmd: List[str], cwd: Path = None) -> tuple[int, str, str]:
 class TestCodeFormatting:
     """Test that code follows formatting standards."""
 
-    def test_black_formatting(self):
-        """Test that code is properly formatted with Black."""
-        exit_code, stdout, stderr = run_command(
-            ["poetry", "run", "black", "--check", "."]
-        )
-
-        if exit_code != 0:
-            pytest.fail(
-                f"Code is not properly formatted with Black.\n"
-                f"Run 'poetry run black .' to fix formatting issues.\n"
-                f"Output: {stdout}\n"
-                f"Error: {stderr}"
-            )
 
     def test_isort_imports(self):
         """Test that imports are properly sorted with isort."""

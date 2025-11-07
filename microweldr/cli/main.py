@@ -16,7 +16,7 @@ from microweldr.prusalink.exceptions import PrusaLinkError
 from microweldr.validation.validators import (
     AnimationValidator,
     GCodeValidator,
-    SVGValidator,
+    SVGValidator
 )
 
 

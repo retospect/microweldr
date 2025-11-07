@@ -804,26 +804,30 @@ class AnimationGenerator:
 
         # Create interpolated points at final spacing (same as G-code)
         all_path_points = []
-        for i in range(len(original_points) - 1):
-            start = original_points[i]
-            end = original_points[i + 1]
+        # Handle single point case
+        if len(original_points) == 1:
+            all_path_points = original_points.copy()
+        else:
+            for i in range(len(original_points) - 1):
+                start = original_points[i]
+                end = original_points[i + 1]
 
-            # Calculate distance
-            dx = end.x - start.x
-            dy = end.y - start.y
-            distance = math.sqrt(dx * dx + dy * dy)
+                # Calculate distance
+                dx = end.x - start.x
+                dy = end.y - start.y
+                distance = math.sqrt(dx * dx + dy * dy)
 
-            if distance == 0:
-                continue
+                if distance == 0:
+                    continue
 
-            # Generate points at final spacing along this segment
-            num_points = max(1, int(distance / final_spacing))
+                # Generate points at final spacing along this segment
+                num_points = max(1, int(distance / final_spacing))
 
-            for j in range(num_points + 1):
-                t = j / num_points if num_points > 0 else 0
-                x = start.x + t * dx
-                y = start.y + t * dy
-                all_path_points.append(WeldPoint(x, y, start.weld_type))
+                for j in range(num_points + 1):
+                    t = j / num_points if num_points > 0 else 0
+                    x = start.x + t * dx
+                    y = start.y + t * dy
+                    all_path_points.append(WeldPoint(x, y, start.weld_type))
 
         # Distribute points across passes using binary subdivision (same as G-code)
         execution_order = []
