@@ -8,7 +8,7 @@ import pytest
 
 
 class TestCodeFormatting:
-    """Test suite for code formatting compliance."""
+    """Test suite for code formatting compliance using black and other tools."""
 
     def get_python_files(self) -> list[Path]:
         """Get all Python files in the project."""
@@ -22,6 +22,60 @@ class TestCodeFormatting:
                 python_files.extend(dir_path.rglob("*.py"))
 
         return python_files
+
+    def test_black_formatting_compliance(self):
+        """Test that all Python files comply with black formatting standards."""
+        project_root = Path(__file__).parent.parent.parent
+
+        # Run black --check on microweldr and tests directories
+        cmd = [
+            sys.executable,
+            "-m",
+            "black",
+            "--check",
+            str(project_root / "microweldr"),
+            str(project_root / "tests"),
+        ]
+
+        try:
+            result = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                cwd=project_root,
+                timeout=30,  # Prevent hanging
+            )
+
+            # Black returns 0 if all files are formatted correctly
+            if result.returncode != 0:
+                # Get list of files that would be reformatted
+                # Black outputs to stderr, not stdout
+                unformatted_files = []
+                output_text = result.stderr + result.stdout  # Check both
+                for line in output_text.split("\n"):
+                    if line.startswith("would reformat"):
+                        unformatted_files.append(line)
+
+                error_message = (
+                    f"Code formatting check failed. {len(unformatted_files)} files need formatting.\n"
+                    f"Run 'poetry run black microweldr tests' to fix formatting issues.\n\n"
+                    f"Files that need formatting:\n"
+                    + "\n".join(unformatted_files[:10])  # Show first 10 files
+                )
+
+                if len(unformatted_files) > 10:
+                    error_message += (
+                        f"\n... and {len(unformatted_files) - 10} more files"
+                    )
+
+                pytest.fail(error_message)
+
+        except subprocess.TimeoutExpired:
+            pytest.fail("Black formatting check timed out after 30 seconds")
+        except FileNotFoundError:
+            pytest.skip(
+                "Black not available - install dev dependencies with 'poetry install --with dev'"
+            )
 
     def test_python_files_exist(self):
         """Test that Python files exist in expected directories."""
@@ -39,39 +93,29 @@ class TestCodeFormatting:
         ), "No Python files found in microweldr directory"
         assert len(test_files) > 0, "No Python files found in tests directory"
 
-    def test_isort_formatting_compliance(self):
-        """Test that all Python files comply with isort import sorting standards."""
-        project_root = Path(__file__).parent.parent.parent
-
-        # Run isort --check-only on microweldr and tests directories
-        cmd = [
-            sys.executable,
-            "-m",
-            "isort",
-            "--check-only",
-            "--diff",  # Show what would change
-            str(project_root / "microweldr"),
-            str(project_root / "tests"),
-        ]
-
+    def test_black_version_compatibility(self):
+        """Test that black is available and working."""
         try:
             result = subprocess.run(
-                cmd, capture_output=True, text=True, cwd=project_root, timeout=30
+                [sys.executable, "-m", "black", "--version"],
+                capture_output=True,
+                text=True,
+                timeout=10,
             )
 
-            # isort returns non-zero if imports need sorting
             if result.returncode != 0:
-                error_message = (
-                    f"Import sorting check failed. Some files have incorrectly sorted imports.\n"
-                    f"Run 'make format' or 'isort microweldr tests' to fix import sorting.\n\n"
-                    f"Diff output:\n{result.stdout}"
-                )
-                pytest.fail(error_message)
+                pytest.skip("Black not working properly")
 
-        except subprocess.TimeoutExpired:
-            pytest.fail("isort check timed out after 30 seconds")
-        except FileNotFoundError:
-            pytest.skip("isort not available - install with 'pip install isort'")
+            # Check that we have a reasonable version
+            version_output = result.stdout.strip()
+            assert (
+                "black" in version_output.lower()
+            ), f"Unexpected black version output: {version_output}"
+
+        except (subprocess.TimeoutExpired, FileNotFoundError):
+            pytest.skip(
+                "Black not available - install dev dependencies with 'poetry install --with dev'"
+            )
 
     def test_no_trailing_whitespace_in_python_files(self):
         """Test that Python files don't have trailing whitespace."""

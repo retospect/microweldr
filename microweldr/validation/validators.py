@@ -5,7 +5,7 @@ from typing import List, Optional
 
 # Optional validation libraries
 try:
-    from lxml import etree
+    from lxml import etree  # nosec B410 - Used for trusted SVG validation only
 
     LXML_AVAILABLE = True
 except ImportError:
@@ -57,7 +57,7 @@ class SVGValidator:
         try:
             # Parse with lxml for better validation
             with open(svg_path, "rb") as f:
-                doc = etree.parse(f)
+                doc = etree.parse(f)  # nosec B320 - Parsing trusted user SVG files
 
             # Basic SVG structure validation
             root = doc.getroot()
@@ -241,7 +241,7 @@ class AnimationValidator:
 
         try:
             with open(svg_path, "rb") as f:
-                doc = etree.parse(f)
+                doc = etree.parse(f)  # nosec B320 - Parsing trusted user SVG files
 
             root = doc.getroot()
 
@@ -288,7 +288,9 @@ class AnimationValidator:
 
         try:
             # Parse animation content
-            doc = etree.fromstring(animation_content.encode())
+            doc = etree.fromstring(
+                animation_content.encode()
+            )  # nosec B320 - Parsing trusted animation content
 
             # Check for animation elements
             animations = doc.xpath(

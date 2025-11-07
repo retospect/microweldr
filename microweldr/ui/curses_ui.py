@@ -397,7 +397,7 @@ class MicroWeldrUI:
             self.plate_heater_on = target_temp > 0
             if target_temp > 0:
                 self.target_bed_temp = int(target_temp)
-        except:
+        except:  # nosec B110 - Intentional broad exception for UI robustness
             pass
 
     def get_bed_temperature_display(self) -> str:

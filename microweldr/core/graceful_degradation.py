@@ -10,7 +10,7 @@ from ..prusalink.client import PrusaLinkClient
 from ..prusalink.exceptions import (
     PrusaLinkAuthError,
     PrusaLinkConnectionError,
-    PrusaLinkError
+    PrusaLinkError,
 )
 
 logger = logging.getLogger(__name__)

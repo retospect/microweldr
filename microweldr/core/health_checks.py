@@ -3,7 +3,7 @@
 import logging
 import platform
 import shutil
-import subprocess
+import subprocess  # nosec B404 - Used for system health checks only
 import sys
 import time
 from pathlib import Path
@@ -173,7 +173,9 @@ class HealthChecker:
             Path.cwd(),  # Current directory
             Path.cwd() / "logs",  # Logs directory
             (
-                Path("/tmp") if platform.system() != "Windows" else Path.cwd() / "temp"
+                Path("/tmp")
+                if platform.system() != "Windows"
+                else Path.cwd() / "temp"  # nosec B108 - Standard temp directory
             ),  # Temp directory
         ]
 

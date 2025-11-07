@@ -123,7 +123,9 @@ class ConfigKeys:
     # PrusaLink settings
     HOST = "host"
     USERNAME = "username"
-    PASSWORD = "password"
+    PASSWORD = (
+        "password"  # nosec B105 - This is a config key name, not a hardcoded password
+    )
     API_KEY = "api_key"
     TIMEOUT = "timeout"
 
@@ -308,7 +310,7 @@ class ErrorMessages:
     UPLOAD_FAILED = "Failed to upload file to printer: {error}"
 
     # Security errors
-    WEAK_PASSWORD = "Password is too weak: {reason}"
+    WEAK_PASSWORD = "Password is too weak: {reason}"  # nosec B105 - This is an error message template, not a hardcoded password
     INSECURE_FILE_PERMISSIONS = "File has insecure permissions: {path}"
     INVALID_IP_ADDRESS = "Invalid IP address: {ip}"
 

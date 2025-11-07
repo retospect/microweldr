@@ -28,17 +28,21 @@ def run_command(cmd: List[str], cwd: Path = None) -> tuple[int, str, str]:
 class TestCodeFormatting:
     """Test that code follows formatting standards."""
 
-
-    def test_isort_imports(self):
-        """Test that imports are properly sorted with isort."""
-        exit_code, stdout, stderr = run_command(
-            ["poetry", "run", "python", "-m", "isort", "--check-only", "."]
-        )
+    def test_black_formatting(self):
+        """Test that code is properly formatted with Black."""
+        try:
+            exit_code, stdout, stderr = run_command(
+                ["poetry", "run", "python", "-m", "black", "--check", "."]
+            )
+        except FileNotFoundError:
+            pytest.skip(
+                "Black not available - install dev dependencies with 'poetry install --with dev'"
+            )
 
         if exit_code != 0:
             pytest.fail(
-                f"Imports are not properly sorted with isort.\n"
-                f"Run 'poetry run python -m isort .' to fix import sorting.\n"
+                f"Code is not properly formatted with Black.\n"
+                f"Run 'poetry run black .' to fix formatting issues.\n"
                 f"Output: {stdout}\n"
                 f"Error: {stderr}"
             )

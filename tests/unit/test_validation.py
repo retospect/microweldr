@@ -9,7 +9,7 @@ from microweldr.validation.validators import (
     AnimationValidator,
     GCodeValidator,
     SVGValidator,
-    ValidationResult
+    ValidationResult,
 )
 
 

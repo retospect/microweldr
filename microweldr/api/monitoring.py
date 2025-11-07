@@ -7,7 +7,7 @@ from typing import Any, Dict, List, Optional
 from ..core.health_checks import (
     HealthChecker,
     generate_health_report,
-    quick_health_check
+    quick_health_check,
 )
 from ..core.logging_config import LogContext
 

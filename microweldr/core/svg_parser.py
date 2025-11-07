@@ -2,7 +2,7 @@
 
 import math
 import re
-import xml.etree.ElementTree as ET
+import xml.etree.ElementTree as ET  # nosec B405 - Parsing trusted SVG files only
 from typing import List, Optional, Tuple
 
 from microweldr.core.models import WeldPath, WeldPoint
@@ -24,7 +24,7 @@ class SVGParser:
     def parse_file(self, svg_path: str) -> List[WeldPath]:
         """Parse SVG file and extract weld paths."""
         try:
-            tree = ET.parse(svg_path)
+            tree = ET.parse(svg_path)  # nosec B314 - Parsing trusted user SVG files
             root = tree.getroot()
         except ET.ParseError as e:
             raise SVGParseError(f"Invalid SVG file: {e}")

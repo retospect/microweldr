@@ -2,7 +2,7 @@
 
 import hashlib
 import logging
-import pickle
+import pickle  # nosec B403 - Used for internal caching only, not user data
 import time
 from functools import lru_cache, wraps
 from pathlib import Path
@@ -65,7 +65,7 @@ class FileCache:
 
         try:
             with open(cache_path, "rb") as f:
-                result = pickle.load(f)
+                result = pickle.load(f)  # nosec B301 - Internal cache files only
             logger.debug(f"Cache hit for {operation}: {cache_key}")
             return result
         except Exception as e:

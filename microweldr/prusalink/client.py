@@ -11,14 +11,14 @@ from requests.auth import HTTPDigestAuth
 from microweldr.prusalink.exceptions import (
     PrusaLinkConnectionError,
     PrusaLinkOperationError,
-    PrusaLinkValidationError
+    PrusaLinkValidationError,
 )
 
 from .exceptions import (
     PrusaLinkAuthError,
     PrusaLinkConfigError,
     PrusaLinkError,
-    PrusaLinkUploadError
+    PrusaLinkUploadError,
 )
 
 

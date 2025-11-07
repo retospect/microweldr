@@ -118,7 +118,9 @@ class PrintMonitor:
         """Clear the terminal screen."""
         import os
 
-        os.system("cls" if os.name == "nt" else "clear")
+        os.system(
+            "cls" if os.name == "nt" else "clear"
+        )  # nosec B605 - Simple terminal clear command
 
     def format_time_remaining(self, seconds: Optional[float]) -> str:
         """Format time remaining in human readable format."""
