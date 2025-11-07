@@ -32,18 +32,21 @@ pip install -e .[validation,dev]
 # Or install step by step
 pip install -e .                    # Core package
 pip install -e .[validation]        # With validation libraries
-pip install pytest pytest-cov black isort flake8 mypy pre-commit  # Dev tools
+pip install pytest pytest-cov isort flake8 mypy pre-commit  # Dev tools
 ```
 
 ### Development Dependencies
 The development environment includes:
 - **pytest**: Testing framework
 - **pytest-cov**: Coverage reporting
-- **black**: Code formatting
 - **isort**: Import sorting
 - **flake8**: Linting
 - **mypy**: Type checking
 - **pre-commit**: Git hooks
+
+### Optional Dependencies
+- **lxml**: Enhanced SVG validation (install with `pip install -e .[validation]`)
+- **gcodeparser**: G-code syntax validation (install with `pip install -e .[validation]`)
 
 ## Running Examples (Development)
 
