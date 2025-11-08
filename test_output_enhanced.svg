@@ -1,0 +1,2044 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="117.0" height="207.0" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100%" height="100%" fill="white"/>
+  <g transform="translate(58.5,6.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="0.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(60.0,6.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="0.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(61.5,6.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="0.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(63.0,6.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="0.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(64.5,6.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="0.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,6.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="0.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,6.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="0.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,7.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="0.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,9.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="0.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,10.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="0.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,12.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="1.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,13.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="1.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,15.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="1.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,16.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="1.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,18.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="1.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,19.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="1.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,21.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="1.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,22.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="1.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,24.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="1.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,25.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="1.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,27.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="2.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,28.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="2.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,30.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="2.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,31.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="2.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,33.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="2.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,34.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="2.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,36.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="2.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,37.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="2.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,39.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="2.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,40.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="2.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,42.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="3.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,43.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="3.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,45.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="3.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,46.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="3.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,48.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="3.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,49.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="3.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,51.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="3.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,52.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="3.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,54.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="3.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,55.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="3.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,57.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="4.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,58.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="4.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,60.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="4.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,61.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="4.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,63.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="4.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,64.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="4.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,66.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="4.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,67.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="4.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,69.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="4.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,70.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="4.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,72.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="5.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,73.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="5.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,75.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="5.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,76.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="5.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,78.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="5.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,79.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="5.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,81.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="5.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.0,81.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="5.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.99775000000001,81.6)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="5.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.99775000000001,81.6)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="5.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.99100000000001,82.20000000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="6.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.99100000000001,82.20000000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="6.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.97975,82.79999999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="6.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.97975,82.79999999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="6.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.96400000000003,83.40000000000003)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="6.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.96400000000003,83.40000000000003)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="6.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.94375000000001,84.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="6.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.94375000000001,84.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="6.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.919,84.6)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="6.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.919,84.6)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="6.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.88974999999999,85.19999999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="7.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.88974999999999,85.19999999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="7.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.856,85.80000000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="7.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.856,85.80000000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="7.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.81775,86.4)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="7.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.81775,86.4)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="7.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.77499999999999,87.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="7.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.77499999999999,87.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="7.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.72775,87.60000000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="7.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.72775,87.60000000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="7.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.67600000000002,88.19999999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="8.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.67600000000002,88.19999999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="8.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.61975,88.79999999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="8.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.61975,88.79999999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="8.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.559,89.39999999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="8.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.559,89.39999999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="8.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.49374999999999,90.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="8.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.49374999999999,90.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="8.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.424,90.60000000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="8.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.424,90.60000000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="8.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.34974999999999,91.19999999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="9.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.34974999999999,91.19999999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="9.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.27100000000002,91.80000000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="9.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.27100000000002,91.80000000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="9.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.18775000000002,92.4)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="9.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.18775000000002,92.4)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="9.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.10000000000001,93.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="9.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.10000000000001,93.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="9.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(64.5,94.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="9.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(63.900000000000006,96.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="9.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(63.300000000000004,97.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="10.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(62.7,99.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="10.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(62.099999999999994,100.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="10.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(61.5,102.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="10.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(61.5,102.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="10.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(61.5225,102.8775)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="10.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(61.5225,102.8775)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="10.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(61.59000000000002,103.71000000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="10.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(61.59000000000002,103.71000000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="10.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(61.7025,104.49749999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="10.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(61.7025,104.49749999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="11.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(61.860000000000014,105.24000000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="11.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(61.860000000000014,105.24000000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="11.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(62.0625,105.9375)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="11.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(62.0625,105.9375)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="11.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(62.30999999999999,106.58999999999997)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="11.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(62.30999999999999,106.58999999999997)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="11.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(62.6025,107.1975)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="11.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(62.6025,107.1975)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="11.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(62.94,107.76)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="11.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(62.94,107.76)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="12.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(63.32250000000002,108.2775)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="12.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(63.32250000000002,108.2775)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="12.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(63.75,108.75)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="12.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(63.75,108.75)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="12.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(64.2225,109.1775)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="12.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(64.2225,109.1775)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="12.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(64.74,109.55999999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="12.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(64.74,109.55999999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="12.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.3025,109.89750000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="12.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.3025,109.89750000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="13.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.91,110.19000000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="13.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.91,110.19000000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="13.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.5625,110.4375)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="13.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.5625,110.4375)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="13.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(67.26,110.64000000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="13.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(67.26,110.64000000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="13.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(68.0025,110.79749999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="13.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(68.0025,110.79749999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="13.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(68.78999999999999,110.91)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="13.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(68.78999999999999,110.91)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="14.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(69.6225,110.97749999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="14.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(69.6225,110.97749999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="14.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(70.5,111.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="14.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(70.5,111.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="14.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(71.81625,111.75625)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="14.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(73.1325,112.51249999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="14.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(74.44874999999999,113.26874999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="14.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(74.44874999999999,113.26874999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="14.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(76.32187499999999,114.421875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="14.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(78.19500000000002,115.57500000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="15.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(78.19500000000002,115.57500000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="15.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(79.966875,116.74687500000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="15.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(81.73874999999998,117.91874999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="15.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(81.73874999999998,117.91874999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="15.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(83.40937500000001,119.109375)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="15.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(85.08000000000001,120.30000000000003)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="15.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(85.08000000000001,120.30000000000003)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="15.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(86.64937500000002,121.509375)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="15.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(88.21875,122.71875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="15.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(88.21875,122.71875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="16.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(89.68687499999999,123.94687499999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="16.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(91.155,125.17499999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="16.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(91.155,125.17499999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="16.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(92.52187500000001,126.421875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="16.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(93.88875,127.66875000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="16.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(93.88875,127.66875000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="16.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(95.154375,128.93437500000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="16.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(96.42,130.2)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="16.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(96.42,130.2)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="16.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(97.58437500000001,131.484375)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="17.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(98.74875000000002,132.76875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="17.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(98.74875000000002,132.76875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="17.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(99.81187500000001,134.071875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="17.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(100.875,135.375)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="17.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(100.875,135.375)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="17.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(101.83687499999999,136.696875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="17.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(102.79875,138.01875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="17.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(102.79875,138.01875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="17.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(103.65937500000001,139.359375)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="17.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(104.52000000000001,140.7)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="18.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(104.52000000000001,140.7)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="18.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(105.279375,142.05937500000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="18.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(106.03875,143.41875000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="18.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(106.03875,143.41875000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="18.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(106.69687499999999,144.796875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="18.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(107.35500000000002,146.17499999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="18.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(107.35500000000002,146.17499999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="18.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(107.911875,147.57187499999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="18.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(108.46875,148.96875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="18.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(108.46875,148.96875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="19.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(109.38,151.8)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="19.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(109.38,151.8)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="19.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(110.08874999999998,154.66875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="19.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(110.08874999999998,154.66875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="19.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(110.595,157.575)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="19.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(110.595,157.575)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="19.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(110.89875,160.51875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="19.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(110.89875,160.51875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="19.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(111.0,163.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="19.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(111.0,163.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="20.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(110.86875,166.44375000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="20.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(110.86875,166.44375000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="20.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(110.47500000000001,169.27499999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="20.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(110.47500000000001,169.27499999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="20.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(109.81874999999997,171.99374999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="20.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(109.81874999999997,171.99374999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="20.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(108.90000000000003,174.60000000000005)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="20.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(108.90000000000003,174.60000000000005)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="20.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(107.71875,177.09375)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="20.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(107.71875,177.09375)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="21.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(106.27499999999999,179.47499999999997)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="21.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(106.27499999999999,179.47499999999997)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="21.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(104.56875,181.74374999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="21.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(104.56875,181.74374999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="21.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(102.60000000000001,183.89999999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="21.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(102.60000000000001,183.89999999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="21.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(101.48437500000003,184.921875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="21.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(100.36875000000003,185.94375000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="21.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(100.36875000000003,185.94375000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="21.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(99.12187500000002,186.90937499999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="22.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(97.875,187.875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="22.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(97.875,187.875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="22.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(96.49687499999999,188.78437499999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="22.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(95.11874999999999,189.69375000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="22.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(95.11874999999999,189.69375000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="22.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(93.609375,190.546875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="22.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(92.10000000000001,191.39999999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="22.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(92.10000000000001,191.39999999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="22.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(90.45937500000001,192.19687499999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="22.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(88.81875000000001,192.99374999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="23.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(88.81875000000001,192.99374999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="23.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(87.046875,193.734375)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="23.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(85.275,194.47499999999997)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="23.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(85.275,194.47499999999997)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="23.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(83.37187500000002,195.15937499999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="23.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(81.46875,195.84375)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="23.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(81.46875,195.84375)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="23.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(79.43437499999999,196.47187499999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="23.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(77.39999999999999,197.10000000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="23.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(77.39999999999999,197.10000000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="24.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(75.234375,197.671875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="24.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(73.06875,198.24374999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="24.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(73.06875,198.24374999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="24.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(71.5375,198.58750000000003)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="24.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(70.00625,198.93125)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="24.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(68.47500000000001,199.27500000000003)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="24.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(68.47500000000001,199.27500000000003)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="24.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(66.85625000000002,199.58125)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="24.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(65.23750000000001,199.88750000000005)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="24.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(63.61875000000001,200.19375000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="25.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(63.61875000000001,200.19375000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="25.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(61.91250000000001,200.46250000000003)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="25.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(60.206250000000004,200.73125)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="25.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(58.5,201.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="25.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(58.5,6.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="25.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(57.0,6.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="25.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(55.5,6.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="25.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(54.0,6.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="25.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(52.5,6.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="25.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,6.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="26.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,6.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="26.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,7.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="26.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,9.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="26.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,10.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="26.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,12.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="26.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,13.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="26.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,15.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="26.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,16.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="26.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,18.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="26.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,19.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="27.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,21.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="27.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,22.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="27.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,24.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="27.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,25.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="27.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,27.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="27.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,28.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="27.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,30.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="27.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,31.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="27.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,33.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="27.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,34.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="28.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,36.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="28.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,37.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="28.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,39.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="28.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,40.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="28.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,42.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="28.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,43.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="28.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,45.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="28.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,46.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="28.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,48.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="28.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,49.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="29.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,51.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="29.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,52.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="29.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,54.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="29.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,55.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="29.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,57.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="29.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,58.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="29.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,60.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="29.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,61.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="29.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,63.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="29.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,64.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="30.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,66.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="30.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,67.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="30.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,69.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="30.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,70.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="30.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,72.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="30.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,73.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="30.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,75.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="30.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,76.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="30.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,78.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="30.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,79.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="31.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,81.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="31.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.0,81.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="31.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.002250000000004,81.6)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="31.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.002250000000004,81.6)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="31.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.009,82.20000000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="31.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.009,82.20000000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="31.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.02024999999999,82.79999999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="31.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.02024999999999,82.79999999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="31.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.03600000000002,83.40000000000003)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="31.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.03600000000002,83.40000000000003)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="32.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.056250000000006,84.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="32.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.056250000000006,84.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="32.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.08099999999999,84.6)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="32.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.08099999999999,84.6)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="32.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.11025000000001,85.19999999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="32.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.11025000000001,85.19999999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="32.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.144000000000005,85.80000000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="32.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.144000000000005,85.80000000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="32.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.18225000000001,86.4)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="32.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.18225000000001,86.4)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="33.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.224999999999994,87.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="33.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.224999999999994,87.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="33.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.27225,87.60000000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="33.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.27225,87.60000000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="33.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.324,88.19999999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="33.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.324,88.19999999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="33.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.380250000000004,88.79999999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="33.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.380250000000004,88.79999999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="33.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.440999999999995,89.39999999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="33.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.440999999999995,89.39999999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="34.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.50625000000001,90.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="34.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.50625000000001,90.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="34.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.57600000000001,90.60000000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="34.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.57600000000001,90.60000000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="34.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.65025,91.19999999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="34.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.65025,91.19999999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="34.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.729,91.80000000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="34.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.729,91.80000000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="34.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.812250000000006,92.4)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="34.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.812250000000006,92.4)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="35.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.900000000000006,93.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="35.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.900000000000006,93.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="35.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(52.5,94.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="35.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(53.099999999999994,96.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="35.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(53.699999999999996,97.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="35.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(54.300000000000004,99.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="35.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(54.900000000000006,100.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="35.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(55.5,102.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="35.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(55.5,102.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="35.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(55.4775,102.8775)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="36.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(55.4775,102.8775)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="36.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(55.41000000000001,103.71000000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="36.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(55.41000000000001,103.71000000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="36.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(55.29749999999999,104.49749999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="36.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(55.29749999999999,104.49749999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="36.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(55.14000000000001,105.24000000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="36.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(55.14000000000001,105.24000000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="36.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(54.9375,105.9375)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="36.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(54.9375,105.9375)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="36.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(54.68999999999999,106.58999999999997)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="37.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(54.68999999999999,106.58999999999997)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="37.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(54.397499999999994,107.1975)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="37.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(54.397499999999994,107.1975)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="37.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(54.06,107.76)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="37.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(54.06,107.76)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="37.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(53.677500000000016,108.2775)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="37.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(53.677500000000016,108.2775)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="37.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(53.25,108.75)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="37.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(53.25,108.75)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="37.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(52.7775,109.1775)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="38.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(52.7775,109.1775)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="38.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(52.260000000000005,109.55999999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="38.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(52.260000000000005,109.55999999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="38.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.697500000000005,109.89750000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="38.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.697500000000005,109.89750000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="38.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.09,110.19000000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="38.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.09,110.19000000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="38.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(50.4375,110.4375)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="38.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(50.4375,110.4375)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="38.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(49.740000000000016,110.64000000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="39.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(49.740000000000016,110.64000000000001)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="39.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(48.99749999999999,110.79749999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="39.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(48.99749999999999,110.79749999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="39.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(48.21,110.91)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="39.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(48.21,110.91)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="39.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(47.37750000000001,110.97749999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="39.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(47.37750000000001,110.97749999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="39.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(46.5,111.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="39.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(46.5,111.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="39.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(45.18375,111.75625)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="40.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(43.86749999999999,112.51249999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="40.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(42.551249999999996,113.26874999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="40.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(42.551249999999996,113.26874999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="40.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(40.67812500000001,114.421875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="40.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(38.80500000000001,115.57500000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="40.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(38.80500000000001,115.57500000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="40.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(37.033125,116.74687500000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="40.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(35.26124999999999,117.91874999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="40.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(35.26124999999999,117.91874999999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="40.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(33.590624999999996,119.109375)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="41.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(31.920000000000012,120.30000000000003)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="41.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(31.920000000000012,120.30000000000003)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="41.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(30.350625,121.509375)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="41.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(28.78125,122.71875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="41.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(28.78125,122.71875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="41.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(27.313124999999992,123.94687499999999)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="41.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(25.844999999999995,125.17499999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="41.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(25.844999999999995,125.17499999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="41.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(24.47812499999999,126.421875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="41.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(23.11125,127.66875000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="42.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(23.11125,127.66875000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="42.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(21.845625,128.93437500000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="42.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(20.58,130.2)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="42.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(20.58,130.2)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="42.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(19.415625000000002,131.484375)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="42.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(18.251250000000006,132.76875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="42.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(18.251250000000006,132.76875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="42.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(17.188125000000003,134.071875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="42.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(16.125,135.375)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="42.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(16.125,135.375)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="43.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(15.163125,136.696875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="43.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(14.201249999999996,138.01875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="43.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(14.201249999999996,138.01875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="43.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(13.340624999999996,139.359375)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="43.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(12.48,140.7)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="43.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(12.48,140.7)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="43.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(11.720624999999998,142.05937500000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="43.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(10.961249999999996,143.41875000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="43.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(10.961249999999996,143.41875000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="43.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(10.303124999999998,144.796875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="44.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(9.645,146.17499999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="44.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(9.645,146.17499999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="44.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(9.088125,147.57187499999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="44.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(8.53125,148.96875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="44.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(8.53125,148.96875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="44.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(7.620000000000003,151.8)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="44.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(7.620000000000003,151.8)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="44.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(6.911249999999992,154.66875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="44.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(6.911249999999992,154.66875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="44.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(6.404999999999999,157.575)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="45.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(6.404999999999999,157.575)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="45.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(6.101250000000004,160.51875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="45.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(6.101250000000004,160.51875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="45.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(6.0,163.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="45.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(6.0,163.5)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="45.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(6.131249999999998,166.44375000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="45.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(6.131249999999998,166.44375000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="45.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(6.525000000000002,169.27499999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="45.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(6.525000000000002,169.27499999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="45.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(7.181249999999997,171.99374999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="46.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(7.181249999999997,171.99374999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="46.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(8.100000000000009,174.60000000000005)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="46.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(8.100000000000009,174.60000000000005)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="46.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(9.28125,177.09375)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="46.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(9.28125,177.09375)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="46.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(10.724999999999998,179.47499999999997)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="46.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(10.724999999999998,179.47499999999997)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="46.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(12.431249999999997,181.74374999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="46.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(12.431249999999997,181.74374999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="46.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(14.400000000000002,183.89999999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="47.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(14.400000000000002,183.89999999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="47.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(15.515625000000005,184.921875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="47.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(16.63125000000001,185.94375000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="47.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(16.63125000000001,185.94375000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="47.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(17.878125000000004,186.90937499999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="47.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(19.125,187.875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="47.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(19.125,187.875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="47.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(20.503125000000004,188.78437499999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="47.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(21.88125000000001,189.69375000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="47.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(21.88125000000001,189.69375000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="48.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(23.390625,190.546875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="48.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(24.89999999999999,191.39999999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="48.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(24.89999999999999,191.39999999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="48.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(26.54062499999999,192.19687499999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="48.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(28.181250000000002,192.99374999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="48.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(28.181250000000002,192.99374999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="48.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(29.953125,193.734375)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="48.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(31.724999999999998,194.47499999999997)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="48.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(31.724999999999998,194.47499999999997)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="48.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(33.628125000000004,195.15937499999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="49.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(35.53125,195.84375)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="49.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(35.53125,195.84375)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="49.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(37.565625000000004,196.47187499999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="49.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(39.60000000000001,197.10000000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="49.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(39.60000000000001,197.10000000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="49.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(41.765625,197.671875)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="49.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(43.93124999999999,198.24374999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="49.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(43.93124999999999,198.24374999999998)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="49.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(45.46249999999999,198.58750000000003)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="49.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(46.99375,198.93125)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="50.00s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(48.525000000000006,199.27500000000003)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="50.10s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(48.525000000000006,199.27500000000003)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="50.20s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(50.14375,199.58125)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="50.30s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(51.7625,199.88750000000005)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="50.40s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(53.381249999999994,200.19375000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="50.50s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(53.381249999999994,200.19375000000002)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="50.60s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(55.087500000000006,200.46250000000003)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="50.70s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(56.793749999999996,200.73125)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="50.80s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+  <g transform="translate(58.5,201.0)" opacity="0">
+    <animate attributeName="opacity" values="0;1" dur="0.01s" begin="50.90s" fill="freeze"/>
+    <circle cx="0" cy="0" r="1.65" fill="black" stroke="black" stroke-width="0.5" opacity="0.8"/>
+  </g>
+</svg>

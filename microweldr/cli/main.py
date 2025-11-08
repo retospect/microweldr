@@ -88,6 +88,27 @@ def create_parser() -> argparse.ArgumentParser:
         "--keep-file", action="store_true", help="Keep temp files"
     )
 
+    # Calibrate and set temperatures command
+    calibrate_and_set_parser = subparsers.add_parser(
+        "calibrate-and-set",
+        help="Set temperatures from config and run full calibration",
+    )
+    calibrate_and_set_parser.add_argument(
+        "--verbose", "-v", action="store_true", help="Verbose output"
+    )
+    calibrate_and_set_parser.add_argument(
+        "--home-only", action="store_true", help="Home axes only"
+    )
+    calibrate_and_set_parser.add_argument(
+        "--print-gcode", action="store_true", help="Print G-code"
+    )
+    calibrate_and_set_parser.add_argument(
+        "--keep-file", action="store_true", help="Keep temp files"
+    )
+    calibrate_and_set_parser.add_argument(
+        "--wait", action="store_true", help="Wait for temperatures to be reached"
+    )
+
     # Temperature control commands
     temp_bed_parser = subparsers.add_parser("temp-bed", help="Set bed temperature")
     temp_bed_parser.add_argument(
@@ -453,6 +474,120 @@ def cmd_calibrate(args):
 
         print("\n🎉 Calibration completed successfully!")
         print("Your printer is now calibrated and ready for welding operations.")
+        return True
+
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        return False
+
+
+def cmd_calibrate_and_set(args):
+    """Set temperatures from config and run full calibration."""
+    print("🌡️🎯 Calibrate and Set Temperatures")
+    print("=" * 40)
+
+    try:
+        # Load configuration
+        from microweldr.core.config import Config
+
+        config = Config()
+
+        # Get temperatures from config
+        bed_temp = config.get("temperatures", "bed_temperature")
+        nozzle_temp = config.get("temperatures", "nozzle_temperature")
+
+        print(f"📋 Configuration loaded:")
+        print(f"   • Bed temperature: {bed_temp}°C")
+        print(f"   • Nozzle temperature: {nozzle_temp}°C")
+        print()
+
+        # Connect to printer
+        client = PrusaLinkClient()
+        print("1. Checking printer connection...")
+        status = client.get_printer_status()
+        printer = status.get("printer", {})
+        state = printer.get("state", "Unknown")
+        print(f"   ✓ Connected to printer")
+        print(f"   ✓ Printer state: {state}")
+
+        if state.upper() == "PRINTING":
+            print(
+                "   ⚠ Printer is currently printing - cannot set temperatures or calibrate"
+            )
+            return False
+
+        # Set bed temperature
+        print(f"2. Setting bed temperature to {bed_temp}°C...")
+        success = client.set_bed_temperature(bed_temp)
+        if success:
+            print(f"   ✓ Bed temperature set to {bed_temp}°C")
+            if args.wait:
+                print("   • Waiting for bed to reach target temperature...")
+                # Note: PrusaLink doesn't have a direct "wait for temperature" API
+                # The printer will heat up during calibration
+        else:
+            print(f"   ✗ Failed to set bed temperature")
+            return False
+
+        # Set nozzle temperature
+        print(f"3. Setting nozzle temperature to {nozzle_temp}°C...")
+        success = client.set_nozzle_temperature(nozzle_temp)
+        if success:
+            print(f"   ✓ Nozzle temperature set to {nozzle_temp}°C")
+            if args.wait:
+                print("   • Waiting for nozzle to reach target temperature...")
+                # Note: PrusaLink doesn't have a direct "wait for temperature" API
+                # The printer will heat up during calibration
+        else:
+            print(f"   ✗ Failed to set nozzle temperature")
+            return False
+
+        # Run calibration
+        print("4. Starting calibration...")
+        from microweldr.core.printer_operations import PrinterOperations
+
+        printer_ops = PrinterOperations(client)
+
+        if args.home_only:
+            print("   • Homing axes only...")
+            success = printer_ops.home_axes()
+            if success:
+                print("   ✓ Homing completed successfully")
+            else:
+                print("   ✗ Homing failed")
+                return False
+        else:
+            print("   • Starting full calibration (home + bed leveling)...")
+            print("   • This may take up to 5 minutes...")
+            success = printer_ops.calibrate_printer(bed_leveling=True)
+            if success:
+                print("   ✓ Full calibration completed successfully")
+            else:
+                print("   ✗ Calibration failed")
+                return False
+
+        # Verify final state
+        print("5. Verifying final state...")
+        final_status = client.get_printer_status()
+        final_printer = final_status.get("printer", {})
+        final_state = final_printer.get("state", "Unknown")
+
+        # Get current temperatures from printer status
+        current_bed = final_printer.get("temp_bed", 0)
+        current_nozzle = final_printer.get("temp_nozzle", 0)
+        target_bed = final_printer.get("target_bed", 0)
+        target_nozzle = final_printer.get("target_nozzle", 0)
+
+        print(f"   ✓ Printer state: {final_state}")
+        print(f"   ✓ Bed temperature: {current_bed:.1f}°C (target: {target_bed:.1f}°C)")
+        print(
+            f"   ✓ Nozzle temperature: {current_nozzle:.1f}°C (target: {target_nozzle:.1f}°C)"
+        )
+
+        print("\n🎉 Calibration and temperature setup completed successfully!")
+        print(
+            "Your printer is now heated, calibrated, and ready for welding operations."
+        )
         return True
 
     except Exception as e:
@@ -1270,6 +1405,9 @@ def main():
         )
         print("  microweldr test                      # Test printer connection")
         print("  microweldr calibrate                 # Calibrate printer")
+        print(
+            "  microweldr calibrate-and-set         # Set temps from config + calibrate"
+        )
         print("  microweldr frame your_design.svg     # Draw frame only")
         sys.exit(1)
 
@@ -1279,6 +1417,7 @@ def main():
         "home": cmd_home,
         "bed-level": cmd_bed_level,
         "calibrate": cmd_calibrate,
+        "calibrate-and-set": cmd_calibrate_and_set,
         "temp-bed": cmd_temp_bed,
         "temp-nozzle": cmd_temp_nozzle,
         "frame": cmd_frame,

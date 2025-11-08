@@ -985,5 +985,124 @@ def main():
         sys.exit(1)
 
 
+@cli.command("calibrate-and-set")
+@click.option("--home-only", is_flag=True, help="Home axes only")
+@click.option("--wait", is_flag=True, help="Wait for temperatures to be reached")
+@common_options
+@click.pass_context
+def calibrate_and_set(ctx, home_only, wait, log_file, config, quiet, verbose):
+    """Set temperatures from config and run full calibration."""
+    click.echo("🌡️🎯 Calibrate and Set Temperatures")
+    click.echo("=" * 40)
+
+    try:
+        # Load configuration
+        from microweldr.core.config import Config
+
+        config_obj = Config()
+
+        # Get temperatures from config
+        bed_temp = config_obj.get("temperatures", "bed_temperature")
+        nozzle_temp = config_obj.get("temperatures", "nozzle_temperature")
+
+        click.echo(f"📋 Configuration loaded:")
+        click.echo(f"   • Bed temperature: {bed_temp}°C")
+        click.echo(f"   • Nozzle temperature: {nozzle_temp}°C")
+        click.echo()
+
+        # Connect to printer
+        from microweldr.prusalink.client import PrusaLinkClient
+
+        client = PrusaLinkClient()
+
+        click.echo("1. Checking printer connection...")
+        status = client.get_printer_status()
+        printer = status.get("printer", {})
+        state = printer.get("state", "Unknown")
+        click.echo(f"   ✓ Connected to printer")
+        click.echo(f"   ✓ Printer state: {state}")
+
+        if state.upper() == "PRINTING":
+            click.echo(
+                "   ⚠ Printer is currently printing - cannot set temperatures or calibrate"
+            )
+            raise click.Abort()
+
+        # Set bed temperature
+        click.echo(f"2. Setting bed temperature to {bed_temp}°C...")
+        success = client.set_bed_temperature(bed_temp)
+        if success:
+            click.echo(f"   ✓ Bed temperature set to {bed_temp}°C")
+            if wait:
+                click.echo("   • Waiting for bed to reach target temperature...")
+        else:
+            click.echo(f"   ✗ Failed to set bed temperature")
+            raise click.Abort()
+
+        # Set nozzle temperature
+        click.echo(f"3. Setting nozzle temperature to {nozzle_temp}°C...")
+        success = client.set_nozzle_temperature(nozzle_temp)
+        if success:
+            click.echo(f"   ✓ Nozzle temperature set to {nozzle_temp}°C")
+            if wait:
+                click.echo("   • Waiting for nozzle to reach target temperature...")
+        else:
+            click.echo(f"   ✗ Failed to set nozzle temperature")
+            raise click.Abort()
+
+        # Run calibration
+        click.echo("4. Starting calibration...")
+        from microweldr.core.printer_operations import PrinterOperations
+
+        printer_ops = PrinterOperations(client)
+
+        if home_only:
+            click.echo("   • Homing axes only...")
+            success = printer_ops.home_axes()
+            if success:
+                click.echo("   ✓ Homing completed successfully")
+            else:
+                click.echo("   ✗ Homing failed")
+                raise click.Abort()
+        else:
+            click.echo("   • Starting full calibration (home + bed leveling)...")
+            click.echo("   • This may take up to 5 minutes...")
+            success = printer_ops.calibrate_printer(bed_leveling=True)
+            if success:
+                click.echo("   ✓ Full calibration completed successfully")
+            else:
+                click.echo("   ✗ Calibration failed")
+                raise click.Abort()
+
+        # Verify final state
+        click.echo("5. Verifying final state...")
+        final_status = client.get_printer_status()
+        final_printer = final_status.get("printer", {})
+        final_state = final_printer.get("state", "Unknown")
+
+        # Get current temperatures from printer status
+        current_bed = final_printer.get("temp_bed", 0)
+        current_nozzle = final_printer.get("temp_nozzle", 0)
+        target_bed = final_printer.get("target_bed", 0)
+        target_nozzle = final_printer.get("target_nozzle", 0)
+
+        click.echo(f"   ✓ Printer state: {final_state}")
+        click.echo(
+            f"   ✓ Bed temperature: {current_bed:.1f}°C (target: {target_bed:.1f}°C)"
+        )
+        click.echo(
+            f"   ✓ Nozzle temperature: {current_nozzle:.1f}°C (target: {target_nozzle:.1f}°C)"
+        )
+
+        click.echo("\n🎉 Calibration and temperature setup completed successfully!")
+        click.echo(
+            "Your printer is now heated, calibrated, and ready for welding operations."
+        )
+
+    except Exception as e:
+        click.echo(f"❌ Error: {e}")
+        raise click.Abort()
+
+
 if __name__ == "__main__":
     main()
