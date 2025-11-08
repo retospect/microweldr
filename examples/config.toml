@@ -39,10 +39,10 @@ dot_spacing = 0.5  # mm - final desired spacing (double density, ~50% overlap wi
 initial_dot_spacing = 8.0  # mm - spacing for first pass (wider, 12x final spacing for clear demo)
 cooling_time_between_passes = 2.0  # seconds - time to let plastic cool
 
-[light_welds]
-# Settings for blue SVG elements
-weld_height = 0.020  # mm - same precision height for light welds (20 microns, optimized compression)
-weld_temperature = 160  # °C - slightly lower temp for light welds
+[frangible_welds]
+# Settings for frangible welds (blue SVG elements)
+weld_height = 0.020  # mm - same precision height for frangible welds (20 microns, optimized compression)
+weld_temperature = 160  # °C - temperature for frangible welds
 weld_time = 0.3  # seconds - shorter welding time
 dot_spacing = 0.5  # mm - final desired spacing (double density, ~50% overlap with 1.1mm effective diameter)
 initial_dot_spacing = 8.0  # mm - spacing for first pass (wider, 12x final spacing for clear demo)

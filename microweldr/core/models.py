@@ -12,7 +12,9 @@ class WeldPoint:
 
     x: float
     y: float
-    weld_type: str  # Use WeldType enum values: 'normal', 'light', 'stop', or 'pipette'
+    weld_type: (
+        str  # Use WeldType enum values: 'normal', 'frangible', 'stop', or 'pipette'
+    )
     custom_temp: Optional[float] = None  # Custom temperature for this point
     custom_weld_time: Optional[float] = None  # Custom weld time for this point
     custom_bed_temp: Optional[float] = None  # Custom bed temperature

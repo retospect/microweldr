@@ -834,7 +834,7 @@ def validate_welding_temperature(config):
 
         # Get expected temperatures from config
         normal_weld_temp = config.get("normal_welds", "weld_temperature", 130)
-        light_weld_temp = config.get("light_welds", "weld_temperature", 180)
+        frangible_weld_temp = config.get("frangible_welds", "weld_temperature", 180)
         temp_tolerance = config.get("temperatures", "temp_tolerance", 10)
 
         # For now, we'll check against normal weld temperature

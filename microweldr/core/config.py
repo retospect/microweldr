@@ -79,7 +79,7 @@ class Config:
                 "initial_dot_spacing": 3.6,
                 "cooling_time_between_passes": 2.0,
             },
-            "light_welds": {
+            "frangible_welds": {
                 "weld_height": 0.020,
                 "weld_temperature": 160,
                 "weld_time": 0.3,
@@ -166,9 +166,9 @@ class Config:
         return self.get_section("normal_welds")
 
     @property
-    def light_welds(self) -> Dict[str, Any]:
-        """Get light welds configuration."""
-        return self.get_section("light_welds")
+    def frangible_welds(self) -> Dict[str, Any]:
+        """Get frangible welds configuration."""
+        return self.get_section("frangible_welds")
 
     @property
     def output(self) -> Dict[str, Any]:
@@ -207,7 +207,7 @@ class Config:
             "temperatures",
             "movement",
             "normal_welds",
-            "light_welds",
+            "frangible_welds",
             "output",
             "animation",
         ]
@@ -234,7 +234,7 @@ class Config:
                 "initial_dot_spacing",
                 "cooling_time_between_passes",
             ],
-            "light_welds": [
+            "frangible_welds": [
                 "weld_height",
                 "weld_temperature",
                 "weld_time",
@@ -272,7 +272,7 @@ class Config:
             raise ConfigError("move_height must be positive")
 
         # Weld validations
-        for weld_type in ["normal_welds", "light_welds"]:
+        for weld_type in ["normal_welds", "frangible_welds"]:
             weld_config = self.get_section(weld_type)
             if weld_config["dot_spacing"] <= 0:
                 raise ConfigError(f"{weld_type}.dot_spacing must be positive")

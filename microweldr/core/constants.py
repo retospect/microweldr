@@ -8,7 +8,7 @@ class WeldType(Enum):
     """Types of welding operations."""
 
     NORMAL = "normal"  # Standard welding with full heat
-    LIGHT = "light"  # Lighter welding with reduced heat/time
+    FRANGIBLE = "frangible"  # Frangible welding with reduced heat/time
     STOP = "stop"  # Stop point with pause message
     PIPETTE = "pipette"  # Pipetting operation point
 
@@ -73,7 +73,7 @@ class ConfigSections:
     TEMPERATURES = "temperatures"
     MOVEMENT = "movement"
     NORMAL_WELDS = "normal_welds"
-    LIGHT_WELDS = "light_welds"
+    FRANGIBLE_WELDS = "frangible_welds"
     ANIMATION = "animation"
     OUTPUT = "output"
     PRUSALINK = "prusalink"
@@ -163,13 +163,13 @@ class Colors:
     """Color mappings for weld types."""
 
     NORMAL_WELD = "black"
-    LIGHT_WELD = "blue"
+    FRANGIBLE_WELD = "blue"
     STOP_POINT = "red"
     PIPETTE_POINT = "magenta"  # Changed from green to magenta for pipette
 
     # Alternative color names
     NORMAL_ALIASES = {"black", "#000000", "#000", "rgb(0,0,0)"}
-    LIGHT_ALIASES = {"blue", "#0000ff", "#00f", "rgb(0,0,255)"}
+    FRANGIBLE_ALIASES = {"blue", "#0000ff", "#00f", "rgb(0,0,255)"}
     STOP_ALIASES = {"red", "#ff0000", "#f00", "rgb(255,0,0)"}
     PIPETTE_ALIASES = {
         "magenta",
@@ -267,9 +267,9 @@ class DefaultValues:
     NORMAL_WELD_HEIGHT = 0.020
     NORMAL_WELD_TEMPERATURE = 100
     NORMAL_WELD_TIME = 0.1
-    LIGHT_WELD_HEIGHT = 0.020
-    LIGHT_WELD_TEMPERATURE = 110
-    LIGHT_WELD_TIME = 0.3
+    FRANGIBLE_WELD_HEIGHT = 0.020
+    FRANGIBLE_WELD_TEMPERATURE = 110
+    FRANGIBLE_WELD_TIME = 0.3
     DOT_SPACING = 0.9
     INITIAL_DOT_SPACING = 3.6
     COOLING_TIME = 2.0
@@ -382,8 +382,8 @@ def get_color_weld_type(color: str) -> WeldType:
 
     if color in Colors.NORMAL_ALIASES:
         return WeldType.NORMAL
-    elif color in Colors.LIGHT_ALIASES:
-        return WeldType.LIGHT
+    elif color in Colors.FRANGIBLE_ALIASES:
+        return WeldType.FRANGIBLE
     elif color in Colors.STOP_ALIASES:
         return WeldType.STOP
     elif color in Colors.PIPETTE_ALIASES:

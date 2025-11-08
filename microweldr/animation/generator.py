@@ -257,7 +257,7 @@ class AnimationGenerator:
                 continue
 
             # Determine color based on weld type
-            color = "blue" if path.weld_type == "light" else "black"
+            color = "blue" if path.weld_type == "frangible" else "black"
 
             # Process weld points using multi-pass logic to match G-code execution
             multipass_points = self._generate_multipass_points_for_animation(
@@ -644,14 +644,14 @@ class AnimationGenerator:
     def _get_ring_color(self, weld_color: str) -> str:
         """Get the ring color based on weld type."""
         if weld_color == "blue":
-            return "#87CEEB"  # Light blue for light welds
+            return "#87CEEB"  # Light blue for frangible welds
         else:
             return "#FFB347"  # Orange for normal welds (heated metal)
 
     def _get_inner_ring_color(self, weld_color: str) -> str:
         """Get the inner ring color based on weld type."""
         if weld_color == "blue":
-            return "#4169E1"  # Royal blue for light welds
+            return "#4169E1"  # Royal blue for frangible welds
         else:
             return "#FF6347"  # Tomato red for normal welds (hot zone)
 
@@ -748,7 +748,7 @@ class AnimationGenerator:
                     for i, point in enumerate(multipass_points):
                         point_time = path_time + (i * time_between_welds)
                         if point_time <= current_time:
-                            color = "blue" if path.weld_type == "light" else "black"
+                            color = "blue" if path.weld_type == "frangible" else "black"
                             # Use actual nozzle diameter from config
                             nozzle_diameter = self.config.get(
                                 "nozzle", "outer_diameter", 1.1
@@ -792,7 +792,9 @@ class AnimationGenerator:
         from ..core.models import WeldPoint
 
         # Get config values for multi-pass welding
-        config_section = "light_welds" if weld_type == "light" else "normal_welds"
+        config_section = (
+            "frangible_welds" if weld_type == "frangible" else "normal_welds"
+        )
         # Use coarser spacing for animation to avoid performance issues
         final_spacing = max(
             2.0, self.config.get(config_section, "dot_spacing", 0.5) * 4

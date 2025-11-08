@@ -405,7 +405,7 @@ class AnimationSubscriber(EventSubscriber):
                 if path.weld_type in ["stop", "pipette"]:
                     continue
 
-                color = "blue" if path.weld_type == "light" else "black"
+                color = "blue" if path.weld_type == "frangible" else "black"
 
                 for point in path.points:
                     x = (point.x - min_x + padding) * 3

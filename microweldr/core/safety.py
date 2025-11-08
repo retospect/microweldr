@@ -227,7 +227,7 @@ class SafetyValidator:
                 )
 
             # Validate weld type configurations
-            for weld_type in ["normal_welds", "light_welds"]:
+            for weld_type in ["normal_welds", "frangible_welds"]:
                 if weld_type in config:
                     weld_config = config[weld_type]
 

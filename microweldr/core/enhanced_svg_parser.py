@@ -691,10 +691,10 @@ class EnhancedSVGParser:
                 )
                 return WeldType.PIPETTE.value, pipette_message
 
-            # Check for light weld colors
-            for color_alias in Colors.LIGHT_ALIASES:
+            # Check for frangible weld colors
+            for color_alias in Colors.FRANGIBLE_ALIASES:
                 if color_alias in color_info:
-                    return WeldType.LIGHT.value, None
+                    return WeldType.FRANGIBLE.value, None
 
             # Default to normal weld (black or other colors)
             return WeldType.NORMAL.value, None
