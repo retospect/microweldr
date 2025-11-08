@@ -21,11 +21,26 @@ from microweldr.validation.validators import (
 from microweldr.core.secrets_config import SecretsConfig
 
 
+def get_version() -> str:
+    """Get the current version of MicroWeldr."""
+    try:
+        import microweldr
+
+        return microweldr.__version__
+    except (ImportError, AttributeError):
+        return "unknown"
+
+
 def create_parser() -> argparse.ArgumentParser:
     """Create command line argument parser."""
     parser = argparse.ArgumentParser(
         description="MicroWeldr: SVG to G-code conversion and printer control for plastic welding",
         formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+
+    # Add version argument
+    parser.add_argument(
+        "--version", action="version", version=f"MicroWeldr {get_version()}"
     )
 
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
