@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="60mm" height="80mm" viewBox="0 0 60 80"
+     xmlns="http://www.w3.org/2000/svg">
+
+  <title>Simple Flask - Direct Elements</title>
+  <desc>Flask drawn with direct elements (no defs/use)</desc>
+
+  <!-- Right half -->
+  <line x1="30" y1="10" x2="32.5" y2="10"
+        stroke="black" stroke-width="1.1" stroke-linecap="round"/>
+
+  <path d="M 32.5 10
+           L 32.5 35
+           Q 32.5 37 32.2 39
+           L 31 42
+           Q 31 45 34 45
+           Q 47.5 52.5 47.5 62.5
+           Q 47.5 72.5 30 75"
+        stroke="black" stroke-width="1.1" stroke-linecap="round" fill="none"/>
+
+  <!-- Left half (mirrored coordinates) -->
+  <line x1="30" y1="10" x2="27.5" y2="10"
+        stroke="black" stroke-width="1.1" stroke-linecap="round"/>
+
+  <path d="M 27.5 10
+           L 27.5 35
+           Q 27.5 37 27.8 39
+           L 29 42
+           Q 29 45 26 45
+           Q 12.5 52.5 12.5 62.5
+           Q 12.5 72.5 30 75"
+        stroke="black" stroke-width="1.1" stroke-linecap="round" fill="none"/>
+
+</svg>
