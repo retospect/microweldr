@@ -60,8 +60,8 @@ class Config:
                 "inner_diameter": 0.2,
             },
             "temperatures": {
-                "bed_temperature": 120,
-                "nozzle_temperature": 170,
+                "bed_temperature": 35,
+                "nozzle_temperature": 160,
                 "chamber_temperature": 35,
                 "use_chamber_heating": False,
                 "cooldown_temperature": 50,
@@ -73,7 +73,7 @@ class Config:
             },
             "normal_welds": {
                 "weld_height": 0.020,
-                "weld_temperature": 170,
+                "weld_temperature": 160,
                 "weld_time": 0.1,
                 "dot_spacing": 0.5,
                 "initial_dot_spacing": 3.6,

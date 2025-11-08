@@ -1,6 +1,6 @@
 [temperatures]
-bed_temperature = 120
-nozzle_temperature = 170
+bed_temperature = 35
+nozzle_temperature = 160
 chamber_temperature = 35
 use_chamber_heating = false
 cooldown_temperature = 50
@@ -9,7 +9,7 @@ cooldown_temperature = 50
 weld_time = 0.1
 dot_spacing = 0.5
 weld_height = 0.020
-weld_temperature = 170
+weld_temperature = 160
 initial_dot_spacing = 3.6
 cooling_time_between_passes = 2.0
 

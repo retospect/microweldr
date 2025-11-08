@@ -318,7 +318,9 @@ min_animation_duration = 10.0
             config.validate()
 
             # Verify defaults are used for missing keys
-            assert config.temperatures["nozzle_temperature"] == 170  # Default value
+            assert (
+                config.temperatures["nozzle_temperature"] == 160
+            )  # Default value (updated for safety)
             assert config.temperatures["cooldown_temperature"] == 50  # Default value
         finally:
             config_path.unlink()
