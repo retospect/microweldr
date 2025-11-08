@@ -41,3 +41,15 @@ class PrusaLinkConfigError(PrusaLinkError):
     """Exception raised when PrusaLink configuration is invalid."""
 
     pass
+
+
+class PrusaLinkFileError(PrusaLinkError):
+    """Exception raised when file operations fail."""
+
+    pass
+
+
+class PrusaLinkJobError(PrusaLinkError):
+    """Exception raised when print job operations fail."""
+
+    pass

@@ -18,6 +18,7 @@ from ..core.safety import SafetyError, validate_weld_operation
 from ..core.security import create_secure_secrets_template, validate_secrets_interactive
 from ..core.svg_parser import SVGParser
 from ..validation.validators import GCodeValidator, SVGValidator
+from .config_setup import config
 
 
 # Custom click decorators for common options
@@ -966,6 +967,10 @@ def temp_on(
 
     except Exception as e:
         click.echo(f"❌ Temperature control failed: {e}", err=True)
+
+
+# Add config command group to main CLI
+cli.add_command(config)
 
 
 def main():

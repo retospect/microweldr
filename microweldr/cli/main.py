@@ -18,6 +18,7 @@ from microweldr.validation.validators import (
     GCodeValidator,
     SVGValidator,
 )
+from microweldr.core.secrets_config import SecretsConfig
 
 
 def create_parser() -> argparse.ArgumentParser:
@@ -167,6 +168,36 @@ def create_parser() -> argparse.ArgumentParser:
     )
     full_weld_parser.add_argument(
         "--submit", action="store_true", help="Submit to printer and start immediately"
+    )
+
+    # Config command
+    config_parser = subparsers.add_parser("config", help="Configuration management")
+    config_subparsers = config_parser.add_subparsers(
+        dest="config_command", help="Config commands"
+    )
+
+    # Config init
+    config_init_parser = config_subparsers.add_parser(
+        "init", help="Initialize configuration file"
+    )
+    config_init_parser.add_argument(
+        "--scope",
+        choices=["local", "user", "system"],
+        default="local",
+        help="Configuration scope (local=current dir, user=~/.config, system=/etc)",
+    )
+    config_init_parser.add_argument(
+        "--force", action="store_true", help="Overwrite existing configuration file"
+    )
+
+    # Config show
+    config_show_parser = config_subparsers.add_parser(
+        "show", help="Show current configuration and sources"
+    )
+
+    # Config validate
+    config_validate_parser = config_subparsers.add_parser(
+        "validate", help="Validate configuration and test printer connection"
     )
 
     # Support SVG file as first argument (default to weld) - handled in main()
@@ -1029,11 +1060,157 @@ def cmd_full_weld(args):
         return False
     except Exception as e:
         print(f"Unexpected error: {e}")
-        if args.verbose:
-            import traceback
-
-            traceback.print_exc()
         return False
+
+
+def cmd_config(args):
+    """Handle config command."""
+    import shutil
+    import json
+
+    if not hasattr(args, "config_command") or args.config_command is None:
+        print(
+            "Config command requires a subcommand. Use 'microweldr config --help' for options."
+        )
+        return False
+
+    if args.config_command == "init":
+        # Initialize configuration file
+        template_path = (
+            Path(__file__).parent.parent.parent / "microweldr_secrets.toml.template"
+        )
+
+        if args.scope == "local":
+            config_path = Path.cwd() / "microweldr_secrets.toml"
+        elif args.scope == "user":
+            config_dir = Path.home() / ".config" / "microweldr"
+            config_dir.mkdir(parents=True, exist_ok=True)
+            config_path = config_dir / "microweldr_secrets.toml"
+        elif args.scope == "system":
+            config_dir = Path("/etc/microweldr")
+            config_path = config_dir / "microweldr_secrets.toml"
+
+            # Check if we can write to system directory
+            if not config_dir.exists():
+                try:
+                    config_dir.mkdir(parents=True, exist_ok=True)
+                except PermissionError:
+                    print(
+                        "Error: Permission denied. Run with sudo for system configuration."
+                    )
+                    return False
+
+        if config_path.exists() and not args.force:
+            print(f"Configuration file already exists: {config_path}")
+            print("Use --force to overwrite")
+            return False
+
+        try:
+            shutil.copy2(template_path, config_path)
+            print(f"Created configuration file: {config_path}")
+            print("\nNext steps:")
+            print("1. Edit the file to add your printer's IP address and credentials")
+            print("2. Test the connection with: microweldr config validate")
+
+            if args.scope == "system":
+                print(
+                    f"3. Set appropriate file permissions: sudo chmod 600 {config_path}"
+                )
+
+        except Exception as e:
+            print(f"Error creating configuration file: {e}")
+            return False
+
+    elif args.config_command == "show":
+        # Show current configuration
+        try:
+            secrets_config = SecretsConfig()
+            config_data = secrets_config.to_dict()
+            sources = secrets_config.list_sources()
+
+            print("Configuration Sources (in load order):")
+            if sources:
+                for i, source in enumerate(sources, 1):
+                    print(f"  {i}. {source}")
+            else:
+                print("  No configuration files found")
+
+            print("\nMerged Configuration:")
+            if config_data:
+                # Hide sensitive information
+                safe_config = _sanitize_config_for_display(config_data)
+                print(json.dumps(safe_config, indent=2))
+            else:
+                print("  No configuration loaded")
+
+        except Exception as e:
+            print(f"Error loading configuration: {e}")
+            return False
+
+    elif args.config_command == "validate":
+        # Validate configuration and test connection
+        try:
+            secrets_config = SecretsConfig()
+            prusalink_config = secrets_config.get_prusalink_config()
+
+            print("✓ Configuration loaded successfully")
+
+            # Validate required fields
+            required_fields = ["host", "username"]
+            for field in required_fields:
+                if field in prusalink_config:
+                    print(f"✓ {field}: {prusalink_config[field]}")
+                else:
+                    print(f"✗ Missing required field: {field}")
+                    return False
+
+            # Check authentication
+            if "password" in prusalink_config:
+                print("✓ Authentication: LCD password")
+            elif "api_key" in prusalink_config:
+                print("✓ Authentication: API key")
+            else:
+                print("✗ Missing authentication: need either 'password' or 'api_key'")
+                return False
+
+            # Test connection
+            print("\nTesting printer connection...")
+            try:
+                client = PrusaLinkClient()
+                info = client.get_printer_info()
+                print(f"✓ Connected to printer: {info.get('name', 'Unknown')}")
+                print(f"  Firmware: {info.get('firmware', 'Unknown')}")
+                print(f"  State: {info.get('state', 'Unknown')}")
+            except Exception as e:
+                print(f"✗ Connection failed: {e}")
+                return False
+
+        except Exception as e:
+            print(f"Error validating configuration: {e}")
+            return False
+
+    return True
+
+
+def _sanitize_config_for_display(config_data: dict) -> dict:
+    """Remove sensitive information from configuration for display."""
+    import copy
+
+    safe_config = copy.deepcopy(config_data)
+
+    # List of sensitive keys to hide
+    sensitive_keys = ["password", "api_key", "secret", "token"]
+
+    def sanitize_dict(d):
+        if isinstance(d, dict):
+            for key, value in d.items():
+                if any(sensitive in key.lower() for sensitive in sensitive_keys):
+                    d[key] = "[HIDDEN]"
+                elif isinstance(value, dict):
+                    sanitize_dict(value)
+
+    sanitize_dict(safe_config)
+    return safe_config
 
 
 def main():
@@ -1092,6 +1269,7 @@ def main():
         "frame": cmd_frame,
         "weld": cmd_weld,
         "full-weld": cmd_full_weld,
+        "config": cmd_config,
     }
 
     handler = command_handlers.get(args.command)

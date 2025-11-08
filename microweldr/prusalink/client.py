@@ -2,22 +2,21 @@
 
 import os
 from pathlib import Path
-from typing import Any, Dict, Optional
+import time
+from typing import Any, Dict, List, Optional, Tuple
 
 import requests
 import toml
 from requests.auth import HTTPDigestAuth
 
-from microweldr.prusalink.exceptions import (
-    PrusaLinkConnectionError,
-    PrusaLinkOperationError,
-    PrusaLinkValidationError,
-)
-
+from ..core.secrets_config import load_prusalink_config
 from .exceptions import (
     PrusaLinkAuthError,
     PrusaLinkConfigError,
+    PrusaLinkConnectionError,
     PrusaLinkError,
+    PrusaLinkFileError,
+    PrusaLinkJobError,
     PrusaLinkUploadError,
 )
 
@@ -29,7 +28,7 @@ class PrusaLinkClient:
         """Initialize PrusaLink client.
 
         Args:
-            config_path: Path to secrets.toml file. If None, looks for secrets.toml in current directory.
+            config_path: Path to specific config file. If None, uses hierarchical config loading.
         """
         self.config = self._load_config(config_path)
         self.base_url = f"http://{self.config['host']}"
@@ -40,26 +39,15 @@ class PrusaLinkClient:
         self.timeout = self.config.get("timeout", 30)
 
     def _load_config(self, config_path: Optional[str] = None) -> Dict[str, Any]:
-        """Load configuration from secrets.toml file."""
-        if config_path is None:
-            config_path = "secrets.toml"
-
-        if not os.path.exists(config_path):
-            raise PrusaLinkConfigError(
-                f"Configuration file not found: {config_path}. "
-                f"Please create it based on secrets.toml.template"
-            )
-
+        """Load configuration using hierarchical config loading or specific file."""
         try:
-            with open(config_path, "r") as f:
-                config = toml.load(f)
+            prusalink_config = load_prusalink_config(config_path)
+        except FileNotFoundError as e:
+            raise PrusaLinkConfigError(str(e))
+        except KeyError as e:
+            raise PrusaLinkConfigError(str(e))
         except Exception as e:
             raise PrusaLinkConfigError(f"Failed to load configuration: {e}")
-
-        if "prusalink" not in config:
-            raise PrusaLinkConfigError("Missing [prusalink] section in configuration")
-
-        prusalink_config = config["prusalink"]
 
         # Validate required fields
         required_fields = ["host", "username"]
