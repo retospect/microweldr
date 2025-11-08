@@ -15,23 +15,23 @@ jobs:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 2
-    
+
     - name: Check if version changed
       id: check
       run: |
         # Get current version from pyproject.toml
         CURRENT_VERSION=$(grep '^version = ' pyproject.toml | sed 's/version = "\(.*\)"/\1/')
-        
+
         # Get previous version from git
         git checkout HEAD~1 -- pyproject.toml || echo "No previous version"
         PREVIOUS_VERSION=$(grep '^version = ' pyproject.toml | sed 's/version = "\(.*\)"/\1/' || echo "0.0.0")
-        
+
         # Restore current pyproject.toml
         git checkout HEAD -- pyproject.toml
-        
+
         echo "Current version: $CURRENT_VERSION"
         echo "Previous version: $PREVIOUS_VERSION"
-        
+
         if [ "$CURRENT_VERSION" != "$PREVIOUS_VERSION" ]; then
           echo "version-changed=true" >> $GITHUB_OUTPUT
           echo "new-version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
@@ -62,21 +62,21 @@ jobs:
     permissions:
       contents: write
       id-token: write  # Required for PyPI Trusted Publishing
-    
+
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Set up Python
       uses: actions/setup-python@v6
       with:
         python-version: '3.11'
-    
+
     - name: Install Poetry
       uses: snok/install-poetry@v1
-    
+
     - name: Build package
       run: poetry build
-    
+
     - name: Create GitHub Release
       uses: actions/create-release@v1
       env:
@@ -86,17 +86,17 @@ jobs:
         release_name: Release v${{ needs.check-version.outputs.new-version }}
         body: |
           ## Changes in v${{ needs.check-version.outputs.new-version }}
-          
+
           See [CHANGELOG.md](CHANGELOG.md) for detailed changes.
-          
+
           ## Installation
-          
+
           ```bash
           pip install microweldr==${{ needs.check-version.outputs.new-version }}
           ```
         draft: false
         prerelease: false
-    
+
     - name: Publish to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
       with:

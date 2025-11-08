@@ -30,7 +30,7 @@ When you bump the version, these files are automatically updated:
 # Bump patch version (4.0.0 -> 4.0.1)
 make bump-patch
 
-# Bump minor version (4.0.0 -> 4.1.0)  
+# Bump minor version (4.0.0 -> 4.1.0)
 make bump-minor
 
 # Bump major version (4.0.0 -> 5.0.0)
@@ -191,7 +191,7 @@ make bump-patch
 
 ### Example 2: Feature Release
 ```bash
-# Current: v4.0.1  
+# Current: v4.0.1
 # Add new temperature control commands
 make bump-minor
 # Result: v4.1.0, all files updated, committed, tagged
@@ -201,7 +201,7 @@ make bump-minor
 ```bash
 # Current: v4.1.0
 # Complete API overhaul with breaking changes
-make bump-major  
+make bump-major
 # Result: v5.0.0, all files updated, committed, tagged
 ```
 
@@ -214,11 +214,11 @@ The version bumping system integrates well with CI/CD:
 - name: Bump version and publish
   run: |
     make release-patch
-    
+
 # Or for manual control:
-- name: Bump version  
+- name: Bump version
   run: make bump-patch
-  
+
 - name: Build and publish
   run: make publish
 ```

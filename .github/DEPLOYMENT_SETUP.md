@@ -15,7 +15,7 @@ Go to your repository settings → Environments and create:
   - ✅ Wait timer: 0 minutes
   - ✅ Restrict to selected branches: `master`, `main`
 
-#### **`pypi` Environment**  
+#### **`pypi` Environment**
 - **Name**: `pypi`
 - **Protection rules**:
   - ✅ Required reviewers: Add yourself
@@ -76,7 +76,7 @@ git push origin v1.0.1
 # Then create release in GitHub UI
 
 # Option 2: Manual trigger
-# Actions → Publish to PyPI → Run workflow  
+# Actions → Publish to PyPI → Run workflow
 # Environment: pypi
 ```
 

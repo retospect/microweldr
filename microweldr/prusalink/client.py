@@ -17,7 +17,9 @@ from .exceptions import (
     PrusaLinkError,
     PrusaLinkFileError,
     PrusaLinkJobError,
+    PrusaLinkOperationError,
     PrusaLinkUploadError,
+    PrusaLinkValidationError,
 )
 
 

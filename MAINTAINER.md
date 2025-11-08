@@ -63,7 +63,7 @@ Go to Repository Settings → Environments and create:
 - Wait timer: 0 minutes
 
 **`pypi` Environment:**
-- Protection rules: ✅ Required reviewers (yourself)  
+- Protection rules: ✅ Required reviewers (yourself)
 - Branch restrictions: ✅ `master` only
 - Wait timer: 5 minutes (safety buffer)
 
@@ -218,7 +218,7 @@ poetry run mypy microweldr/
 # Add dependencies
 poetry add requests
 
-# Add development dependencies  
+# Add development dependencies
 poetry add --group dev pytest
 
 # Update dependencies

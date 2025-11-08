@@ -7,7 +7,7 @@ MicroWeldr provides convenient temperature control commands to manage your print
 ### `temp-on` - Heat Up Printer
 Turn on printer temperatures for welding operations.
 
-### `temp-off` - Cool Down Printer  
+### `temp-off` - Cool Down Printer
 Turn off printer temperatures for safe handling.
 
 ## Usage Examples
@@ -18,7 +18,7 @@ Turn off printer temperatures for safe handling.
 # Heat up printer to welding temperatures (uses config defaults)
 microweldr temp-on
 
-# Cool down printer to safe temperatures  
+# Cool down printer to safe temperatures
 microweldr temp-off
 
 # Force operations without confirmation
@@ -45,7 +45,7 @@ microweldr temp-off --cooldown-temp 30
 # Only control bed temperature
 microweldr temp-off --bed-only
 
-# Only control nozzle temperature  
+# Only control nozzle temperature
 microweldr temp-off --nozzle-only
 
 # Only control chamber temperature
@@ -142,13 +142,13 @@ The temperature control commands generate and execute G-code:
 ### Heating Commands (`temp-on`)
 ```gcode
 ; MicroWeldr Temperature Heating
-M140 S60 ; Set bed temperature  
+M140 S60 ; Set bed temperature
 M104 S100 ; Set nozzle temperature
 M141 S35 ; Set chamber temperature
 
 ; Optional: Wait for temperatures (with --wait)
 M190 S60 ; Wait for bed temperature
-M109 S100 ; Wait for nozzle temperature  
+M109 S100 ; Wait for nozzle temperature
 M191 S35 ; Wait for chamber temperature
 ```
 
