@@ -34,7 +34,7 @@ def get_version() -> str:
 def create_parser() -> argparse.ArgumentParser:
     """Create command line argument parser."""
     parser = argparse.ArgumentParser(
-        description="MicroWeldr: SVG to G-code conversion and printer control for plastic welding",
+        description="MicroWeldr: SVG/DXF to G-code conversion and printer control for plastic welding",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
@@ -138,9 +138,9 @@ def create_parser() -> argparse.ArgumentParser:
 
     # Frame command (requires SVG)
     frame_parser = subparsers.add_parser(
-        "frame", help="Draw frame around SVG design (no welding)"
+        "frame", help="Draw frame around SVG/DXF design (no welding)"
     )
-    frame_parser.add_argument("svg_file", help="Input SVG file")
+    frame_parser.add_argument("svg_file", help="Input SVG or DXF file")
     frame_parser.add_argument(
         "-c", "--config", default="config.toml", help="Config file"
     )
@@ -151,9 +151,9 @@ def create_parser() -> argparse.ArgumentParser:
 
     # Weld command (default - requires SVG)
     weld_parser = subparsers.add_parser(
-        "weld", help="Convert SVG to G-code and weld (default command)"
+        "weld", help="Convert SVG/DXF to G-code and weld (default command)"
     )
-    weld_parser.add_argument("svg_file", help="Input SVG file")
+    weld_parser.add_argument("svg_file", help="Input SVG or DXF file")
     weld_parser.add_argument("-o", "--output", help="Output G-code file")
     weld_parser.add_argument(
         "-c", "--config", default="config.toml", help="Config file"
@@ -188,7 +188,7 @@ def create_parser() -> argparse.ArgumentParser:
         "full-weld",
         help="Generate self-contained G-code with all heating, calibration, and prompts built-in",
     )
-    full_weld_parser.add_argument("svg_file", help="Input SVG file")
+    full_weld_parser.add_argument("svg_file", help="Input SVG or DXF file")
     full_weld_parser.add_argument("-o", "--output", help="Output G-code file")
     full_weld_parser.add_argument(
         "-c", "--config", default="config.toml", help="Config file"
@@ -238,7 +238,7 @@ def create_parser() -> argparse.ArgumentParser:
 
     # Support SVG file as first argument (default to weld) - handled in main()
     parser.add_argument(
-        "svg_file", nargs="?", help="Input SVG file (defaults to weld command)"
+        "svg_file", nargs="?", help="Input SVG or DXF file (defaults to weld command)"
     )
     parser.add_argument("-o", "--output", help="Output G-code file")
     parser.add_argument("-c", "--config", default="config.toml", help="Config file")
@@ -886,8 +886,8 @@ def validate_welding_temperature(config):
 
 
 def cmd_weld(args):
-    """Convert SVG to G-code and weld (main functionality)."""
-    print("🔥 MicroWeldr - SVG to G-code Conversion")
+    """Convert SVG/DXF to G-code and weld (main functionality)."""
+    print("🔥 MicroWeldr - SVG/DXF to G-code Conversion")
     print("=" * 50)
 
     try:
@@ -1398,8 +1398,10 @@ def main():
     if not args.command:
         parser.print_help()
         print("Quick start:")
-        print("  microweldr your_design.svg           # Convert and generate G-code")
-        print("  microweldr weld your_design.svg      # Same as above")
+        print(
+            "  microweldr your_design.svg           # Convert SVG/DXF and generate G-code"
+        )
+        print("  microweldr weld your_design.dxf      # Same as above (DXF example)")
         print(
             "  microweldr full-weld your_design.svg # Self-contained G-code (recommended)"
         )
@@ -1408,7 +1410,7 @@ def main():
         print(
             "  microweldr calibrate-and-set         # Set temps from config + calibrate"
         )
-        print("  microweldr frame your_design.svg     # Draw frame only")
+        print("  microweldr frame your_design.dxf     # Draw frame only (DXF example)")
         sys.exit(1)
 
     # Dispatch to command handlers
