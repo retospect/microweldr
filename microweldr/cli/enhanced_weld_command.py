@@ -50,7 +50,9 @@ def cmd_weld_enhanced(args) -> bool:
         if args.no_animation:
             animation_path = None
         else:
-            animation_path = input_path.with_suffix("_animation.svg")
+            animation_path = input_path.with_stem(
+                input_path.stem + "_animation"
+            ).with_suffix(".svg")
 
         if args.verbose:
             print(f"✓ Output G-code: {output_path}")
