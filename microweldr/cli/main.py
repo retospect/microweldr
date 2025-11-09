@@ -11,10 +11,8 @@ from microweldr.core.converter import SVGToGCodeConverter
 from microweldr.core.printer_operations import PrinterOperations
 from microweldr.core.svg_parser import SVGParseError
 from microweldr.core.file_factory import FileProcessor
-from microweldr.cli.enhanced_weld_command import (
-    cmd_weld_enhanced,
-    cmd_full_weld_enhanced,
-)
+
+# Enhanced weld command consolidated into main cmd_weld function
 
 # Monitoring system removed
 from microweldr.prusalink.client import PrusaLinkClient
@@ -1008,8 +1006,8 @@ def cmd_weld(args):
         if args.verbose:
             print(f"Output files:")
             print(f"  G-code: {output_path}")
-            if not args.no_animation:
-                print(f"  Animation: {output_animation}")
+            if animation_path:
+                print(f"  Animation: {animation_path}")
 
         return True
 
@@ -1373,8 +1371,8 @@ def main():
         "temp-bed": cmd_temp_bed,
         "temp-nozzle": cmd_temp_nozzle,
         "frame": cmd_frame,
-        "weld": cmd_weld_enhanced,
-        "full-weld": cmd_full_weld_enhanced,
+        "weld": cmd_weld,
+        "full-weld": cmd_full_weld,
         "config": cmd_config,
     }
 
