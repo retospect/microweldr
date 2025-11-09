@@ -786,69 +786,25 @@ class AnimationGenerator:
         return frames
 
     def _generate_multipass_points_for_animation(self, original_points, weld_type):
-        """Generate points for animation that match G-code multi-pass execution order."""
-        import math
-
+        """Generate points for animation that match G-code multi-pass execution order exactly."""
+        from ..core.weld_point_generator import WeldPointGenerator
         from ..core.models import WeldPoint
 
-        # Get config values for multi-pass welding
+        # Get config values for multi-pass welding (same as G-code generator)
         config_section = (
             "frangible_welds" if weld_type == "frangible" else "normal_welds"
         )
-        # Use coarser spacing for animation to avoid performance issues
-        final_spacing = max(
-            2.0, self.config.get(config_section, "dot_spacing", 0.5) * 4
+        # Use exact same spacing as G-code generator for accurate preview
+        final_spacing = self.config.get(config_section, "dot_spacing", 0.5)  # mm
+        initial_spacing = self.config.get(
+            config_section, "initial_dot_spacing", 6.0
         )  # mm
-        num_passes = self.config.get("sequencing", "passes", 3)
+        num_passes = self.config.get("sequencing", "passes", 4)
 
-        if num_passes == 1:
-            return original_points
-
-        # Create interpolated points at final spacing (same as G-code)
-        all_path_points = []
-        # Handle single point case
-        if len(original_points) == 1:
-            all_path_points = original_points.copy()
-        else:
-            for i in range(len(original_points) - 1):
-                start = original_points[i]
-                end = original_points[i + 1]
-
-                # Calculate distance
-                dx = end.x - start.x
-                dy = end.y - start.y
-                distance = math.sqrt(dx * dx + dy * dy)
-
-                if distance == 0:
-                    continue
-
-                # Generate points at final spacing along this segment
-                num_points = max(1, int(distance / final_spacing))
-
-                for j in range(num_points + 1):
-                    t = j / num_points if num_points > 0 else 0
-                    x = start.x + t * dx
-                    y = start.y + t * dy
-                    all_path_points.append(WeldPoint(x, y, start.weld_type))
-
-        # Distribute points across passes using binary subdivision (same as G-code)
-        execution_order = []
-
-        # First pass: every 2^(num_passes-1) point
-        step = 2 ** (num_passes - 1)
-        for i in range(0, len(all_path_points), step):
-            execution_order.append(all_path_points[i])
-
-        # Subsequent passes: fill in between previous pass points
-        for pass_num in range(1, num_passes):
-            step = 2 ** (num_passes - 1 - pass_num)
-            offset = step
-
-            for i in range(offset, len(all_path_points), step * 2):
-                if i < len(all_path_points):
-                    execution_order.append(all_path_points[i])
-
-        return execution_order
+        # Use shared WeldPointGenerator to ensure exact match with G-code
+        return WeldPointGenerator.get_all_weld_points(
+            original_points, initial_spacing, final_spacing, num_passes
+        )
 
     def _add_scale_bar_to_plot(
         self, ax, bounds: tuple[float, float, float, float], padding: float

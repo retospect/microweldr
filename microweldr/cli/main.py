@@ -10,6 +10,11 @@ from microweldr.core.config import Config, ConfigError
 from microweldr.core.converter import SVGToGCodeConverter
 from microweldr.core.printer_operations import PrinterOperations
 from microweldr.core.svg_parser import SVGParseError
+from microweldr.core.file_factory import FileProcessor
+from microweldr.cli.enhanced_weld_command import (
+    cmd_weld_enhanced,
+    cmd_full_weld_enhanced,
+)
 from microweldr.monitoring import MonitorMode, PrintMonitor
 from microweldr.prusalink.client import PrusaLinkClient
 from microweldr.prusalink.exceptions import PrusaLinkError
@@ -1423,8 +1428,8 @@ def main():
         "temp-bed": cmd_temp_bed,
         "temp-nozzle": cmd_temp_nozzle,
         "frame": cmd_frame,
-        "weld": cmd_weld,
-        "full-weld": cmd_full_weld,
+        "weld": cmd_weld_enhanced,
+        "full-weld": cmd_full_weld_enhanced,
         "config": cmd_config,
     }
 

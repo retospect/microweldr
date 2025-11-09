@@ -78,6 +78,11 @@ class WeldPath:
             raise ValueError("Weld path must have at least two points for welding")
 
     @property
+    def svg_id(self) -> Optional[str]:
+        """Backward compatibility property for svg_id."""
+        return self.path_id
+
+    @property
     def length(self) -> float:
         """Calculate total path length."""
         if len(self.points) < 2:
