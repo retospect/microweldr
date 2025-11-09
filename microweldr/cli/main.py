@@ -606,29 +606,28 @@ def cmd_temp_bed(args):
     print("=" * 40)
 
     try:
-        client = PrusaLinkClient()
+        from ..core.printer_service import get_printer_service
+
+        printer_service = get_printer_service()
 
         print("1. Connecting to printer...")
-        if not client.test_connection():
+        if not printer_service.test_connection():
             print("   ✗ Connection failed")
             return False
         print("   ✓ Connected to printer")
 
         print("2. Checking printer status...")
-        status = client.get_printer_status()
-        printer_info = status.get("printer", {})
-        state = printer_info.get("state", "Unknown")
-        current_bed = printer_info.get("temp_bed", 0)
-        print(f"   ✓ Printer state: {state}")
-        print(f"   ✓ Current bed temperature: {current_bed}°C")
+        status = printer_service.get_status()
+        print(f"   ✓ Printer state: {status.state.value}")
+        print(f"   ✓ Current bed temperature: {status.bed_temp}°C")
 
         print(f"3. Setting bed temperature to {args.temperature}°C...")
-        success = client.set_bed_temperature(args.temperature)
+        success = printer_service.set_bed_temperature(args.temperature)
 
         if success:
             print("   ✓ Temperature command sent successfully")
 
-            if args.wait and args.temperature > 0:
+            if getattr(args, "wait", False) and args.temperature > 0:
                 print("   • Waiting for temperature to be reached...")
                 import time
 
@@ -636,11 +635,11 @@ def cmd_temp_bed(args):
                 start_time = time.time()
 
                 while time.time() - start_time < timeout:
-                    status = client.get_printer_status()
-                    current_temp = status.get("printer", {}).get("temp_bed", 0)
-                    target_temp = status.get("printer", {}).get("target_bed", 0)
+                    current_status = printer_service.get_status()
+                    current_temp = current_status.bed_temp
+                    target_temp = current_status.bed_target
 
-                    if args.verbose:
+                    if getattr(args, "verbose", False):
                         print(
                             f"   • Current: {current_temp}°C, Target: {target_temp}°C"
                         )
