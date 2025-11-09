@@ -1,138 +1,303 @@
-"""Event-driven file processor with factory pattern."""
+"""Event-driven processor for file conversion with publish-subscribe architecture."""
 
+import time
 from pathlib import Path
-from typing import Dict, List, Optional, Type, Union
+from typing import Dict, List, Optional, Set, Union
 import logging
 
-from .processing_events import FileReaderPublisher, EventType, ProcessingEvent
-from .enhanced_readers import EnhancedSVGReader, EnhancedDXFReader
-from .enhanced_writers import GCodeWriterSubscriber, AnimationWriterSubscriber
-from .error_handling import FileProcessingError, handle_errors
+from .config import Config
+from .events import (
+    Event,
+    EventType,
+    ParsingEvent,
+    PathEvent,
+    PointEvent,
+    OutputEvent,
+    ErrorEvent,
+    ProgressEvent,
+    publish_event,
+    subscribe_to_events,
+    unsubscribe_from_events,
+)
+from .subscribers import (
+    ProgressTracker,
+    LoggingSubscriber,
+    ValidationSubscriber,
+    GCodeSubscriber,
+    AnimationSubscriber,
+    StatisticsSubscriber,
+)
+from .models import WeldPath, WeldPoint
 
 logger = logging.getLogger(__name__)
 
 
+class FileProcessingError(Exception):
+    """Raised when file processing fails."""
+
+    pass
+
+
 class EventDrivenProcessor:
-    """Main processor using event-driven architecture."""
+    """Event-driven processor for converting files with publish-subscribe architecture."""
 
-    def __init__(self, config):
+    def __init__(self, config: Config, verbose: bool = False):
+        """Initialize the event-driven processor."""
         self.config = config
-        self._readers: Dict[str, Type[FileReaderPublisher]] = {}
-        self._writers: Dict[str, Type] = {}
-        self._setup_readers_and_writers()
+        self.verbose = verbose
+        self.subscribers: List = []
 
-    def _setup_readers_and_writers(self):
-        """Register available readers and writers."""
-        # Register readers by file extension
-        self._readers[".svg"] = EnhancedSVGReader
-        self._readers[".dxf"] = EnhancedDXFReader
+        # Set up default subscribers
+        self.progress_tracker = ProgressTracker(verbose=verbose)
+        self.validation_subscriber = ValidationSubscriber()
+        self.statistics_subscriber = StatisticsSubscriber()
 
-        # Register writers by file extension
-        self._writers[".gcode"] = GCodeWriterSubscriber
-        self._writers[".g"] = GCodeWriterSubscriber
-        self._writers[".nc"] = GCodeWriterSubscriber
-        self._writers[".svg"] = AnimationWriterSubscriber
-        self._writers[".png"] = AnimationWriterSubscriber
+        # Subscribe default subscribers
+        subscribe_to_events(self.progress_tracker)
+        subscribe_to_events(self.validation_subscriber)
+        subscribe_to_events(self.statistics_subscriber)
 
-    def _create_reader(self, file_path: Path) -> Optional[FileReaderPublisher]:
-        """Create appropriate reader for the file."""
-        extension = file_path.suffix.lower()
+        self.subscribers.extend(
+            [
+                self.progress_tracker,
+                self.validation_subscriber,
+                self.statistics_subscriber,
+            ]
+        )
 
-        if extension not in self._readers:
-            logger.error(f"No reader available for extension: {extension}")
-            return None
+        # Add logging subscriber if verbose
+        if verbose:
+            self.logging_subscriber = LoggingSubscriber(logging.DEBUG)
+            subscribe_to_events(self.logging_subscriber)
+            self.subscribers.append(self.logging_subscriber)
 
-        reader_class = self._readers[extension]
-        logger.info(f"Creating {reader_class.__name__} for {file_path}")
+    def __del__(self):
+        """Clean up subscribers."""
+        self.cleanup()
 
-        return reader_class()
+    def cleanup(self) -> None:
+        """Clean up subscribers."""
+        for subscriber in self.subscribers:
+            try:
+                unsubscribe_from_events(subscriber)
+            except Exception as e:
+                logger.warning(f"Error unsubscribing {subscriber}: {e}")
+        self.subscribers.clear()
 
-    def _create_writer(self, file_path: Path):
-        """Create appropriate writer for the file."""
-        extension = file_path.suffix.lower()
+    def get_supported_input_extensions(self) -> List[str]:
+        """Get supported input file extensions."""
+        return [".svg", ".dxf"]
 
-        if extension not in self._writers:
-            logger.error(f"No writer available for extension: {extension}")
-            return None
+    def get_supported_output_types(self) -> List[str]:
+        """Get supported output types."""
+        return ["gcode", "animation", "png"]
 
-        writer_class = self._writers[extension]
-        logger.info(f"Creating {writer_class.__name__} for {file_path}")
-
-        return writer_class(self.config)
-
-    @handle_errors(default_error=FileProcessingError)
     def process_file(
         self,
         input_path: Union[str, Path],
         output_path: Union[str, Path],
         animation_path: Optional[Union[str, Path]] = None,
-        **kwargs,
+        png_path: Optional[Union[str, Path]] = None,
+        verbose: bool = False,
     ) -> bool:
-        """Process input file using event-driven architecture."""
+        """Process input file and generate outputs using event-driven architecture."""
         input_path = Path(input_path)
         output_path = Path(output_path)
 
-        logger.info(f"Processing: {input_path} → {output_path}")
+        try:
+            # Publish start event
+            publish_event(ParsingEvent("start", input_path))
 
-        # Validate input file
-        if not input_path.exists():
-            raise FileProcessingError(f"Input file not found: {input_path}")
+            # Parse input file
+            weld_paths = self._parse_input_file(input_path)
 
-        # Create reader based on input file extension
-        reader = self._create_reader(input_path)
-        if not reader:
-            raise FileProcessingError(
-                f"Unsupported input file type: {input_path.suffix}"
+            if not weld_paths:
+                publish_event(
+                    ErrorEvent("parsing", f"No weld paths found in {input_path}")
+                )
+                return False
+
+            # Publish parsing complete
+            publish_event(
+                ParsingEvent("complete", input_path, paths_count=len(weld_paths))
             )
 
-        # Create primary output writer
-        primary_writer = self._create_writer(output_path)
-        if not primary_writer:
-            raise FileProcessingError(
-                f"Unsupported output file type: {output_path.suffix}"
+            # Set up output subscribers
+            output_subscribers = []
+
+            # G-code output
+            gcode_subscriber = GCodeSubscriber(output_path, self.config)
+            subscribe_to_events(gcode_subscriber)
+            output_subscribers.append(gcode_subscriber)
+
+            # Animation output
+            if animation_path:
+                animation_subscriber = AnimationSubscriber(
+                    Path(animation_path), self.config
+                )
+                subscribe_to_events(animation_subscriber)
+                output_subscribers.append(animation_subscriber)
+
+            # PNG output
+            if png_path:
+                png_subscriber = AnimationSubscriber(Path(png_path), self.config)
+                subscribe_to_events(png_subscriber)
+                output_subscribers.append(png_subscriber)
+
+            try:
+                # Process weld paths through events
+                self._process_weld_paths_via_events(weld_paths)
+
+                # Generate outputs
+                publish_event(OutputEvent("generate", "gcode", output_path))
+
+                if animation_path:
+                    publish_event(OutputEvent("generate", "animation", animation_path))
+
+                if png_path:
+                    publish_event(OutputEvent("generate", "png", png_path))
+
+                # Check for validation errors
+                if self.validation_subscriber.has_errors():
+                    errors = self.validation_subscriber.get_errors()
+                    for error in errors:
+                        publish_event(ErrorEvent("validation", error))
+                    return False
+
+                return True
+
+            finally:
+                # Clean up output subscribers
+                for subscriber in output_subscribers:
+                    try:
+                        unsubscribe_from_events(subscriber)
+                    except Exception as e:
+                        logger.warning(f"Error unsubscribing output subscriber: {e}")
+
+        except Exception as e:
+            publish_event(ErrorEvent("processing", str(e)))
+            if verbose:
+                logger.exception("Error during file processing")
+            raise FileProcessingError(f"Failed to process {input_path}: {e}")
+
+    def _parse_input_file(self, input_path: Path) -> List[WeldPath]:
+        """Parse input file based on extension."""
+        extension = input_path.suffix.lower()
+
+        if extension == ".svg":
+            return self._parse_svg_file(input_path)
+        elif extension == ".dxf":
+            return self._parse_dxf_file(input_path)
+        else:
+            raise FileProcessingError(f"Unsupported file type: {extension}")
+
+    def _parse_svg_file(self, svg_path: Path) -> List[WeldPath]:
+        """Parse SVG file."""
+        from .svg_parser import SVGParser
+
+        dot_spacing = self.config.get("normal_welds", "dot_spacing")
+        parser = SVGParser(dot_spacing=dot_spacing)
+
+        publish_event(ParsingEvent("parsing_svg", svg_path))
+        weld_paths = parser.parse_file(str(svg_path))
+
+        return weld_paths
+
+    def _parse_dxf_file(self, dxf_path: Path) -> List[WeldPath]:
+        """Parse DXF file."""
+        from .dxf_reader import DXFReader
+
+        publish_event(ParsingEvent("parsing_dxf", dxf_path))
+
+        # Create DXF reader with same dot spacing as SVG
+        dot_spacing = self.config.get("normal_welds", "dot_spacing")
+        reader = DXFReader(dot_spacing=dot_spacing)
+
+        weld_paths = reader.read_file(str(dxf_path))
+        return weld_paths
+
+    def _process_weld_paths_via_events(self, weld_paths: List[WeldPath]) -> None:
+        """Process weld paths by publishing events."""
+        publish_event(
+            PathEvent("start_processing", "all_paths", total_paths=len(weld_paths))
+        )
+
+        for i, path in enumerate(weld_paths):
+            # Publish path start event
+            publish_event(
+                PathEvent(
+                    "path_start",
+                    path.id,
+                    path_data={
+                        "id": path.id,
+                        "weld_type": path.weld_type,
+                        "point_count": len(path.points),
+                    },
+                )
             )
 
-        # Create animation writer if requested
-        animation_writer = None
-        if animation_path:
-            animation_path = Path(animation_path)
-            animation_writer = self._create_writer(animation_path)
-            if not animation_writer:
-                logger.warning(
-                    f"Cannot create animation writer for: {animation_path.suffix}"
+            # Publish point events
+            for j, point in enumerate(path.points):
+                publish_event(
+                    PointEvent(
+                        "point_added",
+                        {"x": point.x, "y": point.y, "weld_type": point.weld_type},
+                    )
                 )
 
-        # Subscribe writers to reader events
-        reader.subscribe(primary_writer)
-        if animation_writer:
-            reader.subscribe(animation_writer)
+                # Publish progress
+                if j % 10 == 0:  # Every 10th point
+                    publish_event(
+                        ProgressEvent(
+                            stage=f"path_{path.id}", progress=j, total=len(path.points)
+                        )
+                    )
 
-        # Process the file (this will emit events)
-        logger.info(f"Reading {input_path.suffix.upper()} file...")
-        weld_paths = reader.process_file(input_path)
+            # Publish path complete event
+            publish_event(
+                PathEvent(
+                    "path_complete",
+                    path.id,
+                    path_data={
+                        "id": path.id,
+                        "weld_type": path.weld_type,
+                        "points": [
+                            {"x": p.x, "y": p.y, "weld_type": p.weld_type}
+                            for p in path.points
+                        ],
+                    },
+                )
+            )
 
-        if not weld_paths:
-            raise FileProcessingError("No weld paths found in input file")
+            # Publish overall progress
+            publish_event(
+                ProgressEvent(
+                    stage="processing_paths", progress=i + 1, total=len(weld_paths)
+                )
+            )
 
-        logger.info(f"Found {len(weld_paths)} weld paths")
+    def get_statistics(self) -> Dict:
+        """Get processing statistics."""
+        return self.statistics_subscriber.get_statistics()
 
-        # Write primary output
-        success = primary_writer.write_file(output_path, **kwargs)
+    def get_validation_results(self) -> Dict:
+        """Get validation results."""
+        return {
+            "has_errors": self.validation_subscriber.has_errors(),
+            "has_warnings": self.validation_subscriber.has_warnings(),
+            "errors": self.validation_subscriber.get_errors(),
+            "warnings": self.validation_subscriber.get_warnings(),
+        }
 
-        # Write animation if requested
-        if animation_writer:
-            try:
-                animation_writer.write_file(animation_path, **kwargs)
-            except Exception as e:
-                logger.warning(f"Failed to write animation: {e}")
-                # Don't fail the whole process if animation fails
+    def clear_validation_results(self) -> None:
+        """Clear validation results."""
+        self.validation_subscriber.clear()
 
-        return success
+    def reset_statistics(self) -> None:
+        """Reset processing statistics."""
+        self.statistics_subscriber.reset_statistics()
 
-    def get_supported_input_extensions(self) -> List[str]:
-        """Get supported input file extensions."""
-        return list(self._readers.keys())
 
-    def get_supported_output_extensions(self) -> List[str]:
-        """Get supported output file extensions."""
-        return list(self._writers.keys())
+def create_processor(config: Config, verbose: bool = False) -> EventDrivenProcessor:
+    """Create an event-driven processor instance."""
+    return EventDrivenProcessor(config, verbose=verbose)

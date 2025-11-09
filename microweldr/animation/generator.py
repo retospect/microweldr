@@ -87,6 +87,8 @@ class AnimationGenerator:
             self._write_scale_bar(f, width, height, bounds, padding)
             self._write_svg_footer(f)
 
+        return None
+
     def generate_png_file(
         self,
         weld_paths: List[WeldPath],
@@ -169,6 +171,8 @@ class AnimationGenerator:
             )
 
         plt.close(fig)
+
+        return None
 
     def _calculate_bounds(
         self, weld_paths: List[WeldPath]

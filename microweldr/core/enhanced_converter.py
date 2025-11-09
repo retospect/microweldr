@@ -7,21 +7,8 @@ import time
 from .config import Config
 from .models import WeldPath
 from .enhanced_svg_parser import EnhancedSVGParser
-from .events import (
-    Event,
-    EventType,
-    EventSubscriber,
-    publish_event,
-    subscribe_to_events,
-    unsubscribe_from_events,
-    event_publisher,
-)
-from .subscribers import (
-    ProgressTracker,
-    GCodeSubscriber,
-    AnimationSubscriber,
-    StatisticsSubscriber,
-)
+
+# Simplified converter without event system
 
 
 class EnhancedSVGToGCodeConverter:

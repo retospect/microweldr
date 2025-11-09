@@ -15,7 +15,8 @@ from microweldr.cli.enhanced_weld_command import (
     cmd_weld_enhanced,
     cmd_full_weld_enhanced,
 )
-from microweldr.monitoring import MonitorMode, PrintMonitor
+
+# Monitoring system removed
 from microweldr.prusalink.client import PrusaLinkClient
 from microweldr.prusalink.exceptions import PrusaLinkError
 from microweldr.validation.validators import (
@@ -262,12 +263,11 @@ def create_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--png", action="store_true", help="Generate animated PNG (slower)"
     )
-    parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
 
     return parser
 
 
-def cmd_test(args):
+def cmd_test(args) -> bool:
     """Test PrusaLink connection."""
     print("Testing PrusaLink integration...")
     print("=" * 50)
@@ -327,7 +327,7 @@ def cmd_test(args):
         return False
 
 
-def cmd_home(args):
+def cmd_home(args) -> bool:
     """Home printer axes."""
     print(f"🏠 Homing {args.axes} axes...")
     print("=" * 40)
@@ -367,7 +367,7 @@ def cmd_home(args):
         return False
 
 
-def cmd_bed_level(args):
+def cmd_bed_level(args) -> bool:
     """Run bed leveling only."""
     print("🛏️ Bed Leveling")
     print("=" * 40)
@@ -418,7 +418,7 @@ def cmd_bed_level(args):
         return False
 
 
-def cmd_calibrate(args):
+def cmd_calibrate(args) -> bool:
     """Full calibration (home + bed leveling)."""
     print("🎯 Printer Calibration")
     print("=" * 40)
@@ -486,7 +486,7 @@ def cmd_calibrate(args):
         return False
 
 
-def cmd_calibrate_and_set(args):
+def cmd_calibrate_and_set(args) -> bool:
     """Set temperatures from config and run full calibration."""
     print("🌡️🎯 Calibrate and Set Temperatures")
     print("=" * 40)
@@ -600,7 +600,7 @@ def cmd_calibrate_and_set(args):
         return False
 
 
-def cmd_temp_bed(args):
+def cmd_temp_bed(args) -> bool:
     """Set bed temperature."""
     print(f"🌡️ Setting Bed Temperature to {args.temperature}°C")
     print("=" * 40)
@@ -662,7 +662,7 @@ def cmd_temp_bed(args):
         return False
 
 
-def cmd_temp_nozzle(args):
+def cmd_temp_nozzle(args) -> bool:
     """Set nozzle temperature."""
     print(f"🌡️ Setting Nozzle Temperature to {args.temperature}°C")
     print("=" * 40)
@@ -1217,7 +1217,7 @@ def cmd_full_weld(args):
         return False
 
 
-def cmd_config(args):
+def cmd_config(args) -> bool:
     """Handle config command."""
     import shutil
     import json

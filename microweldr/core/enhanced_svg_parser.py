@@ -8,16 +8,8 @@ from typing import List, Optional, Tuple
 from pathlib import Path
 
 from .models import WeldPath, WeldPoint
-from .events import (
-    Event,
-    EventType,
-    ParsingEvent,
-    PathEvent,
-    PointEvent,
-    CurveEvent,
-    ErrorEvent,
-    publish_event,
-)
+
+# Event system removed - using simplified logging
 
 
 class SVGParseError(Exception):

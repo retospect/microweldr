@@ -271,7 +271,7 @@ pytest tests/unit/test_models.py -v -s
 **Configuration Issues:**
 ```bash
 # Validate configuration (with venv activated)
-python -c "from svg_welder.core.config import Config; Config('config.toml').validate()"
+python -c "from microweldr.core.config import Config; Config().validate()"
 ```
 
 ## Building and Distribution

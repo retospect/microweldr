@@ -79,15 +79,13 @@ class UnifiedConfig:
         if self._main_config is not None:
             return self._main_config
 
-        # Find main config file
-        config_path = self._find_config_file(
-            "microweldr_config.toml", legacy_names=["config.toml"]
-        )
+        # Find main config file - NO LEGACY SUPPORT
+        config_path = self._find_config_file("microweldr_config.toml")
 
         if config_path is None:
             # Use default configuration
             self._main_config = self._get_default_main_config()
-            logger.info("Using default main configuration (no config file found)")
+            print(f"Using default main configuration (no microweldr_config.toml found)")
             return self._main_config
 
         try:
@@ -99,7 +97,7 @@ class UnifiedConfig:
             self._merge_config(self._main_config, loaded_config)
             self._main_config_path = config_path
 
-            logger.info(f"Loaded main config from: {config_path}")
+            print(f"✓ Configuration loaded from {config_path}")
             return self._main_config
 
         except Exception as e:
@@ -131,7 +129,7 @@ class UnifiedConfig:
                 self._secrets_config = toml.load(f)
 
             self._secrets_config_path = config_path
-            logger.info(f"Loaded secrets config from: {config_path}")
+            print(f"✓ Secrets loaded from {config_path}")
             return self._secrets_config
 
         except Exception as e:

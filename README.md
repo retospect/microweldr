@@ -128,7 +128,7 @@ Perfect for CAD-based microfluidics design:
 
 ### Configuration
 
-Create `config.toml` for custom settings:
+Create `microweldr_config.toml` for custom settings:
 
 ```toml
 [printer]

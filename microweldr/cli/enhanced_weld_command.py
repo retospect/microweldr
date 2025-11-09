@@ -10,7 +10,7 @@ from ..core.error_handling import FileProcessingError
 logger = logging.getLogger(__name__)
 
 
-def cmd_weld_enhanced(args):
+def cmd_weld_enhanced(args) -> bool:
     """Enhanced weld command using factory pattern for SVG/DXF processing."""
     print("🔥 MicroWeldr - SVG/DXF to G-code Conversion")
     print("=" * 50)
@@ -31,7 +31,7 @@ def cmd_weld_enhanced(args):
             print(f"✓ Input file found: {args.svg_file}")
 
         # Create event-driven processor
-        processor = EventDrivenProcessor(config)
+        processor = EventDrivenProcessor(config, verbose=args.verbose)
 
         # Check if input file type is supported
         supported_inputs = processor.get_supported_input_extensions()
@@ -47,67 +47,43 @@ def cmd_weld_enhanced(args):
             output_path = input_path.with_suffix(".gcode")
 
         # Determine animation path
-        animation_path = None
-        if not getattr(args, "no_animation", False):
-            if getattr(args, "png", False):
-                animation_path = output_path.with_name(
-                    f"{output_path.stem}_animation.png"
-                )
-            else:
-                animation_path = output_path.with_name(
-                    f"{output_path.stem}_animation.svg"
-                )
+        if args.no_animation:
+            animation_path = None
+        else:
+            animation_path = input_path.with_suffix("_animation.svg")
 
         if args.verbose:
             print(f"✓ Output G-code: {output_path}")
             if animation_path:
                 print(f"✓ Animation: {animation_path}")
 
-        # Process file using factory pattern
-        print(f"🔧 Processing {input_path.suffix.upper()} file...")
-
+        # Process the file using event-driven architecture
         success = processor.process_file(
             input_path=input_path,
             output_path=output_path,
             animation_path=animation_path,
-            skip_bed_leveling=getattr(args, "skip_bed_leveling", False),
-            no_calibrate=getattr(args, "no_calibrate", False),
-            verbose=getattr(args, "verbose", False),
+            verbose=args.verbose,
         )
 
         if success:
-            print(f"✅ G-code written to: {output_path}")
+            print("✅ G-code written to:", output_path)
             if animation_path and animation_path.exists():
-                print(f"🎬 Animation written to: {animation_path}")
+                print("🎬 Animation written to:", animation_path)
                 print(
-                    f"🌐 Open {animation_path} in a web browser to view the animation"
+                    "🌐 Open", animation_path, "in a web browser to view the animation"
                 )
 
-            # Handle printer submission if requested
-            if getattr(args, "submit", False) or getattr(args, "auto_start", False):
-                try:
-                    _submit_to_printer(
-                        output_path,
-                        getattr(args, "submit", False),
-                        getattr(args, "auto_start", False),
-                        getattr(args, "queue_only", False),
-                        args.verbose,
-                    )
-                except Exception as e:
-                    print(f"⚠️  Printer submission failed: {e}")
-                    if args.verbose:
-                        import traceback
-
-                        traceback.print_exc()
-
-            # Show weld statistics
-            print("\n📊 Processing Summary:")
-            print(f"   Input: {input_path.name} ({input_path.suffix.upper()})")
-            print(f"   Output: {output_path.name}")
-            if animation_path:
-                print(f"   Animation: {animation_path.name}")
-
-            return True
+            # Submit to printer if requested
+            if args.submit or args.auto_start:
+                submit_success = _submit_to_printer(
+                    output_path,
+                    args.submit,
+                    args.auto_start,
+                    args.queue_only,
+                    args.verbose,
+                )
+                if not submit_success:
+                    success = False
         else:
             print("❌ File processing failed")
             return False
@@ -124,7 +100,9 @@ def cmd_weld_enhanced(args):
         return False
 
 
-def _submit_to_printer(gcode_path, submit, auto_start, queue_only, verbose):
+def _submit_to_printer(
+    gcode_path: Path, submit: bool, auto_start: bool, queue_only: bool, verbose: bool
+) -> bool:
     """Submit G-code to printer using centralized printer service."""
     print("🚀 Submitting to printer...")
 
