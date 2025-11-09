@@ -46,11 +46,26 @@ def iterate_multipass_points_from_file(
             )
 
         # Determine if this is an arc (many points) or line (few points)
-        if len(weld_points) > 10:  # Likely an arc - preserve tessellation
+        if (
+            len(weld_points) > 10
+        ):  # Likely an arc - apply multipass along tessellated curve
             logger.debug(
-                f"Path {path_id}: Arc detected, preserving {len(weld_points)} tessellated points"
+                f"Path {path_id}: Arc detected, applying multipass along {len(weld_points)} tessellated points"
             )
-            multipass_points = weld_points
+            # Get config for this weld type
+            weld_type = path_points[0]["weld_type"]
+            config_section = (
+                "frangible_welds" if weld_type == "frangible" else "normal_welds"
+            )
+            initial_spacing = config.get(config_section, {}).get(
+                "initial_dot_spacing", 8.0
+            )
+            final_spacing = config.get(config_section, {}).get("final_dot_spacing", 0.5)
+
+            # Apply multipass to the tessellated arc
+            multipass_points = WeldPointGenerator.get_all_weld_points(
+                weld_points, initial_spacing, final_spacing
+            )
         else:  # Line - apply multipass spacing
             # Get config for this weld type
             weld_type = path_points[0]["weld_type"]

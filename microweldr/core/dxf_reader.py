@@ -9,6 +9,7 @@ from .app_constants import DXFEntities, LayerTypes
 from .data_models import (
     Point,
     WeldType,
+    WeldPath as DataWeldPath,
     LineEntity,
     ArcEntity,
     CircleEntity,
@@ -216,6 +217,7 @@ class DXFReader(FileReaderPublisher):
     def _entities_to_weld_paths(self, entities: List[CADEntity]) -> List[WeldPath]:
         """Convert CAD entities to weld paths."""
         weld_paths = []
+        entity_counter = 0  # Add unique counter for each entity
 
         for entity in entities:
             # Skip construction entities
@@ -242,8 +244,11 @@ class DXFReader(FileReaderPublisher):
                     continue
 
                 # Convert data_models.WeldPath to models.WeldPath
-                path = self._convert_to_models_weld_path(data_path, entity.layer)
+                path = self._convert_to_models_weld_path(
+                    data_path, entity.layer, entity_counter
+                )
                 weld_paths.append(path)
+                entity_counter += 1  # Increment counter for next entity
                 logger.debug(
                     f"Converted {entity.entity_type} on layer '{entity.layer}' to {weld_type.value} weld path"
                 )
@@ -256,7 +261,9 @@ class DXFReader(FileReaderPublisher):
 
         return weld_paths
 
-    def _convert_to_models_weld_path(self, data_path, layer_name: str):
+    def _convert_to_models_weld_path(
+        self, data_path: DataWeldPath, layer_name: str, entity_id: int
+    ) -> WeldPath:
         """Convert data_models.WeldPath to models.WeldPath for event system compatibility."""
         # Convert Point objects to WeldPoint objects
         weld_points = []
@@ -268,11 +275,11 @@ class DXFReader(FileReaderPublisher):
             )
             weld_points.append(weld_point)
 
-        # Create models.WeldPath with svg_id instead of id
+        # Create models.WeldPath with unique svg_id
         return WeldPath(
             points=weld_points,
             weld_type=data_path.weld_type.value,  # Convert enum to string
-            svg_id=f"dxf_layer_{layer_name}_{len(weld_points)}pts",  # Generate unique svg_id
+            svg_id=f"dxf_entity_{entity_id}_{layer_name}_{len(weld_points)}pts",  # Generate unique svg_id
         )
 
     def _determine_weld_type(self, layer_name: str) -> WeldType:
