@@ -8,13 +8,13 @@ from typing import List, Optional, Dict, Any
 from .app_constants import DXFEntities, LayerTypes
 from .data_models import (
     Point,
-    WeldPath,
     WeldType,
     LineEntity,
     ArcEntity,
     CircleEntity,
     CADEntity,
 )
+from .models import WeldPath, WeldPoint
 from .error_handling import FileProcessingError, ParsingError, handle_errors
 from .file_readers import FileReaderPublisher
 
@@ -228,15 +228,17 @@ class DXFReader(FileReaderPublisher):
 
             try:
                 if isinstance(entity, LineEntity):
-                    path = entity.to_weld_path(weld_type)
+                    data_path = entity.to_weld_path(weld_type)
                 elif isinstance(entity, ArcEntity):
-                    path = entity.to_weld_path(segments=20, weld_type=weld_type)
+                    data_path = entity.to_weld_path(segments=20, weld_type=weld_type)
                 elif isinstance(entity, CircleEntity):
-                    path = entity.to_weld_path(segments=36, weld_type=weld_type)
+                    data_path = entity.to_weld_path(segments=36, weld_type=weld_type)
                 else:
                     logger.warning(f"Unknown entity type: {type(entity)}")
                     continue
 
+                # Convert data_models.WeldPath to models.WeldPath
+                path = self._convert_to_models_weld_path(data_path, entity.layer)
                 weld_paths.append(path)
                 logger.debug(
                     f"Converted {entity.entity_type} on layer '{entity.layer}' to {weld_type.value} weld path"
@@ -249,6 +251,25 @@ class DXFReader(FileReaderPublisher):
                 continue
 
         return weld_paths
+
+    def _convert_to_models_weld_path(self, data_path, layer_name: str):
+        """Convert data_models.WeldPath to models.WeldPath for event system compatibility."""
+        # Convert Point objects to WeldPoint objects
+        weld_points = []
+        for point in data_path.points:
+            weld_point = WeldPoint(
+                x=point.x,
+                y=point.y,
+                weld_type=data_path.weld_type.value,  # Convert enum to string
+            )
+            weld_points.append(weld_point)
+
+        # Create models.WeldPath with svg_id instead of id
+        return WeldPath(
+            points=weld_points,
+            weld_type=data_path.weld_type.value,  # Convert enum to string
+            svg_id=f"dxf_layer_{layer_name}_{len(weld_points)}pts",  # Generate unique svg_id
+        )
 
     def _determine_weld_type(self, layer_name: str) -> WeldType:
         """Determine weld type based on layer name and filename."""
