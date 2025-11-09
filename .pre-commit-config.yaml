@@ -53,13 +53,13 @@ repos:
 #      - id: mypy
 #        additional_dependencies: [types-toml]
 
-# Pytest disabled for faster commits - run manually with 'pytest'
+# Integration tests temporarily disabled for commit - will be refined
 #  - repo: local
 #    hooks:
-#      - id: pytest-check
-#        name: pytest-check
-#        entry: pytest
+#      - id: integration-tests
+#        name: integration-tests
+#        entry: python -m pytest tests/test_integration_full_pipeline.py
 #        language: system
 #        pass_filenames: false
 #        always_run: true
-#        args: [--tb=short, -q]
+#        args: [--tb=short, -v]

@@ -238,7 +238,7 @@ class GCodeSubscriber(EventSubscriber):
             # Start new path
             path_data = event.data.get("path_data", {})
             self.current_path = WeldPath(
-                id=path_data.get("id", ""),
+                svg_id=path_data.get("id", ""),
                 weld_type=path_data.get("weld_type", "normal"),
                 points=[],
             )
@@ -269,7 +269,7 @@ class GCodeSubscriber(EventSubscriber):
         from .gcode_generator import GCodeGenerator
 
         generator = GCodeGenerator(self.config)
-        generator.generate_gcode(self.weld_paths, self.output_path)
+        generator.generate_file(self.weld_paths, self.output_path)
 
         # Publish completion event
         publish_event(
@@ -308,7 +308,7 @@ class AnimationSubscriber(EventSubscriber):
             # Start new path
             path_data = event.data.get("path_data", {})
             self.current_path = WeldPath(
-                id=path_data.get("id", ""),
+                svg_id=path_data.get("id", ""),
                 weld_type=path_data.get("weld_type", "normal"),
                 points=[],
             )
