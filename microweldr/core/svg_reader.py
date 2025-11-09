@@ -41,6 +41,9 @@ class SVGReader(FileReaderPublisher):
         """Parse SVG file and extract weld paths."""
         logger.info(f"Parsing SVG file: {file_path}")
 
+        # Store filename for weld type detection
+        self._current_filename = file_path.stem
+
         try:
             tree = ET.parse(
                 str(file_path)
@@ -247,7 +250,7 @@ class SVGReader(FileReaderPublisher):
         return self._parse_element(ref_element, defs_elements, namespaces)
 
     def _determine_weld_type(self, elem: ET.Element) -> WeldType:
-        """Determine weld type based on element attributes."""
+        """Determine weld type based on element attributes and filename."""
         # Check stroke color for frangible welds (blue indicates frangible)
         stroke = elem.get("stroke", "").lower()
         if "blue" in stroke or stroke in ["#0000ff", "#00f", "blue"]:
@@ -262,6 +265,13 @@ class SVGReader(FileReaderPublisher):
         id_attr = elem.get("id", "").lower()
         if any(keyword in id_attr for keyword in ["frangible", "light", "break"]):
             return WeldType.FRANGIBLE
+
+        # Fallback: Check filename for frangible indicators
+        if hasattr(self, "_current_filename") and self._current_filename:
+            filename_lower = self._current_filename.lower()
+            frangible_keywords = ["frangible", "light", "break", "seal", "weak"]
+            if any(keyword in filename_lower for keyword in frangible_keywords):
+                return WeldType.FRANGIBLE
 
         # Default to normal welds (black stroke)
         return WeldType.NORMAL

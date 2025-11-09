@@ -49,8 +49,14 @@ class DXFReader(FileReaderPublisher):
 
     @handle_errors(
         error_types={
-            ezdxf.DXFError: ParsingError,
-            ezdxf.DXFStructureError: ParsingError,
+            **(
+                {
+                    ezdxf.DXFError: ParsingError,
+                    ezdxf.DXFStructureError: ParsingError,
+                }
+                if DXF_AVAILABLE
+                else {}
+            ),
             ValueError: ParsingError,
         },
         default_error=FileProcessingError,
@@ -58,6 +64,9 @@ class DXFReader(FileReaderPublisher):
     def _parse_file_internal(self, file_path: Path) -> List[WeldPath]:
         """Parse DXF file and extract weld paths."""
         logger.info(f"Parsing DXF file: {file_path}")
+
+        # Store filename for weld type detection
+        self._current_filename = file_path.stem
 
         try:
             # Load DXF document
@@ -246,13 +255,19 @@ class DXFReader(FileReaderPublisher):
         return weld_paths
 
     def _determine_weld_type(self, layer_name: str) -> WeldType:
-        """Determine weld type based on layer name."""
+        """Determine weld type based on layer name and filename."""
         layer_lower = layer_name.lower()
 
-        # Check for frangible indicators
+        # First check layer name for frangible indicators
         frangible_keywords = ["frangible", "light", "break", "seal", "weak"]
         if any(keyword in layer_lower for keyword in frangible_keywords):
             return WeldType.FRANGIBLE
+
+        # Fallback: Check filename for frangible indicators
+        if hasattr(self, "_current_filename") and self._current_filename:
+            filename_lower = self._current_filename.lower()
+            if any(keyword in filename_lower for keyword in frangible_keywords):
+                return WeldType.FRANGIBLE
 
         # Default to normal welds
         return WeldType.NORMAL

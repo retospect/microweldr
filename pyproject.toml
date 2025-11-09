@@ -64,6 +64,7 @@ types-toml = ">=0.10.8"
 
 [tool.poetry.extras]
 validation = ["lxml", "gcodeparser"]
+dxf = ["ezdxf"]
 
 [tool.poetry.scripts]
 microweldr = "microweldr.cli.main:main"
