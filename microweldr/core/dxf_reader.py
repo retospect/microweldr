@@ -230,7 +230,11 @@ class DXFReader(FileReaderPublisher):
                 if isinstance(entity, LineEntity):
                     data_path = entity.to_weld_path(weld_type)
                 elif isinstance(entity, ArcEntity):
+                    logger.debug(
+                        f"Processing arc: center={entity.center}, radius={entity.radius}, angles={entity.start_angle}-{entity.end_angle}"
+                    )
                     data_path = entity.to_weld_path(segments=20, weld_type=weld_type)
+                    logger.debug(f"Arc converted to {len(data_path.points)} points")
                 elif isinstance(entity, CircleEntity):
                     data_path = entity.to_weld_path(segments=36, weld_type=weld_type)
                 else:

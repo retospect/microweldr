@@ -48,6 +48,7 @@ def _iterate_dxf_points(file_path: Path) -> Iterator[Dict[str, Any]]:
         total_points = 0
         for path in weld_paths:
             path_id = path.svg_id or f"path_{total_points}"
+            logger.debug(f"Path {path_id}: {len(path.points)} points")
 
             for point in path.points:
                 yield {

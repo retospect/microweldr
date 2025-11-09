@@ -1,4 +1,4 @@
-"""Simple G-code generator for two-phase processing architecture."""
+"""Unified generators for two-phase architecture."""
 
 import logging
 from pathlib import Path
@@ -7,32 +7,30 @@ from typing import Dict, Any, Optional, TextIO
 logger = logging.getLogger(__name__)
 
 
-class SimpleGCodeGenerator:
-    """Simple G-code generator that writes points as they're added."""
+class GCodeGenerator:
+    """Unified G-code generator for two-phase architecture."""
 
     def __init__(
-        self,
-        output_path: Path,
-        bounds: Dict[str, float],
-        config: Optional[Dict[str, Any]] = None,
+        self, output_path: Path, bounds: Dict[str, float], config: Dict[str, Any]
     ):
         """Initialize G-code generator."""
         self.output_path = output_path
         self.bounds = bounds
-        self.config = config or {}
+        self.config = config
         self.file_handle: Optional[TextIO] = None
         self.total_points = 0
         self.current_path_id = ""
         self.is_first_point_in_path = True
 
         # G-code settings from config
-        self.safe_height = self.config.get("safe_height", 5.0)
-        self.weld_height = self.config.get("weld_height", 0.02)
-        self.travel_speed = self.config.get("travel_speed", 3000)
-        self.weld_time = self.config.get("weld_time", 100)  # milliseconds
+        movement_config = config.get("movement", {})
+        self.safe_height = movement_config.get("move_height", 5.0)
+        self.weld_height = 0.02  # Fixed weld height for plastic welding
+        self.travel_speed = movement_config.get("travel_speed", 3000)
+        self.weld_time = 100  # milliseconds
 
         # Calculate centering offset from bed size and frame bounds
-        printer_config = self.config.get("printer", {})
+        printer_config = config.get("printer", {})
         bed_size_x = printer_config.get("bed_size_x", 250.0)
         bed_size_y = printer_config.get("bed_size_y", 220.0)
 
@@ -44,7 +42,7 @@ class SimpleGCodeGenerator:
         self.offset_y = (bed_size_y - frame_height) / 2
 
         logger.debug(
-            f"Centering: bed={bed_size_x}×{bed_size_y}, frame={frame_width:.1f}×{frame_height:.1f}, offset=({self.offset_x:.1f},{self.offset_y:.1f})"
+            f"G-code centering: bed={bed_size_x}×{bed_size_y}, frame={frame_width:.1f}×{frame_height:.1f}, offset=({self.offset_x:.1f},{self.offset_y:.1f})"
         )
 
         # Open file and write header
@@ -190,3 +188,155 @@ class SimpleGCodeGenerator:
                 self.file_handle.close()
             except:
                 pass
+
+
+class SVGGenerator:
+    """Unified SVG animation generator for two-phase architecture."""
+
+    def __init__(
+        self, output_path: Path, bounds: Dict[str, float], config: Dict[str, Any]
+    ):
+        """Initialize SVG generator."""
+        self.output_path = output_path
+        self.bounds = bounds
+        self.config = config
+        self.points = []
+
+        logger.info(f"SVG generator initialized: {output_path}")
+
+    def add_point(self, point: Dict[str, Any]) -> None:
+        """Collect points for SVG generation."""
+        self.points.append(point)
+
+    def finalize(self) -> Dict[str, Any]:
+        """Generate SVG using collected points."""
+        try:
+            # Convert points back to WeldPath format for existing SVG generator
+            weld_paths = self._convert_points_to_weld_paths(self.points)
+
+            # Use existing animation generator
+            from ..animation.generator import AnimationGenerator
+            from ..core.config import Config
+
+            # Create Config object from dict
+            config_obj = Config()
+            config_obj._config = self.config
+
+            animation_generator = AnimationGenerator(config_obj)
+            animation_generator.generate_file(weld_paths, self.output_path)
+
+            logger.info(f"SVG generation complete: {self.output_path}")
+
+            return {
+                "success": True,
+                "output_path": self.output_path,
+                "total_points": len(self.points),
+            }
+        except Exception as e:
+            logger.error(f"SVG generation failed: {e}")
+            return {"success": False, "error": str(e)}
+
+    def _convert_points_to_weld_paths(self, points):
+        """Convert collected points back to WeldPath objects."""
+        from ..core.models import WeldPath, WeldPoint
+
+        # Group points by path_id
+        paths_dict = {}
+        for point in points:
+            path_id = point["path_id"]
+            if path_id not in paths_dict:
+                paths_dict[path_id] = []
+            paths_dict[path_id].append(point)
+
+        # Create WeldPath objects
+        weld_paths = []
+        for path_id, path_points in paths_dict.items():
+            weld_points = []
+            for pt in path_points:
+                weld_point = WeldPoint(x=pt["x"], y=pt["y"], weld_type=pt["weld_type"])
+                weld_points.append(weld_point)
+
+            # Create WeldPath with first point's weld_type as default
+            path_weld_type = path_points[0]["weld_type"] if path_points else "normal"
+            weld_path = WeldPath(
+                points=weld_points, weld_type=path_weld_type, svg_id=path_id
+            )
+            weld_paths.append(weld_path)
+
+        return weld_paths
+
+
+class PNGGenerator:
+    """Unified PNG animation generator for two-phase architecture."""
+
+    def __init__(
+        self, output_path: Path, bounds: Dict[str, float], config: Dict[str, Any]
+    ):
+        """Initialize PNG generator."""
+        self.output_path = output_path
+        self.bounds = bounds
+        self.config = config
+        self.points = []
+
+        logger.info(f"PNG generator initialized: {output_path}")
+
+    def add_point(self, point: Dict[str, Any]) -> None:
+        """Collect points for PNG generation."""
+        self.points.append(point)
+
+    def finalize(self) -> Dict[str, Any]:
+        """Generate PNG using collected points."""
+        try:
+            # Convert points back to WeldPath format for existing PNG generator
+            weld_paths = self._convert_points_to_weld_paths(self.points)
+
+            # Use existing animation generator
+            from ..animation.generator import AnimationGenerator
+            from ..core.config import Config
+
+            # Create Config object from dict
+            config_obj = Config()
+            config_obj._config = self.config
+
+            animation_generator = AnimationGenerator(config_obj)
+            animation_generator.generate_png_file(weld_paths, self.output_path)
+
+            logger.info(f"PNG generation complete: {self.output_path}")
+
+            return {
+                "success": True,
+                "output_path": self.output_path,
+                "total_points": len(self.points),
+            }
+        except Exception as e:
+            logger.error(f"PNG generation failed: {e}")
+            return {"success": False, "error": str(e)}
+
+    def _convert_points_to_weld_paths(self, points):
+        """Convert collected points back to WeldPath objects."""
+        from ..core.models import WeldPath, WeldPoint
+
+        # Group points by path_id
+        paths_dict = {}
+        for point in points:
+            path_id = point["path_id"]
+            if path_id not in paths_dict:
+                paths_dict[path_id] = []
+            paths_dict[path_id].append(point)
+
+        # Create WeldPath objects
+        weld_paths = []
+        for path_id, path_points in paths_dict.items():
+            weld_points = []
+            for pt in path_points:
+                weld_point = WeldPoint(x=pt["x"], y=pt["y"], weld_type=pt["weld_type"])
+                weld_points.append(weld_point)
+
+            # Create WeldPath with first point's weld_type as default
+            path_weld_type = path_points[0]["weld_type"] if path_points else "normal"
+            weld_path = WeldPath(
+                points=weld_points, weld_type=path_weld_type, svg_id=path_id
+            )
+            weld_paths.append(weld_path)
+
+        return weld_paths

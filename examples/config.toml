@@ -35,8 +35,8 @@ z_speed = 600  # mm/min - optimized Z speed (near maximum safe limit for Core On
 weld_height = 0.020  # mm - how low the nozzle goes for welding (20 microns, optimized compression)
 weld_temperature = 160  # °C - safer temperature to reduce burn injury risk
 weld_time = 0.1  # seconds - optimal from calibration test (first line, best results)
-dot_spacing = 0.5  # mm - final desired spacing (double density, ~50% overlap with 1.1mm effective diameter)
-initial_dot_spacing = 8.0  # mm - spacing for first pass (wider, 12x final spacing for clear demo)
+initial_dot_spacing = 8.0  # mm - spacing for first pass (wide spacing for clear demo)
+final_dot_spacing = 0.5  # mm - final desired spacing (~50% overlap with 1.1mm effective diameter)
 cooling_time_between_passes = 2.0  # seconds - time to let plastic cool
 
 [frangible_welds]
@@ -44,8 +44,8 @@ cooling_time_between_passes = 2.0  # seconds - time to let plastic cool
 weld_height = 0.020  # mm - same precision height for frangible welds (20 microns, optimized compression)
 weld_temperature = 160  # °C - temperature for frangible welds
 weld_time = 0.3  # seconds - shorter welding time
-dot_spacing = 0.5  # mm - final desired spacing (double density, ~50% overlap with 1.1mm effective diameter)
-initial_dot_spacing = 8.0  # mm - spacing for first pass (wider, 12x final spacing for clear demo)
+initial_dot_spacing = 8.0  # mm - spacing for first pass (wide spacing for clear demo)
+final_dot_spacing = 0.5  # mm - final desired spacing (~50% overlap with 1.1mm effective diameter)
 cooling_time_between_passes = 1.5  # seconds - time to let plastic cool
 
 [output]
@@ -59,9 +59,8 @@ outer_diameter = 1.1  # mm - effective nozzle diameter (plastic melting zone)
 inner_diameter = 0.2  # mm - nozzle inner diameter (opening)
 
 [sequencing]
-# Weld sequence settings
-passes = 3  # Number of passes for multi-pass welding
-pass_spacing_multiplier = 0.6  # Multiplier for spacing between passes (0.6 = 40% closer each pass)
+# Weld sequence settings - passes calculated automatically from initial/final spacing
+# Each pass fills in gaps between previous passes for optimal coverage
 
 [animation]
 # Animation timing settings for SVG output

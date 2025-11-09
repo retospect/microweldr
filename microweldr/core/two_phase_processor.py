@@ -4,6 +4,7 @@ import logging
 from pathlib import Path
 from typing import Dict, Any, Optional, List
 from .point_iterator import iterate_points_from_file
+from .multipass_point_iterator import iterate_multipass_points_from_file
 from .generator_factory import GeneratorFactory
 from .config import Config
 
@@ -32,6 +33,9 @@ class TwoPhaseProcessor:
         self.factory = GeneratorFactory(config.config)
 
         if verbose:
+            logging.basicConfig(
+                level=logging.DEBUG, format="%(levelname)s:%(name)s:%(message)s"
+            )
             logging.getLogger().setLevel(logging.DEBUG)
 
     def process_file(
@@ -152,9 +156,11 @@ class TwoPhaseProcessor:
                     f"Phase 2 generators: {[g.__class__.__name__ for g in generators]}"
                 )
 
-            # Process all points through Phase 2 generators
+            # Process all multipass points through Phase 2 generators
             point_count = 0
-            for point in iterate_points_from_file(input_path):
+            for point in iterate_multipass_points_from_file(
+                input_path, self.config._config
+            ):
                 for generator in generators:
                     generator.add_point(point)
                 point_count += 1

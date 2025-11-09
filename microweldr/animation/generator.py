@@ -749,10 +749,8 @@ class AnimationGenerator:
                         ax.add_patch(circle)
                     path_time += pause_time
                 else:
-                    # Handle weld points - use multi-pass logic to match G-code execution
-                    multipass_points = self._generate_multipass_points_for_animation(
-                        path.points, path.weld_type
-                    )
+                    # Handle weld points - use points as-is (multipass processing done upstream)
+                    multipass_points = path.points
                     for i, point in enumerate(multipass_points):
                         point_time = path_time + (i * time_between_welds)
                         if point_time <= current_time:
@@ -812,6 +810,136 @@ class AnimationGenerator:
         # Use shared WeldPointGenerator to ensure exact match with G-code
         return WeldPointGenerator.get_all_weld_points(
             original_points, initial_spacing, final_spacing, num_passes
+        )
+
+    def _generate_smart_multipass_points(self, original_points, weld_type):
+        """Generate multipass points with interleaved pattern that preserves arc geometry."""
+        from ..core.models import WeldPoint
+        import math
+
+        # Get config values
+        config_section = (
+            "frangible_welds" if weld_type == "frangible" else "normal_welds"
+        )
+        initial_spacing = self.config.get(config_section, "initial_dot_spacing", 8.0)
+        final_spacing = self.config.get(config_section, "final_dot_spacing", 0.5)
+
+        # Calculate number of passes needed (powers of 2 for perfect interleaving)
+        # Each pass halves the spacing: 8.0 → 4.0 → 2.0 → 1.0 → 0.5
+        spacing_ratio = initial_spacing / final_spacing
+        num_passes = max(1, int(math.ceil(math.log2(spacing_ratio))))
+
+        # For arcs (many points), use the original tessellated points with smart spacing
+        if len(original_points) > 10:  # Likely an arc
+            return self._generate_arc_multipass_points(
+                original_points, initial_spacing, final_spacing, num_passes
+            )
+        else:
+            # For lines (few points), use traditional interpolation
+            return self._generate_line_multipass_points(
+                original_points, initial_spacing, final_spacing, num_passes
+            )
+
+    def _generate_arc_multipass_points(
+        self, arc_points, initial_spacing, final_spacing, num_passes
+    ):
+        """Generate multipass points for arcs preserving the tessellated geometry."""
+        from ..core.models import WeldPoint
+        import math
+
+        # Calculate total arc length
+        total_length = 0
+        for i in range(len(arc_points) - 1):
+            dx = arc_points[i + 1].x - arc_points[i].x
+            dy = arc_points[i + 1].y - arc_points[i].y
+            total_length += math.sqrt(dx * dx + dy * dy)
+
+        # Create cumulative distance array for the arc
+        distances = [0]
+        for i in range(len(arc_points) - 1):
+            dx = arc_points[i + 1].x - arc_points[i].x
+            dy = arc_points[i + 1].y - arc_points[i].y
+            distances.append(distances[-1] + math.sqrt(dx * dx + dy * dy))
+
+        # Generate all weld points with interleaved pattern
+        all_points = []
+        current_spacing = initial_spacing
+
+        for pass_num in range(num_passes):
+            # Calculate offset for this pass to create interleaved pattern
+            # Pass 0: offset 0 (positions 0, 8, 16, ...)
+            # Pass 1: offset 4 (positions 4, 12, 20, ...)
+            # Pass 2: offset 2 (positions 2, 6, 10, 14, ...)
+            # Pass 3: offset 1 (positions 1, 3, 5, 7, 9, ...)
+            if pass_num == 0:
+                offset = 0
+            else:
+                offset = current_spacing / 2
+
+            # Generate points at this spacing with offset
+            distance = offset
+            while distance <= total_length:
+                # Find the arc point at this distance
+                point = self._interpolate_arc_point(arc_points, distances, distance)
+                if point:
+                    all_points.append(point)
+                distance += current_spacing
+
+            # Halve spacing for next pass
+            current_spacing /= 2
+
+        return all_points
+
+    def _generate_line_multipass_points(
+        self, line_points, initial_spacing, final_spacing, num_passes
+    ):
+        """Generate multipass points for straight lines using traditional interpolation."""
+        from ..core.weld_point_generator import WeldPointGenerator
+
+        # Use existing generator for lines
+        return WeldPointGenerator.get_all_weld_points(
+            line_points, initial_spacing, final_spacing, num_passes
+        )
+
+    def _interpolate_arc_point(self, arc_points, distances, target_distance):
+        """Interpolate a point at target_distance along the arc."""
+        from ..core.models import WeldPoint
+
+        if target_distance <= 0:
+            return arc_points[0]
+        if target_distance >= distances[-1]:
+            return arc_points[-1]
+
+        # Find the segment containing target_distance
+        for i in range(len(distances) - 1):
+            if distances[i] <= target_distance <= distances[i + 1]:
+                # Interpolate between arc_points[i] and arc_points[i+1]
+                segment_length = distances[i + 1] - distances[i]
+                if segment_length == 0:
+                    return arc_points[i]
+
+                t = (target_distance - distances[i]) / segment_length
+                x = arc_points[i].x + t * (arc_points[i + 1].x - arc_points[i].x)
+                y = arc_points[i].y + t * (arc_points[i + 1].y - arc_points[i].y)
+
+                return WeldPoint(x, y, arc_points[i].weld_type)
+
+        return arc_points[-1]
+
+    def _generate_simple_multipass_points(self, original_points, weld_type):
+        """Simple multipass generation for lines using existing WeldPointGenerator."""
+        from ..core.weld_point_generator import WeldPointGenerator
+
+        # Get config values
+        config_section = (
+            "frangible_welds" if weld_type == "frangible" else "normal_welds"
+        )
+        initial_spacing = self.config.get(config_section, "initial_dot_spacing", 8.0)
+        final_spacing = self.config.get(config_section, "final_dot_spacing", 0.5)
+
+        # Use existing generator - it will calculate num_passes automatically
+        return WeldPointGenerator.get_all_weld_points(
+            original_points, initial_spacing, final_spacing
         )
 
     def _add_scale_bar_to_plot(

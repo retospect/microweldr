@@ -880,9 +880,12 @@ class EnhancedSVGParser:
 
         # Parse group's own transform
         group_transform = group.get("transform", "")
-        group_scale_x, group_scale_y, group_translate_x, group_translate_y = (
-            self._parse_transform(group_transform)
-        )
+        (
+            group_scale_x,
+            group_scale_y,
+            group_translate_x,
+            group_translate_y,
+        ) = self._parse_transform(group_transform)
 
         # Combine transformations
         combined_scale_x = scale_x * group_scale_x
@@ -930,9 +933,12 @@ class EnhancedSVGParser:
                         use_y = float(child.get("y", 0))
 
                         # Parse nested use transform
-                        use_scale_x, use_scale_y, use_translate_x, use_translate_y = (
-                            self._parse_transform(use_transform)
-                        )
+                        (
+                            use_scale_x,
+                            use_scale_y,
+                            use_translate_x,
+                            use_translate_y,
+                        ) = self._parse_transform(use_transform)
                         use_translate_x += use_x
                         use_translate_y += use_y
 

@@ -13,7 +13,7 @@ class WeldPointGenerator:
         original_points: List[WeldPoint],
         initial_spacing: float,
         final_spacing: float,
-        num_passes: int,
+        num_passes: int = None,
     ) -> List[List[WeldPoint]]:
         """Generate points for each pass of multi-pass welding.
 
@@ -21,11 +21,16 @@ class WeldPointGenerator:
             original_points: Original path points from DXF/SVG
             initial_spacing: Spacing for first pass (mm)
             final_spacing: Spacing for final pass (mm)
-            num_passes: Number of welding passes
+            num_passes: Number of welding passes (calculated if None)
 
         Returns:
             List of point lists, one for each pass
         """
+        # Calculate num_passes if not provided
+        if num_passes is None:
+            spacing_ratio = initial_spacing / final_spacing
+            num_passes = max(1, int(math.ceil(math.log2(spacing_ratio))))
+
         if num_passes == 1:
             return [original_points]
 
@@ -78,7 +83,7 @@ class WeldPointGenerator:
         original_points: List[WeldPoint],
         initial_spacing: float,
         final_spacing: float,
-        num_passes: int,
+        num_passes: int = None,
     ) -> List[WeldPoint]:
         """Get all weld points that will be welded (flattened from all passes).
 
@@ -100,7 +105,7 @@ class WeldPointGenerator:
         original_points: List[WeldPoint],
         initial_spacing: float,
         final_spacing: float,
-        num_passes: int,
+        num_passes: int = None,
     ) -> int:
         """Get the total number of weld operations that will be performed."""
         all_points = WeldPointGenerator.get_all_weld_points(
