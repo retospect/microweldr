@@ -74,6 +74,23 @@ class UnifiedConfig:
 
         return None
 
+    def _format_config_path_display(self, config_path: Path) -> str:
+        """Format config path for display - relative for local, absolute for others."""
+        current_dir = Path.cwd()
+
+        # Check if the config file is in the current directory
+        try:
+            # If the path is relative to current directory and only one level deep
+            relative_path = config_path.relative_to(current_dir)
+            if len(relative_path.parts) == 1:  # File is directly in current directory
+                return f"./{relative_path}"
+        except ValueError:
+            # Path is not relative to current directory
+            pass
+
+        # For all other cases, use absolute path
+        return str(config_path.absolute())
+
     def get_main_config(self) -> Dict[str, Any]:
         """Get main configuration (microweldr_config.toml)."""
         if self._main_config is not None:
@@ -97,7 +114,8 @@ class UnifiedConfig:
             self._merge_config(self._main_config, loaded_config)
             self._main_config_path = config_path
 
-            print(f"✓ Configuration loaded from {config_path}")
+            display_path = self._format_config_path_display(config_path)
+            print(f"✓ Configuration loaded from {display_path}")
             return self._main_config
 
         except Exception as e:
@@ -129,7 +147,8 @@ class UnifiedConfig:
                 self._secrets_config = toml.load(f)
 
             self._secrets_config_path = config_path
-            print(f"✓ Secrets loaded from {config_path}")
+            display_path = self._format_config_path_display(config_path)
+            print(f"✓ Secrets loaded from {display_path}")
             return self._secrets_config
 
         except Exception as e:
