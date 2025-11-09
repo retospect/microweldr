@@ -155,7 +155,6 @@ class DXFReader(FileReaderPublisher):
 
         return LineEntity(
             layer=layer,
-            entity_type=DXFEntities.LINE,
             start=Point(start_point.x, start_point.y),
             end=Point(end_point.x, end_point.y),
         )
@@ -169,7 +168,6 @@ class DXFReader(FileReaderPublisher):
 
         return ArcEntity(
             layer=layer,
-            entity_type=DXFEntities.ARC,
             center=Point(center.x, center.y),
             radius=radius,
             start_angle=start_angle,
@@ -183,7 +181,6 @@ class DXFReader(FileReaderPublisher):
 
         return CircleEntity(
             layer=layer,
-            entity_type=DXFEntities.CIRCLE,
             center=Point(center.x, center.y),
             radius=radius,
         )
@@ -202,7 +199,7 @@ class DXFReader(FileReaderPublisher):
                     points.append(Point(loc.x, loc.y))
         else:
             # LWPOLYLINE
-            for point in entity:
+            for point in entity.lwpoints:
                 points.append(Point(point[0], point[1]))
 
         if len(points) >= 2:
@@ -210,7 +207,6 @@ class DXFReader(FileReaderPublisher):
             # TODO: Handle polylines as multiple connected segments
             return LineEntity(
                 layer=layer,
-                entity_type="POLYLINE_SEGMENT",
                 start=points[0],
                 end=points[1],
             )
