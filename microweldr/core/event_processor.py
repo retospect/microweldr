@@ -19,14 +19,8 @@ from .events import (
     subscribe_to_events,
     unsubscribe_from_events,
 )
-from .subscribers import (
-    ProgressTracker,
-    LoggingSubscriber,
-    ValidationSubscriber,
-    GCodeSubscriber,
-    AnimationSubscriber,
-    StatisticsSubscriber,
-)
+from .subscriber_factory import SubscriberFactory
+from .two_phase_processor import TwoPhaseProcessor
 from .models import WeldPath, WeldPoint
 
 logger = logging.getLogger(__name__)
@@ -41,35 +35,26 @@ class FileProcessingError(Exception):
 class EventDrivenProcessor:
     """Event-driven processor for converting files with publish-subscribe architecture."""
 
-    def __init__(self, config: Config, verbose: bool = False):
+    def __init__(
+        self, config: Config, verbose: bool = False, use_two_phase: bool = True
+    ):
         """Initialize the event-driven processor."""
         self.config = config
         self.verbose = verbose
-        self.subscribers: List = []
+        self.use_two_phase = use_two_phase
 
-        # Set up default subscribers
-        self.progress_tracker = ProgressTracker(verbose=verbose)
-        self.validation_subscriber = ValidationSubscriber()
-        self.statistics_subscriber = StatisticsSubscriber()
-
-        # Subscribe default subscribers
-        subscribe_to_events(self.progress_tracker)
-        subscribe_to_events(self.validation_subscriber)
-        subscribe_to_events(self.statistics_subscriber)
-
-        self.subscribers.extend(
-            [
-                self.progress_tracker,
-                self.validation_subscriber,
-                self.statistics_subscriber,
-            ]
-        )
-
-        # Add logging subscriber if verbose
-        if verbose:
-            self.logging_subscriber = LoggingSubscriber(logging.DEBUG)
-            subscribe_to_events(self.logging_subscriber)
-            self.subscribers.append(self.logging_subscriber)
+        if use_two_phase:
+            # Use new two-phase architecture
+            self.two_phase_processor = TwoPhaseProcessor(config, verbose)
+            self.subscriber_factory = None
+            self.global_subscribers = []
+        else:
+            # Use legacy event-driven architecture
+            self.two_phase_processor = None
+            self.subscriber_factory = SubscriberFactory(config)
+            self.global_subscribers = self.subscriber_factory.create_global_subscribers(
+                verbose
+            )
 
     def __del__(self):
         """Clean up subscribers."""
@@ -77,12 +62,8 @@ class EventDrivenProcessor:
 
     def cleanup(self) -> None:
         """Clean up subscribers."""
-        for subscriber in self.subscribers:
-            try:
-                unsubscribe_from_events(subscriber)
-            except Exception as e:
-                logger.warning(f"Error unsubscribing {subscriber}: {e}")
-        self.subscribers.clear()
+        if self.subscriber_factory:
+            self.subscriber_factory.cleanup_all_subscribers()
 
     def get_supported_input_extensions(self) -> List[str]:
         """Get supported input file extensions."""
@@ -100,10 +81,21 @@ class EventDrivenProcessor:
         png_path: Optional[Union[str, Path]] = None,
         verbose: bool = False,
     ) -> bool:
-        """Process input file and generate outputs using event-driven architecture."""
+        """Process input file and generate outputs."""
         input_path = Path(input_path)
         output_path = Path(output_path)
 
+        if self.use_two_phase:
+            # Use new two-phase architecture
+            return self.two_phase_processor.process_file(
+                input_path=input_path,
+                output_path=output_path,
+                animation_path=Path(animation_path) if animation_path else None,
+                png_path=Path(png_path) if png_path else None,
+                verbose=verbose,
+            )
+
+        # Legacy event-driven architecture
         try:
             # Publish start event
             publish_event(ParsingEvent("start", input_path))
@@ -122,27 +114,13 @@ class EventDrivenProcessor:
                 ParsingEvent("complete", input_path, paths_count=len(weld_paths))
             )
 
-            # Set up output subscribers
-            output_subscribers = []
-
-            # G-code output
-            gcode_subscriber = GCodeSubscriber(output_path, self.config)
-            subscribe_to_events(gcode_subscriber)
-            output_subscribers.append(gcode_subscriber)
-
-            # Animation output
-            if animation_path:
-                animation_subscriber = AnimationSubscriber(
-                    Path(animation_path), self.config
-                )
-                subscribe_to_events(animation_subscriber)
-                output_subscribers.append(animation_subscriber)
-
-            # PNG output
-            if png_path:
-                png_subscriber = AnimationSubscriber(Path(png_path), self.config)
-                subscribe_to_events(png_subscriber)
-                output_subscribers.append(png_subscriber)
+            # Create processing subscribers using factory
+            session_subscribers = self.subscriber_factory.create_processing_subscribers(
+                output_path=output_path,
+                animation_path=Path(animation_path) if animation_path else None,
+                png_path=Path(png_path) if png_path else None,
+                verbose=verbose,
+            )
 
             try:
                 # Process weld paths through events
@@ -158,21 +136,21 @@ class EventDrivenProcessor:
                     publish_event(OutputEvent("generate", "png", png_path))
 
                 # Check for validation errors
-                if self.validation_subscriber.has_errors():
-                    errors = self.validation_subscriber.get_errors()
-                    for error in errors:
-                        publish_event(ErrorEvent("validation", error))
-                    return False
+                validation_subscriber = (
+                    self.subscriber_factory.get_validation_subscriber()
+                )
+                if validation_subscriber:
+                    validation_results = validation_subscriber.get_validation_results()
+                    if validation_results["has_errors"]:
+                        for error in validation_results["errors"]:
+                            publish_event(ErrorEvent("validation", error))
+                        return False
 
                 return True
 
             finally:
-                # Clean up output subscribers
-                for subscriber in output_subscribers:
-                    try:
-                        unsubscribe_from_events(subscriber)
-                    except Exception as e:
-                        logger.warning(f"Error unsubscribing output subscriber: {e}")
+                # Clean up session subscribers
+                self.subscriber_factory.cleanup_session_subscribers(session_subscribers)
 
         except Exception as e:
             publish_event(ErrorEvent("processing", str(e)))
@@ -279,24 +257,36 @@ class EventDrivenProcessor:
 
     def get_statistics(self) -> Dict:
         """Get processing statistics."""
-        return self.statistics_subscriber.get_statistics()
+        stats_subscriber = self.subscriber_factory.get_statistics_subscriber()
+        return stats_subscriber.get_statistics() if stats_subscriber else {}
 
     def get_validation_results(self) -> Dict:
         """Get validation results."""
-        return {
-            "has_errors": self.validation_subscriber.has_errors(),
-            "has_warnings": self.validation_subscriber.has_warnings(),
-            "errors": self.validation_subscriber.get_errors(),
-            "warnings": self.validation_subscriber.get_warnings(),
-        }
+        if self.use_two_phase:
+            return self.two_phase_processor.get_validation_results()
+
+        validation_subscriber = self.subscriber_factory.get_validation_subscriber()
+        return (
+            validation_subscriber.get_validation_results()
+            if validation_subscriber
+            else {}
+        )
 
     def clear_validation_results(self) -> None:
         """Clear validation results."""
-        self.validation_subscriber.clear()
+        if self.use_two_phase:
+            self.two_phase_processor.clear_validation_results()
+            return
+
+        validation_subscriber = self.subscriber_factory.get_validation_subscriber()
+        if validation_subscriber:
+            validation_subscriber.reset()
 
     def reset_statistics(self) -> None:
         """Reset processing statistics."""
-        self.statistics_subscriber.reset_statistics()
+        stats_subscriber = self.subscriber_factory.get_statistics_subscriber()
+        if stats_subscriber:
+            stats_subscriber.reset_statistics()
 
 
 def create_processor(config: Config, verbose: bool = False) -> EventDrivenProcessor:

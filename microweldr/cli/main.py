@@ -900,42 +900,41 @@ def cmd_weld(args):
         if args.verbose:
             print(f"✓ Configuration loaded from {args.config}")
 
-        # Validate SVG file
-        svg_path = Path(args.svg_file)
-        if not svg_path.exists():
-            print(f"❌ SVG file not found: {args.svg_file}")
+        # Validate input file
+        input_path = Path(args.svg_file)
+        if not input_path.exists():
+            print(f"❌ Input file not found: {args.svg_file}")
             return False
 
         if args.verbose:
-            print(f"✓ SVG file found: {args.svg_file}")
-
-        # Validate SVG content
-        svg_validator = SVGValidator()
-        svg_result = svg_validator.validate_file(svg_path)
-
-        if not svg_result.is_valid:
-            raise SVGParseError(f"SVG validation failed: {svg_result.message}")
-
-        if svg_result.warnings:
-            print("⚠️ SVG validation warnings:")
-            for warning in svg_result.warnings:
-                print(f"  • {warning}")
+            print(f"✓ Input file found: {args.svg_file}")
 
         # Set up output paths
         if args.output:
-            output_gcode = Path(args.output)
+            output_path = Path(args.output)
         else:
-            output_gcode = svg_path.with_suffix(".gcode")
+            output_path = input_path.with_suffix(".gcode")
 
-        output_animation = output_gcode.with_suffix(".html")
+        # Determine animation path
+        animation_path = None
+        if not getattr(args, "no_animation", False):
+            if getattr(args, "png", False):
+                animation_path = output_path.with_name(
+                    f"{output_path.stem}_animation.png"
+                )
+            else:
+                animation_path = output_path.with_name(
+                    f"{output_path.stem}_animation.svg"
+                )
 
-        print(f"📄 Output G-code: {output_gcode}")
-        if not args.no_animation:
-            print(f"🎬 Output animation: {output_animation}")
+        print(f"✓ Output G-code: {output_path}")
+        if animation_path:
+            print(f"✓ Animation: {animation_path}")
 
-        # Create converter and generate G-code
-        print("🔧 Converting SVG to G-code...")
-        converter = SVGToGCodeConverter(config)
+        # Create processor with two-phase architecture
+        from ..core.event_processor import EventDrivenProcessor
+
+        processor = EventDrivenProcessor(config, verbose=args.verbose)
 
         # Handle calibration options
         # Skip calibration when submitting to printer (user has already prepared it)
@@ -946,70 +945,17 @@ def cmd_weld(args):
         elif skip_bed_leveling:
             print("📋 Skipping calibration as requested")
 
-        # Temperature validation check before welding
-        if args.submit:
-            print("🌡️ Checking nozzle temperature matches welding requirements...")
-            if not validate_welding_temperature(config):
-                print("❌ Temperature validation failed - aborting weld operation")
-                return False
-
-        # Convert SVG to G-code
-        weld_paths = converter.convert(
-            svg_path, output_gcode, skip_bed_leveling=skip_bed_leveling
+        # Process file using two-phase architecture
+        success = processor.process_file(
+            input_path=input_path,
+            output_path=output_path,
+            animation_path=animation_path,
+            verbose=args.verbose,
         )
 
-        # Read the generated G-code content for validation
-        with open(output_gcode, "r") as f:
-            gcode_content = f.read()
-
-        # Validate G-code
-        gcode_validator = GCodeValidator()
-        gcode_result = gcode_validator.validate_content(gcode_content)
-
-        if not gcode_result.is_valid:
-            print(f"❌ G-code validation failed: {gcode_result.message}")
-            print("Generated G-code may not work properly!")
-
-        if gcode_result.warnings:
-            print("⚠️ G-code validation warnings:")
-            for warning in gcode_result.warnings:
-                print(f"  • {warning}")
-
-        # Write G-code file
-        with open(output_gcode, "w") as f:
-            f.write(gcode_content)
-        print(f"✅ G-code written to {output_gcode}")
-
-        # Generate animation if requested
-        if not args.no_animation:
-            print("🎬 Generating animation...")
-            animation_generator = AnimationGenerator(config)
-            animation_generator.generate_file(weld_paths, output_animation)
-
-            # Generate animated PNG if requested
-            if args.png:
-                output_png = output_animation.with_suffix(".png")
-                print(f"🎬 Generating animated PNG...")
-                animation_generator.generate_png_file(weld_paths, output_png)
-                print(f"✅ Animated PNG written to {output_png}")
-
-            # Validate animation by reading the generated file
-            with open(output_animation, "r") as f:
-                animation_content = f.read()
-
-            animation_validator = AnimationValidator()
-            animation_result = animation_validator.validate_content(animation_content)
-
-            if not animation_result.is_valid:
-                print(f"❌ Animation validation failed: {animation_result.message}")
-                print("Generated animation may not display properly!")
-
-            if animation_result.warnings:
-                print("⚠️ Animation validation warnings:")
-                for warning in animation_result.warnings:
-                    print(f"  • {warning}")
-
-            print(f"✅ Animation written to {output_animation}")
+        if not success:
+            print("❌ Processing failed")
+            return False
 
         # Submit to printer if requested
         if args.submit:
@@ -1018,7 +964,7 @@ def cmd_weld(args):
                 client = PrusaLinkClient()
 
                 # Read G-code file and convert to command list
-                with open(output_gcode, "r") as f:
+                with open(output_path, "r") as f:
                     gcode_lines = f.readlines()
 
                 # Clean up G-code lines (remove empty lines and comments)
@@ -1061,7 +1007,7 @@ def cmd_weld(args):
 
         if args.verbose:
             print(f"Output files:")
-            print(f"  G-code: {output_gcode}")
+            print(f"  G-code: {output_path}")
             if not args.no_animation:
                 print(f"  Animation: {output_animation}")
 
@@ -1116,13 +1062,13 @@ def cmd_full_weld(args):
 
         # Set up output paths
         if args.output:
-            output_gcode = Path(args.output)
+            output_path = Path(args.output)
         else:
-            output_gcode = svg_path.with_suffix(".gcode")
+            output_path = svg_path.with_suffix(".gcode")
 
-        output_animation = output_gcode.with_suffix(".html")
+        output_animation = output_path.with_suffix(".html")
 
-        print(f"📄 Output G-code: {output_gcode}")
+        print(f"📄 Output G-code: {output_path}")
         if not args.no_animation:
             print(f"🎬 Output animation: {output_animation}")
 
@@ -1131,9 +1077,9 @@ def cmd_full_weld(args):
         converter = SVGToGCodeConverter(config)
 
         # Convert SVG to G-code with self-contained mode
-        weld_paths = converter.convert_full_weld(svg_path, output_gcode)
+        weld_paths = converter.convert_full_weld(svg_path, output_path)
 
-        print(f"✅ Self-contained G-code written to {output_gcode}")
+        print(f"✅ Self-contained G-code written to {output_path}")
 
         # Generate animation if requested
         if not args.no_animation:
@@ -1157,7 +1103,7 @@ def cmd_full_weld(args):
                 client = PrusaLinkClient()
 
                 # Read G-code file and convert to command list
-                with open(output_gcode, "r") as f:
+                with open(output_path, "r") as f:
                     gcode_lines = f.readlines()
 
                 # Clean up G-code lines (remove empty lines and comments)

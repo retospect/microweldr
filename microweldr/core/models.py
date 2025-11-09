@@ -52,20 +52,9 @@ class WeldPath:
     custom_weld_height: Optional[float] = None  # Custom weld height (compression depth)
 
     def __post_init__(self) -> None:
-        """Validate weld path data."""
-        valid_types = get_valid_weld_types()
-        if self.weld_type not in valid_types:
-            raise ValueError(
-                ErrorMessages.INVALID_WELD_TYPE.format(
-                    weld_type=self.weld_type, valid_types=", ".join(valid_types)
-                )
-            )
-
-        if not self.points:
-            raise ValueError("WeldPath must contain at least one point")
-
-        if not self.svg_id:
-            raise ValueError("WeldPath must have a valid svg_id")
+        """Initialize weld path data."""
+        # Validation moved to ValidationSubscriber for streaming architecture
+        pass
 
     @property
     def weld_type_enum(self) -> WeldType:

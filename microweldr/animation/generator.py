@@ -20,6 +20,10 @@ class AnimationGenerator:
     def __init__(self, config: Config) -> None:
         """Initialize animation generator."""
         self.config = config
+        # For two-phase architecture support
+        self.collected_points = []
+        self.bounds = None
+        self.output_path = None
 
     def generate_file(
         self,
@@ -854,3 +858,73 @@ class AnimationGenerator:
     def _write_svg_footer(self, f: TextIO) -> None:
         """Write SVG footer."""
         f.write("</svg>\n")
+
+    # Two-phase architecture support methods
+    def initialize_for_png(self, output_path: Path, bounds: dict) -> None:
+        """Initialize for PNG generation in two-phase architecture."""
+        self.output_path = output_path
+        self.bounds = bounds
+        self.collected_points = []
+
+    def add_point(self, point: dict) -> None:
+        """Add a point for incremental PNG generation."""
+        self.collected_points.append(
+            {
+                "x": point.get("x", 0),
+                "y": point.get("y", 0),
+                "weld_type": point.get("weld_type", "normal"),
+                "path_id": point.get("path_id", "unknown"),
+            }
+        )
+
+    def finalize_png(self) -> dict:
+        """Finalize PNG generation using collected points."""
+        if not self.output_path or not self.collected_points:
+            return {
+                "success": False,
+                "error": "No points collected or output path not set",
+            }
+
+        try:
+            # Convert collected points back to WeldPath format for existing PNG generator
+            weld_paths = self._convert_points_to_weld_paths(self.collected_points)
+
+            # Use existing PNG generation method
+            self.generate_png_file(weld_paths, self.output_path)
+
+            return {
+                "success": True,
+                "output_path": self.output_path,
+                "total_points": len(self.collected_points),
+            }
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    def _convert_points_to_weld_paths(self, points: list) -> List[WeldPath]:
+        """Convert collected points back to WeldPath objects."""
+        from microweldr.core.models import WeldPoint
+
+        # Group points by path_id
+        paths_dict = {}
+        for point in points:
+            path_id = point["path_id"]
+            if path_id not in paths_dict:
+                paths_dict[path_id] = []
+            paths_dict[path_id].append(point)
+
+        # Create WeldPath objects
+        weld_paths = []
+        for path_id, path_points in paths_dict.items():
+            weld_points = []
+            for pt in path_points:
+                weld_point = WeldPoint(x=pt["x"], y=pt["y"], weld_type=pt["weld_type"])
+                weld_points.append(weld_point)
+
+            # Create WeldPath with first point's weld_type as default
+            path_weld_type = path_points[0]["weld_type"] if path_points else "normal"
+            weld_path = WeldPath(
+                points=weld_points, weld_type=path_weld_type, svg_id=path_id
+            )
+            weld_paths.append(weld_path)
+
+        return weld_paths

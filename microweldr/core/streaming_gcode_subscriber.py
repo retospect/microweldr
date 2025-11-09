@@ -1,0 +1,264 @@
+"""Streaming G-code subscriber that writes G-code incrementally as events flow."""
+
+import logging
+from pathlib import Path
+from typing import List, Optional, TextIO
+from .events import Event, EventType, OutputEvent, publish_event
+from .subscribers import EventSubscriber
+
+logger = logging.getLogger(__name__)
+
+
+class StreamingGCodeSubscriber(EventSubscriber):
+    """Generates G-code output from events in streaming mode.
+
+    This subscriber writes G-code incrementally as events flow through the system,
+    eliminating the need to store WeldPath objects in memory.
+    """
+
+    def __init__(self, output_path: Path, config):
+        """Initialize streaming G-code subscriber."""
+        self.output_path = Path(output_path)
+        self.config = config
+        self.file_handle: Optional[TextIO] = None
+        self.current_path_id = ""
+        self.current_weld_type = "normal"
+        self.is_first_point_in_path = True
+        self.total_paths_processed = 0
+        self.total_points_processed = 0
+        self.is_initialized = False
+
+    def get_priority(self) -> int:
+        """Get subscriber priority (lower number = higher priority)."""
+        return 20  # Lower priority - after validation and bounding box
+
+    def get_subscribed_events(self) -> List[EventType]:
+        """Get subscribed event types."""
+        return [
+            EventType.PATH_PROCESSING,
+            EventType.POINT_PROCESSING,
+            EventType.OUTPUT_GENERATION,
+        ]
+
+    def handle_event(self, event: Event) -> None:
+        """Handle events for streaming G-code generation."""
+        try:
+            if event.event_type == EventType.PATH_PROCESSING:
+                self._handle_path_event(event)
+            elif event.event_type == EventType.POINT_PROCESSING:
+                self._handle_point_event(event)
+            elif event.event_type == EventType.OUTPUT_GENERATION:
+                self._handle_output_event(event)
+        except Exception as e:
+            logger.exception(f"Error in streaming G-code subscriber: {e}")
+
+    def _handle_path_event(self, event: Event) -> None:
+        """Handle path processing event - streaming mode."""
+        action = event.data.get("action", "")
+
+        if action == "path_start":
+            path_data = event.data.get("path_data", {})
+            self.current_path_id = path_data.get(
+                "id", f"path_{self.total_paths_processed}"
+            )
+            self.current_weld_type = path_data.get("weld_type", "normal")
+            self.is_first_point_in_path = True
+
+            # Initialize G-code file if not already done
+            if not self.file_handle:
+                self._initialize_gcode_file()
+
+            # Write path start comment
+            self.file_handle.write(
+                f"; Starting path: {self.current_path_id} ({self.current_weld_type})\n"
+            )
+            logger.debug(f"StreamingGCode: Started path {self.current_path_id}")
+
+        elif action == "path_complete":
+            # Write path completion comment
+            if self.file_handle:
+                self.file_handle.write(f"; Completed path: {self.current_path_id}\n\n")
+                self.file_handle.flush()  # Ensure data is written
+            self.total_paths_processed += 1
+            logger.debug(f"StreamingGCode: Completed path {self.current_path_id}")
+
+    def _handle_point_event(self, event: Event) -> None:
+        """Handle point processing event - streaming mode."""
+        action = event.data.get("action", "")
+
+        if action == "point_added":
+            point_data = event.data.get("point_data", {})
+            x = point_data.get("x", 0)
+            y = point_data.get("y", 0)
+            point_weld_type = point_data.get("weld_type", self.current_weld_type)
+
+            # Write G-code movement command immediately
+            self._write_point_gcode(x, y, point_weld_type)
+            self.total_points_processed += 1
+
+    def _handle_output_event(self, event: Event) -> None:
+        """Handle output generation event."""
+        action = event.data.get("action", "")
+        output_type = event.data.get("output_type", "")
+
+        if action == "generate" and output_type == "gcode":
+            self._finalize_gcode_file()
+
+    def _initialize_gcode_file(self) -> None:
+        """Initialize G-code file with header."""
+        try:
+            self.file_handle = open(self.output_path, "w", encoding="utf-8")
+            self._write_gcode_header()
+            self.is_initialized = True
+            logger.info(f"StreamingGCode: Initialized G-code file {self.output_path}")
+        except Exception as e:
+            logger.error(f"Failed to initialize G-code file {self.output_path}: {e}")
+            raise
+
+    def _write_gcode_header(self) -> None:
+        """Write G-code file header."""
+        if not self.file_handle:
+            return
+
+        self.file_handle.write("; Generated by MicroWeldr - Streaming Mode\n")
+        self.file_handle.write("; G-code written incrementally as events processed\n")
+        self.file_handle.write(f"; Output file: {self.output_path.name}\n")
+        self.file_handle.write("; \n")
+        self.file_handle.write("; Prusa Core One Plastic Welding G-code\n")
+        self.file_handle.write("; \n\n")
+
+        # Write initialization commands
+        self.file_handle.write("; Printer initialization\n")
+        self.file_handle.write("G90 ; Absolute positioning\n")
+        self.file_handle.write("G28 ; Home all axes\n")
+        self.file_handle.write("M83 ; Relative extrusion\n")
+        self.file_handle.write("\n")
+
+    def _write_point_gcode(self, x: float, y: float, weld_type: str) -> None:
+        """Write G-code movement command for a point."""
+        if not self.file_handle:
+            return
+
+        # Get movement settings from config
+        move_height = self.config.get("movement", "move_height", 0.2)
+        z_speed = self.config.get("movement", "z_speed", 300)
+        xy_speed = self.config.get("movement", "xy_speed", 3000)
+
+        if self.is_first_point_in_path:
+            # Move to first point at safe height
+            self.file_handle.write(
+                f"G1 Z{move_height} F{z_speed} ; Move to safe height\n"
+            )
+            self.file_handle.write(
+                f"G1 X{x:.3f} Y{y:.3f} F{xy_speed} ; Move to start of path\n"
+            )
+            self.is_first_point_in_path = False
+        else:
+            # Move to next point
+            self.file_handle.write(
+                f"G1 X{x:.3f} Y{y:.3f} F{xy_speed} ; Move to next point\n"
+            )
+
+        # Add weld-specific commands based on weld type
+        self._write_weld_commands(weld_type)
+
+    def _write_weld_commands(self, weld_type: str) -> None:
+        """Write weld-specific G-code commands."""
+        if not self.file_handle:
+            return
+
+        if weld_type == "normal":
+            # Normal welding commands
+            weld_height = self.config.get("normal_welds", "weld_height", 0.1)
+            weld_time = self.config.get("normal_welds", "weld_time", 1.0)
+            self.file_handle.write(f"G1 Z{weld_height} F300 ; Lower to weld height\n")
+            self.file_handle.write(
+                f"G4 P{weld_time * 1000:.0f} ; Weld for {weld_time}s\n"
+            )
+            self.file_handle.write(f"G1 Z0.2 F300 ; Raise to safe height\n")
+
+        elif weld_type == "frangible":
+            # Frangible welding commands (lighter)
+            weld_height = self.config.get("frangible_welds", "weld_height", 0.15)
+            weld_time = self.config.get("frangible_welds", "weld_time", 0.5)
+            self.file_handle.write(
+                f"G1 Z{weld_height} F300 ; Lower to frangible weld height\n"
+            )
+            self.file_handle.write(
+                f"G4 P{weld_time * 1000:.0f} ; Frangible weld for {weld_time}s\n"
+            )
+            self.file_handle.write(f"G1 Z0.2 F300 ; Raise to safe height\n")
+
+        elif weld_type == "stop":
+            # Stop point with pause
+            self.file_handle.write("M0 ; Pause for user interaction\n")
+
+        elif weld_type == "pipette":
+            # Pipette operation
+            self.file_handle.write("; Pipette operation point\n")
+            self.file_handle.write("G1 Z0.05 F300 ; Lower for pipette\n")
+            self.file_handle.write("G4 P500 ; Brief pause\n")
+            self.file_handle.write("G1 Z0.2 F300 ; Raise after pipette\n")
+
+    def _finalize_gcode_file(self) -> None:
+        """Finalize G-code file and close."""
+        if self.file_handle:
+            # Write footer
+            self.file_handle.write("; End of welding sequence\n")
+            self.file_handle.write("G28 ; Home all axes\n")
+            self.file_handle.write("M84 ; Disable steppers\n")
+            self.file_handle.write(
+                f"; Total paths processed: {self.total_paths_processed}\n"
+            )
+            self.file_handle.write(
+                f"; Total points processed: {self.total_points_processed}\n"
+            )
+            self.file_handle.write("; End of G-code\n")
+
+            # Close file
+            self.file_handle.close()
+            self.file_handle = None
+
+            logger.info(f"StreamingGCode: Finalized G-code file {self.output_path}")
+            logger.info(
+                f"StreamingGCode: Processed {self.total_paths_processed} paths, {self.total_points_processed} points"
+            )
+
+            # Publish completion event
+            publish_event(
+                OutputEvent(
+                    action="complete",
+                    output_type="gcode",
+                    file_path=self.output_path,
+                    statistics={
+                        "total_paths": self.total_paths_processed,
+                        "total_points": self.total_points_processed,
+                        "file_size": (
+                            self.output_path.stat().st_size
+                            if self.output_path.exists()
+                            else 0
+                        ),
+                    },
+                )
+            )
+
+    def get_statistics(self) -> dict:
+        """Get G-code generation statistics."""
+        return {
+            "total_paths_processed": self.total_paths_processed,
+            "total_points_processed": self.total_points_processed,
+            "output_file": str(self.output_path),
+            "file_exists": self.output_path.exists(),
+            "file_size": (
+                self.output_path.stat().st_size if self.output_path.exists() else 0
+            ),
+            "is_initialized": self.is_initialized,
+        }
+
+    def __del__(self):
+        """Ensure file is closed on cleanup."""
+        if self.file_handle:
+            try:
+                self.file_handle.close()
+            except:
+                pass
