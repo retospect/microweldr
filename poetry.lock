@@ -290,14 +290,14 @@ files = [
 
 [[package]]
 name = "click"
-version = "8.3.0"
+version = "8.2.1"
 description = "Composable command line interface toolkit"
 optional = false
 python-versions = ">=3.10"
 groups = ["main", "dev"]
 files = [
-    {file = "click-8.3.0-py3-none-any.whl", hash = "sha256:9b9f285302c6e3064f4330c05f05b81945b2a39544279343e6e7c5f27a9baddc"},
-    {file = "click-8.3.0.tar.gz", hash = "sha256:e7b8232224eba16f4ebe410c25ced9f7875cb5f3263ffc93cc3e8da705e229c4"},
+    {file = "click-8.2.1-py3-none-any.whl", hash = "sha256:61a3265b914e850b85317d0b3109c7f8cd35a670f963866005d6ef1d5175a12b"},
+    {file = "click-8.2.1.tar.gz", hash = "sha256:27c491cc05d968d271d5a1db13e3b5a184636d9d930f148c50b038f0d0646202"},
 ]
 
 [package.dependencies]
@@ -2379,4 +2379,4 @@ validation = ["gcodeparser", "lxml"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10"
-content-hash = "ef4dd7b6891c694b84474b60fe6b4c35d9ea4db169c1b80e6ef8f10ce0dcc200"
+content-hash = "adddf9326b9d498b0699b508ab65a4446665de10bc182c6b1005d6f36bda43e0"

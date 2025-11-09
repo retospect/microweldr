@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "microweldr"
-version = "5.3.0"
+version = "5.3.1"
 description = "Convert SVG files to Prusa Core One G-code for plastic welding applications - microfluidics prototyping with 3D printers"
 authors = ["Reto Stamm <reto@retospect.ch>"]
 maintainers = ["Reto Stamm <reto@retospect.ch>"]
@@ -42,9 +42,10 @@ toml = ">=0.10.0"
 requests = ">=2.25.0"
 lxml = {version = ">=4.0.0", optional = true}
 gcodeparser = {version = ">=0.2.0", optional = true}
-click = ">=8.0.0"
+click = ">=8.0.0,<8.2.2"
 pillow = ">=10.0.0"
 matplotlib = ">=3.5.0"
+numpy = ">=1.24,<2.3"
 python-configuration = {version = ">=0.8.0", extras = ["toml"]}
 ezdxf = {version = ">=1.0.0", optional = true}
 
