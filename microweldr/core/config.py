@@ -16,15 +16,23 @@ class Config:
     """Configuration manager for the SVG welder."""
 
     def __init__(self, config_path: str | Path | None = None) -> None:
-        """Initialize configuration from TOML file with fallback system.
+        """Initialize configuration using unified configuration system.
 
         Args:
-            config_path: Path to configuration file. If None, searches for config files
-                        in multiple locations and falls back to defaults if not found.
+            config_path: Legacy parameter for backward compatibility (ignored)
         """
-        self.config_path = self._find_config_file(config_path)
-        self._config: Dict[str, Any] = {}
-        self.load()
+        if config_path is not None:
+            import warnings
+
+            warnings.warn(
+                "Config path parameter is deprecated. Using unified configuration system.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+
+        from .unified_config import get_main_config
+
+        self._config = get_main_config()
 
     def _find_config_file(self, config_path: str | Path | None) -> Path | None:
         """Find configuration file using fallback system."""

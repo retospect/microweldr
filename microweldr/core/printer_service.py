@@ -98,22 +98,53 @@ class PrinterStatus:
 class PrinterService:
     """Centralized printer service for consistent API usage."""
 
-    def __init__(self, config_path: Optional[str] = None):
-        """Initialize printer service.
-
-        Args:
-            config_path: Optional path to specific config file
-        """
+    def __init__(self):
+        """Initialize printer service with unified configuration."""
         self._client = None
-        self._config_path = config_path
         self._last_status = None
 
     @property
     def client(self) -> PrusaLinkClient:
         """Get or create PrusaLink client (lazy initialization)."""
         if self._client is None:
-            self._client = PrusaLinkClient(self._config_path)
+            # Use unified configuration system
+            from .unified_config import get_prusalink_config
+
+            try:
+                prusalink_config = get_prusalink_config()
+                self._client = self._create_client_from_config(prusalink_config)
+            except Exception as e:
+                logger.error(f"Failed to create PrusaLink client: {e}")
+                raise
         return self._client
+
+    def _create_client_from_config(self, config: Dict[str, Any]) -> PrusaLinkClient:
+        """Create PrusaLink client from configuration dictionary."""
+        # Validate required fields
+        required_fields = ["host", "username"]
+        for field in required_fields:
+            if field not in config:
+                raise ValueError(f"Missing required field in printer config: {field}")
+
+        # Require either password or api_key
+        if "password" not in config and "api_key" not in config:
+            raise ValueError(
+                "Missing authentication: need either 'password' or 'api_key' in printer config"
+            )
+
+        # Create a minimal client that doesn't use file-based config loading
+        client = object.__new__(PrusaLinkClient)
+        client.config = config
+        client.base_url = f"http://{config['host']}"
+
+        # Support both API key and LCD password authentication
+        password = config.get("password") or config.get("api_key")
+        from requests.auth import HTTPDigestAuth
+
+        client.auth = HTTPDigestAuth(config["username"], password)
+        client.timeout = config.get("timeout", 30)
+
+        return client
 
     def test_connection(self) -> bool:
         """Test printer connection."""
@@ -287,12 +318,12 @@ class PrinterService:
 _printer_service: Optional[PrinterService] = None
 
 
-def get_printer_service(config_path: Optional[str] = None) -> PrinterService:
+def get_printer_service() -> PrinterService:
     """Get global printer service instance."""
     global _printer_service
 
-    if _printer_service is None or config_path is not None:
-        _printer_service = PrinterService(config_path)
+    if _printer_service is None:
+        _printer_service = PrinterService()
 
     return _printer_service
 
