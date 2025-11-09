@@ -209,11 +209,10 @@ class EventDrivenProcessor:
 
         publish_event(ParsingEvent("parsing_dxf", dxf_path))
 
-        # Create DXF reader with same dot spacing as SVG
-        dot_spacing = self.config.get("normal_welds", "dot_spacing")
-        reader = DXFReader(dot_spacing=dot_spacing)
+        # Create DXF reader
+        reader = DXFReader()
 
-        weld_paths = reader.read_file(str(dxf_path))
+        weld_paths = reader.parse_file(dxf_path)
         return weld_paths
 
     def _process_weld_paths_via_events(self, weld_paths: List[WeldPath]) -> None:
