@@ -80,8 +80,12 @@ class UnifiedConfig:
 
         # Check if the config file is in the current directory
         try:
+            # Resolve both paths to handle symlinks and relative paths
+            resolved_config = config_path.resolve()
+            resolved_current = current_dir.resolve()
+
             # If the path is relative to current directory and only one level deep
-            relative_path = config_path.relative_to(current_dir)
+            relative_path = resolved_config.relative_to(resolved_current)
             if len(relative_path.parts) == 1:  # File is directly in current directory
                 return f"./{relative_path}"
         except ValueError:
@@ -89,7 +93,7 @@ class UnifiedConfig:
             pass
 
         # For all other cases, use absolute path
-        return str(config_path.absolute())
+        return str(config_path.resolve())
 
     def get_main_config(self) -> Dict[str, Any]:
         """Get main configuration (microweldr_config.toml)."""
