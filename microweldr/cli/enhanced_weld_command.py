@@ -83,6 +83,23 @@ def cmd_weld_enhanced(args):
                     f"🌐 Open {animation_path} in a web browser to view the animation"
                 )
 
+            # Handle printer submission if requested
+            if getattr(args, "submit", False) or getattr(args, "auto_start", False):
+                try:
+                    _submit_to_printer(
+                        output_path,
+                        getattr(args, "submit", False),
+                        getattr(args, "auto_start", False),
+                        getattr(args, "queue_only", False),
+                        args.verbose,
+                    )
+                except Exception as e:
+                    print(f"⚠️  Printer submission failed: {e}")
+                    if args.verbose:
+                        import traceback
+
+                        traceback.print_exc()
+
             # Show weld statistics
             print("\n📊 Processing Summary:")
             print(f"   Input: {input_path.name} ({input_path.suffix.upper()})")
@@ -101,6 +118,108 @@ def cmd_weld_enhanced(args):
     except Exception as e:
         print(f"❌ Unexpected error: {e}")
         if args.verbose:
+            import traceback
+
+            traceback.print_exc()
+        return False
+
+
+def _submit_to_printer(gcode_path, submit, auto_start, queue_only, verbose):
+    """Submit G-code to printer using PrusaLink."""
+    print("🚀 Submitting to printer...")
+
+    try:
+        from ..prusalink.client import PrusaLinkClient
+        from ..core.secrets_config import SecretsConfig
+
+        # Load secrets configuration
+        secrets_config = SecretsConfig("microweldr_secrets.toml")
+        config = secrets_config.load()
+
+        # Check if PrusaLink configuration exists
+        try:
+            prusalink_config = secrets_config.get_prusalink_config()
+
+            # Check for required configuration
+            host = prusalink_config.get("host") or prusalink_config.get("base_url")
+            api_key = prusalink_config.get("api_key")
+            password = prusalink_config.get("password")
+
+            if not host:
+                print("❌ Missing printer host/base_url in secrets configuration")
+                print("   Please check your microweldr_secrets.toml file")
+                return False
+
+            if not api_key and not password:
+                print(
+                    "❌ Missing printer credentials (api_key or password) in secrets configuration"
+                )
+                print("   Please check your microweldr_secrets.toml file")
+                return False
+
+            # Build base_url if only host is provided
+            if host and not host.startswith("http"):
+                base_url = f"http://{host}"
+            else:
+                base_url = host
+
+        except Exception as e:
+            print(f"❌ Error loading printer secrets configuration: {e}")
+            print("   Please run 'microweldr config init' to set up printer connection")
+            return False
+
+        # Create PrusaLink client (it loads config internally)
+        client = PrusaLinkClient()
+
+        # Check printer status
+        if verbose:
+            print("🔍 Checking printer status...")
+
+        status = client.get_printer_status()
+        printer_state = status.get("state", "Unknown")
+
+        if verbose:
+            print(f"   Printer state: {printer_state}")
+
+        if printer_state not in ["Operational", "Finished"]:
+            print(f"⚠️  Printer not ready (state: {printer_state})")
+            return False
+
+        # Upload file
+        filename = gcode_path.name
+        print(f"📤 Uploading {filename}...")
+
+        upload_result = client.upload_file(
+            str(gcode_path), filename=filename, auto_start=auto_start and not queue_only
+        )
+
+        if upload_result:
+            print(f"✅ File uploaded successfully: {filename}")
+
+            if auto_start and not queue_only:
+                print("🔥 Starting print automatically...")
+                start_result = client.start_print(filename)
+                if start_result:
+                    print("✅ Print started successfully")
+                else:
+                    print("⚠️  Failed to start print automatically")
+            elif queue_only:
+                print("📋 File queued for later printing")
+            else:
+                print("📁 File ready for manual printing")
+
+            return True
+        else:
+            print("❌ Failed to upload file to printer")
+            return False
+
+    except ImportError:
+        print("❌ PrusaLink client not available")
+        print("   Install with: pip install microweldr[prusalink]")
+        return False
+    except Exception as e:
+        print(f"❌ Printer submission failed: {e}")
+        if verbose:
             import traceback
 
             traceback.print_exc()
