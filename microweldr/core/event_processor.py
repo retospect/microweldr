@@ -226,9 +226,9 @@ class EventDrivenProcessor:
             publish_event(
                 PathEvent(
                     "path_start",
-                    path.id,
+                    path.svg_id,
                     path_data={
-                        "id": path.id,
+                        "id": path.svg_id,
                         "weld_type": path.weld_type,
                         "point_count": len(path.points),
                     },
@@ -248,7 +248,9 @@ class EventDrivenProcessor:
                 if j % 10 == 0:  # Every 10th point
                     publish_event(
                         ProgressEvent(
-                            stage=f"path_{path.id}", progress=j, total=len(path.points)
+                            stage=f"path_{path.svg_id}",
+                            progress=j,
+                            total=len(path.points),
                         )
                     )
 
@@ -256,9 +258,9 @@ class EventDrivenProcessor:
             publish_event(
                 PathEvent(
                     "path_complete",
-                    path.id,
+                    path.svg_id,
                     path_data={
-                        "id": path.id,
+                        "id": path.svg_id,
                         "weld_type": path.weld_type,
                         "points": [
                             {"x": p.x, "y": p.y, "weld_type": p.weld_type}
