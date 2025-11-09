@@ -48,7 +48,7 @@ dot_spacing = 2.0
 initial_dot_spacing = 8.0
 cooling_time_between_passes = 2.0
 
-[light_welds]
+[frangible_welds]
 weld_height = 0.05
 weld_temperature = 180
 weld_time = 0.3
@@ -160,18 +160,18 @@ min_animation_duration = 10.0
             if output_path.exists():
                 output_path.unlink()
 
-    def test_generate_light_welds(self):
-        """Test generating G-code for light welds."""
+    def test_generate_frangible_welds(self):
+        """Test generating G-code for frangible welds."""
         config = self.create_test_config()
         generator = GCodeGenerator(config)
 
         weld_paths = [
             WeldPath(
-                svg_id="light1",
-                weld_type="light",
+                svg_id="frangible1",
+                weld_type="frangible",
                 points=[
-                    WeldPoint(10.0, 10.0, "light"),
-                    WeldPoint(20.0, 10.0, "light"),
+                    WeldPoint(10.0, 10.0, "frangible"),
+                    WeldPoint(20.0, 10.0, "frangible"),
                 ],
             )
         ]
@@ -184,7 +184,7 @@ min_animation_duration = 10.0
 
             content = output_path.read_text()
 
-            # Check for light weld temperature
+            # Check for frangible weld temperature
             assert (
                 "M104 S180" in content or "M109 S180" in content
             )  # Light weld temperature
@@ -235,9 +235,9 @@ min_animation_duration = 10.0
                 points=[WeldPoint(10.0, 10.0, "normal")],
             ),
             WeldPath(
-                svg_id="light1",
-                weld_type="light",
-                points=[WeldPoint(20.0, 10.0, "light")],
+                svg_id="frangible1",
+                weld_type="frangible",
+                points=[WeldPoint(20.0, 10.0, "frangible")],
             ),
             WeldPath(
                 svg_id="stop1",

@@ -19,7 +19,7 @@ class TestFilenameDetection:
         # Test frangible keywords in filename
         frangible_filenames = [
             "frangible_seals.dxf",
-            "light_welds.dxf",
+            "frangible_welds.dxf",
             "break_points.dxf",
             "seal_layer.dxf",
             "weak_connections.dxf",
@@ -66,7 +66,7 @@ class TestFilenameDetection:
 
         frangible_filenames = [
             "frangible_design.svg",
-            "light_channels.svg",
+            "frangible_channels.svg",
             "break_seals.svg",
             "seal_points.svg",
             "weak_joints.svg",

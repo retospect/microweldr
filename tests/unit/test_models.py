@@ -15,10 +15,10 @@ class TestWeldPoint:
         assert point.y == 20.3
         assert point.weld_type == "normal"
 
-    def test_weld_point_with_light_type(self):
-        """Test creating a weld point with light type."""
-        point = WeldPoint(x=0.0, y=0.0, weld_type="light")
-        assert point.weld_type == "light"
+    def test_weld_point_with_frangible_type(self):
+        """Test creating a weld point with frangible type."""
+        point = WeldPoint(x=0.0, y=0.0, weld_type="frangible")
+        assert point.weld_type == "frangible"
 
     def test_weld_point_with_stop_type(self):
         """Test creating a weld point with stop type."""
@@ -34,7 +34,7 @@ class TestWeldPoint:
         """Test weld point equality comparison."""
         point1 = WeldPoint(x=1.0, y=2.0, weld_type="normal")
         point2 = WeldPoint(x=1.0, y=2.0, weld_type="normal")
-        point3 = WeldPoint(x=1.0, y=2.0, weld_type="light")
+        point3 = WeldPoint(x=1.0, y=2.0, weld_type="frangible")
 
         assert point1 == point2
         assert point1 != point3

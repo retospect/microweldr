@@ -54,7 +54,7 @@ class TestSVGParser:
             assert len(weld_paths) == 1
             path = weld_paths[0]
             assert path.svg_id == "circle1"
-            assert path.weld_type == "light"  # Blue color
+            assert path.weld_type == "frangible"  # Blue color
             assert len(path.points) > 8  # Should have multiple points around circle
         finally:
             svg_path.unlink()
@@ -163,8 +163,8 @@ class TestSVGParser:
 
             assert paths_by_id["red1"].weld_type == "stop"
             assert paths_by_id["red2"].weld_type == "stop"
-            assert paths_by_id["blue1"].weld_type == "light"
-            assert paths_by_id["blue2"].weld_type == "light"
+            assert paths_by_id["blue1"].weld_type == "frangible"
+            assert paths_by_id["blue2"].weld_type == "frangible"
             assert paths_by_id["black1"].weld_type == "normal"
         finally:
             svg_path.unlink()

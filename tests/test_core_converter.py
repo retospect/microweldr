@@ -132,7 +132,7 @@ class TestConverterPathGeneration:
         converter = SVGToGCodeConverter(config)
 
         # Test different weld types
-        weld_types = ["normal", "light", "stop", "pipette"]
+        weld_types = ["normal", "frangible", "stop", "pipette"]
 
         for weld_type in weld_types:
             point = WeldPoint(x=10.0, y=10.0, weld_type=weld_type)
@@ -192,13 +192,13 @@ def sample_weld_paths():
     ]
 
     points2 = [
-        WeldPoint(x=30.0, y=30.0, weld_type="light"),
-        WeldPoint(x=40.0, y=30.0, weld_type="light"),
+        WeldPoint(x=30.0, y=30.0, weld_type="frangible"),
+        WeldPoint(x=40.0, y=30.0, weld_type="frangible"),
     ]
 
     return [
         WeldPath(points=points1, weld_type="normal", svg_id="square"),
-        WeldPath(points=points2, weld_type="light", svg_id="line"),
+        WeldPath(points=points2, weld_type="frangible", svg_id="line"),
     ]
 
 

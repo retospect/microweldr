@@ -48,7 +48,7 @@ dot_spacing = 2.0
 initial_dot_spacing = 8.0
 cooling_time_between_passes = 2.0
 
-[light_welds]
+[frangible_welds]
 weld_height = 0.05
 weld_temperature = 180
 weld_time = 0.3

@@ -47,7 +47,7 @@ dot_spacing = 2.0
 initial_dot_spacing = 8.0
 cooling_time_between_passes = 2.0
 
-[light_welds]
+[frangible_welds]
 weld_height = 0.05
 weld_temperature = 180
 weld_time = 0.3
@@ -137,9 +137,9 @@ skip_base_distance = 5
                 points=[WeldPoint(10.0, 10.0, "normal")],
             ),
             WeldPath(
-                svg_id="light1",
-                weld_type="light",
-                points=[WeldPoint(20.0, 10.0, "light")],
+                svg_id="frangible1",
+                weld_type="frangible",
+                points=[WeldPoint(20.0, 10.0, "frangible")],
             ),
             WeldPath(
                 svg_id="stop1",
