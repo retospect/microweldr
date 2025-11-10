@@ -34,15 +34,22 @@ class GCodeGenerator:
         bed_size_x = printer_config.get("bed_size_x", 250.0)
         bed_size_y = printer_config.get("bed_size_y", 220.0)
 
+        # Get actual design bounds and center
+        design_center_x = bounds.get("center_x", 0)
+        design_center_y = bounds.get("center_y", 0)
         frame_width = bounds.get("width", 0)
         frame_height = bounds.get("height", 0)
 
-        # Center the frame on the bed
-        self.offset_x = (bed_size_x - frame_width) / 2
-        self.offset_y = (bed_size_y - frame_height) / 2
+        # Calculate bed center
+        bed_center_x = bed_size_x / 2
+        bed_center_y = bed_size_y / 2
+
+        # Center the design on the bed by moving design center to bed center
+        self.offset_x = bed_center_x - design_center_x
+        self.offset_y = bed_center_y - design_center_y
 
         logger.debug(
-            f"G-code centering: bed={bed_size_x}×{bed_size_y}, frame={frame_width:.1f}×{frame_height:.1f}, offset=({self.offset_x:.1f},{self.offset_y:.1f})"
+            f"G-code centering: bed={bed_size_x}×{bed_size_y}, design_center=({design_center_x:.1f},{design_center_y:.1f}), bed_center=({bed_center_x:.1f},{bed_center_y:.1f}), offset=({self.offset_x:.1f},{self.offset_y:.1f})"
         )
 
         # Open file and write header
@@ -73,6 +80,20 @@ class GCodeGenerator:
             self.file_handle.write("G90 ; Absolute positioning\n")
             self.file_handle.write("G28 ; Home all axes\n")
             self.file_handle.write("M83 ; Relative extrusion\n\n")
+
+            # Set and wait for temperatures
+            temperatures_config = self.config.get("temperatures", {})
+            bed_temp = temperatures_config.get("bed_temperature", 35)
+            nozzle_temp = temperatures_config.get("nozzle_temperature", 160)
+
+            self.file_handle.write("; Set temperatures and wait\n")
+            self.file_handle.write(
+                f"M190 S{bed_temp} ; Set bed temperature to {bed_temp}°C and wait\n"
+            )
+            self.file_handle.write(
+                f"M109 S{nozzle_temp} ; Set nozzle temperature to {nozzle_temp}°C and wait\n"
+            )
+            self.file_handle.write("M117 Temperatures reached - ready to weld\n\n")
 
             logger.debug(f"Initialized G-code file: {self.output_path}")
 

@@ -975,20 +975,19 @@ def cmd_weld(args):
                 # Send G-code using the same method as frame command
                 success = client.send_and_run_gcode(
                     commands=gcode_commands,
-                    job_name=f"weld_{svg_path.stem}",
+                    job_name=f"weld_{input_path.stem}",
                     wait_for_completion=False,
-                    keep_temp_file=not args.queue_only,
+                    keep_temp_file=True,
                 )
 
                 if success:
-                    if args.auto_start or not args.queue_only:
-                        print("✅ G-code uploaded and print started!")
+                    print("✅ G-code uploaded and print started!")
 
-                        # Monitor print if requested
-                        if not args.queue_only:
-                            print("📊 Starting print monitor...")
-                            monitor = PrintMonitor(MonitorMode.STANDARD)
-                            monitor.monitor_until_complete()
+                    # Monitor print if requested
+                    if args.verbose:
+                        print("📊 Starting print monitor...")
+                        monitor = PrintMonitor(MonitorMode.STANDARD)
+                        monitor.monitor_until_complete()
                     else:
                         print("✅ G-code uploaded successfully!")
                 else:
@@ -1114,7 +1113,7 @@ def cmd_full_weld(args):
                 # Send G-code using the same method as other commands
                 success = client.send_and_run_gcode(
                     commands=gcode_commands,
-                    job_name=f"full_weld_{svg_path.stem}",
+                    job_name=f"full_weld_{input_path.stem}",
                     wait_for_completion=False,
                     keep_temp_file=False,
                 )

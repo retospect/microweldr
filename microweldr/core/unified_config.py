@@ -63,15 +63,6 @@ class UnifiedConfig:
             if config_path.exists() and config_path.is_file():
                 return config_path
 
-        # Search for legacy names only in current directory
-        for legacy_name in legacy_names:
-            legacy_path = Path.cwd() / legacy_name
-            if legacy_path.exists() and legacy_path.is_file():
-                logger.warning(
-                    f"Using legacy config file {legacy_name}. Consider renaming to {filename}"
-                )
-                return legacy_path
-
         return None
 
     def _format_config_path_display(self, config_path: Path) -> str:

@@ -115,15 +115,6 @@ class SecretsConfig:
         # Add hierarchy configs in reverse order (root to current)
         config_files.extend(reversed(hierarchy_configs))
 
-        # 4. Legacy support: check for secrets.toml in current directory
-        legacy_config = Path.cwd() / self.legacy_name
-        if legacy_config.exists() and legacy_config not in config_files:
-            config_files.append(legacy_config)
-            print(
-                f"Warning: Using legacy config file {self.legacy_name}. "
-                f"Consider renaming to {self.config_name}"
-            )
-
         return config_files
 
     def get(self, key: str, default: Any = None) -> Any:

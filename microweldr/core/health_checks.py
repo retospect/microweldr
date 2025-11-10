@@ -10,7 +10,6 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from .graceful_degradation import ResilientPrusaLinkClient
-from .security import SecretsValidator
 
 logger = logging.getLogger(__name__)
 
@@ -52,13 +51,8 @@ class HealthChecker:
         # Printer connectivity (if secrets provided)
         if secrets_path and Path(secrets_path).exists():
             self.checks["printer"] = self._check_printer_connectivity(secrets_path)
-            self.checks["secrets"] = self._check_secrets_security(secrets_path)
         else:
             self.checks["printer"] = {
-                "status": "skipped",
-                "message": "No secrets file provided",
-            }
-            self.checks["secrets"] = {
                 "status": "skipped",
                 "message": "No secrets file provided",
             }
@@ -428,42 +422,6 @@ class HealthChecker:
                 "state": "disconnected",
                 "message": f"Connection failed: {e}",
             }
-
-    def _check_secrets_security(self, secrets_path: str) -> Dict[str, Any]:
-        """Check secrets file security."""
-        try:
-            validator = SecretsValidator()
-            warnings, errors = validator.validate_secrets_file(secrets_path)
-
-            if errors:
-                self.errors.extend([f"Secrets security: {error}" for error in errors])
-                return {
-                    "status": "error",
-                    "warnings": warnings,
-                    "errors": errors,
-                    "message": f"{len(errors)} security errors",
-                }
-            elif warnings:
-                self.warnings.extend(
-                    [f"Secrets security: {warning}" for warning in warnings]
-                )
-                return {
-                    "status": "warning",
-                    "warnings": warnings,
-                    "errors": [],
-                    "message": f"{len(warnings)} security warnings",
-                }
-            else:
-                return {
-                    "status": "healthy",
-                    "warnings": [],
-                    "errors": [],
-                    "message": "Secrets file is secure",
-                }
-
-        except Exception as e:
-            self.errors.append(f"Secrets validation failed: {e}")
-            return {"status": "error", "message": f"Validation failed: {e}"}
 
     def _get_system_info(self) -> Dict[str, Any]:
         """Get system information."""

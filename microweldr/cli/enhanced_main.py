@@ -15,7 +15,6 @@ from ..core.logging_config import LogContext, setup_logging
 from ..core.progress import progress_context
 from ..core.resource_management import safe_gcode_generation
 from ..core.safety import SafetyError, validate_weld_operation
-from ..core.security import create_secure_secrets_template, validate_secrets_interactive
 from ..core.svg_parser import SVGParser
 from ..validation.validators import GCodeValidator, SVGValidator
 from .config_setup import config
@@ -148,29 +147,14 @@ def weld(
                 config_obj = Config(config)
                 bar.update(1)
 
-            # Validate secrets if printer submission is requested
+            # Check secrets file exists if printer submission is requested
             if submit_to_printer:
                 if not Path(secrets).exists():
                     click.echo(f"❌ Secrets file not found: {secrets}")
-                    if click.confirm("Create a secure secrets template?"):
-                        create_secure_secrets_template(secrets)
-                        click.echo(
-                            f"✅ Created {secrets}. Please edit it with your printer details."
-                        )
-                        return
-                    else:
-                        raise click.Abort()
-
-                if not validate_secrets_interactive(secrets):
-                    if not force:
-                        click.echo(
-                            "❌ Security validation failed. Use --force to override."
-                        )
-                        raise click.Abort()
-                    else:
-                        click.echo(
-                            "⚠️  Proceeding despite security warnings (--force used)"
-                        )
+                    click.echo(
+                        "Please create a secrets file with your printer configuration."
+                    )
+                    raise click.Abort()
 
             # Parse SVG with progress and caching
             click.echo(f"📄 Processing SVG: {svg_file}")
@@ -414,9 +398,7 @@ def status(ctx, secrets, verbose, quiet, config, log_file):
                     else (
                         "🔥"
                         if state == "Printing"
-                        else "⏸️"
-                        if state == "Paused"
-                        else "❌"
+                        else "⏸️" if state == "Paused" else "❌"
                     )
                 )
                 click.echo(f"\n🖨️  Printer: {emoji} {state}")
@@ -465,12 +447,19 @@ def init_secrets(ctx, output, force, verbose, quiet, config, log_file):
             return
 
     try:
-        create_secure_secrets_template(str(output_path))
-        click.echo(f"✅ Secure secrets template created: {output}")
-        click.echo("🔒 Please review and customize the generated credentials")
-        click.echo(
-            "⚠️  Remember to keep this file secure and never commit it to version control"
-        )
+        # Create a basic secrets template
+        template_content = """# MicroWeldr Secrets Configuration
+# This file contains sensitive information - keep it secure!
+
+[prusalink]
+host = "prusa-core-one.local"
+username = "maker"
+password = "your-password-here"
+default_storage = "local"
+"""
+        output_path.write_text(template_content)
+        click.echo(f"✅ Secrets template created: {output}")
+        click.echo("Please edit the file with your printer configuration.")
 
     except Exception as e:
         click.echo(f"❌ Failed to create secrets file: {e}")

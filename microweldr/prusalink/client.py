@@ -1,5 +1,6 @@
 """PrusaLink API client for G-code submission."""
 
+import logging
 import os
 from pathlib import Path
 import time
@@ -21,6 +22,8 @@ from .exceptions import (
     PrusaLinkUploadError,
     PrusaLinkValidationError,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class PrusaLinkClient:
@@ -190,6 +193,13 @@ class PrusaLinkClient:
         # Upload file
         url = f"{self.base_url}/api/v1/files/{storage}/{remote_filename}"
 
+        # Debug logging for upload details
+        logger.info(f"Upload URL: {url}")
+        logger.info(f"Upload headers: {headers}")
+        logger.info(f"File size: {len(file_content)} bytes")
+        logger.info(f"Storage: {storage}")
+        logger.info(f"Remote filename: {remote_filename}")
+
         try:
             response = requests.put(
                 url,
@@ -199,9 +209,20 @@ class PrusaLinkClient:
                 timeout=self.timeout,
             )
 
+            # Log response details
+            logger.info(f"Response status: {response.status_code}")
+            logger.info(f"Response headers: {dict(response.headers)}")
+            logger.info(f"Response text: {response.text}")
+
             if response.status_code == 401:
                 raise PrusaLinkAuthError(
                     "Authentication failed. Check your credentials."
+                )
+            elif response.status_code == 403:
+                raise PrusaLinkUploadError(
+                    f"Upload forbidden (403): {response.text}. "
+                    f"Check printer permissions, storage availability, or API access rights. "
+                    f"URL: {url}, Storage: {storage}"
                 )
             elif response.status_code == 409:
                 raise PrusaLinkUploadError(
@@ -359,7 +380,7 @@ class PrusaLinkClient:
         # Timeout reached
         return False
 
-    def delete_file(self, filename: str, storage: str = "usb") -> bool:
+    def delete_file(self, filename: str, storage: str = "local") -> bool:
         """Delete a file from printer storage.
 
         Args:
@@ -446,7 +467,7 @@ class PrusaLinkClient:
                 # Upload and auto-start the G-code
                 result = self.upload_gcode(
                     gcode_path=temp_file_path,
-                    storage="usb",
+                    storage="local",  # Use local storage since USB not available
                     remote_filename=temp_filename,
                     auto_start=True,
                     overwrite=True,
@@ -462,11 +483,11 @@ class PrusaLinkClient:
                 if wait_for_completion:
                     if self.wait_for_printer_ready(timeout_seconds=600):
                         if not keep_temp_file:
-                            self.delete_file(temp_filename, storage="usb")
+                            self.delete_file(temp_filename, storage="local")
                     else:
                         # Even if timeout, try to clean up (unless keeping)
                         if not keep_temp_file:
-                            self.delete_file(temp_filename, storage="usb")
+                            self.delete_file(temp_filename, storage="local")
 
                         # Check if printer is in error state
                         self._check_printer_error_state()
@@ -483,7 +504,7 @@ class PrusaLinkClient:
                     os.unlink(temp_file_path)
                 # Try to clean up remote file too (unless keeping)
                 if not keep_temp_file:
-                    self.delete_file(temp_filename, storage="usb")
+                    self.delete_file(temp_filename, storage="local")
                 raise e
 
         except Exception as e:
