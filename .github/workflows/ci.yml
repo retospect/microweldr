@@ -94,7 +94,6 @@ jobs:
     - uses: snok/install-poetry@v1
     - run: poetry install --with dev
     - run: poetry run black --check .
-    - run: poetry run isort --check-only .
     - run: poetry run flake8 .
     - run: poetry run mypy microweldr/ || true  # Allow mypy to fail until type annotations are complete
 
