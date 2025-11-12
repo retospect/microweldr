@@ -25,7 +25,8 @@ max_safe_nozzle_temp = 250  # °C - maximum safe temperature to prevent damage
 temp_tolerance = 10  # °C - allowed temperature deviation from target
 
 [movement]
-move_height = 5.0  # mm - height for safe movement
+move_height = 5.0  # mm - height for safe movement between paths
+weld_move_offset = 0.5  # mm - offset above weld height for intra-path movement (faster welding)
 frame_height = 10.0  # mm - height for frame drawing (clearance check)
 travel_speed = 3000  # mm/min - travel speed for movements
 z_speed = 600  # mm/min - optimized Z speed (near maximum safe limit for Core One)

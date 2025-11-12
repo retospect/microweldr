@@ -26,6 +26,11 @@ class GCodeGenerator:
         movement_config = config.get("movement", {})
         self.safe_height = movement_config.get("move_height", 5.0)
         self.weld_height = 0.02  # Fixed weld height for plastic welding
+
+        # Calculate weld_move_height: weld_height + offset (default 0.5mm)
+        weld_move_offset = movement_config.get("weld_move_offset", 0.5)
+        self.weld_move_height = self.weld_height + weld_move_offset
+
         self.travel_speed = movement_config.get("travel_speed", 3000)
         self.weld_time = 100  # milliseconds
 
@@ -70,6 +75,10 @@ class GCodeGenerator:
             )
             self.file_handle.write(
                 f"; Centered at offset: ({self.offset_x:.1f}, {self.offset_y:.1f})\n"
+            )
+            self.file_handle.write(f"; Weld height: {self.weld_height:.3f}mm\n")
+            self.file_handle.write(
+                f"; Weld move height: {self.weld_move_height:.3f}mm\n"
             )
             self.file_handle.write("; \n")
             self.file_handle.write("; Prusa Core One Plastic Welding G-code\n")
@@ -144,9 +153,9 @@ class GCodeGenerator:
                 f"G1 X{centered_x:.3f} Y{centered_y:.3f} F{self.travel_speed} ; Move to start of path\n"
             )
         else:
-            # Move to safe height, then to next position
+            # Move to weld move height (faster), then to next position
             self.file_handle.write(
-                f"G1 Z{self.safe_height:.1f} F300 ; Raise to safe height\n"
+                f"G1 Z{self.weld_move_height:.3f} F300 ; Raise to weld move height\n"
             )
             self.file_handle.write(
                 f"G1 X{centered_x:.3f} Y{centered_y:.3f} F{self.travel_speed} ; Move to next point\n"

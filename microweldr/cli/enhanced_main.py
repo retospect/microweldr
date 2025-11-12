@@ -44,7 +44,7 @@ def printer_options(func):
     """Printer-related CLI options decorator."""
     func = click.option(
         "--secrets",
-        default="secrets.toml",
+        default="microweldr_secrets.toml",
         help="Secrets configuration file",
         type=click.Path(),
     )(func)
@@ -346,7 +346,7 @@ def validate(ctx, svg_file, verbose, quiet, config, log_file):
 
 
 @cli.command()
-@click.option("--secrets", default="secrets.toml", help="Secrets file path")
+@click.option("--secrets", default="microweldr_secrets.toml", help="Secrets file path")
 @common_options
 @click.pass_context
 def status(ctx, secrets, verbose, quiet, config, log_file):
@@ -423,7 +423,9 @@ def status(ctx, secrets, verbose, quiet, config, log_file):
 
 
 @cli.command()
-@click.option("--output", "-o", default="secrets.toml", help="Output secrets file path")
+@click.option(
+    "--output", "-o", default="microweldr_secrets.toml", help="Output secrets file path"
+)
 @click.option("--force", is_flag=True, help="Overwrite existing file")
 @common_options
 @click.pass_context
@@ -538,7 +540,7 @@ def _submit_to_printer(gcode_path, secrets_path, auto_start, storage):
     "--secrets-config",
     "-s",
     type=click.Path(exists=True, path_type=Path),
-    default="secrets.toml",
+    default="microweldr_secrets.toml",
     help="Path to secrets configuration file",
 )
 @click.option(
@@ -732,7 +734,7 @@ def temp_off(
     "--secrets-config",
     "-s",
     type=click.Path(exists=True, path_type=Path),
-    default="secrets.toml",
+    default="microweldr_secrets.toml",
     help="Path to secrets configuration file",
 )
 @click.option(

@@ -74,6 +74,7 @@ When colors/layers don't specify weld type, filenames are checked:
 ### Advanced Features
 - **Configurable Parameters**: TOML-based configuration for temperatures, heights, and timing
 - **Multi-Pass Welding**: Configurable initial and final dot spacing
+- **Optimized Z Movement**: Separate weld move height for faster intra-path welding
 - **Chamber Temperature Control**: Prusa Core One chamber heating
 - **Animation Output**: Generates animated SVG showing the welding sequence
 - **Proper G-code Structure**: Includes heating, cooling, and safety procedures
@@ -136,6 +137,13 @@ bed_x = 250
 bed_y = 220
 bed_z = 270
 chamber_temperature = 45
+
+[movement]
+move_height = 5.0  # mm - height for safe movement between paths
+weld_move_offset = 0.5  # mm - offset above weld height for intra-path movement (faster welding)
+frame_height = 10.0  # mm - height for frame drawing (clearance check)
+travel_speed = 3000  # mm/min - travel speed for movements
+z_speed = 600  # mm/min - optimized Z speed (near maximum safe limit for Core One)
 
 [normal_welds]
 weld_height = 0.020          # mm - compression depth
