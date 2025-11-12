@@ -2383,4 +2383,4 @@ validation = ["gcodeparser", "lxml"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10"
-content-hash = "adddf9326b9d498b0699b508ab65a4446665de10bc182c6b1005d6f36bda43e0"
+content-hash = "a4ac83fe9e583ef3d2538d85b554f587066c4ee194e7836b708429e16782dae8"

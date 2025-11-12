@@ -474,9 +474,9 @@ EOF
                     try:
                         import ezdxf
                     except ImportError:
-                        results[
-                            f"{input_ext}→{output_type}"
-                        ] = "SKIPPED (ezdxf not available)"
+                        results[f"{input_ext}→{output_type}"] = (
+                            "SKIPPED (ezdxf not available)"
+                        )
                         continue
 
                 # Create temp input file

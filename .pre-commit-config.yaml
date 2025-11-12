@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
@@ -11,7 +11,7 @@ repos:
       - id: debug-statements
 
   - repo: https://github.com/psf/black
-    rev: 24.4.2
+    rev: 25.11.0
     hooks:
       - id: black
         language_version: python3
@@ -32,7 +32,7 @@ repos:
 #        additional_dependencies: [types-requests, types-toml]
 
   - repo: https://github.com/PyCQA/bandit
-    rev: 1.7.8
+    rev: 1.8.6
     hooks:
       - id: bandit
         args: ["--skip", "B105,B301,B403,B404,B108,B405,B314,B605,B110,B410,B320"]

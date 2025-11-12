@@ -4,6 +4,7 @@ Setup script for MicroWeldr PyPI publishing.
 This script helps configure the initial PyPI uploads and trusted publishing.
 """
 
+import shlex
 import subprocess
 import sys
 from pathlib import Path
@@ -12,7 +13,9 @@ from pathlib import Path
 def run_command(cmd: str, check: bool = True) -> subprocess.CompletedProcess:
     """Run a shell command and return the result."""
     print(f"🔧 Running: {cmd}")
-    result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+    result = subprocess.run(
+        shlex.split(cmd), capture_output=True, text=True
+    )  # nosec B603
 
     if check and result.returncode != 0:
         print(f"❌ Command failed: {cmd}")
@@ -65,7 +68,9 @@ def upload_to_testpypi():
     if result.returncode == 0:
         print("✅ Successfully uploaded to TestPyPI!")
         print("🔗 Check: https://test.pypi.org/project/microweldr/")
-        print("📦 Test install: pip install -i https://test.pypi.org/simple/ microweldr")
+        print(
+            "📦 Test install: pip install -i https://test.pypi.org/simple/ microweldr"
+        )
         return True
     else:
         print("❌ TestPyPI upload failed")
