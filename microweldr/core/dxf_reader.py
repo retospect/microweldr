@@ -125,14 +125,18 @@ class DXFReader(FileReaderPublisher):
             try:
                 parsed_entity = self._parse_entity(entity)
                 if parsed_entity:
-                    entities.append(parsed_entity)
+                    # Handle both single entities and lists (from polylines)
+                    if isinstance(parsed_entity, list):
+                        entities.extend(parsed_entity)
+                    else:
+                        entities.append(parsed_entity)
             except Exception as e:
                 logger.warning(f"Failed to parse entity {entity.dxftype()}: {e}")
                 continue
 
         return entities
 
-    def _parse_entity(self, entity) -> Optional[CADEntity]:
+    def _parse_entity(self, entity):
         """Parse a single DXF entity."""
         entity_type = entity.dxftype()
         layer = entity.dxf.layer or "0"
@@ -186,33 +190,162 @@ class DXFReader(FileReaderPublisher):
             radius=radius,
         )
 
-    def _parse_polyline(self, entity, layer: str) -> Optional[LineEntity]:
-        """Parse POLYLINE/LWPOLYLINE entities as connected line segments."""
-        # For now, convert polylines to individual line segments
-        # This could be enhanced to create proper polyline entities
-        points = []
+    def _parse_polyline(self, entity, layer: str) -> List[LineEntity]:
+        """Parse POLYLINE/LWPOLYLINE entities as connected line segments with proper arc support."""
+        import math
 
-        if hasattr(entity, "vertices"):
-            # POLYLINE
-            for vertex in entity.vertices:
+        line_entities = []
+        points = []
+        bulges = []
+
+        if entity.dxftype() == DXFEntities.POLYLINE:
+            # POLYLINE - extract points and bulges
+            for vertex in entity.vertices():
                 if hasattr(vertex.dxf, "location"):
                     loc = vertex.dxf.location
                     points.append(Point(loc.x, loc.y))
+                    bulges.append(getattr(vertex.dxf, "bulge", 0.0))
         else:
-            # LWPOLYLINE
+            # LWPOLYLINE - extract points and bulges
             for point in entity.lwpoints:
                 points.append(Point(point[0], point[1]))
+                # LWPOLYLINE format: [x, y, start_width, end_width, bulge]
+                bulges.append(point[4] if len(point) > 4 else 0.0)
 
-        if len(points) >= 2:
-            # For now, just return the first line segment
-            # TODO: Handle polylines as multiple connected segments
-            return LineEntity(
-                layer=layer,
-                start=points[0],
-                end=points[1],
-            )
+        if len(points) < 2:
+            return []
 
-        return None
+        # Check if polyline is closed
+        is_closed = hasattr(entity.dxf, "flags") and (entity.dxf.flags & 1)
+
+        # Process each segment
+        num_segments = len(points) if is_closed else len(points) - 1
+
+        for i in range(num_segments):
+            start_point = points[i]
+            end_point = points[
+                (i + 1) % len(points)
+            ]  # Wrap around for closed polylines
+            bulge = bulges[i]
+
+            if abs(bulge) < 1e-10:  # Straight line segment
+                line_entities.append(
+                    LineEntity(
+                        layer=layer,
+                        start=start_point,
+                        end=end_point,
+                    )
+                )
+            else:  # Arc segment - convert to multiple line segments
+                arc_segments = self._bulge_to_line_segments(
+                    start_point, end_point, bulge
+                )
+                line_entities.extend(
+                    [
+                        LineEntity(layer=layer, start=seg[0], end=seg[1])
+                        for seg in arc_segments
+                    ]
+                )
+
+        return line_entities
+
+    def _bulge_to_line_segments(
+        self, start: Point, end: Point, bulge: float, segments: int = 16
+    ) -> List[tuple]:
+        """Convert a bulge arc to multiple line segments.
+
+        DXF Bulge specification (Autodesk DXF Reference):
+        - Bulge = tan(included_angle / 4)
+        - Positive bulge: Counter-clockwise arc
+        - Negative bulge: Clockwise arc
+        - Bulge of 1 = semicircle (180°)
+        """
+        import math
+
+        # Calculate chord length
+        chord_length = start.distance_to(end)
+        if chord_length < 1e-10:  # Degenerate case
+            return [(start, end)]
+
+        # Calculate the included angle from bulge
+        included_angle = 4 * math.atan(bulge)
+
+        # If angle is too small, treat as straight line
+        if abs(included_angle) < 1e-10:
+            return [(start, end)]
+
+        # Calculate radius using: R = chord_length / (2 * sin(|included_angle|/2))
+        # Use absolute value to ensure positive radius
+        half_angle = abs(included_angle) / 2
+        if abs(math.sin(half_angle)) < 1e-10:
+            return [(start, end)]
+
+        radius = chord_length / (2 * math.sin(half_angle))
+
+        # Calculate chord midpoint
+        chord_mid_x = (start.x + end.x) / 2
+        chord_mid_y = (start.y + end.y) / 2
+
+        # Calculate the distance from chord midpoint to arc center
+        # This is the "height" of the arc segment
+        h = radius * math.cos(half_angle)
+
+        # Unit vector along chord (start to end)
+        chord_dx = (end.x - start.x) / chord_length
+        chord_dy = (end.y - start.y) / chord_length
+
+        # Unit vector perpendicular to chord (90° counter-clockwise)
+        perp_dx = -chord_dy
+        perp_dy = chord_dx
+
+        # For positive bulge (counter-clockwise), center is on the left side of chord
+        # For negative bulge (clockwise), center is on the right side of chord
+        if bulge < 0:
+            perp_dx = -perp_dx
+            perp_dy = -perp_dy
+
+        # Calculate arc center
+        center_x = chord_mid_x + h * perp_dx
+        center_y = chord_mid_y + h * perp_dy
+
+        # Calculate start and end angles
+        start_angle = math.atan2(start.y - center_y, start.x - center_x)
+        end_angle = math.atan2(end.y - center_y, end.x - center_x)
+
+        # Calculate sweep angle - use the included_angle directly
+        # The DXF bulge already encodes the correct direction and magnitude
+        sweep_angle = included_angle
+
+        # Adjust the end_angle to match the intended sweep
+        end_angle = start_angle + sweep_angle
+
+        # Generate line segments along the arc
+        line_segments = []
+        for i in range(segments):
+            t1 = i / segments
+            t2 = (i + 1) / segments
+
+            if i == 0:
+                # First segment: start with exact start point
+                p1 = start
+            else:
+                angle1 = start_angle + t1 * sweep_angle
+                x1 = center_x + radius * math.cos(angle1)
+                y1 = center_y + radius * math.sin(angle1)
+                p1 = Point(x1, y1)
+
+            if i == segments - 1:
+                # Last segment: end with exact end point
+                p2 = end
+            else:
+                angle2 = start_angle + t2 * sweep_angle
+                x2 = center_x + radius * math.cos(angle2)
+                y2 = center_y + radius * math.sin(angle2)
+                p2 = Point(x2, y2)
+
+            line_segments.append((p1, p2))
+
+        return line_segments
 
     def _entities_to_weld_paths(self, entities: List[CADEntity]) -> List[WeldPath]:
         """Convert CAD entities to weld paths."""

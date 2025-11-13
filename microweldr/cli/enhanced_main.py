@@ -456,7 +456,7 @@ def init_secrets(ctx, output, force, verbose, quiet, config, log_file):
 [prusalink]
 host = "prusa-core-one.local"
 username = "maker"
-password = "your-password-here"
+password = "REPLACE_WITH_YOUR_PASSWORD"
 default_storage = "local"
 """
         output_path.write_text(template_content)
