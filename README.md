@@ -140,7 +140,8 @@ chamber_temperature = 45
 
 [movement]
 move_height = 5.0  # mm - height for safe movement between paths
-weld_move_offset = 0.5  # mm - offset above weld height for intra-path movement (faster welding)
+weld_height = 0.02  # mm - height for actual welding (touching plastic)
+weld_move_height = 2.0  # mm - height for moving between weld points (faster than safe height)
 frame_height = 10.0  # mm - height for frame drawing (clearance check)
 travel_speed = 3000  # mm/min - travel speed for movements
 z_speed = 600  # mm/min - optimized Z speed (near maximum safe limit for Core One)

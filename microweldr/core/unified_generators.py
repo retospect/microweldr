@@ -29,7 +29,7 @@ class GCodeGenerator:
             "weld_height", 0.02
         )  # Height for actual welding
         self.weld_move_height = movement_config.get(
-            "weld_move_height", 0.52
+            "weld_move_height", 2.0
         )  # Height for moving between welds
 
         self.travel_speed = movement_config.get("travel_speed", 3000)

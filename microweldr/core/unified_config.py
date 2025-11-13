@@ -187,7 +187,7 @@ class UnifiedConfig:
                 "travel_speed": 3000,
                 "z_speed": 600,
                 "weld_height": 0.02,
-                "weld_move_height": 0.52,
+                "weld_move_height": 2.0,
             },
             "normal_welds": {
                 "weld_height": 0.020,

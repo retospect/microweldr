@@ -19,6 +19,8 @@ cooldown_temperature = 50
 
 [movement]
 move_height = 5.0
+weld_height = 0.02
+weld_move_height = 2.0
 travel_speed = 3000
 z_speed = 600
 
