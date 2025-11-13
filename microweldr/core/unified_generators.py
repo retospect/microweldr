@@ -124,6 +124,9 @@ class GCodeGenerator:
         # Check if we're starting a new path
         if path_id != self.current_path_id:
             if self.current_path_id:  # Complete previous path
+                self.file_handle.write(
+                    f"G1 Z{self.safe_height:.1f} F300 ; Raise to safe height (end of path)\n"
+                )
                 self.file_handle.write(f"; Completed path: {self.current_path_id}\n\n")
 
             # Start new path
