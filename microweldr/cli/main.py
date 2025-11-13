@@ -726,8 +726,8 @@ def cmd_temp_nozzle(args) -> bool:
 
 
 def cmd_frame(args):
-    """Draw frame around SVG design."""
-    print("🖼️ Drawing Frame")
+    """Quick frame check - trace design bounds at travel height."""
+    print("🖼️ Quick Frame Check")
     print("=" * 40)
 
     try:
@@ -735,81 +735,86 @@ def cmd_frame(args):
         config = Config(args.config)
         print(f"✓ Configuration loaded from {args.config}")
 
-        # Parse SVG
-        svg_path = Path(args.svg_file)
-        if not svg_path.exists():
-            print(f"❌ SVG file not found: {args.svg_file}")
+        # Parse file (SVG or DXF)
+        file_path = Path(args.svg_file)
+        if not file_path.exists():
+            print(f"❌ File not found: {args.svg_file}")
             return False
 
-        print(f"✓ SVG file found: {args.svg_file}")
+        print(f"✓ File found: {args.svg_file}")
 
-        # Validate SVG content
-        svg_validator = SVGValidator()
-        svg_result = svg_validator.validate_file(svg_path)
+        # Handle both SVG and DXF files directly
+        if file_path.suffix.lower() == ".dxf":
+            from microweldr.core.dxf_reader import DXFReader
 
-        if not svg_result.is_valid:
-            raise SVGParseError(f"SVG validation failed: {svg_result.message}")
+            reader = DXFReader()
+            weld_paths = reader.parse_file(file_path)
+        else:
+            # Use SVG converter for SVG files
+            converter = SVGToGCodeConverter(config)
+            weld_paths = converter.parse_svg(file_path)
 
-        if svg_result.warnings:
-            print("⚠️ SVG validation warnings:")
-            for warning in svg_result.warnings:
-                print(f"  • {warning}")
+        if not weld_paths:
+            print("❌ No weld paths found in file")
+            return False
 
-        # Create converter and parse SVG
-        converter = SVGToGCodeConverter(config)
-        converter.parse_svg(svg_path)
-
-        # Get SVG bounds for frame
-        bounds = converter.get_bounds()
+        # Calculate bounds from weld paths
+        if not weld_paths:
+            bounds = (0.0, 0.0, 0.0, 0.0)
+        else:
+            all_bounds = [path.get_bounds() for path in weld_paths]
+            min_x = min(bounds[0] for bounds in all_bounds)
+            min_y = min(bounds[1] for bounds in all_bounds)
+            max_x = max(bounds[2] for bounds in all_bounds)
+            max_y = max(bounds[3] for bounds in all_bounds)
+            bounds = (min_x, min_y, max_x, max_y)
 
         if not bounds or bounds == (0.0, 0.0, 0.0, 0.0):
-            print("❌ Could not determine SVG bounds for frame")
+            print("❌ Could not determine file bounds for frame")
             return False
 
         min_x, min_y, max_x, max_y = bounds
         width = max_x - min_x
         height = max_y - min_y
-        print(f"✓ SVG bounds: {width:.1f}x{height:.1f}mm")
+        print(f"✓ Design bounds: {width:.1f}x{height:.1f}mm")
 
-        # Generate frame G-code
-        print("🔧 Generating frame G-code...")
+        # Generate super quick frame G-code
+        print("🚀 Generating quick frame G-code...")
 
-        # Get frame height from config
-        frame_height = config.get("movement", "frame_height", 10.0)
+        # Use travel height (safe height) - no temperature changes, no calibration
+        travel_height = config.get("movement", "move_height", 5.0)
         travel_speed = config.get("movement", "travel_speed", 3000)
-        z_speed = config.get("movement", "z_speed", 600)
 
-        # Create a simple frame path
-        margin = 5.0  # 5mm margin around design
-        print(f"📏 Frame height: {frame_height}mm (clearance check)")
+        print(f"📏 Travel height: {travel_height}mm (quick check)")
 
+        # Simple frame commands - just trace the rectangle at travel height
         frame_commands = [
-            "G90  ; Absolute positioning",
-            f"G1 X{min_x - margin} Y{min_y - margin} F{travel_speed}  ; Move to start",
-            f"G1 Z{frame_height} F{z_speed}  ; Lower to frame height",
-            f"G1 X{max_x + margin} Y{min_y - margin} F{travel_speed}  ; Bottom edge",
-            f"G1 X{max_x + margin} Y{max_y + margin} F{travel_speed}  ; Right edge",
-            f"G1 X{min_x - margin} Y{max_y + margin} F{travel_speed}  ; Top edge",
-            f"G1 X{min_x - margin} Y{min_y - margin} F{travel_speed}  ; Left edge",
-            f"G1 Z{config.get('movement', 'move_height', 5.0)} F{z_speed}  ; Lift to safe height",
-            "M117 Frame complete",
+            "G90 ; Absolute positioning",
+            f"G1 Z{travel_height} F{travel_speed} ; Move to travel height",
+            f"G1 X{min_x:.3f} Y{min_y:.3f} F{travel_speed} ; Move to start corner",
+            f"G1 X{max_x:.3f} Y{min_y:.3f} F{travel_speed} ; Bottom edge",
+            f"G1 X{max_x:.3f} Y{max_y:.3f} F{travel_speed} ; Right edge",
+            f"G1 X{min_x:.3f} Y{max_y:.3f} F{travel_speed} ; Top edge",
+            f"G1 X{min_x:.3f} Y{min_y:.3f} F{travel_speed} ; Left edge (close)",
+            "M117 Frame check complete",
         ]
 
         if args.submit:
-            print("📤 Submitting frame to printer...")
+            print("📤 Submitting quick frame to printer...")
             client = PrusaLinkClient()
             success = client.send_and_run_gcode(
                 commands=frame_commands,
-                job_name=f"frame_{svg_path.stem}",
+                job_name=f"frame_{file_path.stem}",
                 wait_for_completion=False,
             )
             if success:
-                print("✅ Frame job submitted successfully!")
+                print("✅ Quick frame job submitted successfully!")
+                print("   Nozzle will remain at final position for inspection")
             else:
                 print("❌ Failed to submit frame job")
                 return False
         else:
-            print("📄 Frame G-code generated (use --submit to send to printer)")
+            print("📄 Quick frame G-code generated (use --submit to send to printer)")
             if args.verbose:
                 print("\nGenerated G-code:")
                 for cmd in frame_commands:

@@ -25,11 +25,12 @@ class GCodeGenerator:
         # G-code settings from config
         movement_config = config.get("movement", {})
         self.safe_height = movement_config.get("move_height", 5.0)
-        self.weld_height = 0.02  # Fixed weld height for plastic welding
-
-        # Calculate weld_move_height: weld_height + offset (default 0.5mm)
-        weld_move_offset = movement_config.get("weld_move_offset", 0.5)
-        self.weld_move_height = self.weld_height + weld_move_offset
+        self.weld_height = movement_config.get(
+            "weld_height", 0.02
+        )  # Height for actual welding
+        self.weld_move_height = movement_config.get(
+            "weld_move_height", 0.52
+        )  # Height for moving between welds
 
         self.travel_speed = movement_config.get("travel_speed", 3000)
         self.weld_time = 100  # milliseconds
