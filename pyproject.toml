@@ -3,7 +3,7 @@ name = "microweldr"
 version = "5.5.4"
 description = "Convert SVG and DXF files to Prusa Core One G-code for plastic welding"
 authors = [
-    {name = "Reto Stamm", email = "reto@retospect.ch"}
+    {name = "Reto Stamm", email = "reto@retostamm.com"}
 ]
 readme = "README.md"
 license = "MIT"
@@ -39,6 +39,10 @@ Documentation = "https://github.com/retospect/microweldr"
 microweldr = "microweldr.__main__:main"
 
 [tool.poetry]
+name = "microweldr"
+version = "5.5.4"
+description = "Convert SVG and DXF files to Prusa Core One G-code for plastic welding"
+authors = ["Reto Stamm <reto@retostamm.com>"]
 packages = [{include = "microweldr"}]
 
 
