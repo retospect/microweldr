@@ -4,6 +4,8 @@ import logging
 from pathlib import Path
 from typing import Iterator, Dict, Any
 
+from ..core.unified_config import UnifiedConfig
+
 logger = logging.getLogger(__name__)
 
 
@@ -18,9 +20,20 @@ class DXFPointIterator:
     # Class constants
     SUPPORTED_EXTENSIONS = [".dxf"]
 
-    def __init__(self, dot_spacing: float = 2.0):
-        """Initialize DXF point iterator."""
-        self.dot_spacing = dot_spacing
+    def __init__(self, dot_spacing: float = None):
+        """Initialize DXF point iterator.
+
+        Args:
+            dot_spacing: Spacing between points in mm. If None, uses unified config.
+        """
+        if dot_spacing is None:
+            config = UnifiedConfig()
+            main_config = config.get_main_config()
+            self.dot_spacing = main_config.get("normal_welds", {}).get(
+                "dot_spacing", 1.0
+            )
+        else:
+            self.dot_spacing = dot_spacing
 
     def iterate_points(self, file_path: Path) -> Iterator[Dict[str, Any]]:
         """Iterate through points in a DXF file.

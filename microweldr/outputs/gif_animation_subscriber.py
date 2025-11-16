@@ -252,9 +252,7 @@ class GIFAnimationSubscriber(EventSubscriber):
                 color = self.colors.get(point["weld_type"], self.colors["normal"])
 
                 # Draw small completed point
-                draw.ellipse(
-                    [x - 2, y - 2, x + 2, y + 2], fill=color, outline="black", width=1
-                )
+                draw.ellipse([x - 2, y - 2, x + 2, y + 2], fill=color)
 
             # Draw current point (larger and highlighted)
             if points_to_show:
@@ -341,7 +339,6 @@ class GIFAnimationSubscriber(EventSubscriber):
                     legend_y + y_offset + 10,
                 ],
                 fill=color,
-                outline="black",
             )
 
             # Draw label

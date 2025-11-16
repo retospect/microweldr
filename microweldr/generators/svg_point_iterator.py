@@ -4,6 +4,8 @@ import logging
 from pathlib import Path
 from typing import Iterator, Dict, Any
 
+from ..core.unified_config import UnifiedConfig
+
 logger = logging.getLogger(__name__)
 
 
@@ -11,22 +13,28 @@ class SVGPointIterator:
     """Iterator for extracting points from SVG files.
 
     This class provides a clean interface for iterating through points in SVG files
-    without loading all points into memory at once. It supports customizable dot
-    spacing for point interpolation.
+    without loading all points into memory at once. It handles color-based weld type
+    detection and path interpolation.
     """
 
     # Class constants
     SUPPORTED_EXTENSIONS = [".svg"]
-    DEFAULT_DOT_SPACING = 2.0
 
     def __init__(self, dot_spacing: float = None):
         """Initialize SVG point iterator.
 
         Args:
             dot_spacing: Spacing between interpolated points in mm.
-                        If None, uses DEFAULT_DOT_SPACING.
+                        If None, uses unified config.
         """
-        self.dot_spacing = dot_spacing or self.DEFAULT_DOT_SPACING
+        if dot_spacing is None:
+            config = UnifiedConfig()
+            main_config = config.get_main_config()
+            self.dot_spacing = main_config.get("normal_welds", {}).get(
+                "dot_spacing", 1.0
+            )
+        else:
+            self.dot_spacing = dot_spacing
 
     def iterate_points(self, file_path: Path) -> Iterator[Dict[str, Any]]:
         """Iterate through points in an SVG file.
