@@ -193,13 +193,13 @@ class UnifiedConfig:
                 "weld_height": 0.1,
                 "weld_temperature": 160,
                 "weld_time": 0.1,
-                "dot_spacing": 0.5,
+                "dot_spacing": 1.0,
             },
             "frangible_welds": {
                 "weld_height": 0.6,
                 "weld_temperature": 160,
                 "weld_time": 0.3,
-                "dot_spacing": 0.5,
+                "dot_spacing": 1.0,
             },
             "output": {
                 "gcode_extension": ".gcode",
