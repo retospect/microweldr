@@ -6,17 +6,17 @@ This directory contains example files demonstrating MicroWeldr's capabilities wi
 
 ### SVG Example
 - **Source**: `flask_simple.svg` (1,053 bytes)
-- **Animation**: `flask_svg_animation.gif` (449KB, 154 frames)
-- **Points**: 154 weld points
-- **Duration**: ~15.4 seconds
-- **Features**: Bézier curves with proper curved bottom, scale-aware point sizing
+- **Animation**: `flask_svg_animation.gif` (1,435KB, 628 frames)
+- **Points**: 628 weld points
+- **Duration**: ~62.8 seconds
+- **Features**: Bézier curves, unified 0.5mm spacing, scale-aware point sizing
 
 ### DXF Example
 - **Source**: `flask.dxf` (2,546 bytes)
-- **Animation**: `flask_dxf_animation.gif` (305KB, 121 frames)
-- **Points**: 121 weld points
-- **Duration**: ~12.1 seconds
-- **Features**: Distance-based spacing, straight line interpolation, scale-aware points
+- **Animation**: `flask_dxf_animation.gif` (1,278KB, 467 frames)
+- **Points**: 467 weld points
+- **Duration**: ~46.7 seconds
+- **Features**: Unified 0.5mm spacing, straight line interpolation, scale-aware points
 
 ## Animation Features
 
@@ -55,7 +55,7 @@ microweldr -weld flask_simple.svg -g_out flask.gcode -animation flask_animation.
 | **Precision** | Artistic/design focused | Engineering precision |
 | **Curves** | Bézier curves (smooth) | Tessellated line segments |
 | **File Size** | Smaller source (1KB) | Larger source (2.5KB) |
-| **Points** | 154 (interpolated curves) | 121 (distance-based + line interpolation) |
+| **Points** | 628 (0.5mm spacing) | 467 (0.5mm spacing) |
 | **Use Case** | Design visualization | Technical drawings |
 
 ## System Improvements
@@ -64,8 +64,18 @@ These examples demonstrate the simplified MicroWeldr system:
 
 - ✅ **No multi-pass welding logic** - direct point-to-point welding
 - ✅ **No break/pause functionality** - continuous welding sequence
-- ✅ **Simplified point generation** - no complex spacing calculations
+- ✅ **Unified configuration** - both SVG and DXF use same 0.5mm dot_spacing
 - ✅ **Complete visualization** - every weld point shown in animation
+- ✅ **Scale-aware point sizing** - based on nozzle diameter from config
 - ✅ **Web-ready output** - animated GIFs work in all browsers
+
+## Configuration Consistency
+
+Both examples now use the unified configuration system:
+
+- **Dot Spacing**: 0.5mm for both SVG and DXF (from `normal_welds.dot_spacing`)
+- **Point Sizing**: Based on 1.1mm nozzle outer diameter (from `nozzle.outer_diameter`)
+- **Consistent Behavior**: Same spacing logic across all file formats
+- **High Detail**: 4x more points than previous 2.0mm spacing
 
 Perfect for understanding weld sequences and verifying welding patterns before sending to the printer!
