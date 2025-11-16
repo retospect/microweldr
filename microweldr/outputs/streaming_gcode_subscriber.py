@@ -80,6 +80,17 @@ class StreamingGCodeSubscriber(EventSubscriber):
             )
             logger.debug(f"StreamingGCode: Started path {self.current_path_id}")
 
+        elif action == "point_added":
+            # Handle point added to path
+            point_data = event.data.get("point", {})
+            x = point_data.get("x", 0)
+            y = point_data.get("y", 0)
+            point_weld_type = point_data.get("weld_type", self.current_weld_type)
+
+            # Write G-code movement command immediately
+            self._write_point_gcode(x, y, point_weld_type)
+            self.total_points_processed += 1
+
         elif action == "path_complete":
             # Write path completion comment
             if self.file_handle:
