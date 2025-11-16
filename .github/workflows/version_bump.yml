@@ -39,8 +39,8 @@ jobs:
 
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install poetry toml
+        pip install poetry toml bump-my-version
+        poetry install
 
     - name: Configure git
       run: |
@@ -51,26 +51,20 @@ jobs:
       id: version
       run: |
         # Get current version
-        CURRENT_VERSION=$(python -c "import toml; print(toml.load('pyproject.toml')['tool']['poetry']['version'])")
+        CURRENT_VERSION=$(bump-my-version show current_version)
         echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
 
-        # Bump version using poetry
-        poetry version ${{ github.event.inputs.version_type }}
+        # Bump version using bump-my-version (updates all files consistently)
+        bump-my-version bump ${{ github.event.inputs.version_type }}
 
         # Get new version
-        NEW_VERSION=$(python -c "import toml; print(toml.load('pyproject.toml')['tool']['poetry']['version'])")
+        NEW_VERSION=$(bump-my-version show current_version)
         echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
-
-        # Update __init__.py version
-        sed -i "s/__version__ = \".*\"/__version__ = \"$NEW_VERSION\"/" microweldr/__init__.py
 
     - name: Commit version bump
       run: |
-        git add pyproject.toml microweldr/__init__.py
-        git commit -m "🔖 Bump version: ${{ steps.version.outputs.current_version }} → ${{ steps.version.outputs.new_version }}"
-        git tag -a "v${{ steps.version.outputs.new_version }}" -m "Version ${{ steps.version.outputs.new_version }}"
-        git push origin master
-        git push origin "v${{ steps.version.outputs.new_version }}"
+        # bump-my-version already creates commit and tag, just push them
+        git push origin master --follow-tags
 
     - name: Create GitHub Release
       if: github.event.inputs.create_release == 'true'

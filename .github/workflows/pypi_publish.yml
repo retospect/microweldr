@@ -132,7 +132,7 @@ jobs:
     - name: Extract version from pyproject.toml
       id: version
       run: |
-        VERSION=$(python -c "import toml; print(toml.load('pyproject.toml')['tool']['poetry']['version'])")
+        VERSION=$(python -c "import toml; config = toml.load('pyproject.toml'); print(config.get('project', {}).get('version') or config.get('tool', {}).get('poetry', {}).get('version'))")
         echo "version=$VERSION" >> $GITHUB_OUTPUT
 
     - name: Create Release
