@@ -82,6 +82,3 @@ def test_bandit_security_scan():
         print("Bandit security issues found (non-blocking):")
         print(result.stdout)
         print(result.stderr)
-
-    # Always pass for now - security issues should be addressed but not block CI
-    assert True
