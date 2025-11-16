@@ -8,6 +8,42 @@ from microweldr.core.config import Config
 from microweldr.core.models import WeldPath, WeldPoint
 
 
+class FilenameError(Exception):
+    """Raised when filename validation fails."""
+
+    pass
+
+
+def validate_gcode_filename(output_path: str | Path) -> None:
+    """Validate G-code filename length for Prusa printer compatibility.
+
+    Prusa printers have filename length limitations that can cause issues:
+    - Files may not display properly on the printer screen
+    - File selection may fail or select wrong files
+    - Transfer errors may occur
+
+    Args:
+        output_path: Path to the G-code file
+
+    Raises:
+        FilenameError: If filename is too long for Prusa compatibility
+    """
+    output_path = Path(output_path)
+    filename = output_path.name
+
+    # Prusa printers typically support 31-63 characters depending on model/firmware
+    # Use conservative 31 character limit for maximum compatibility
+    MAX_FILENAME_LENGTH = 31
+
+    if len(filename) > MAX_FILENAME_LENGTH:
+        raise FilenameError(
+            f"G-code filename '{filename}' is {len(filename)} characters long, "
+            f"which exceeds the {MAX_FILENAME_LENGTH} character limit for Prusa printers. "
+            f"Long filenames can cause display issues, file selection errors, or transfer failures. "
+            f"Please use a shorter filename (max {MAX_FILENAME_LENGTH} characters including .gcode extension)."
+        )
+
+
 class GCodeGenerator:
     """Generator for G-code files from weld paths."""
 
@@ -24,6 +60,9 @@ class GCodeGenerator:
     ) -> None:
         """Generate G-code file from weld paths."""
         output_path = Path(output_path)
+
+        # Validate filename length for Prusa printer compatibility
+        validate_gcode_filename(output_path)
 
         with open(output_path, "w") as f:
             self._write_header(f, weld_paths)
@@ -345,6 +384,9 @@ class GCodeGenerator:
     ) -> None:
         """Generate self-contained G-code file with all heating, calibration, and prompts built-in."""
         output_path = Path(output_path)
+
+        # Validate filename length for Prusa printer compatibility
+        validate_gcode_filename(output_path)
 
         with open(output_path, "w") as f:
             self._write_full_weld_header(f, weld_paths)

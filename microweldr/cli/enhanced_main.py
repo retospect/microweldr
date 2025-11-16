@@ -270,8 +270,16 @@ def weld(
             click.echo(f"❌ Safety error: {e}")
             raise click.Abort()
         except Exception as e:
-            logger.error(f"Weld generation failed: {e}", exc_info=True)
-            click.echo(f"❌ Error: {e}")
+            # Check if it's a filename error for better user messaging
+            if "filename" in str(e).lower() and "character" in str(e).lower():
+                logger.error(f"Filename validation failed: {e}")
+                click.echo(f"❌ Filename error: {e}")
+                click.echo(
+                    "💡 Tip: Use a shorter filename (max 31 characters including .gcode extension)"
+                )
+            else:
+                logger.error(f"Weld generation failed: {e}", exc_info=True)
+                click.echo(f"❌ Error: {e}")
             raise click.Abort()
 
 

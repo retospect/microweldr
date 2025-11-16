@@ -99,9 +99,6 @@ class LayerTypes:
 class Geometry:
     """Geometric calculation constants."""
 
-    CURVE_APPROXIMATION_SEGMENTS: Final[int] = 20
-    MIN_CURVE_SEGMENTS: Final[int] = 5
-    MAX_CURVE_SEGMENTS: Final[int] = 100
     TOLERANCE_MM: Final[float] = 0.001
 
 

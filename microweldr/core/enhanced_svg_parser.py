@@ -24,7 +24,6 @@ class EnhancedSVGParser:
     def __init__(self, dot_spacing: float = 2.0) -> None:
         """Initialize enhanced SVG parser."""
         self.dot_spacing = dot_spacing
-        self.curve_resolution = 20  # Number of points to approximate curves
 
     def parse_file(self, svg_path: str) -> List[WeldPath]:
         """Parse SVG file and extract weld paths with event publishing."""
@@ -504,10 +503,20 @@ class EnhancedSVGParser:
     def _approximate_quadratic_bezier(
         self, x0: float, y0: float, x1: float, y1: float, x2: float, y2: float
     ) -> List[WeldPoint]:
-        """Approximate quadratic Bézier curve with line segments."""
+        """Approximate quadratic Bézier curve with length-based point spacing."""
+        # Estimate curve length using control polygon approximation
+        # This is more accurate than chord length for most curves
+        leg1 = math.sqrt((x1 - x0) ** 2 + (y1 - y0) ** 2)
+        leg2 = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+        chord = math.sqrt((x2 - x0) ** 2 + (y2 - y0) ** 2)
+        estimated_length = (leg1 + leg2 + chord) / 2
+
+        # Calculate number of segments based on dot_spacing
+        num_segments = max(1, int(estimated_length / self.dot_spacing))
+
         points = []
-        for i in range(1, self.curve_resolution + 1):
-            t = i / self.curve_resolution
+        for i in range(1, num_segments + 1):
+            t = i / num_segments
             # Quadratic Bézier formula: B(t) = (1-t)²P0 + 2(1-t)tP1 + t²P2
             x = (1 - t) ** 2 * x0 + 2 * (1 - t) * t * x1 + t**2 * x2
             y = (1 - t) ** 2 * y0 + 2 * (1 - t) * t * y1 + t**2 * y2
@@ -525,10 +534,20 @@ class EnhancedSVGParser:
         x3: float,
         y3: float,
     ) -> List[WeldPoint]:
-        """Approximate cubic Bézier curve with line segments."""
+        """Approximate cubic Bézier curve with length-based point spacing."""
+        # Estimate curve length using control polygon approximation
+        leg1 = math.sqrt((x1 - x0) ** 2 + (y1 - y0) ** 2)
+        leg2 = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+        leg3 = math.sqrt((x3 - x2) ** 2 + (y3 - y2) ** 2)
+        chord = math.sqrt((x3 - x0) ** 2 + (y3 - y0) ** 2)
+        estimated_length = (leg1 + leg2 + leg3 + chord) / 2
+
+        # Calculate number of segments based on dot_spacing
+        num_segments = max(1, int(estimated_length / self.dot_spacing))
+
         points = []
-        for i in range(1, self.curve_resolution + 1):
-            t = i / self.curve_resolution
+        for i in range(1, num_segments + 1):
+            t = i / num_segments
             # Cubic Bézier formula: B(t) = (1-t)³P0 + 3(1-t)²tP1 + 3(1-t)t²P2 + t³P3
             x = (
                 (1 - t) ** 3 * x0
@@ -557,29 +576,164 @@ class EnhancedSVGParser:
         x2: float,
         y2: float,
     ) -> List[WeldPoint]:
-        """Approximate elliptical arc with line segments."""
-        # Simplified arc approximation - convert to center parameterization
-        # This is a complex calculation, so we'll use a simplified approach
-        points = []
-
+        """Approximate elliptical arc with proper geometry and length calculation."""
         # If radii are zero, just draw a line
         if rx == 0 or ry == 0:
             return [WeldPoint(x2, y2, "normal")]
 
-        # Simple approximation: create points along a circular arc
-        dx = x2 - x1
-        dy = y2 - y1
-        distance = math.sqrt(dx * dx + dy * dy)
+        # Convert SVG arc parameters to center parameterization
+        center_params = self._svg_arc_to_center_params(
+            x1, y1, x2, y2, rx, ry, phi, fa, fs
+        )
+        if center_params is None:
+            # Fallback to line if conversion fails
+            return [WeldPoint(x2, y2, "normal")]
 
-        # Create points along the arc
-        for i in range(1, self.curve_resolution + 1):
-            t = i / self.curve_resolution
-            # Simple linear interpolation (not geometrically correct but functional)
-            x = x1 + t * dx
-            y = y1 + t * dy
+        cx, cy, rx_adj, ry_adj, theta1, delta_theta = center_params
+
+        # Calculate accurate arc length using elliptical arc length formula
+        arc_length = self._calculate_elliptical_arc_length(
+            rx_adj, ry_adj, abs(delta_theta)
+        )
+
+        # Calculate number of segments based on dot_spacing
+        num_segments = max(1, int(arc_length / self.dot_spacing))
+
+        points = []
+        # Generate points along the actual elliptical arc
+        for i in range(1, num_segments + 1):
+            t = i / num_segments
+            angle = theta1 + t * delta_theta
+
+            # Calculate point on ellipse in local coordinates
+            local_x = rx_adj * math.cos(angle)
+            local_y = ry_adj * math.sin(angle)
+
+            # Rotate by phi and translate to center
+            cos_phi = math.cos(phi)
+            sin_phi = math.sin(phi)
+
+            x = cx + local_x * cos_phi - local_y * sin_phi
+            y = cy + local_x * sin_phi + local_y * cos_phi
+
             points.append(WeldPoint(x, y, "normal"))
 
         return points
+
+    def _svg_arc_to_center_params(
+        self,
+        x1: float,
+        y1: float,
+        x2: float,
+        y2: float,
+        rx: float,
+        ry: float,
+        phi: float,
+        fa: float,
+        fs: float,
+    ) -> Optional[Tuple[float, float, float, float, float, float]]:
+        """Convert SVG arc parameters to center parameterization.
+
+        Returns: (cx, cy, rx, ry, theta1, delta_theta) or None if invalid
+        """
+        # Handle degenerate cases
+        if x1 == x2 and y1 == y2:
+            return None
+
+        if rx == 0 or ry == 0:
+            return None
+
+        # Ensure radii are positive
+        rx = abs(rx)
+        ry = abs(ry)
+
+        # Convert rotation angle to radians
+        phi_rad = math.radians(phi)
+        cos_phi = math.cos(phi_rad)
+        sin_phi = math.sin(phi_rad)
+
+        # Step 1: Compute (x1', y1')
+        dx = (x1 - x2) / 2
+        dy = (y1 - y2) / 2
+        x1_prime = cos_phi * dx + sin_phi * dy
+        y1_prime = -sin_phi * dx + cos_phi * dy
+
+        # Step 2: Ensure radii are large enough
+        lambda_val = (x1_prime / rx) ** 2 + (y1_prime / ry) ** 2
+        if lambda_val > 1:
+            rx *= math.sqrt(lambda_val)
+            ry *= math.sqrt(lambda_val)
+
+        # Step 3: Compute (cx', cy')
+        sign = -1 if fa == fs else 1
+        sq = max(0, (rx * ry) ** 2 - (rx * y1_prime) ** 2 - (ry * x1_prime) ** 2)
+        coeff = sign * math.sqrt(sq / ((rx * y1_prime) ** 2 + (ry * x1_prime) ** 2))
+
+        cx_prime = coeff * rx * y1_prime / ry
+        cy_prime = -coeff * ry * x1_prime / rx
+
+        # Step 4: Compute (cx, cy)
+        cx = cos_phi * cx_prime - sin_phi * cy_prime + (x1 + x2) / 2
+        cy = sin_phi * cx_prime + cos_phi * cy_prime + (y1 + y2) / 2
+
+        # Step 5: Compute angles
+        def angle_between_vectors(ux: float, uy: float, vx: float, vy: float) -> float:
+            dot = ux * vx + uy * vy
+            det = ux * vy - uy * vx
+            return math.atan2(det, dot)
+
+        theta1 = angle_between_vectors(
+            1, 0, (x1_prime - cx_prime) / rx, (y1_prime - cy_prime) / ry
+        )
+        delta_theta = angle_between_vectors(
+            (x1_prime - cx_prime) / rx,
+            (y1_prime - cy_prime) / ry,
+            (-x1_prime - cx_prime) / rx,
+            (-y1_prime - cy_prime) / ry,
+        )
+
+        # Adjust delta_theta based on sweep flag
+        if fs == 0 and delta_theta > 0:
+            delta_theta -= 2 * math.pi
+        elif fs == 1 and delta_theta < 0:
+            delta_theta += 2 * math.pi
+
+        return (cx, cy, rx, ry, theta1, delta_theta)
+
+    def _calculate_elliptical_arc_length(
+        self, rx: float, ry: float, delta_theta: float
+    ) -> float:
+        """Calculate the length of an elliptical arc using Ramanujan's approximation.
+
+        This provides a very accurate approximation for elliptical arc length.
+        """
+        if rx == ry:
+            # Circle case - exact formula
+            return rx * abs(delta_theta)
+
+        # Ellipse case - use Ramanujan's approximation
+        # First, we need to convert the angular span to the equivalent on a canonical ellipse
+
+        # For simplicity, we'll use a numerical integration approach for high accuracy
+        # This approximates the arc length integral: ∫√(rx²sin²t + ry²cos²t) dt
+
+        num_samples = max(
+            10, int(abs(delta_theta) * 20)
+        )  # More samples for larger arcs
+        dt = delta_theta / num_samples
+
+        arc_length = 0.0
+        for i in range(num_samples):
+            t = i * dt
+            # Derivative magnitude: √(rx²sin²t + ry²cos²t)
+            sin_t = math.sin(t)
+            cos_t = math.cos(t)
+            derivative_mag = math.sqrt(
+                rx * rx * sin_t * sin_t + ry * ry * cos_t * cos_t
+            )
+            arc_length += derivative_mag * abs(dt)
+
+        return arc_length
 
     def _interpolate_points(
         self, points: List[WeldPoint], path_id: str
