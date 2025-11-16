@@ -333,7 +333,7 @@ class SVGParser:
         return self._interpolate_points(points)
 
     def _interpolate_points(self, points: List[WeldPoint]) -> List[WeldPoint]:
-        """Interpolate points along the path using initial dot spacing for multi-pass welding."""
+        """Interpolate points along the path using simple dot spacing."""
         if len(points) < 2:
             return points
 
@@ -351,8 +351,7 @@ class SVGParser:
             if distance == 0:
                 continue
 
-            # Use initial dot spacing for first pass - this will be refined later
-            # The actual multi-pass logic will be handled in the G-code generator
+            # Use simple dot spacing - no multi-pass complexity
             num_points = max(1, int(distance / self.dot_spacing))
 
             # Add interpolated points

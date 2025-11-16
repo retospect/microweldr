@@ -202,13 +202,10 @@ class GIFAnimationSubscriber(EventSubscriber):
             return
 
         frames = []
-        frame_duration = 150  # milliseconds per frame (faster animation)
+        frame_duration = 100  # milliseconds per frame (faster animation)
 
-        # Create frames showing progressive welding - show every point
-        # Limit to reasonable number of frames for file size
-        step_size = max(1, len(self.weld_sequence) // 30)  # Max 30 frames
-
-        for frame_num in range(0, len(self.weld_sequence), step_size):
+        # Create frames showing progressive welding - show every single point
+        for frame_num in range(len(self.weld_sequence)):
             # Create frame
             img = Image.new("RGB", (self.width, self.height), "white")
             draw = ImageDraw.Draw(img)
