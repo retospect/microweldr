@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="120" height="80" xmlns="http://www.w3.org/2000/svg">
+  <!-- Polyline creating a zigzag pattern -->
+  <polyline points="10,20 30,40 50,20 70,40 90,20"
+            fill="none" stroke="black" stroke-width="1"/>
+</svg>

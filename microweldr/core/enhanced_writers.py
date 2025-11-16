@@ -19,19 +19,14 @@ class GCodeWriterSubscriber(FileWriterSubscriber):
 
     def write_output(self, output_path: Path, **kwargs) -> bool:
         """Write G-code file using weld paths from events."""
-        from ..core.gcode_generator import GCodeGenerator
+        from ..outputs.streaming_gcode_subscriber import StreamingGCodeSubscriber
+        from ..core.events import Event, EventType
 
         logger.info(f"Writing G-code to: {output_path}")
 
-        generator = GCodeGenerator(self.config)
+        subscriber = StreamingGCodeSubscriber(output_path, self.config)
 
-        # Extract options from kwargs
-        skip_bed_leveling = kwargs.get("skip_bed_leveling", False)
-
-        # Convert to old-style WeldPath with WeldPoint objects for compatibility
-        from ..core.models import WeldPath as OldWeldPath, WeldPoint
-
-        enhanced_paths = []
+        # Convert weld paths to events for streaming processing
         for i, path in enumerate(self._weld_paths):
             # Convert WeldType enum to string
             weld_type_str = (
@@ -40,24 +35,44 @@ class GCodeWriterSubscriber(FileWriterSubscriber):
                 else path.weld_type
             )
 
-            # Convert Point objects to WeldPoint objects
-            weld_points = []
-            for point in path.points:
-                weld_point = WeldPoint(x=point.x, y=point.y, weld_type=weld_type_str)
-                weld_points.append(weld_point)
-
-            # Create old-style WeldPath
-            old_path = OldWeldPath(
-                points=weld_points,
-                weld_type=weld_type_str,
-                svg_id=path.path_id or f"path_{i+1}",
+            # Path start event
+            path_event = Event(
+                event_type=EventType.PATH_PROCESSING,
+                data={
+                    "action": "path_start",
+                    "path_data": {
+                        "id": path.path_id or f"path_{i+1}",
+                        "weld_type": weld_type_str,
+                    },
+                },
             )
+            subscriber.handle_event(path_event)
 
-            enhanced_paths.append(old_path)
+            # Point events
+            for point in path.points:
+                point_event = Event(
+                    event_type=EventType.POINT_PROCESSING,
+                    data={
+                        "action": "point_processed",
+                        "x": point.x,
+                        "y": point.y,
+                        "weld_type": weld_type_str,
+                    },
+                )
+                subscriber.handle_event(point_event)
 
-        generator.generate_file(
-            enhanced_paths, output_path, skip_bed_leveling=skip_bed_leveling
+            # Path end event
+            path_end_event = Event(
+                event_type=EventType.PATH_PROCESSING, data={"action": "path_end"}
+            )
+            subscriber.handle_event(path_end_event)
+
+        # Finalize
+        finalize_event = Event(
+            event_type=EventType.OUTPUT_GENERATION,
+            data={"action": "processing_complete"},
         )
+        subscriber.handle_event(finalize_event)
 
         logger.info(f"G-code written successfully: {output_path}")
         return True

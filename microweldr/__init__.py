@@ -5,12 +5,10 @@ __author__ = "Your Name"
 __email__ = "your.email@example.com"
 
 from microweldr.core.config import Config
-from microweldr.core.converter import SVGToGCodeConverter
-from microweldr.core.models import WeldPath, WeldPoint
+from microweldr.generators.models import WeldPath, WeldPoint
 
 __all__ = [
     "WeldPoint",
     "WeldPath",
-    "SVGToGCodeConverter",
     "Config",
 ]

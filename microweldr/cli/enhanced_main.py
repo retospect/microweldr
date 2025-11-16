@@ -6,16 +6,15 @@ from pathlib import Path
 
 import click
 
-from ..animation.generator import AnimationGenerator
 from ..core.caching import OptimizedSVGParser
 from ..core.config import Config
-from ..core.gcode_generator import GCodeGenerator
+from ..outputs.streaming_gcode_subscriber import StreamingGCodeSubscriber
 from ..core.graceful_degradation import ResilientPrusaLinkClient, check_system_health
 from ..core.logging_config import LogContext, setup_logging
 from ..core.progress import progress_context
 from ..core.resource_management import safe_gcode_generation
 from ..core.safety import SafetyError, validate_weld_operation
-from ..core.svg_parser import SVGParser
+from ..parsers.svg_parser import SVGParser
 from ..validation.validators import GCodeValidator, SVGValidator
 from .config_setup import config
 
@@ -242,10 +241,14 @@ def weld(
             if animation:
                 click.echo(f"🎬 Generating animation: {animation}")
 
-                anim_generator = AnimationGenerator(config_obj)
-                anim_generator.generate(weld_paths, str(animation))
+                # TODO: Replace with event-driven streaming animation subscriber
+                # For now, skip animation generation due to architectural changes
+                click.echo(
+                    "⚠️  Animation generation temporarily disabled during refactoring"
+                )
+                click.echo("   Use the event-driven processor for animation output")
 
-                click.echo(f"✅ Animation saved: {animation}")
+                # click.echo(f"✅ Animation saved: {animation}")
 
             # Display file information
             gcode_size = output.stat().st_size

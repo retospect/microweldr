@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100" height="50" xmlns="http://www.w3.org/2000/svg">
+  <!-- Simple horizontal line: 40mm long, should generate ~20 points at 2mm spacing -->
+  <line x1="10" y1="25" x2="50" y2="25" stroke="black" stroke-width="1"/>
+</svg>

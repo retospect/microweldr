@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="150" height="100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Complex path with lines, curves, and close command -->
+  <path d="M 20 20 L 60 20 C 80 20 80 40 60 40 L 40 40 Q 20 40 20 60 Z"
+        fill="none" stroke="black" stroke-width="1"/>
+</svg>

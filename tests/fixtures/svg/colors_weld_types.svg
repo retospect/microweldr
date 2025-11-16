@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="150" height="100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Different colors for different weld types -->
+  <!-- Black = normal weld -->
+  <line x1="10" y1="20" x2="50" y2="20" stroke="black" stroke-width="1"/>
+  <!-- Red = frangible weld -->
+  <line x1="10" y1="40" x2="50" y2="40" stroke="red" stroke-width="1"/>
+  <!-- Blue = normal weld (alternative) -->
+  <line x1="10" y1="60" x2="50" y2="60" stroke="blue" stroke-width="1"/>
+  <!-- Green = normal weld (alternative) -->
+  <circle cx="100" cy="40" r="15" fill="none" stroke="green" stroke-width="1"/>
+</svg>

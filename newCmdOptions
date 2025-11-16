@@ -1,0 +1,117 @@
+# MicroWeldr Command Line Interface Design
+# Simplified, focused interface for plastic welding workflow
+
+microweldr --help
+usage: microweldr [-h] [--version]
+                  [-weld WELDFILE] [-frange FRANGEFILE]
+                  [-g_out GCODEFILE] [-png_animation PNGFILE]
+                  [-level-bed] [-stop-for-film] [-cool-bed-after]
+                  [-config CONFIGFILE] [-verbose]
+
+MicroWeldr: Simplified plastic welding G-code generation for Prusa printers
+
+## Core Workflow Options:
+  -weld WELDFILE        Main weld file (SVG or DXF) for structural welds
+                        Supports: .svg, .dxf
+                        Example: -weld main_structure.svg
+
+  -frange FRANGEFILE    Frangible/breakaway weld file (SVG or DXF)
+                        For temporary seals and filling ports
+                        Example: -frange filling_ports.dxf
+
+  -g_out GCODEFILE      Output G-code file (default: auto-generated from input)
+                        Example: -g_out device.gcode
+                        Max filename: 31 chars (Prusa compatibility)
+
+## Output Options:
+  -png_animation PNGFILE Generate animated PNG showing weld sequence
+                        Example: -png_animation preview.png
+                        Note: Slower than SVG animation
+
+## Process Control:
+  -level-bed            Include bed leveling in G-code (default: not included)
+                        Use to ensure proper first layer adhesion
+
+  -stop-for-film        Pause for plastic film insertion (default: not included)
+                        Allows manual placement of welding material
+
+  -cool-bed-after       Cool bed after welding (default: not included, if option is present bed is cooled to 0°C)
+
+## Configuration:
+Configuration is automatically read from:
+  1. microweldr-config.toml (in current directory)
+  2. ~/.config/microweldr/microweldr-config.toml (user config)
+  3. Built-in defaults if no config file found
+
+Secrets are automatically read from:
+  1. microweldr-secrets.toml (in current directory)
+  2. ~/.config/microweldr/microweldr-secrets.toml (user secrets)
+
+  -quiet                Disable detailed logging output (default: normal logging)
+                        Use for production runs to reduce console output
+
+## Standard Options:
+  -h, --help           Show this help message and exit
+  --version            Show program version and exit
+
+## Usage Examples:
+
+# Basic welding (single file):
+microweldr -weld device.dxf
+
+# Structural + frangible welds:
+microweldr -weld main.svg -frange seals.dxf -g_out complete_device.gcode
+
+# With animation preview:
+microweldr -weld design.svg -png_animation preview.png
+
+# Quiet production run:
+microweldr -weld test.svg -quiet
+
+# With bed leveling and calibration:
+microweldr -weld device.svg -level-bed
+
+# Production workflow:
+microweldr -weld structure.dxf -frange ports.dxf -g_out production.gcode
+
+## File Type Detection:
+- Black elements (SVG) / Normal layers (DXF) → Structural welds (0.3mm depth)
+- Blue elements (SVG) / Frangible layers (DXF) → Breakaway welds (0.6mm depth)
+- Red elements → Stop points (user intervention)
+- Magenta elements → Pipette points (filling operations)
+
+## Output G-code Features:
+- Complete Prusa Core One compatibility
+- Optional bed leveling (G29) with -level-bed flag
+- Efficient temperature control (160°C nozzle, 35°C bed)
+  * Temperatures set at start of G-code (M104/M140)
+  * Wait for target temps just before welding begins (M109/M190)
+  * Allows heating during calibration for faster workflow
+- Optional user pause for material insertion with -stop-for-film flag
+- Multi-pass welding for strong bonds
+- Optional cooldown sequence (to 0°C) with -cool-bed-after flag
+- Filename length validation (31 char max)
+
+## Configuration File Format (TOML):
+```toml
+[temperatures]
+bed_temperature = 35      # °C
+nozzle_temperature = 160  # °C
+
+[normal_welds]
+weld_height = 0.3        # mm (strong bonds)
+weld_time = 0.1          # seconds
+
+[frangible_welds]
+weld_height = 0.6        # mm (breakaway bonds)
+weld_time = 0.1          # seconds
+```
+
+## Notes:
+- G-code includes basic heating and initialization
+- Optional features (bed leveling, user pause, cooldown) controlled by flags
+- Supports mixed SVG + DXF workflows
+- Automatic weld type detection from colors/layers
+- Memory-efficient streaming processing
+- Built-in safety validations
+- Configuration files automatically discovered in current directory or user config folder

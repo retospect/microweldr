@@ -8,7 +8,7 @@ import pytest
 
 from microweldr.core.config import Config
 from microweldr.core.models import WeldPoint
-from microweldr.core.svg_parser import SVGParser
+from microweldr.parsers.svg_parser import SVGParser
 
 
 class TestSVGEndpoints:
@@ -64,11 +64,8 @@ time_between_welds = 0.1
 pause_time = 3.0
 min_animation_duration = 10.0
         """
-        config_path = self.create_temp_config(config_content)
-        try:
-            return Config(config_path)
-        finally:
-            config_path.unlink()
+        # Use default config instead of deprecated path-based constructor
+        return Config()
 
     def create_test_svg(self, content: str) -> Path:
         """Create a temporary SVG file for testing."""

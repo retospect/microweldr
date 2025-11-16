@@ -54,18 +54,51 @@ class GCodeWriter(FileWriterSubscriber):
         self, weld_paths: List[WeldPath], output_path: Path, **kwargs
     ) -> bool:
         """Write weld paths to G-code file."""
-        from ..core.gcode_generator import GCodeGenerator
-
         logger.info(f"Writing G-code to: {output_path}")
 
-        generator = GCodeGenerator(self.config)
+        # Use streaming G-code subscriber for modern architecture
+        from ..outputs.streaming_gcode_subscriber import StreamingGCodeSubscriber
+        from ..core.events import Event, EventType
 
-        # Extract options from kwargs
-        skip_bed_leveling = kwargs.get("skip_bed_leveling", False)
+        subscriber = StreamingGCodeSubscriber(output_path, self.config)
 
-        generator.generate_file(
-            weld_paths, output_path, skip_bed_leveling=skip_bed_leveling
+        # Convert WeldPaths to events for compatibility
+        for path in weld_paths:
+            # Path start event
+            path_event = Event(
+                event_type=EventType.PATH_PROCESSING,
+                data={
+                    "action": "path_start",
+                    "path_data": {"id": path.svg_id, "weld_type": path.weld_type},
+                },
+            )
+            subscriber.handle_event(path_event)
+
+            # Point events
+            for point in path.points:
+                point_event = Event(
+                    event_type=EventType.POINT_PROCESSING,
+                    data={
+                        "action": "point_processed",
+                        "x": point.x,
+                        "y": point.y,
+                        "weld_type": point.weld_type,
+                    },
+                )
+                subscriber.handle_event(point_event)
+
+            # Path end event
+            path_end_event = Event(
+                event_type=EventType.PATH_PROCESSING, data={"action": "path_end"}
+            )
+            subscriber.handle_event(path_end_event)
+
+        # Finalize
+        finalize_event = Event(
+            event_type=EventType.OUTPUT_GENERATION,
+            data={"action": "processing_complete"},
         )
+        subscriber.handle_event(finalize_event)
 
         logger.info(f"G-code written successfully: {output_path}")
         return True

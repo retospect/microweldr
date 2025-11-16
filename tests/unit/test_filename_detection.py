@@ -4,8 +4,8 @@ import pytest
 from pathlib import Path
 from unittest.mock import Mock, patch
 
-from microweldr.core.dxf_reader import DXFReader
-from microweldr.core.svg_reader import SVGReader
+from microweldr.parsers.dxf_reader import DXFReader
+from microweldr.parsers.svg_reader import SVGReader
 from microweldr.core.data_models import WeldType
 
 

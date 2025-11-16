@@ -1,15 +1,21 @@
-"""Tests for the animation generator module."""
+"""Tests for the animation generator module.
+
+NOTE: AnimationGenerator has been removed in favor of streaming animation subscribers.
+These tests are disabled until the new architecture is fully integrated.
+"""
 
 import tempfile
 from pathlib import Path
 
 import pytest
 
-from microweldr.animation.generator import AnimationGenerator
+# AnimationGenerator removed - using streaming subscribers now
+# from microweldr.animation.generator import AnimationGenerator
 from microweldr.core.config import Config
 from microweldr.core.models import WeldPath, WeldPoint
 
 
+@pytest.mark.skip(reason="AnimationGenerator removed - using streaming subscribers now")
 class TestAnimationGenerator:
     """Test cases for AnimationGenerator class."""
 

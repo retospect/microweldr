@@ -1,1 +1,0 @@
-"""Animation generation functionality."""

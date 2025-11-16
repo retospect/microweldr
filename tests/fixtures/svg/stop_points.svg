@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="150" height="80" xmlns="http://www.w3.org/2000/svg">
+  <!-- Normal weld line -->
+  <line x1="10" y1="30" x2="60" y2="30" stroke="black" stroke-width="1"/>
+  <!-- Stop point with message -->
+  <circle cx="80" cy="30" r="3" fill="orange" stroke="orange"
+          data-weld-type="stop" data-message="Insert part B and press continue"/>
+  <!-- Continue with normal weld -->
+  <line x1="100" y1="30" x2="140" y2="30" stroke="black" stroke-width="1"/>
+</svg>
