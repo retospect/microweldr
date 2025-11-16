@@ -396,6 +396,9 @@ class StreamingGCodeSubscriber(EventSubscriber):
                     f"StreamingGCodeSubscriber: File {self.output_path} closed in destructor - this should not happen in normal operation"
                 )
                 self.file_handle.close()
-            except Exception:
-                # Ignore all exceptions in destructor
-                pass
+            except Exception as e:
+                # Log exceptions in destructor for debugging but don't raise
+                import logging
+
+                logger = logging.getLogger(__name__)
+                logger.debug(f"Exception in StreamingGCodeSubscriber destructor: {e}")

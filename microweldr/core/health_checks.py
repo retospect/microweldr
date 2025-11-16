@@ -163,14 +163,12 @@ class HealthChecker:
 
     def _check_filesystem_access(self) -> Dict[str, Any]:
         """Check filesystem read/write access."""
+        import tempfile
+
         test_paths = [
             Path.cwd(),  # Current directory
             Path.cwd() / "logs",  # Logs directory
-            (
-                Path("/tmp")
-                if platform.system() != "Windows"
-                else Path.cwd() / "temp"  # nosec B108 - Standard temp directory
-            ),  # Temp directory
+            Path(tempfile.gettempdir()),  # Secure temp directory
         ]
 
         access_issues = []
