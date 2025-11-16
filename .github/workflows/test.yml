@@ -29,8 +29,10 @@ jobs:
 
     - name: Install Poetry
       run: |
-        curl -sSL https://install.python-poetry.org | POETRY_VERSION=1.7.1 python3 -
+        echo "Installing Poetry..."
+        curl -sSL https://install.python-poetry.org | POETRY_VERSION=1.8.3 python3 -
         echo "$HOME/.local/bin" >> $GITHUB_PATH
+        echo "Poetry installation completed"
 
     - name: Verify Poetry installation
       run: |
@@ -40,6 +42,9 @@ jobs:
     - name: Configure Poetry
       run: |
         echo "Configuring Poetry..."
+        echo "Poetry version: $(poetry --version)"
+        echo "Current directory: $(pwd)"
+        echo "Files in directory: $(ls -la)"
         poetry config virtualenvs.create true
         poetry config virtualenvs.in-project false
         echo "Poetry configuration complete"
@@ -47,9 +52,11 @@ jobs:
     - name: Validate Poetry configuration
       run: |
         echo "Validating Poetry setup..."
-        poetry --version
+        echo "Poetry version: $(poetry --version)"
+        echo "Poetry config list:"
         poetry config --list
-        poetry check
+        echo "Checking project configuration..."
+        poetry check --verbose || (echo "Poetry check failed, showing pyproject.toml content:" && head -20 pyproject.toml && exit 1)
 
     - name: Load cached venv
       id: cached-poetry-dependencies
