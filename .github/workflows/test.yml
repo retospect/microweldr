@@ -39,8 +39,17 @@ jobs:
 
     - name: Configure Poetry
       run: |
+        echo "Configuring Poetry..."
         poetry config virtualenvs.create true
         poetry config virtualenvs.in-project false
+        echo "Poetry configuration complete"
+
+    - name: Validate Poetry configuration
+      run: |
+        echo "Validating Poetry setup..."
+        poetry --version
+        poetry config --list
+        poetry check
 
     - name: Load cached venv
       id: cached-poetry-dependencies
