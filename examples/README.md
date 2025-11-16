@@ -18,6 +18,13 @@ This directory contains example files demonstrating MicroWeldr's capabilities wi
 - **Duration**: ~46.7 seconds
 - **Features**: Unified 0.5mm spacing, straight line interpolation, scale-aware points
 
+### Combined Weld Types Example
+- **Sources**: `combined_normal.dxf` (3,794 bytes) + `combined_frangible.dxf` (2,315 bytes)
+- **Animation**: `combined_animation.gif` (1,823KB, 806 frames)
+- **Points**: 801 normal + 5 frangible = 806 total weld points
+- **Duration**: ~80.6 seconds
+- **Features**: Dual weld types, color-coded visualization, unified 0.5mm spacing
+
 ## Animation Features
 
 ### Visual Elements
@@ -79,3 +86,28 @@ Both examples now use the unified configuration system:
 - **High Detail**: 4x more points than previous 2.0mm spacing
 
 Perfect for understanding weld sequences and verifying welding patterns before sending to the printer!
+
+## Example Generation Commands
+
+To regenerate the examples, use these commands:
+
+### Single File Examples
+```bash
+# SVG Flask Example
+python -m microweldr -weld examples/flask_simple.svg -animation examples/flask_svg_animation.gif
+
+# DXF Flask Example
+python -m microweldr -weld examples/flask.dxf -animation examples/flask_dxf_animation.gif
+```
+
+### Combined Weld Type Examples
+```bash
+# Combined Normal + Frangible Example
+python -m microweldr -weld examples/combined_normal.dxf -frange examples/combined_frangible.dxf -animation examples/combined_animation.gif
+```
+
+### Configuration Used
+All examples use the unified configuration:
+- **dot_spacing**: 0.5mm (from `normal_welds.dot_spacing`)
+- **nozzle.outer_diameter**: 1.1mm (for point sizing)
+- **Consistent behavior** across SVG and DXF formats
