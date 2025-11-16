@@ -1,33 +1,28 @@
 # Development Guide
 
-This guide covers development setup and running the SVG welder from source code.
+This guide covers development setup and contributing to MicroWeldr.
 
 ## Development Setup
 
 ### Prerequisites
-- Python 3.10 or higher
+- Python 3.10+ (supports 3.10, 3.11, 3.12, 3.13)
+- Poetry (dependency management)
 - Git
 
 ### Initial Setup
 ```bash
 # Clone the repository
-git clone <repository-url>
-cd svg-to-gcode-welder
+git clone https://github.com/retospect/microweldr.git
+cd microweldr
 
-# Create virtual environment
-python -m venv venv
+# Install Poetry (if not already installed)
+curl -sSL https://install.python-poetry.org | python3 -
 
-# Activate virtual environment
-# On macOS/Linux:
-source venv/bin/activate
-# On Windows:
-# venv\Scripts\activate
+# Install dependencies and development tools
+poetry install --with dev
 
-# Upgrade pip
-pip install --upgrade pip
-
-# Install in development mode with all dependencies
-pip install -e .[validation,dev]
+# Activate the virtual environment
+poetry shell
 
 # Or install step by step
 pip install -e .                    # Core package

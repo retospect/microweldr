@@ -11,36 +11,54 @@ A Python package that converts **SVG and DXF files** to Prusa Core One G-code fo
 
 This enables rapid **microfluidics prototyping** with a 3D printer by creating **sealed, waterproof channels and barriers**. Each vector path becomes a continuous welded line through precisely controlled sequential dot placement.
 
-## 🆕 Version 5.3.0 - Major Refactoring
+## 🆕 Version 5.5.2 - Production Ready
 
-- **DXF Support**: Full DXF file processing with lines, arcs, circles, and polylines
-- **Multi-File Processing**: Process multiple SVG and DXF files in a single command
-- **Frangible Welds**: Renamed from "light welds" for better terminology
-- **Filename-Based Detection**: Automatic weld type detection from filenames as fallback
-- **Modular CLI**: Refactored command architecture with better error handling
-- **Publisher-Subscriber Architecture**: Extensible file processing framework
+- **Unified Configuration**: Consistent 0.5mm dot spacing across SVG and DXF formats
+- **Professional Examples**: Complete example collection with combined weld types
+- **Improved Animations**: Uniform timing with 3-second pause for final result viewing
+- **Proper Weld Heights**: 0.1mm normal welds, 0.6mm frangible welds for breakaway functionality
+- **Comprehensive Testing**: Full test coverage including weld height validation
+- **Modern Dependencies**: Updated to pytest 9.0.1, pre-commit 4.4.0, optimized package set
+- **CI/CD Ready**: Complete GitHub Actions workflows with multi-platform testing
 
 ## Project Structure
 
 ```
 microweldr/
 ├── microweldr/           # Main package
-│   ├── core/            # Core functionality
-│   │   ├── dxf_reader.py      # DXF file processing
-│   │   ├── svg_reader.py      # SVG file processing
-│   │   ├── file_readers.py    # Publisher-subscriber framework
+│   ├── core/            # Core functionality & configuration
+│   │   ├── config.py          # Configuration management
+│   │   ├── unified_config.py  # Unified configuration system
 │   │   ├── data_models.py     # Structured data models
-│   │   ├── error_handling.py  # Centralized error handling
+│   │   ├── events.py          # Event system for processing
 │   │   └── constants.py       # Application constants
+│   ├── parsers/         # File format parsers
+│   │   ├── dxf_reader.py      # DXF file processing
+│   │   ├── svg_parser.py      # SVG file processing
+│   │   └── enhanced_svg_parser.py # Advanced SVG features
+│   ├── generators/      # Point and G-code generation
+│   │   ├── point_iterator_factory.py # Factory pattern for iterators
+│   │   ├── svg_point_iterator.py     # SVG point generation
+│   │   └── dxf_point_iterator.py     # DXF point generation
+│   ├── outputs/         # Output generation
+│   │   ├── streaming_gcode_subscriber.py # G-code generation
+│   │   └── gif_animation_subscriber.py   # Animation generation
 │   ├── cli/             # Command line interface
-│   │   └── commands/    # Modular command structure
-│   ├── validation/      # Validation modules
-│   └── animation/       # Animation generation
+│   │   ├── simple_main.py     # Main CLI entry point
+│   │   └── enhanced_main.py   # Advanced CLI features
+│   └── prusalink/       # Printer integration
 ├── tests/               # Comprehensive test suite
-│   ├── unit/           # Unit tests (33 tests)
-│   └── integration/    # Integration tests
-├── examples/           # Example files and configurations
-└── pyproject.toml     # Poetry configuration
+│   ├── unit/           # Unit tests (121 tests)
+│   ├── parsing/        # Parser tests
+│   ├── outputs/        # Output generation tests
+│   └── test_linting.py # Code quality tests
+├── examples/           # Professional example collection
+│   ├── flask_simple.svg        # SVG example (628 points)
+│   ├── flask.dxf              # DXF example (467 points)
+│   ├── combined_normal.dxf     # Combined example (801 points)
+│   ├── combined_frangible.dxf  # Frangible welds (5 points)
+│   └── *.gif                  # Generated animations
+└── pyproject.toml     # Modern Poetry configuration (PEP 621)
 ```
 
 ## Features
@@ -105,16 +123,16 @@ poetry install --with dev
 ### Basic Usage
 ```bash
 # Convert single SVG file
-microweldr convert design.svg -o output.gcode
+microweldr -weld design.svg -g_out output.gcode
 
 # Convert DXF file with unit validation
-microweldr convert drawing.dxf -o output.gcode
+microweldr -weld drawing.dxf -g_out output.gcode
 
-# Process multiple files (SVG + DXF)
-microweldr convert main_welds.dxf frangible_seals.dxf design.svg -o combined.gcode
+# Process combined normal and frangible welds
+microweldr -weld main_welds.dxf -frange frangible_seals.dxf -g_out combined.gcode
 
-# Validate files before processing
-microweldr validate *.svg *.dxf
+# Generate animation along with G-code
+microweldr -weld design.svg -g_out output.gcode -animation output_animation.gif
 ```
 
 ### Fusion 360 Workflow
@@ -124,7 +142,7 @@ Perfect for CAD-based microfluidics design:
 2. **Export two DXF files**:
    - `main_welds.dxf` - Primary structural welds
    - `frangible_seals.dxf` - Breakaway seals for filling ports
-3. **Process both files**: `microweldr convert main_welds.dxf frangible_seals.dxf -o device.gcode`
+3. **Process both files**: `microweldr -weld main_welds.dxf -frange frangible_seals.dxf -g_out device.gcode`
 4. **Print**: Load G-code on Prusa Core One
 
 ### Configuration
@@ -147,20 +165,16 @@ travel_speed = 3000  # mm/min - travel speed for movements
 z_speed = 600  # mm/min - optimized Z speed (near maximum safe limit for Core One)
 
 [normal_welds]
-weld_height = 0.020          # mm - compression depth
-weld_temperature = 160       # °C - nozzle temperature
-weld_time = 0.1             # seconds - dwell time
-dot_spacing = 0.5           # mm - final spacing
-initial_dot_spacing = 6.0   # mm - first pass spacing
-cooling_time_between_passes = 2.0  # seconds
+weld_height = 0.1           # mm - structural weld depth
+weld_temperature = 160      # °C - nozzle temperature
+weld_time = 0.1            # seconds - dwell time
+dot_spacing = 0.5          # mm - unified spacing
 
 [frangible_welds]
-weld_height = 0.020          # mm - same precision
-weld_temperature = 160       # °C - same temperature
-weld_time = 0.3             # seconds - longer for weaker bond
-dot_spacing = 0.5           # mm - same density
-initial_dot_spacing = 3.6   # mm - closer first pass
-cooling_time_between_passes = 1.5  # seconds
+weld_height = 0.6          # mm - deeper for breakaway functionality
+weld_temperature = 160     # °C - same temperature
+weld_time = 0.3           # seconds - longer for controlled weakness
+dot_spacing = 0.5         # mm - unified spacing
 
 [output]
 gcode_extension = ".gcode"
@@ -169,24 +183,29 @@ animation_extension = "_animation.svg"
 
 ## Command Reference
 
-### Convert Command
+### Main Command
 ```bash
-microweldr convert [OPTIONS] INPUT_FILES...
+microweldr [OPTIONS]
 
 Options:
-  -o, --output PATH     Output G-code file
-  -c, --config PATH     Configuration file
-  --no-animation       Skip animation generation
-  --chamber-temp FLOAT Chamber temperature override
+  -weld PATH           Normal weld file (SVG or DXF)
+  -frange PATH         Frangible weld file (SVG or DXF)
+  -g_out PATH          Output G-code file
+  -animation PATH      Output animation GIF file
+  -quiet              Suppress verbose output
+  --help              Show help message
 ```
 
-### Validate Command
+### Examples
 ```bash
-microweldr validate [OPTIONS] INPUT_FILES...
+# Single file processing
+microweldr -weld design.svg -g_out output.gcode
 
-Options:
-  -c, --config PATH     Configuration file
-  --detailed           Show detailed validation info
+# Combined weld types
+microweldr -weld structural.dxf -frange seals.dxf -g_out device.gcode
+
+# With animation
+microweldr -weld design.svg -animation preview.gif -g_out output.gcode
 ```
 
 ## File Format Details
@@ -250,24 +269,28 @@ poetry install dist/*.whl          # Install local build
 
 ## Examples
 
-### Multi-File Processing
+### Professional Examples
 ```bash
-# Process structural and frangible welds together
-microweldr convert \
-  main_structure.dxf \
-  frangible_seals.dxf \
-  alignment_marks.svg \
-  -o complete_device.gcode \
-  --chamber-temp 50
+# See examples/ directory for complete example collection:
+# - flask_simple.svg (628 points, Bézier curves)
+# - flask.dxf (467 points, line interpolation)
+# - combined_normal.dxf + combined_frangible.dxf (806 total points)
+
+# Process the combined example
+microweldr -weld examples/combined_normal.dxf \
+           -frange examples/combined_frangible.dxf \
+           -g_out examples/combined_animation.gif \
+           -animation examples/combined_animation.gif
 ```
 
-### Validation Workflow
+### Production Workflow
 ```bash
-# Validate all design files
-microweldr validate *.dxf *.svg --detailed
+# 1. Design in CAD software (Fusion 360, etc.)
+# 2. Export separate files for different weld types
+# 3. Process with MicroWeldr
+microweldr -weld structural_welds.dxf -frange breakaway_seals.dxf -g_out device.gcode
 
-# Convert if validation passes
-microweldr convert *.dxf *.svg -o final_device.gcode
+# 4. Load G-code on Prusa Core One and print
 ```
 
 ## Troubleshooting
