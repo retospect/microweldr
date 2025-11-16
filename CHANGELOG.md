@@ -7,6 +7,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.5.2] - 2025-11-16
+
+### 🎯 Production Ready Release
+
+This release represents a complete production-ready system with unified configuration, comprehensive testing, and professional examples.
+
+#### ✨ Added
+- **Combined Weld Types**: Support for processing normal and frangible welds in single command
+- **Professional Examples**: Complete example collection with SVG, DXF, and combined weld types
+- **Comprehensive Testing**: Full test coverage including weld height validation and linting tests
+- **Modern Dependencies**: Updated to pytest 9.0.1, pre-commit 4.4.0, optimized package set
+- **CI/CD Pipeline**: Complete GitHub Actions workflows with multi-platform testing
+
+#### 🔧 Improved
+- **Unified Configuration**: Consistent 0.5mm dot spacing across SVG and DXF formats
+- **Proper Weld Heights**: 0.1mm normal welds, 0.6mm frangible welds for breakaway functionality
+- **Animation Timing**: Uniform progression with 3-second pause for final result viewing
+- **Event System**: Unified point processing between G-code and GIF generators
+- **Dependency Management**: Modern Poetry configuration with PEP 621 compliance
+
+#### 🐛 Fixed
+- **GitHub Actions**: Resolved missing pyproject.toml and TOML deprecation warnings
+- **Weld Heights**: Corrected from 0.02mm to proper 0.1mm/0.6mm values
+- **Animation Speed**: Fixed slow arc progression issue with uniform timing
+- **Configuration**: Removed unused parameters and unified dot spacing
+
+#### 📚 Documentation
+- **Updated README**: Complete overhaul reflecting current v5.5.2 state and CLI syntax
+- **Development Guide**: Modernized setup instructions for Poetry-based workflow
+- **Examples Documentation**: Professional example collection with generation commands
+
 ## [4.0.0] - 2025-10-25
 
 ### 🎉 Major Release - Complete System Overhaul
