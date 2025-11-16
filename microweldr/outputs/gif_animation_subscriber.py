@@ -224,7 +224,7 @@ class GIFAnimationSubscriber(EventSubscriber):
             return
 
         frames = []
-        frame_duration = 100  # milliseconds per frame (faster animation)
+        frame_duration = 50  # milliseconds per frame (faster, uniform animation)
 
         # Create frames showing progressive welding - show every single point
         for frame_num in range(len(self.weld_sequence)):
@@ -294,8 +294,17 @@ class GIFAnimationSubscriber(EventSubscriber):
 
             frames.append(img)
 
+        # Add 3-second pause at the end by duplicating the final frame
+        if frames:
+            final_frame = frames[-1]
+            pause_frames = int(3000 / frame_duration)  # 3 seconds worth of frames
+            logger.info(f"Adding {pause_frames} pause frames for 3-second end pause")
+            for _ in range(pause_frames):
+                frames.append(final_frame.copy())
+
         # Save animated GIF
         if frames:
+            logger.info(f"Saving GIF with {len(frames)} total frames")
             frames[0].save(
                 self.output_path,
                 save_all=True,
