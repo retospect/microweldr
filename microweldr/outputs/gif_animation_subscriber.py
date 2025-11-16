@@ -292,6 +292,32 @@ class GIFAnimationSubscriber(EventSubscriber):
 
             frames.append(img)
 
+        # Create a clean final frame with all points in normal size (no highlight/number)
+        if frames and self.weld_sequence:
+            logger.info("Creating clean final frame with all points in normal size")
+            img = Image.new("RGB", (self.width, self.height), "white")
+            draw = ImageDraw.Draw(img)
+
+            # Draw title
+            title = f"MicroWeldr - Weld Complete ({len(self.weld_sequence)} points)"
+            draw.text((10, 10), title, fill="black", font=font)
+
+            # Draw all points in normal size with proper colors
+            for point in self.weld_sequence:
+                x, y = self._transform_point(
+                    point["x"], point["y"], scale, offset_x, offset_y
+                )
+                color = self.colors.get(point["weld_type"], self.colors["normal"])
+
+                # Draw normal-sized point (same as completed points)
+                draw.ellipse([x - 2, y - 2, x + 2, y + 2], fill=color)
+
+            # Draw legend
+            self._draw_legend(draw)
+
+            # Replace the last frame with the clean version
+            frames[-1] = img
+
         # Add 3-second pause at the end by duplicating the final frame
         if frames:
             final_frame = frames[-1]
