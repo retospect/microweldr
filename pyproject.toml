@@ -47,6 +47,11 @@ packages = [{include = "microweldr"}]
 
 [tool.poetry.dependencies]
 python = ">=3.10"
+Pillow = ">=10.0.0"
+ezdxf = ">=1.4.0"
+lxml = ">=5.0.0"
+toml = ">=0.10.2"
+requests = ">=2.25.0"
 
 
 [tool.poetry.group.dev.dependencies]
