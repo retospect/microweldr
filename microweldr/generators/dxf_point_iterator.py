@@ -18,9 +18,9 @@ class DXFPointIterator:
     # Class constants
     SUPPORTED_EXTENSIONS = [".dxf"]
 
-    def __init__(self):
+    def __init__(self, dot_spacing: float = 2.0):
         """Initialize DXF point iterator."""
-        pass
+        self.dot_spacing = dot_spacing
 
     def iterate_points(self, file_path: Path) -> Iterator[Dict[str, Any]]:
         """Iterate through points in a DXF file.
@@ -38,8 +38,8 @@ class DXFPointIterator:
             # Import DXF reader from parsers directory
             from ..parsers.dxf_reader import DXFReader
 
-            # Use existing DXF reader to parse file
-            reader = DXFReader()
+            # Use existing DXF reader to parse file with dot spacing
+            reader = DXFReader(dot_spacing=self.dot_spacing)
             weld_paths = reader.parse_file(file_path)
 
             logger.info(f"DXF file contains {len(weld_paths)} paths")

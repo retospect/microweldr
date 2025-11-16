@@ -33,12 +33,13 @@ except ImportError:
 class DXFReader(FileReaderPublisher):
     """DXF file reader that publishes weld paths."""
 
-    def __init__(self):
+    def __init__(self, dot_spacing: float = 2.0):
         super().__init__()
         if not DXF_AVAILABLE:
             raise ImportError(
                 "ezdxf library is required for DXF reading. Install with: pip install ezdxf"
             )
+        self.dot_spacing = dot_spacing  # Distance between points in mm
 
     def get_supported_extensions(self) -> List[str]:
         """Get supported file extensions."""
@@ -250,7 +251,7 @@ class DXFReader(FileReaderPublisher):
         return line_entities
 
     def _bulge_to_line_segments(
-        self, start: Point, end: Point, bulge: float, segments: int = 16
+        self, start: Point, end: Point, bulge: float
     ) -> List[tuple]:
         """Convert a bulge arc to multiple line segments.
 
@@ -281,6 +282,10 @@ class DXFReader(FileReaderPublisher):
             return [(start, end)]
 
         radius = chord_length / (2 * math.sin(half_angle))
+
+        # Calculate arc length and determine segments based on dot spacing
+        arc_length = radius * abs(included_angle)
+        segments = max(2, int(arc_length / self.dot_spacing))
 
         # Calculate chord midpoint
         chord_mid_x = (start.x + end.x) / 2
@@ -365,13 +370,31 @@ class DXFReader(FileReaderPublisher):
                 if isinstance(entity, LineEntity):
                     data_path = entity.to_weld_path(weld_type)
                 elif isinstance(entity, ArcEntity):
-                    logger.debug(
-                        f"Processing arc: center={entity.center}, radius={entity.radius}, angles={entity.start_angle}-{entity.end_angle}"
+                    # Calculate arc length and determine segments based on dot spacing
+                    arc_length = (
+                        abs(entity.end_angle - entity.start_angle)
+                        * math.pi
+                        / 180
+                        * entity.radius
                     )
-                    data_path = entity.to_weld_path(segments=20, weld_type=weld_type)
+                    segments = max(2, int(arc_length / self.dot_spacing))
+                    logger.debug(
+                        f"Processing arc: center={entity.center}, radius={entity.radius}, angles={entity.start_angle}-{entity.end_angle}, length={arc_length:.1f}mm, segments={segments}"
+                    )
+                    data_path = entity.to_weld_path(
+                        segments=segments, weld_type=weld_type
+                    )
                     logger.debug(f"Arc converted to {len(data_path.points)} points")
                 elif isinstance(entity, CircleEntity):
-                    data_path = entity.to_weld_path(segments=36, weld_type=weld_type)
+                    # Calculate circle circumference and determine segments based on dot spacing
+                    circumference = 2 * math.pi * entity.radius
+                    segments = max(3, int(circumference / self.dot_spacing))
+                    logger.debug(
+                        f"Processing circle: radius={entity.radius}, circumference={circumference:.1f}mm, segments={segments}"
+                    )
+                    data_path = entity.to_weld_path(
+                        segments=segments, weld_type=weld_type
+                    )
                 else:
                     logger.warning(f"Unknown entity type: {type(entity)}")
                     continue

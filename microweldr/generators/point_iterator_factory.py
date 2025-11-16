@@ -36,11 +36,14 @@ class PointIteratorFactory:
     ]
 
     @classmethod
-    def create_iterator(cls, file_path: Union[str, Path]) -> PointIterator:
+    def create_iterator(
+        cls, file_path: Union[str, Path], dot_spacing: float = 2.0
+    ) -> PointIterator:
         """Create appropriate point iterator for the given file.
 
         Args:
             file_path: Path to the file
+            dot_spacing: Distance between points in mm (for DXF arcs/circles)
 
         Returns:
             Point iterator instance for the file type
@@ -53,7 +56,13 @@ class PointIteratorFactory:
         for iterator_class in cls._iterators:
             if iterator_class.supports_file(file_path):
                 logger.debug(f"Using {iterator_class.__name__} for {file_path}")
-                return iterator_class()
+                # Pass dot_spacing to iterators that support it
+                if iterator_class.__name__ == "DXFPointIterator":
+                    return iterator_class(dot_spacing=dot_spacing)
+                elif iterator_class.__name__ == "SVGPointIterator":
+                    return iterator_class(dot_spacing=dot_spacing)
+                else:
+                    return iterator_class()
 
         raise ValueError(f"Unsupported file format: {file_path.suffix}")
 
