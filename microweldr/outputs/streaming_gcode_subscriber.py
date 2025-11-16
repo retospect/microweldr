@@ -398,7 +398,4 @@ class StreamingGCodeSubscriber(EventSubscriber):
                 self.file_handle.close()
             except Exception as e:
                 # Log exceptions in destructor for debugging but don't raise
-                import logging
-
-                logger = logging.getLogger(__name__)
                 logger.debug(f"Exception in StreamingGCodeSubscriber destructor: {e}")
