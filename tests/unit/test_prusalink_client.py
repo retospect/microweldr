@@ -48,11 +48,19 @@ password = "test123"
         with tempfile.NamedTemporaryFile(mode="w", suffix=".toml", delete=False) as f:
             f.write("invalid toml content [")
             f.flush()
+            temp_file_path = f.name
 
+        # File is now closed, safe to use and delete
+        try:
             with pytest.raises(PrusaLinkConfigError):
-                PrusaLinkClient(f.name)
-
-            Path(f.name).unlink()
+                PrusaLinkClient(temp_file_path)
+        finally:
+            # Clean up with error handling for Windows
+            try:
+                Path(temp_file_path).unlink()
+            except (PermissionError, FileNotFoundError):
+                # Windows may still have file locked, or it may already be deleted
+                pass
 
     def test_get_printer_status_success(self, requests_mock, client):
         """Test successful printer status retrieval."""
