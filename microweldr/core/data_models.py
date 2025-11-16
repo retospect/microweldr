@@ -245,9 +245,29 @@ class LineEntity:
         """Calculate line length."""
         return self.start.distance_to(self.end)
 
-    def to_weld_path(self, weld_type: WeldType = WeldType.NORMAL) -> WeldPath:
-        """Convert to weld path."""
-        return WeldPath([self.start, self.end], weld_type, self.layer)
+    def to_weld_path(
+        self, weld_type: WeldType = WeldType.NORMAL, dot_spacing: float = 2.0
+    ) -> WeldPath:
+        """Convert to weld path with interpolated points."""
+        import math
+
+        # Calculate line length and number of segments
+        length = self.length
+        if length < 1e-10:  # Degenerate line
+            return WeldPath([self.start], weld_type, self.layer)
+
+        # Calculate number of points based on dot spacing
+        num_points = max(2, int(length / dot_spacing) + 1)
+
+        # Generate interpolated points along the line
+        points = []
+        for i in range(num_points):
+            t = i / (num_points - 1) if num_points > 1 else 0
+            x = self.start.x + t * (self.end.x - self.start.x)
+            y = self.start.y + t * (self.end.y - self.start.y)
+            points.append(Point(x, y))
+
+        return WeldPath(points, weld_type, self.layer)
 
 
 @dataclass

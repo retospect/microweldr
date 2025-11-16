@@ -368,7 +368,9 @@ class DXFReader(FileReaderPublisher):
 
             try:
                 if isinstance(entity, LineEntity):
-                    data_path = entity.to_weld_path(weld_type)
+                    data_path = entity.to_weld_path(
+                        weld_type, dot_spacing=self.dot_spacing
+                    )
                 elif isinstance(entity, ArcEntity):
                     # Calculate arc length and determine segments based on dot spacing
                     arc_length = (
