@@ -5,7 +5,6 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import toml
-from config import Configuration
 
 
 class SecretsConfig:
@@ -34,14 +33,14 @@ class SecretsConfig:
         """
         self.config_name = config_name
         self.legacy_name = "secrets.toml"
-        self._config: Optional[Configuration] = None
+        self._config: Optional[Dict[str, Any]] = None
         self._config_sources: List[Path] = []
 
-    def load(self) -> Configuration:
+    def load(self) -> Dict[str, Any]:
         """Load and merge configuration files from the hierarchy.
 
         Returns:
-            Merged configuration object
+            Merged configuration dictionary
 
         Raises:
             FileNotFoundError: If no configuration files are found
@@ -79,8 +78,8 @@ class SecretsConfig:
             except Exception as e:
                 print(f"Warning: Failed to load {config_file}: {e}")
 
-        # Create final Configuration object from merged data
-        self._config = Configuration(merged_config)
+        # Store the merged configuration data
+        self._config = merged_config
 
         return self._config
 
