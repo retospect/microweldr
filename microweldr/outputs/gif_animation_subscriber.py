@@ -1,4 +1,4 @@
-"""PNG animation subscriber that generates animated PNG files from weld points."""
+"""GIF animation subscriber that generates animated GIF files from weld points."""
 
 import logging
 from pathlib import Path
@@ -18,13 +18,13 @@ from ..core.config import Config
 logger = logging.getLogger(__name__)
 
 
-class PNGAnimationSubscriber(EventSubscriber):
-    """Generates PNG animation from weld points using PIL."""
+class GIFAnimationSubscriber(EventSubscriber):
+    """Generates animated GIF from weld points using PIL."""
 
     def __init__(self, output_path: Path, config: Config):
-        """Initialize PNG animation subscriber."""
+        """Initialize GIF animation subscriber."""
         if not PIL_AVAILABLE:
-            raise ImportError("PIL (Pillow) is required for PNG animation generation")
+            raise ImportError("PIL (Pillow) is required for GIF animation generation")
 
         self.output_path = Path(output_path)
         self.config = config
@@ -167,90 +167,17 @@ class PNGAnimationSubscriber(EventSubscriber):
         return img_x, img_y
 
     def _generate_png_animation(self) -> None:
-        """Generate animated sequence showing weld progression."""
+        """Generate animated GIF showing weld progression."""
         try:
             if not self.paths:
                 logger.warning("No paths to animate")
                 return
 
-            # Check if output should be animated based on file extension
-            if self.output_path.suffix.lower() == ".gif":
-                self._generate_animated_gif()
-            else:
-                self._generate_static_png()
+            self._generate_animated_gif()
 
         except Exception as e:
             logger.error(f"Failed to generate animation: {e}")
             raise
-
-    def _generate_static_png(self) -> None:
-        """Generate static PNG showing complete weld sequence."""
-        # Calculate transformation
-        scale, offset_x, offset_y = self._calculate_transform()
-
-        # Create image
-        img = Image.new("RGB", (self.width, self.height), "white")
-        draw = ImageDraw.Draw(img)
-
-        # Draw title
-        try:
-            font = ImageFont.truetype("Arial.ttf", 16)
-        except:
-            font = ImageFont.load_default()
-
-        title = "MicroWeldr - Weld Sequence Visualization"
-        draw.text((10, 10), title, fill="black", font=font)
-
-        # Draw all paths and points
-        for path_id, path_data in self.paths.items():
-            points = path_data["points"]
-            weld_type = path_data["weld_type"]
-            color = self.colors.get(weld_type, self.colors["normal"])
-
-            # Draw path lines
-            if len(points) > 1:
-                path_coords = []
-                for point in points:
-                    x, y = self._transform_point(
-                        point["x"], point["y"], scale, offset_x, offset_y
-                    )
-                    path_coords.extend([x, y])
-
-                if len(path_coords) >= 4:  # At least 2 points
-                    draw.line(path_coords, fill=color, width=2)
-
-            # Draw points
-            for i, point in enumerate(points):
-                x, y = self._transform_point(
-                    point["x"], point["y"], scale, offset_x, offset_y
-                )
-
-                # Draw point circle
-                draw.ellipse(
-                    [
-                        x - self.point_radius,
-                        y - self.point_radius,
-                        x + self.point_radius,
-                        y + self.point_radius,
-                    ],
-                    fill=color,
-                    outline="black",
-                )
-
-                # Draw point number
-                try:
-                    small_font = ImageFont.truetype("Arial.ttf", 10)
-                except:
-                    small_font = ImageFont.load_default()
-
-                draw.text((x + 5, y - 5), str(i + 1), fill="black", font=small_font)
-
-        # Draw legend
-        self._draw_legend(draw)
-
-        # Save image
-        img.save(self.output_path, "PNG")
-        logger.info(f"Static PNG saved to {self.output_path}")
 
     def _generate_animated_gif(self) -> None:
         """Generate animated GIF showing weld sequence progression."""

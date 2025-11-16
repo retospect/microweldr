@@ -10,8 +10,7 @@ from ..core.config import Config
 from ..core.logging_config import setup_logging
 from ..generators.point_iterator_factory import PointIteratorFactory
 from ..outputs.streaming_gcode_subscriber import StreamingGCodeSubscriber
-from ..outputs.streaming_animation_subscriber import StreamingAnimationSubscriber
-from ..outputs.png_animation_subscriber import PNGAnimationSubscriber
+from ..outputs.gif_animation_subscriber import GIFAnimationSubscriber
 from ..core.events import (
     Event,
     EventType,
@@ -49,7 +48,7 @@ Usage Examples:
   microweldr -weld main.svg -frange seals.dxf -g_out complete_device.gcode
 
   # With animation preview:
-  microweldr -weld design.svg -png_animation preview.png
+  microweldr -weld design.svg -animation preview.gif
 
   # Quiet production run:
   microweldr -weld test.svg -quiet
@@ -97,10 +96,10 @@ File Type Detection:
 
     # Output Options
     parser.add_argument(
-        "-png_animation",
-        dest="png_animation",
+        "-animation",
+        dest="animation",
         type=str,
-        help="Generate animated PNG showing weld sequence (slower than SVG animation)",
+        help="Generate animated GIF showing weld sequence progression",
     )
 
     # Process Control
@@ -252,18 +251,18 @@ def generate_gcode(points: List[dict], output_path: str, config: Config, args) -
 
 
 def generate_animation(points: List[dict], output_path: str, config: Config) -> bool:
-    """Generate animation using appropriate subscriber based on file extension."""
+    """Generate animated GIF showing weld sequence progression."""
     try:
         output_path_obj = Path(output_path)
-        extension = output_path_obj.suffix.lower()
 
-        if extension == ".png":
-            print(f"🎨 Generating PNG animation: {output_path}")
-            subscriber = PNGAnimationSubscriber(output_path_obj, config)
-        else:
-            # Default to SVG for .svg or unknown extensions
-            print(f"🎨 Generating SVG animation: {output_path}")
-            subscriber = StreamingAnimationSubscriber(output_path_obj, config)
+        # Ensure .gif extension
+        if not output_path_obj.suffix.lower() == ".gif":
+            output_path_obj = output_path_obj.with_suffix(".gif")
+            print(f"ℹ️  Changed animation output to: {output_path_obj}")
+            output_path = str(output_path_obj)  # Update the string path too
+
+        print(f"🎨 Generating animated GIF: {output_path_obj}")
+        subscriber = GIFAnimationSubscriber(output_path_obj, config)
 
         # Send events to generate animation
         timestamp = time.time()
@@ -398,8 +397,16 @@ def main():
             return 1
 
         # Generate animation if requested
-        if args.png_animation:
-            if not generate_animation(all_points, args.png_animation, config):
+        animation_output = None
+        if args.animation:
+            # Ensure .gif extension for display
+            animation_path = Path(args.animation)
+            if not animation_path.suffix.lower() == ".gif":
+                animation_output = str(animation_path.with_suffix(".gif"))
+            else:
+                animation_output = args.animation
+
+            if not generate_animation(all_points, args.animation, config):
                 print(
                     "⚠️  Animation generation failed, but G-code was created successfully"
                 )
@@ -407,8 +414,8 @@ def main():
         print("\n🎉 Welding preparation completed successfully!")
         print(f"📁 Output files:")
         print(f"   • G-code: {gcode_output}")
-        if args.png_animation:
-            print(f"   • Animation: {args.png_animation}")
+        if animation_output:
+            print(f"   • Animation: {animation_output}")
 
         return 0
 

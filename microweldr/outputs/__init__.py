@@ -1,10 +1,10 @@
-"""Output generators for G-code, SVG animations, and PNG files."""
+"""Output generators for G-code and animated GIF files."""
 
 from .streaming_gcode_subscriber import StreamingGCodeSubscriber, FilenameError
-from .streaming_animation_subscriber import StreamingAnimationSubscriber
+from .gif_animation_subscriber import GIFAnimationSubscriber
 
 __all__ = [
     "StreamingGCodeSubscriber",
-    "StreamingAnimationSubscriber",
+    "GIFAnimationSubscriber",
     "FilenameError",
 ]
