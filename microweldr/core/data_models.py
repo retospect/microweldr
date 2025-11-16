@@ -41,6 +41,27 @@ class WeldType(Enum):
 
 
 @dataclass
+class WeldConfig:
+    """Configuration for weld parameters."""
+
+    weld_height: float
+    weld_temperature: float
+    weld_time: float
+    dot_spacing: float
+
+    def __post_init__(self):
+        """Validate weld configuration values."""
+        if self.weld_height < 0:
+            raise ValueError("Weld height must be non-negative")
+        if self.weld_temperature < 0:
+            raise ValueError("Weld temperature must be non-negative")
+        if self.weld_time <= 0:
+            raise ValueError("Weld time must be positive")
+        if self.dot_spacing <= 0:
+            raise ValueError("Dot spacing must be positive")
+
+
+@dataclass
 class WeldSettings:
     """Settings for a specific weld type."""
 
@@ -48,8 +69,6 @@ class WeldSettings:
     weld_temperature: float
     weld_time: float
     dot_spacing: float
-    initial_dot_spacing: float
-    cooling_time_between_passes: float
 
     def __post_init__(self):
         """Validate weld settings."""

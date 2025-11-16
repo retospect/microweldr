@@ -194,16 +194,12 @@ class UnifiedConfig:
                 "weld_temperature": 160,
                 "weld_time": 0.1,
                 "dot_spacing": 0.5,
-                "initial_dot_spacing": 3.6,
-                "cooling_time_between_passes": 2.0,
             },
             "frangible_welds": {
                 "weld_height": 0.020,
                 "weld_temperature": 160,
                 "weld_time": 0.3,
                 "dot_spacing": 0.5,
-                "initial_dot_spacing": 3.6,
-                "cooling_time_between_passes": 1.5,
             },
             "output": {
                 "gcode_extension": ".gcode",
@@ -213,11 +209,7 @@ class UnifiedConfig:
                 "skip_base_distance": 5,
                 "passes": 4,
             },
-            "animation": {
-                "time_between_welds": 0.1,
-                "pause_time": 3.0,
-                "min_animation_duration": 10.0,
-            },
+            # Animation parameters removed - not currently implemented
         }
 
     def _merge_config(self, base: Dict[str, Any], override: Dict[str, Any]) -> None:

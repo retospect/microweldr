@@ -36,14 +36,12 @@ class PointIteratorFactory:
     ]
 
     @classmethod
-    def create_iterator(
-        cls, file_path: Union[str, Path], dot_spacing: float = 2.0
-    ) -> PointIterator:
+    def create_iterator(cls, file_path: Union[str, Path], config=None) -> PointIterator:
         """Create appropriate point iterator for the given file.
 
         Args:
             file_path: Path to the file
-            dot_spacing: Distance between points in mm (for DXF arcs/circles)
+            config: Configuration object to get dot_spacing from
 
         Returns:
             Point iterator instance for the file type
@@ -53,9 +51,19 @@ class PointIteratorFactory:
         """
         file_path = Path(file_path)
 
+        # Get dot_spacing from config, fallback to 2.0mm
+        dot_spacing = 2.0  # Default fallback
+        if config:
+            try:
+                dot_spacing = config.get("normal_welds", "dot_spacing", 2.0)
+            except Exception:
+                dot_spacing = 2.0
+
         for iterator_class in cls._iterators:
             if iterator_class.supports_file(file_path):
-                logger.debug(f"Using {iterator_class.__name__} for {file_path}")
+                logger.debug(
+                    f"Using {iterator_class.__name__} for {file_path} with {dot_spacing}mm spacing"
+                )
                 # Pass dot_spacing to iterators that support it
                 if iterator_class.__name__ == "DXFPointIterator":
                     return iterator_class(dot_spacing=dot_spacing)
@@ -81,7 +89,9 @@ class PointIteratorFactory:
         return list(set(extensions))  # Remove duplicates
 
 
-def iterate_points_from_file(file_path: Union[str, Path]) -> Iterator[Dict[str, Any]]:
+def iterate_points_from_file(
+    file_path: Union[str, Path], config=None
+) -> Iterator[Dict[str, Any]]:
     """
     Iterator that yields points from DXF/SVG files.
 
@@ -90,6 +100,7 @@ def iterate_points_from_file(file_path: Union[str, Path]) -> Iterator[Dict[str, 
 
     Args:
         file_path: Path to the file to process
+        config: Configuration object to get dot_spacing from
 
     Yields:
         Dict containing point data with keys:
@@ -103,19 +114,18 @@ def iterate_points_from_file(file_path: Union[str, Path]) -> Iterator[Dict[str, 
         Exception: If file parsing fails
     """
     file_path = Path(file_path)
-    iterator = PointIteratorFactory.create_iterator(file_path)
+    iterator = PointIteratorFactory.create_iterator(file_path, config=config)
     yield from iterator.iterate_points(file_path)
 
 
-def count_points_in_file(file_path: Union[str, Path]) -> int:
+def count_points_in_file(file_path: Union[str, Path], config=None) -> int:
     """Count total points in a file without storing them.
 
     Args:
         file_path: Path to the file
+        config: Configuration object to get dot_spacing from
 
     Returns:
         Total number of points in the file
     """
-    file_path = Path(file_path)
-    iterator = PointIteratorFactory.create_iterator(file_path)
-    return iterator.count_points(file_path)
+    return sum(1 for _ in iterate_points_from_file(file_path, config=config))

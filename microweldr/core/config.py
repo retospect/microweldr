@@ -136,18 +136,13 @@ class Config:
                 "weld_temperature",
                 "weld_time",
                 "dot_spacing",
-                "initial_dot_spacing",
-                "cooling_time_between_passes",
             ],
             "frangible_welds": [
                 "weld_height",
                 "weld_temperature",
                 "weld_time",
                 "dot_spacing",
-                "initial_dot_spacing",
-                "cooling_time_between_passes",
             ],
-            "animation": ["time_between_welds", "pause_time", "min_animation_duration"],
         }
 
         for section, keys in required_keys.items():
@@ -181,18 +176,8 @@ class Config:
             weld_config = self.get_section(weld_type)
             if weld_config["dot_spacing"] <= 0:
                 raise ConfigError(f"{weld_type}.dot_spacing must be positive")
-            if weld_config["initial_dot_spacing"] <= 0:
-                raise ConfigError(f"{weld_type}.initial_dot_spacing must be positive")
-            if weld_config["initial_dot_spacing"] <= weld_config["dot_spacing"]:
-                raise ConfigError(
-                    f"{weld_type}.initial_dot_spacing must be greater than dot_spacing"
-                )
             if weld_config["weld_time"] < 0:
                 raise ConfigError(f"{weld_type}.weld_time must be non-negative")
-            if weld_config["cooling_time_between_passes"] < 0:
-                raise ConfigError(
-                    f"{weld_type}.cooling_time_between_passes must be non-negative"
-                )
 
         # Nozzle validations
         nozzle = self.nozzle
@@ -203,9 +188,4 @@ class Config:
         if nozzle["inner_diameter"] >= nozzle["outer_diameter"]:
             raise ConfigError("nozzle.inner_diameter must be less than outer_diameter")
 
-        # Animation validations
-        animation = self.animation
-        if animation["time_between_welds"] <= 0:
-            raise ConfigError("animation.time_between_welds must be positive")
-        if animation["pause_time"] <= 0:
-            raise ConfigError("animation.pause_time must be positive")
+        # Animation validations removed - parameters not currently used

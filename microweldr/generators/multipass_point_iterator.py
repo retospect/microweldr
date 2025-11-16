@@ -18,7 +18,7 @@ def iterate_multipass_points_from_file(
     """
     logger.debug(f"Starting simple point iteration from {file_path}")
 
-    # Get iterator for the file type
+    # Get iterator for the file type (using default config for now)
     iterator = PointIteratorFactory.create_iterator(str(file_path))
 
     total_points = 0

@@ -53,10 +53,10 @@ EOF
 
         dxf_path = self.create_test_dxf(dxf_content)
         try:
-            # Parse with 2mm dot spacing
+            # Parse with 2mm dot spacing (using fallback behavior)
             iterator = PointIteratorFactory.create_iterator(
-                str(dxf_path), dot_spacing=2.0
-            )
+                str(dxf_path)
+            )  # No config = 2.0mm fallback
             points = list(iterator.iterate_points(dxf_path))
 
             print(f"40mm line generated {len(points)} points with 2mm spacing")
@@ -137,10 +137,10 @@ EOF
 
         dxf_path = self.create_test_dxf(dxf_content)
         try:
-            # Parse with 2mm dot spacing
+            # Parse with 2mm dot spacing (using fallback behavior)
             iterator = PointIteratorFactory.create_iterator(
-                str(dxf_path), dot_spacing=2.0
-            )
+                str(dxf_path)
+            )  # No config = 2.0mm fallback
             points = list(iterator.iterate_points(dxf_path))
 
             print(f"L-shaped polyline generated {len(points)} points")
@@ -168,8 +168,10 @@ EOF
         if not flask_dxf.exists():
             pytest.skip("Flask DXF file not found")
 
-        # Parse the flask DXF
-        iterator = PointIteratorFactory.create_iterator(str(flask_dxf), dot_spacing=2.0)
+        # Parse the flask DXF with 2mm dot spacing (using fallback behavior)
+        iterator = PointIteratorFactory.create_iterator(
+            str(flask_dxf)
+        )  # No config = 2.0mm fallback
         points = list(iterator.iterate_points(flask_dxf))
 
         print(f"Flask DXF generated {len(points)} points")
