@@ -6,17 +6,17 @@ This directory contains example files demonstrating MicroWeldr's capabilities wi
 
 ### SVG Example
 - **Source**: `flask_simple.svg` (1,053 bytes)
-- **Animation**: `flask_svg_animation.gif` (462KB, 154 frames)
+- **Animation**: `flask_svg_animation.gif` (449KB, 154 frames)
 - **Points**: 154 weld points
 - **Duration**: ~15.4 seconds
-- **Features**: Bézier curves with proper curved bottom, color-coded weld types
+- **Features**: Bézier curves with proper curved bottom, scale-aware point sizing
 
 ### DXF Example
 - **Source**: `flask.dxf` (2,546 bytes)
-- **Animation**: `flask_dxf_animation.gif` (258KB, 98 frames)
-- **Points**: 98 weld points
-- **Duration**: ~9.8 seconds
-- **Features**: CAD-precision line segments, distance-based point spacing
+- **Animation**: `flask_dxf_animation.gif` (305KB, 121 frames)
+- **Points**: 121 weld points
+- **Duration**: ~12.1 seconds
+- **Features**: Distance-based spacing, straight line interpolation, scale-aware points
 
 ## Animation Features
 
@@ -55,7 +55,7 @@ microweldr -weld flask_simple.svg -g_out flask.gcode -animation flask_animation.
 | **Precision** | Artistic/design focused | Engineering precision |
 | **Curves** | Bézier curves (smooth) | Tessellated line segments |
 | **File Size** | Smaller source (1KB) | Larger source (2.5KB) |
-| **Points** | 154 (interpolated curves) | 98 (distance-based spacing) |
+| **Points** | 154 (interpolated curves) | 121 (distance-based + line interpolation) |
 | **Use Case** | Design visualization | Technical drawings |
 
 ## System Improvements
