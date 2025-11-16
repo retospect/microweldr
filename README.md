@@ -11,7 +11,7 @@ A Python package that converts **SVG and DXF files** to Prusa Core One G-code fo
 
 This enables rapid **microfluidics prototyping** with a 3D printer by creating **sealed, waterproof channels and barriers**. Each vector path becomes a continuous welded line through precisely controlled sequential dot placement.
 
-## 🆕 Version 5.5.3 - Production Ready
+## 🆕 Version 5.5.4 - Production Ready
 
 - **Unified Configuration**: Consistent 0.5mm dot spacing across SVG and DXF formats
 - **Professional Examples**: Complete example collection with combined weld types

@@ -1,6 +1,6 @@
 [project]
 name = "microweldr"
-version = "5.5.3"
+version = "5.5.4"
 description = "Convert SVG and DXF files to Prusa Core One G-code for plastic welding"
 authors = [
     {name = "Reto Stamm", email = "reto@retospect.ch"}
