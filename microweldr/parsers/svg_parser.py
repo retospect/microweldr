@@ -219,23 +219,49 @@ class SVGParser:
             return []
 
         points = []
-        # Simple path parser - handles M, L, Z commands
-        commands = re.findall(r"[MLZ][^MLZ]*", d)
+        # Enhanced path parser - handles M, L, Q, C, Z commands
+        commands = re.findall(r"[MLQCZ][^MLQCZ]*", d)
         current_x, current_y = 0.0, 0.0
         start_x, start_y = 0.0, 0.0  # Track start point for Z command
 
         for command in commands:
             cmd = command[0]
-            coords = re.findall(r"-?\d+\.?\d*", command[1:])
-            coords = [float(c) for c in coords]
+            coords_str = command[1:].strip()
+            coords = self._parse_coordinates(coords_str)
 
             if cmd == "M" and len(coords) >= 2:  # Move to
                 current_x, current_y = coords[0], coords[1]
-                start_x, start_y = current_x, current_y  # Remember start point
+                start_x, start_y = current_x, current_y  # Update start point
                 points.append(WeldPoint(current_x, current_y, "normal"))
             elif cmd == "L" and len(coords) >= 2:  # Line to
                 current_x, current_y = coords[0], coords[1]
                 points.append(WeldPoint(current_x, current_y, "normal"))
+            elif cmd == "Q" and len(coords) >= 4:  # Quadratic Bézier curve
+                # Q control_x control_y end_x end_y
+                control_x, control_y = coords[0], coords[1]
+                end_x, end_y = coords[2], coords[3]
+                curve_points = self._generate_quadratic_bezier_points(
+                    current_x, current_y, control_x, control_y, end_x, end_y
+                )
+                points.extend(curve_points)
+                current_x, current_y = end_x, end_y
+            elif cmd == "C" and len(coords) >= 6:  # Cubic Bézier curve
+                # C control1_x control1_y control2_x control2_y end_x end_y
+                control1_x, control1_y = coords[0], coords[1]
+                control2_x, control2_y = coords[2], coords[3]
+                end_x, end_y = coords[4], coords[5]
+                curve_points = self._generate_cubic_bezier_points(
+                    current_x,
+                    current_y,
+                    control1_x,
+                    control1_y,
+                    control2_x,
+                    control2_y,
+                    end_x,
+                    end_y,
+                )
+                points.extend(curve_points)
+                current_x, current_y = end_x, end_y
             elif cmd == "Z":  # Close path - return to start point
                 if points and (current_x != start_x or current_y != start_y):
                     points.append(WeldPoint(start_x, start_y, "normal"))
@@ -337,6 +363,100 @@ class SVGParser:
                 interpolated.append(WeldPoint(x, y, start.weld_type))
 
         return interpolated
+
+    def _generate_quadratic_bezier_points(
+        self,
+        start_x: float,
+        start_y: float,
+        control_x: float,
+        control_y: float,
+        end_x: float,
+        end_y: float,
+    ) -> List[WeldPoint]:
+        """Generate points along a quadratic Bézier curve."""
+        points = []
+
+        # Calculate curve length estimate for point density
+        # Use linear approximation: start -> control -> end
+        dist1 = ((control_x - start_x) ** 2 + (control_y - start_y) ** 2) ** 0.5
+        dist2 = ((end_x - control_x) ** 2 + (end_y - control_y) ** 2) ** 0.5
+        estimated_length = dist1 + dist2
+
+        # Determine number of points based on dot spacing
+        num_points = max(2, int(estimated_length / self.dot_spacing))
+
+        for i in range(num_points + 1):
+            t = i / num_points if num_points > 0 else 0
+
+            # Quadratic Bézier formula: B(t) = (1-t)²P₀ + 2(1-t)tP₁ + t²P₂
+            x = (1 - t) ** 2 * start_x + 2 * (1 - t) * t * control_x + t**2 * end_x
+            y = (1 - t) ** 2 * start_y + 2 * (1 - t) * t * control_y + t**2 * end_y
+
+            points.append(WeldPoint(x, y, "normal"))
+
+        return points
+
+    def _generate_cubic_bezier_points(
+        self,
+        start_x: float,
+        start_y: float,
+        control1_x: float,
+        control1_y: float,
+        control2_x: float,
+        control2_y: float,
+        end_x: float,
+        end_y: float,
+    ) -> List[WeldPoint]:
+        """Generate points along a cubic Bézier curve."""
+        points = []
+
+        # Calculate curve length estimate for point density
+        # Use linear approximation: start -> control1 -> control2 -> end
+        dist1 = ((control1_x - start_x) ** 2 + (control1_y - start_y) ** 2) ** 0.5
+        dist2 = ((control2_x - control1_x) ** 2 + (control2_y - control1_y) ** 2) ** 0.5
+        dist3 = ((end_x - control2_x) ** 2 + (end_y - control2_y) ** 2) ** 0.5
+        estimated_length = dist1 + dist2 + dist3
+
+        # Determine number of points based on dot spacing
+        num_points = max(2, int(estimated_length / self.dot_spacing))
+
+        for i in range(num_points + 1):
+            t = i / num_points if num_points > 0 else 0
+
+            # Cubic Bézier formula: B(t) = (1-t)³P₀ + 3(1-t)²tP₁ + 3(1-t)t²P₂ + t³P₃
+            x = (
+                (1 - t) ** 3 * start_x
+                + 3 * (1 - t) ** 2 * t * control1_x
+                + 3 * (1 - t) * t**2 * control2_x
+                + t**3 * end_x
+            )
+            y = (
+                (1 - t) ** 3 * start_y
+                + 3 * (1 - t) ** 2 * t * control1_y
+                + 3 * (1 - t) * t**2 * control2_y
+                + t**3 * end_y
+            )
+
+            points.append(WeldPoint(x, y, "normal"))
+
+        return points
+
+    def _parse_coordinates(self, coords_str: str) -> List[float]:
+        """Parse coordinate string and return list of floats."""
+        if not coords_str.strip():
+            return []
+
+        # Split by whitespace and commas, filter out empty strings
+        coord_parts = [
+            part.strip()
+            for part in coords_str.replace(",", " ").split()
+            if part.strip()
+        ]
+
+        try:
+            return [float(part) for part in coord_parts]
+        except ValueError:
+            return []
 
     def _is_inside_defs(self, element: ET.Element, root: ET.Element) -> bool:
         """Check if an element is inside a <defs> section."""

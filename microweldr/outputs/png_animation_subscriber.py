@@ -167,16 +167,121 @@ class PNGAnimationSubscriber(EventSubscriber):
         return img_x, img_y
 
     def _generate_png_animation(self) -> None:
-        """Generate the PNG animation showing weld sequence."""
+        """Generate animated sequence showing weld progression."""
         try:
             if not self.paths:
                 logger.warning("No paths to animate")
                 return
 
-            # Calculate transformation
-            scale, offset_x, offset_y = self._calculate_transform()
+            # Check if output should be animated based on file extension
+            if self.output_path.suffix.lower() == ".gif":
+                self._generate_animated_gif()
+            else:
+                self._generate_static_png()
 
-            # Create image
+        except Exception as e:
+            logger.error(f"Failed to generate animation: {e}")
+            raise
+
+    def _generate_static_png(self) -> None:
+        """Generate static PNG showing complete weld sequence."""
+        # Calculate transformation
+        scale, offset_x, offset_y = self._calculate_transform()
+
+        # Create image
+        img = Image.new("RGB", (self.width, self.height), "white")
+        draw = ImageDraw.Draw(img)
+
+        # Draw title
+        try:
+            font = ImageFont.truetype("Arial.ttf", 16)
+        except:
+            font = ImageFont.load_default()
+
+        title = "MicroWeldr - Weld Sequence Visualization"
+        draw.text((10, 10), title, fill="black", font=font)
+
+        # Draw all paths and points
+        for path_id, path_data in self.paths.items():
+            points = path_data["points"]
+            weld_type = path_data["weld_type"]
+            color = self.colors.get(weld_type, self.colors["normal"])
+
+            # Draw path lines
+            if len(points) > 1:
+                path_coords = []
+                for point in points:
+                    x, y = self._transform_point(
+                        point["x"], point["y"], scale, offset_x, offset_y
+                    )
+                    path_coords.extend([x, y])
+
+                if len(path_coords) >= 4:  # At least 2 points
+                    draw.line(path_coords, fill=color, width=2)
+
+            # Draw points
+            for i, point in enumerate(points):
+                x, y = self._transform_point(
+                    point["x"], point["y"], scale, offset_x, offset_y
+                )
+
+                # Draw point circle
+                draw.ellipse(
+                    [
+                        x - self.point_radius,
+                        y - self.point_radius,
+                        x + self.point_radius,
+                        y + self.point_radius,
+                    ],
+                    fill=color,
+                    outline="black",
+                )
+
+                # Draw point number
+                try:
+                    small_font = ImageFont.truetype("Arial.ttf", 10)
+                except:
+                    small_font = ImageFont.load_default()
+
+                draw.text((x + 5, y - 5), str(i + 1), fill="black", font=small_font)
+
+        # Draw legend
+        self._draw_legend(draw)
+
+        # Save image
+        img.save(self.output_path, "PNG")
+        logger.info(f"Static PNG saved to {self.output_path}")
+
+    def _generate_animated_gif(self) -> None:
+        """Generate animated GIF showing weld sequence progression."""
+        # Calculate transformation
+        scale, offset_x, offset_y = self._calculate_transform()
+
+        # Collect all points in sequence
+        all_points = []
+        for path_id, path_data in self.paths.items():
+            for point in path_data["points"]:
+                all_points.append(
+                    {
+                        "x": point["x"],
+                        "y": point["y"],
+                        "weld_type": point["weld_type"],
+                        "path_id": path_id,
+                    }
+                )
+
+        if not all_points:
+            logger.warning("No points to animate")
+            return
+
+        frames = []
+        frame_duration = 200  # milliseconds per frame
+
+        # Create frames showing progressive welding
+        for frame_num in range(
+            0, len(all_points), max(1, len(all_points) // 20)
+        ):  # 20 frames max
+            # Create frame
             img = Image.new("RGB", (self.width, self.height), "white")
             draw = ImageDraw.Draw(img)
 
@@ -186,63 +291,87 @@ class PNGAnimationSubscriber(EventSubscriber):
             except:
                 font = ImageFont.load_default()
 
-            title = "MicroWeldr - Weld Sequence Animation"
+            title = (
+                f"MicroWeldr - Weld Progress ({frame_num + 1}/{len(all_points)} points)"
+            )
             draw.text((10, 10), title, fill="black", font=font)
 
-            # Draw all paths and points
-            for path_id, path_data in self.paths.items():
-                points = path_data["points"]
-                weld_type = path_data["weld_type"]
-                color = self.colors.get(weld_type, self.colors["normal"])
+            # Draw points up to current frame
+            points_to_show = all_points[: frame_num + 1]
 
-                # Draw path lines
-                if len(points) > 1:
-                    path_coords = []
-                    for point in points:
-                        x, y = self._transform_point(
-                            point["x"], point["y"], scale, offset_x, offset_y
-                        )
-                        path_coords.extend([x, y])
-
-                    if len(path_coords) >= 4:  # At least 2 points
-                        draw.line(path_coords, fill=color, width=2)
-
-                # Draw points
-                for i, point in enumerate(points):
+            # Draw path lines for completed segments
+            if len(points_to_show) > 1:
+                path_coords = []
+                for point in points_to_show:
                     x, y = self._transform_point(
                         point["x"], point["y"], scale, offset_x, offset_y
                     )
+                    path_coords.extend([x, y])
 
-                    # Draw point circle
-                    draw.ellipse(
-                        [
-                            x - self.point_radius,
-                            y - self.point_radius,
-                            x + self.point_radius,
-                            y + self.point_radius,
-                        ],
-                        fill=color,
-                        outline="black",
-                    )
+                if len(path_coords) >= 4:
+                    draw.line(path_coords, fill="gray", width=1)
 
-                    # Draw point number
-                    try:
-                        small_font = ImageFont.truetype("Arial.ttf", 10)
-                    except:
-                        small_font = ImageFont.load_default()
+            # Draw completed points
+            for i, point in enumerate(points_to_show[:-1]):  # All but the last
+                x, y = self._transform_point(
+                    point["x"], point["y"], scale, offset_x, offset_y
+                )
+                color = self.colors.get(point["weld_type"], self.colors["normal"])
 
-                    draw.text((x + 5, y - 5), str(i + 1), fill="black", font=small_font)
+                draw.ellipse([x - 2, y - 2, x + 2, y + 2], fill=color, outline="black")
+
+            # Draw current point (larger and highlighted)
+            if points_to_show:
+                current_point = points_to_show[-1]
+                x, y = self._transform_point(
+                    current_point["x"], current_point["y"], scale, offset_x, offset_y
+                )
+                color = self.colors.get(
+                    current_point["weld_type"], self.colors["normal"]
+                )
+
+                # Draw larger current point
+                draw.ellipse(
+                    [
+                        x - self.point_radius,
+                        y - self.point_radius,
+                        x + self.point_radius,
+                        y + self.point_radius,
+                    ],
+                    fill=color,
+                    outline="red",
+                    width=2,
+                )
+
+                # Draw point number
+                try:
+                    small_font = ImageFont.truetype("Arial.ttf", 10)
+                except:
+                    small_font = ImageFont.load_default()
+
+                draw.text(
+                    (x + 5, y - 5), str(frame_num + 1), fill="red", font=small_font
+                )
 
             # Draw legend
             self._draw_legend(draw)
 
-            # Save image
-            img.save(self.output_path, "PNG")
-            logger.info(f"PNG animation saved to {self.output_path}")
+            frames.append(img)
 
-        except Exception as e:
-            logger.error(f"Failed to generate PNG animation: {e}")
-            raise
+        # Save animated GIF
+        if frames:
+            frames[0].save(
+                self.output_path,
+                save_all=True,
+                append_images=frames[1:],
+                duration=frame_duration,
+                loop=0,  # Infinite loop
+            )
+            logger.info(
+                f"Animated GIF saved to {self.output_path} ({len(frames)} frames)"
+            )
+        else:
+            logger.warning("No frames generated for animation")
 
     def _draw_legend(self, draw: ImageDraw.Draw) -> None:
         """Draw legend showing weld types and colors."""
