@@ -97,6 +97,11 @@ jobs:
     - name: Test CLI installation
       run: |
         echo "Testing CLI via Poetry..."
+        echo "Checking Poetry environment..."
+        poetry env info
+        echo "Checking installed packages..."
+        poetry show microweldr || echo "Package not found in poetry show"
+        echo "Testing CLI command..."
         poetry run microweldr --help
 
     - name: Test example conversion
