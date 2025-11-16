@@ -172,19 +172,15 @@ class GIFAnimationSubscriber(EventSubscriber):
         return scale, offset_x, offset_y
 
     def _calculate_point_radius(self, scale: float) -> int:
-        """Calculate point radius based on nozzle size and coordinate scale."""
-        # Get nozzle outer diameter from config (default 1.1mm)
-        try:
-            nozzle_diameter = self.config.get("nozzle", "outer_diameter", 1.1)
-        except Exception:
-            # Fallback if config doesn't have nozzle settings
-            nozzle_diameter = 1.1
+        """Calculate point radius based on actual welding spot size."""
+        # Welding spot diameter is 2mm (both normal and frangible welds)
+        weld_spot_diameter = 2.0  # mm
 
-        # Calculate radius in pixels based on real-world nozzle size
-        nozzle_radius_pixels = (nozzle_diameter / 2) * scale
+        # Calculate radius in pixels based on real-world welding spot size
+        weld_spot_radius_pixels = (weld_spot_diameter / 2) * scale
 
-        # Use the larger of: scaled nozzle size or minimum base radius
-        point_radius = max(self.base_point_radius, int(nozzle_radius_pixels))
+        # Use the larger of: scaled weld spot size or minimum base radius
+        point_radius = max(self.base_point_radius, int(weld_spot_radius_pixels))
 
         # Cap at reasonable maximum to avoid huge points
         return min(point_radius, 20)
@@ -251,8 +247,19 @@ class GIFAnimationSubscriber(EventSubscriber):
                 )
                 color = self.colors.get(point["weld_type"], self.colors["normal"])
 
-                # Draw small completed point
-                draw.ellipse([x - 2, y - 2, x + 2, y + 2], fill=color)
+                # Draw completed point (2mm diameter welding spot)
+                completed_radius = max(
+                    2, int((2.0 / 2) * scale)
+                )  # 2mm diameter = 1mm radius
+                draw.ellipse(
+                    [
+                        x - completed_radius,
+                        y - completed_radius,
+                        x + completed_radius,
+                        y + completed_radius,
+                    ],
+                    fill=color,
+                )
 
             # Draw current point (larger and highlighted)
             if points_to_show:
@@ -309,8 +316,19 @@ class GIFAnimationSubscriber(EventSubscriber):
                 )
                 color = self.colors.get(point["weld_type"], self.colors["normal"])
 
-                # Draw normal-sized point (same as completed points)
-                draw.ellipse([x - 2, y - 2, x + 2, y + 2], fill=color)
+                # Draw normal-sized point (2mm diameter welding spot)
+                final_radius = max(
+                    2, int((2.0 / 2) * scale)
+                )  # 2mm diameter = 1mm radius
+                draw.ellipse(
+                    [
+                        x - final_radius,
+                        y - final_radius,
+                        x + final_radius,
+                        y + final_radius,
+                    ],
+                    fill=color,
+                )
 
             # Draw legend
             self._draw_legend(draw)
