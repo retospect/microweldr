@@ -12,6 +12,12 @@ from microweldr.prusalink.exceptions import (
 
 def printer_available():
     """Check if printer is available for testing."""
+    import os
+
+    # Skip in CI environments
+    if os.getenv("CI") or os.getenv("GITHUB_ACTIONS"):
+        return False
+
     try:
         client = PrusaLinkClient()
         return client.test_connection()
@@ -19,7 +25,7 @@ def printer_available():
         return False
 
 
-# Skip all tests if no printer available
+# Skip all tests if no printer available or in CI environment
 pytestmark = pytest.mark.skipif(
     not printer_available(), reason="Printer not available - skipping integration tests"
 )
@@ -33,6 +39,7 @@ class TestPrinterIntegration:
         """Create PrusaLink client for testing."""
         return PrusaLinkClient()
 
+    @pytest.mark.hardware
     def test_temperature_readback_verification(self, client):
         """Test temperature readback catches clamping (fast, safe test)."""
         # Test 1: Normal temperature should work
@@ -65,6 +72,7 @@ class TestPrinterIntegration:
         # Clean up - set back to safe temperature
         client.set_bed_temperature(0)
 
+    @pytest.mark.hardware
     def test_invalid_gcode_handling(self, client):
         """Test how system handles invalid G-code commands (fast test)."""
         # Test 1: Malformed G-code should be ignored by printer
@@ -86,6 +94,7 @@ class TestPrinterIntegration:
         state = status.get("printer", {}).get("state", "Unknown")
         assert state.upper() in ["IDLE", "FINISHED", "READY"]
 
+    @pytest.mark.hardware
     def test_error_recovery_and_halt(self, client):
         """Test error recovery and halt functionality (safe test)."""
         # Test halt operations method
@@ -121,6 +130,7 @@ class TestPrinterValidationLimits:
         """Create PrusaLink client for testing."""
         return PrusaLinkClient()
 
+    @pytest.mark.hardware
     def test_temperature_limits_realistic(self, client):
         """Test that our validation limits are realistic for the printer."""
         # Test bed temperature at validation limit (should work)
@@ -138,6 +148,7 @@ class TestPrinterValidationLimits:
         # Clean up
         client.set_bed_temperature(0)
 
+    @pytest.mark.hardware
     def test_movement_limits_realistic(self, client):
         """Test that movement limits are appropriate (validation only)."""
         # Test that our validation limits work
