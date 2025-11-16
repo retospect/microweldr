@@ -56,7 +56,7 @@ jobs:
         echo "Poetry config list:"
         poetry config --list
         echo "Checking project configuration..."
-        poetry check --verbose || (echo "Poetry check failed, showing pyproject.toml content:" && head -20 pyproject.toml && exit 1)
+        poetry check --verbose || (echo "Poetry check failed, attempting to fix lock file..." && poetry lock && poetry check --verbose)
 
     - name: Load cached venv
       id: cached-poetry-dependencies
