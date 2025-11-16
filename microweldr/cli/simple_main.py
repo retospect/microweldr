@@ -11,6 +11,7 @@ from ..core.logging_config import setup_logging
 from ..generators.point_iterator_factory import PointIteratorFactory
 from ..outputs.streaming_gcode_subscriber import StreamingGCodeSubscriber
 from ..outputs.streaming_animation_subscriber import StreamingAnimationSubscriber
+from ..outputs.png_animation_subscriber import PNGAnimationSubscriber
 from ..core.events import (
     Event,
     EventType,
@@ -251,12 +252,18 @@ def generate_gcode(points: List[dict], output_path: str, config: Config, args) -
 
 
 def generate_animation(points: List[dict], output_path: str, config: Config) -> bool:
-    """Generate PNG animation using streaming subscriber."""
+    """Generate animation using appropriate subscriber based on file extension."""
     try:
-        print(f"🎨 Generating PNG animation: {output_path}")
+        output_path_obj = Path(output_path)
+        extension = output_path_obj.suffix.lower()
 
-        # Create streaming animation subscriber
-        subscriber = StreamingAnimationSubscriber(Path(output_path), config)
+        if extension == ".png":
+            print(f"🎨 Generating PNG animation: {output_path}")
+            subscriber = PNGAnimationSubscriber(output_path_obj, config)
+        else:
+            # Default to SVG for .svg or unknown extensions
+            print(f"🎨 Generating SVG animation: {output_path}")
+            subscriber = StreamingAnimationSubscriber(output_path_obj, config)
 
         # Send events to generate animation
         timestamp = time.time()
@@ -270,14 +277,39 @@ def generate_animation(points: List[dict], output_path: str, config: Config) -> 
         )
         subscriber.handle_event(start_event)
 
-        # Send points as path events
+        # Send points as path events with proper path management
+        current_path_id = None
         for i, point in enumerate(points):
+            path_id = point.get("path_id", "default_path")
+
+            # Send path start event if this is a new path
+            if path_id != current_path_id:
+                if current_path_id is not None:
+                    # Complete previous path
+                    path_complete_event = PathEvent(
+                        action="path_complete", path_id=current_path_id
+                    )
+                    subscriber.handle_event(path_complete_event)
+
+                # Start new path
+                path_start_event = PathEvent(action="path_start", path_id=path_id)
+                subscriber.handle_event(path_start_event)
+                current_path_id = path_id
+
+            # Send point event
             point_event = PathEvent(
                 action="point_added",
-                path_id=point.get("path_id", f"path_{i}"),
+                path_id=path_id,
                 point=point,
             )
             subscriber.handle_event(point_event)
+
+        # Complete final path
+        if current_path_id is not None:
+            path_complete_event = PathEvent(
+                action="path_complete", path_id=current_path_id
+            )
+            subscriber.handle_event(path_complete_event)
 
         # End processing
         end_event = Event(
