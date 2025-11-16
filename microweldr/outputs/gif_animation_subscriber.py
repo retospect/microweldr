@@ -39,7 +39,8 @@ class GIFAnimationSubscriber(EventSubscriber):
         self.width = 800
         self.height = 600
         self.margin = 50
-        self.point_radius = 3
+        # Point radius will be calculated based on nozzle size and scale
+        self.base_point_radius = 3  # Minimum radius in pixels
         self.colors = {
             "normal": "#000080",  # Blue
             "frangible": "#FF0000",  # Red
@@ -170,6 +171,24 @@ class GIFAnimationSubscriber(EventSubscriber):
 
         return scale, offset_x, offset_y
 
+    def _calculate_point_radius(self, scale: float) -> int:
+        """Calculate point radius based on nozzle size and coordinate scale."""
+        # Get nozzle outer diameter from config (default 1.1mm)
+        try:
+            nozzle_diameter = self.config.get("nozzle", "outer_diameter", 1.1)
+        except Exception:
+            # Fallback if config doesn't have nozzle settings
+            nozzle_diameter = 1.1
+
+        # Calculate radius in pixels based on real-world nozzle size
+        nozzle_radius_pixels = (nozzle_diameter / 2) * scale
+
+        # Use the larger of: scaled nozzle size or minimum base radius
+        point_radius = max(self.base_point_radius, int(nozzle_radius_pixels))
+
+        # Cap at reasonable maximum to avoid huge points
+        return min(point_radius, 20)
+
     def _transform_point(
         self, x: float, y: float, scale: float, offset_x: float, offset_y: float
     ) -> Tuple[int, int]:
@@ -195,6 +214,9 @@ class GIFAnimationSubscriber(EventSubscriber):
         """Generate animated GIF showing weld sequence progression."""
         # Calculate transformation
         scale, offset_x, offset_y = self._calculate_transform()
+
+        # Calculate point radius based on nozzle size and scale
+        point_radius = self._calculate_point_radius(scale)
 
         # Use the weld sequence (points in order they were received)
         if not self.weld_sequence:
@@ -247,10 +269,10 @@ class GIFAnimationSubscriber(EventSubscriber):
                 # Draw larger current point with bright outline
                 draw.ellipse(
                     [
-                        x - self.point_radius,
-                        y - self.point_radius,
-                        x + self.point_radius,
-                        y + self.point_radius,
+                        x - point_radius,
+                        y - point_radius,
+                        x + point_radius,
+                        y + point_radius,
                     ],
                     fill=color,
                     outline="red",
