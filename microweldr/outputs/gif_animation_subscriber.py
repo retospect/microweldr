@@ -32,6 +32,8 @@ class GIFAnimationSubscriber(EventSubscriber):
         self.paths = {}
         self.current_path_id = None
         self.bounds = {"min_x": None, "min_y": None, "max_x": None, "max_y": None}
+        # Track points in welding sequence for animation
+        self.weld_sequence = []
 
         # Animation settings
         self.width = 800
@@ -90,10 +92,20 @@ class GIFAnimationSubscriber(EventSubscriber):
                     y = float(point_data.get("y", 0))
                     weld_type = point_data.get("weld_type", "normal")
 
-                    self.paths[self.current_path_id]["points"].append(
-                        {"x": x, "y": y, "weld_type": weld_type}
-                    )
+                    point_info = {"x": x, "y": y, "weld_type": weld_type}
+
+                    self.paths[self.current_path_id]["points"].append(point_info)
                     self.paths[self.current_path_id]["weld_type"] = weld_type
+
+                    # Add to weld sequence for animation (in order received)
+                    self.weld_sequence.append(
+                        {
+                            "x": x,
+                            "y": y,
+                            "weld_type": weld_type,
+                            "path_id": self.current_path_id,
+                        }
+                    )
 
                     # Update bounds
                     self._update_bounds(x, y)
@@ -184,30 +196,19 @@ class GIFAnimationSubscriber(EventSubscriber):
         # Calculate transformation
         scale, offset_x, offset_y = self._calculate_transform()
 
-        # Collect all points in sequence
-        all_points = []
-        for path_id, path_data in self.paths.items():
-            for point in path_data["points"]:
-                all_points.append(
-                    {
-                        "x": point["x"],
-                        "y": point["y"],
-                        "weld_type": point["weld_type"],
-                        "path_id": path_id,
-                    }
-                )
-
-        if not all_points:
+        # Use the weld sequence (points in order they were received)
+        if not self.weld_sequence:
             logger.warning("No points to animate")
             return
 
         frames = []
-        frame_duration = 200  # milliseconds per frame
+        frame_duration = 150  # milliseconds per frame (faster animation)
 
-        # Create frames showing progressive welding
-        for frame_num in range(
-            0, len(all_points), max(1, len(all_points) // 20)
-        ):  # 20 frames max
+        # Create frames showing progressive welding - show every point
+        # Limit to reasonable number of frames for file size
+        step_size = max(1, len(self.weld_sequence) // 30)  # Max 30 frames
+
+        for frame_num in range(0, len(self.weld_sequence), step_size):
             # Create frame
             img = Image.new("RGB", (self.width, self.height), "white")
             draw = ImageDraw.Draw(img)
@@ -218,34 +219,23 @@ class GIFAnimationSubscriber(EventSubscriber):
             except:
                 font = ImageFont.load_default()
 
-            title = (
-                f"MicroWeldr - Weld Progress ({frame_num + 1}/{len(all_points)} points)"
-            )
+            title = f"MicroWeldr - Weld Progress ({frame_num + 1}/{len(self.weld_sequence)} points)"
             draw.text((10, 10), title, fill="black", font=font)
 
-            # Draw points up to current frame
-            points_to_show = all_points[: frame_num + 1]
+            # Draw points up to current frame (no connecting lines)
+            points_to_show = self.weld_sequence[: frame_num + 1]
 
-            # Draw path lines for completed segments
-            if len(points_to_show) > 1:
-                path_coords = []
-                for point in points_to_show:
-                    x, y = self._transform_point(
-                        point["x"], point["y"], scale, offset_x, offset_y
-                    )
-                    path_coords.extend([x, y])
-
-                if len(path_coords) >= 4:
-                    draw.line(path_coords, fill="gray", width=1)
-
-            # Draw completed points
+            # Draw completed points (smaller, faded)
             for i, point in enumerate(points_to_show[:-1]):  # All but the last
                 x, y = self._transform_point(
                     point["x"], point["y"], scale, offset_x, offset_y
                 )
                 color = self.colors.get(point["weld_type"], self.colors["normal"])
 
-                draw.ellipse([x - 2, y - 2, x + 2, y + 2], fill=color, outline="black")
+                # Draw small completed point
+                draw.ellipse(
+                    [x - 2, y - 2, x + 2, y + 2], fill=color, outline="black", width=1
+                )
 
             # Draw current point (larger and highlighted)
             if points_to_show:
@@ -257,7 +247,7 @@ class GIFAnimationSubscriber(EventSubscriber):
                     current_point["weld_type"], self.colors["normal"]
                 )
 
-                # Draw larger current point
+                # Draw larger current point with bright outline
                 draw.ellipse(
                     [
                         x - self.point_radius,
@@ -267,7 +257,7 @@ class GIFAnimationSubscriber(EventSubscriber):
                     ],
                     fill=color,
                     outline="red",
-                    width=2,
+                    width=3,
                 )
 
                 # Draw point number
