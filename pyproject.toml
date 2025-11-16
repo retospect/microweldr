@@ -45,6 +45,9 @@ description = "Convert SVG and DXF files to Prusa Core One G-code for plastic we
 authors = ["Reto Stamm <reto@retostamm.com>"]
 packages = [{include = "microweldr"}]
 
+[tool.poetry.dependencies]
+python = ">=3.10"
+
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^9.0.0"
