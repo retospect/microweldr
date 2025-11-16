@@ -1,0 +1,40 @@
+[tool.bumpversion]
+current_version = "5.5.2"
+parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"
+serialize = ["{major}.{minor}.{patch}"]
+search = "{current_version}"
+replace = "{new_version}"
+tag = true
+tag_name = "v{new_version}"
+tag_message = "🚀 MicroWeldr v{new_version}"
+commit = true
+commit_args = "--no-verify"
+message = "🚀 Bump version: {current_version} → {new_version}"
+
+# Primary version source
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+search = 'version = "{current_version}"'
+replace = 'version = "{new_version}"'
+
+# Package __init__.py
+[[tool.bumpversion.files]]
+filename = "microweldr/__init__.py"
+search = '__version__ = "{current_version}"'
+replace = '__version__ = "{new_version}"'
+
+# CLI now uses dynamic version from package metadata
+
+# README.md version references
+[[tool.bumpversion.files]]
+filename = "README.md"
+search = "## 🆕 Version {current_version}"
+replace = "## 🆕 Version {new_version}"
+
+# CHANGELOG.md - add new version header
+[[tool.bumpversion.files]]
+filename = "CHANGELOG.md"
+search = "## [Unreleased]"
+replace = """## [Unreleased]
+
+## [{new_version}] - {utcnow:%Y-%m-%d}"""
