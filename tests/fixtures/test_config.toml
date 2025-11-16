@@ -8,13 +8,13 @@ cooldown_temperature = 50
 [normal_welds]
 weld_time = 0.1
 dot_spacing = 0.5
-weld_height = 0.020
+weld_height = 0.1
 weld_temperature = 160
 
 [frangible_welds]
 weld_time = 0.3
 dot_spacing = 0.5
-weld_height = 0.020
+weld_height = 0.6
 weld_temperature = 160
 
 [movement]

@@ -190,13 +190,13 @@ class UnifiedConfig:
                 "weld_move_height": 2.0,
             },
             "normal_welds": {
-                "weld_height": 0.020,
+                "weld_height": 0.1,
                 "weld_temperature": 160,
                 "weld_time": 0.1,
                 "dot_spacing": 0.5,
             },
             "frangible_welds": {
-                "weld_height": 0.020,
+                "weld_height": 0.6,
                 "weld_temperature": 160,
                 "weld_time": 0.3,
                 "dot_spacing": 0.5,
