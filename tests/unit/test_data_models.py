@@ -104,8 +104,19 @@ class TestCADEntities:
         assert not line.is_construction
 
         weld_path = line.to_weld_path()
-        assert len(weld_path.points) == 2
+        # Line length is 5mm, with default 2mm spacing should generate 3 points: 0, 2.5, 5mm
+        assert (
+            len(weld_path.points) >= 2
+        ), f"Expected at least 2 points, got {len(weld_path.points)}"
+        assert (
+            len(weld_path.points) == 3
+        ), f"5mm line with 2mm spacing should generate 3 points, got {len(weld_path.points)}"
         assert weld_path.weld_type == WeldType.NORMAL
+
+        # Verify interpolated points are correct
+        points = weld_path.points
+        assert points[0].x == 0.0 and points[0].y == 0.0  # Start point
+        assert points[-1].x == 3.0 and points[-1].y == 4.0  # End point
 
     def test_construction_layer_detection(self):
         """Test construction layer detection."""
