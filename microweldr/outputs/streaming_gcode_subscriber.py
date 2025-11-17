@@ -27,6 +27,7 @@ class StreamingGCodeSubscriber(EventSubscriber):
         output_path: Path,
         config,
         coordinate_offset: Tuple[float, float] = (0.0, 0.0),
+        include_user_pause: bool = True,
     ):
         """Initialize streaming G-code subscriber.
 
@@ -34,6 +35,7 @@ class StreamingGCodeSubscriber(EventSubscriber):
             output_path: Path for G-code output file
             config: Configuration object
             coordinate_offset: Tuple of (offset_x, offset_y) for coordinate centering
+            include_user_pause: Whether to include user pause for plastic insertion
         """
         self.output_path = Path(output_path)
         self.config = config
@@ -47,6 +49,9 @@ class StreamingGCodeSubscriber(EventSubscriber):
 
         # Store coordinate offset for centering
         self.offset_x, self.offset_y = coordinate_offset
+
+        # User interaction control
+        self.include_user_pause = include_user_pause
 
         # Travel height management
         self.welding_started = False  # Track if we've started welding
@@ -156,7 +161,8 @@ class StreamingGCodeSubscriber(EventSubscriber):
             self.file_handle = open(self.output_path, "w", encoding="utf-8")
             self._write_gcode_header()
             self._write_calibration_and_heating()
-            self._write_user_pause()
+            if self.include_user_pause:
+                self._write_user_pause()
 
             self.is_initialized = True
             logger.info(f"StreamingGCode: Initialized G-code file {self.output_path}")
@@ -204,7 +210,8 @@ class StreamingGCodeSubscriber(EventSubscriber):
         xy_speed = self.config.get("movement", "xy_speed", 3000)
 
         if self.is_first_weld_ever:
-            # Very first weld point - use high travel height
+            # Very first weld point - apply compression offset, then use high travel height
+            self._write_weld_compression_offset()
             self.file_handle.write(
                 f"G1 Z{high_travel_height} F{z_speed} ; Move to high travel height\n"
             )
@@ -402,6 +409,30 @@ class StreamingGCodeSubscriber(EventSubscriber):
             "M0 ; Pause - Insert plastic sheets and press continue\n"
         )
         self.file_handle.write("M117 Starting welding sequence...\n\n")
+
+    def _write_weld_compression_offset(self) -> None:
+        """Write Z offset for weld compression after calibration but before welding."""
+        if not self.file_handle:
+            return
+
+        # Get weld compression offset from config
+        compression_offset = self.config.get("movement", "weld_compression_offset", 0.3)
+        z_speed = self.config.get("movement", "z_speed", 600)
+        high_travel_height = self.config.get("movement", "move_height", 5.0)
+
+        if compression_offset != 0.0:
+            self.file_handle.write(
+                "; Apply Z offset for weld compression (relative adjustment)\n"
+            )
+            self.file_handle.write(
+                f"G1 Z0 F{z_speed} ; Move to Z=0 for relative offset\n"
+            )
+            self.file_handle.write(
+                f"G92 Z{compression_offset} ; Set Z offset - printer thinks it's {compression_offset}mm above surface\n"
+            )
+            self.file_handle.write(
+                f"G1 Z{high_travel_height} F{z_speed} ; Return to travel height\n\n"
+            )
 
     def _write_cooldown_sequence(self) -> None:
         """Write cooldown and end sequence."""

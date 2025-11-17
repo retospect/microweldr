@@ -65,17 +65,25 @@ class TwoPassProcessor:
     Pass 2: Replays events with centering offset applied to G-code generation
     """
 
-    def __init__(self, config, bed_size_x: float = 250.0, bed_size_y: float = 220.0):
+    def __init__(
+        self,
+        config,
+        bed_size_x: float = 250.0,
+        bed_size_y: float = 220.0,
+        include_user_pause: bool = True,
+    ):
         """Initialize two-pass processor.
 
         Args:
             config: Configuration object
             bed_size_x: Printer bed width in mm
             bed_size_y: Printer bed depth in mm
+            include_user_pause: Whether to include user pause for plastic insertion
         """
         self.config = config
         self.bed_size_x = bed_size_x
         self.bed_size_y = bed_size_y
+        self.include_user_pause = include_user_pause
 
         # Event recording and replay
         self.event_recorder = EventRecorder()
@@ -161,7 +169,10 @@ class TwoPassProcessor:
 
             # G-code subscriber with centering offset
             gcode_subscriber = StreamingGCodeSubscriber(
-                output_path, self.config, coordinate_offset=self.centering_offset
+                output_path,
+                self.config,
+                coordinate_offset=self.centering_offset,
+                include_user_pause=self.include_user_pause,
             )
             pass_2_subscribers.append(gcode_subscriber)
 

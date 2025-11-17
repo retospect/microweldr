@@ -189,8 +189,10 @@ def generate_gcode(points: List[dict], output_path: str, config: Config, args) -
         bed_size_x = config.get("printer", "bed_size_x", 250.0)
         bed_size_y = config.get("printer", "bed_size_y", 220.0)
 
-        # Create two-pass processor
-        processor = TwoPassProcessor(config, bed_size_x, bed_size_y)
+        # Create two-pass processor (combined file includes user pause)
+        processor = TwoPassProcessor(
+            config, bed_size_x, bed_size_y, include_user_pause=True
+        )
 
         # Convert points to events
         events = []
