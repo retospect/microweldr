@@ -23,11 +23,7 @@ filename = "microweldr/__init__.py"
 search = '__version__ = "{current_version}"'
 replace = '__version__ = "{new_version}"'
 
-# Tool.poetry section (for Poetry compatibility)
-[[tool.bumpversion.files]]
-filename = "pyproject.toml"
-search = '[tool.poetry]\nname = "microweldr"\nversion = "{current_version}"'
-replace = '[tool.poetry]\nname = "microweldr"\nversion = "{new_version}"'
+# Tool.poetry section is updated by the primary version pattern above
 
 # CLI now uses dynamic version from package metadata
 
