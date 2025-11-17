@@ -27,13 +27,13 @@ When you bump the version, these files are automatically updated:
 ### Method 1: Make Commands (Recommended)
 
 ```bash
-# Bump patch version (4.0.0 -> 4.0.1)
+# Bump patch version (5.5.4 -> 5.5.5)
 make bump-patch
 
-# Bump minor version (4.0.0 -> 4.1.0)
+# Bump minor version (5.5.4 -> 5.6.0)
 make bump-minor
 
-# Bump major version (4.0.0 -> 5.0.0)
+# Bump major version (5.5.4 -> 6.0.0)
 make bump-major
 
 # Show current version
@@ -49,9 +49,9 @@ make release-major
 
 ```bash
 # Direct script usage
-python scripts/bump_version.py patch
-python scripts/bump_version.py minor
-python scripts/bump_version.py major
+python scripts/bump_version.py patch    # 5.5.4 -> 5.5.5
+python scripts/bump_version.py minor    # 5.5.4 -> 5.6.0
+python scripts/bump_version.py major    # 5.5.4 -> 6.0.0
 ```
 
 ### Method 3: Direct bump-my-version
@@ -98,7 +98,7 @@ The version bumping behavior is configured in `.bumpversion.toml`:
 
 ```toml
 [tool.bumpversion]
-current_version = "4.0.0"
+current_version = "5.5.4"
 parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"
 serialize = ["{major}.{minor}.{patch}"]
 search = "{current_version}"
@@ -158,7 +158,7 @@ If you encounter version mismatches:
 
 ```bash
 # Reset to current version in all files
-bump-my-version bump --current-version 4.0.0 patch --dry-run
+bump-my-version bump --current-version 5.5.4 patch --dry-run
 ```
 
 ### Rollback Version

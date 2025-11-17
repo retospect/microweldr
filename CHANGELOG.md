@@ -38,7 +38,7 @@ This release represents a complete production-ready system with unified configur
 - **Configuration**: Removed unused parameters and unified dot spacing
 
 #### 📚 Documentation
-- **Updated README**: Complete overhaul reflecting current v5.5.2 state and CLI syntax
+- **Updated README**: Complete overhaul reflecting current v5.5.4 state and CLI syntax
 - **Development Guide**: Modernized setup instructions for Poetry-based workflow
 - **Examples Documentation**: Professional example collection with generation commands
 
