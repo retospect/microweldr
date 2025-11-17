@@ -2,6 +2,7 @@
 
 [![PyPI version](https://badge.fury.io/py/microweldr.svg)](https://badge.fury.io/py/microweldr)
 [![Test Suite](https://github.com/retospect/microweldr/actions/workflows/test.yml/badge.svg)](https://github.com/retospect/microweldr/actions/workflows/test.yml)
+[![CodeQL](https://github.com/retospect/microweldr/actions/workflows/codeql.yml/badge.svg)](https://github.com/retospect/microweldr/actions/workflows/codeql.yml)
 
 A Python package that converts **SVG and DXF files** to Prusa Core One G-code for **continuous plastic line welding**. The package processes vector graphics and generates G-code that creates **waterproof welded lines** by placing many precise weld "dots" in sequence along the paths, without extruding any plastic material.
 
