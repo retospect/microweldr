@@ -98,7 +98,7 @@ The version bumping behavior is configured in `.bumpversion.toml`:
 
 ```toml
 [tool.bumpversion]
-current_version = "5.5.4"
+current_version = "6.0.0"
 parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"
 serialize = ["{major}.{minor}.{patch}"]
 search = "{current_version}"
