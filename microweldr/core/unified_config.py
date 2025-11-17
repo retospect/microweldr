@@ -180,17 +180,19 @@ class UnifiedConfig:
                 "nozzle_temperature": 160,
                 "chamber_temperature": 35,
                 "use_chamber_heating": False,
-                "cooldown_temperature": 50,
+                "cooldown_temperature": 0,
+                "enable_cooldown": False,
             },
             "movement": {
                 "move_height": 5.0,
+                "low_travel_height": 0.2,
                 "travel_speed": 3000,
                 "z_speed": 600,
                 "weld_height": 0.02,
                 "weld_move_height": 2.0,
             },
             "normal_welds": {
-                "weld_height": 0.1,
+                "weld_height": 0.01,
                 "weld_temperature": 160,
                 "weld_time": 0.1,
                 "dot_spacing": 1.0,
@@ -198,7 +200,7 @@ class UnifiedConfig:
             "frangible_welds": {
                 "weld_height": 0.6,
                 "weld_temperature": 160,
-                "weld_time": 0.3,
+                "weld_time": 0.1,
                 "dot_spacing": 1.0,
             },
             "output": {

@@ -178,24 +178,23 @@ def process_weld_file(
 
 
 def generate_gcode(points: List[dict], output_path: str, config: Config, args) -> bool:
-    """Generate G-code using streaming subscriber."""
+    """Generate G-code using two-pass coordinate centering."""
     try:
         print(f"⚙️  Generating G-code: {output_path}")
 
-        # Create streaming G-code subscriber
-        subscriber = StreamingGCodeSubscriber(Path(output_path), config)
+        # Import two-pass processor
+        from ..processors.two_pass_processor import TwoPassProcessor
 
-        # Send events to generate G-code
+        # Get bed size from config
+        bed_size_x = config.get("printer", "bed_size_x", 250.0)
+        bed_size_y = config.get("printer", "bed_size_y", 220.0)
+
+        # Create two-pass processor
+        processor = TwoPassProcessor(config, bed_size_x, bed_size_y)
+
+        # Convert points to events
+        events = []
         timestamp = time.time()
-
-        # Start processing
-        start_event = Event(
-            event_type=EventType.OUTPUT_GENERATION,
-            timestamp=timestamp,
-            data={"action": "processing_start"},
-            source="microweldr_cli",
-        )
-        subscriber.handle_event(start_event)
 
         # Send points as path events with proper path management
         current_path_id = None
@@ -206,44 +205,64 @@ def generate_gcode(points: List[dict], output_path: str, config: Config, args) -
             if path_id != current_path_id:
                 if current_path_id is not None:
                     # Complete previous path
-                    path_complete_event = PathEvent(
-                        action="path_complete", path_id=current_path_id
+                    path_complete_event = Event(
+                        event_type=EventType.PATH_PROCESSING,
+                        timestamp=timestamp,
+                        data={"action": "path_complete", "path_id": current_path_id},
+                        source="microweldr_cli",
                     )
-                    subscriber.handle_event(path_complete_event)
+                    events.append(path_complete_event)
 
                 # Start new path
-                path_start_event = PathEvent(action="path_start", path_id=path_id)
-                subscriber.handle_event(path_start_event)
+                path_start_event = Event(
+                    event_type=EventType.PATH_PROCESSING,
+                    timestamp=timestamp,
+                    data={
+                        "action": "path_start",
+                        "path_data": {
+                            "id": path_id,
+                            "weld_type": point.get("weld_type", "normal"),
+                        },
+                    },
+                    source="microweldr_cli",
+                )
+                events.append(path_start_event)
                 current_path_id = path_id
 
             # Send point event
-            point_event = PathEvent(action="point_added", path_id=path_id, point=point)
-            subscriber.handle_event(point_event)
+            point_event = Event(
+                event_type=EventType.PATH_PROCESSING,
+                timestamp=timestamp,
+                data={"action": "point_added", "point": point},
+                source="microweldr_cli",
+            )
+            events.append(point_event)
 
         # Complete final path
         if current_path_id is not None:
-            path_complete_event = PathEvent(
-                action="path_complete", path_id=current_path_id
+            path_complete_event = Event(
+                event_type=EventType.PATH_PROCESSING,
+                timestamp=timestamp,
+                data={"action": "path_complete", "path_id": current_path_id},
+                source="microweldr_cli",
             )
-            subscriber.handle_event(path_complete_event)
+            events.append(path_complete_event)
 
-        # End processing
-        end_event = Event(
-            event_type=EventType.OUTPUT_GENERATION,
-            timestamp=timestamp + len(points) * 0.001,
-            data={"action": "processing_complete"},
-            source="microweldr_cli",
+        # Process with two-pass coordinate centering
+        success = processor.process_with_centering(
+            events=events,
+            output_path=Path(output_path),
+            verbose=getattr(args, "verbose", False),
         )
-        subscriber.handle_event(end_event)
 
-        # Check if file was created
-        if Path(output_path).exists():
-            file_size = Path(output_path).stat().st_size
-            print(f"✅ G-code generated: {output_path} ({file_size:,} bytes)")
-            return True
-        else:
-            print(f"❌ Failed to generate G-code file: {output_path}")
-            return False
+        if success:
+            # Log centering statistics
+            stats = processor.get_centering_statistics()
+            offset_x = stats["centering_offset"]["x"]
+            offset_y = stats["centering_offset"]["y"]
+            print(f"📐 Applied centering offset: ({offset_x:+.3f}, {offset_y:+.3f})mm")
+
+        return success
 
     except Exception as e:
         print(f"❌ G-code generation failed: {e}")

@@ -2,7 +2,7 @@
 
 import logging
 from pathlib import Path
-from typing import List, Optional, TextIO
+from typing import List, Optional, TextIO, Tuple
 from ..core.events import Event, EventType, OutputEvent, publish_event
 from ..processors.subscribers import EventSubscriber
 
@@ -22,8 +22,19 @@ class StreamingGCodeSubscriber(EventSubscriber):
     eliminating the need to store WeldPath objects in memory.
     """
 
-    def __init__(self, output_path: Path, config):
-        """Initialize streaming G-code subscriber."""
+    def __init__(
+        self,
+        output_path: Path,
+        config,
+        coordinate_offset: Tuple[float, float] = (0.0, 0.0),
+    ):
+        """Initialize streaming G-code subscriber.
+
+        Args:
+            output_path: Path for G-code output file
+            config: Configuration object
+            coordinate_offset: Tuple of (offset_x, offset_y) for coordinate centering
+        """
         self.output_path = Path(output_path)
         self.config = config
         self.file_handle: Optional[TextIO] = None
@@ -33,6 +44,17 @@ class StreamingGCodeSubscriber(EventSubscriber):
         self.total_paths_processed = 0
         self.total_points_processed = 0
         self.is_initialized = False
+
+        # Store coordinate offset for centering
+        self.offset_x, self.offset_y = coordinate_offset
+
+        # Travel height management
+        self.welding_started = False  # Track if we've started welding
+        self.is_first_weld_ever = True  # Track very first weld point
+
+        logger.info(
+            f"StreamingGCode: Initialized with coordinate offset ({self.offset_x:+.3f}, {self.offset_y:+.3f})"
+        )
 
     def get_priority(self) -> int:
         """Get subscriber priority (lower number = higher priority)."""
@@ -171,24 +193,42 @@ class StreamingGCodeSubscriber(EventSubscriber):
         if not self.file_handle:
             return
 
+        # Apply coordinate centering offset
+        centered_x = x + self.offset_x
+        centered_y = y + self.offset_y
+
         # Get movement settings from config
-        move_height = self.config.get("movement", "move_height", 0.2)
+        high_travel_height = self.config.get("movement", "move_height", 0.2)
+        low_travel_height = self.config.get("movement", "low_travel_height", 0.2)
         z_speed = self.config.get("movement", "z_speed", 300)
         xy_speed = self.config.get("movement", "xy_speed", 3000)
 
-        if self.is_first_point_in_path:
-            # Move to first point at safe height
+        if self.is_first_weld_ever:
+            # Very first weld point - use high travel height
             self.file_handle.write(
-                f"G1 Z{move_height} F{z_speed} ; Move to safe height\n"
+                f"G1 Z{high_travel_height} F{z_speed} ; Move to high travel height\n"
             )
             self.file_handle.write(
-                f"G1 X{x:.3f} Y{y:.3f} F{xy_speed} ; Move to start of path\n"
+                f"G1 X{centered_x:.3f} Y{centered_y:.3f} F{xy_speed} ; Move to start of welding\n"
+            )
+            self.is_first_weld_ever = False
+            self.welding_started = True
+        elif self.is_first_point_in_path:
+            # First point of a new path - ensure at low travel height, then move
+            self.file_handle.write(
+                f"G1 Z{low_travel_height} F{z_speed} ; Ensure at low travel height\n"
+            )
+            self.file_handle.write(
+                f"G1 X{centered_x:.3f} Y{centered_y:.3f} F{xy_speed} ; Move to start of path\n"
             )
             self.is_first_point_in_path = False
         else:
-            # Move to next point
+            # Move to next point - ensure at low travel height first
             self.file_handle.write(
-                f"G1 X{x:.3f} Y{y:.3f} F{xy_speed} ; Move to next point\n"
+                f"G1 Z{low_travel_height} F{z_speed} ; Ensure at low travel height\n"
+            )
+            self.file_handle.write(
+                f"G1 X{centered_x:.3f} Y{centered_y:.3f} F{xy_speed} ; Move to next point\n"
             )
 
         # Add weld-specific commands based on weld type
@@ -199,6 +239,9 @@ class StreamingGCodeSubscriber(EventSubscriber):
         if not self.file_handle:
             return
 
+        # Get travel heights from config
+        low_travel_height = self.config.get("movement", "low_travel_height", 0.2)
+
         if weld_type == "normal":
             # Normal welding commands
             weld_height = self.config.get("normal_welds", "weld_height", 0.1)
@@ -207,7 +250,9 @@ class StreamingGCodeSubscriber(EventSubscriber):
             self.file_handle.write(
                 f"G4 P{weld_time * 1000:.0f} ; Weld for {weld_time}s\n"
             )
-            self.file_handle.write(f"G1 Z0.2 F300 ; Raise to safe height\n")
+            self.file_handle.write(
+                f"G1 Z{low_travel_height} F300 ; Raise to low travel height\n"
+            )
 
         elif weld_type == "frangible":
             # Frangible welding commands (lighter)
@@ -219,7 +264,9 @@ class StreamingGCodeSubscriber(EventSubscriber):
             self.file_handle.write(
                 f"G4 P{weld_time * 1000:.0f} ; Frangible weld for {weld_time}s\n"
             )
-            self.file_handle.write(f"G1 Z0.2 F300 ; Raise to safe height\n")
+            self.file_handle.write(
+                f"G1 Z{low_travel_height} F300 ; Raise to low travel height\n"
+            )
 
         elif weld_type == "stop":
             # Stop point with pause
@@ -230,7 +277,9 @@ class StreamingGCodeSubscriber(EventSubscriber):
             self.file_handle.write("; Pipette operation point\n")
             self.file_handle.write("G1 Z0.05 F300 ; Lower for pipette\n")
             self.file_handle.write("G4 P500 ; Brief pause\n")
-            self.file_handle.write("G1 Z0.2 F300 ; Raise after pipette\n")
+            self.file_handle.write(
+                f"G1 Z{low_travel_height} F300 ; Raise to low travel height\n"
+            )
 
     def _finalize_gcode_file(self) -> None:
         """Finalize G-code file with proper cooldown sequence and close."""
@@ -359,23 +408,25 @@ class StreamingGCodeSubscriber(EventSubscriber):
         if not self.file_handle:
             return
 
-        # Get cooldown temperature
-        cooldown_temp = self.config.get("temperatures", "cooldown_temperature", 50)
+        # Get cooldown settings
+        enable_cooldown = self.config.get("temperatures", "enable_cooldown", False)
+        cooldown_temp = self.config.get("temperatures", "cooldown_temperature", 0)
         use_chamber_heating = self.config.get(
             "temperatures", "use_chamber_heating", False
         )
 
-        self.file_handle.write("; Cooldown and end sequence\n")
-        self.file_handle.write("G1 Z10 F600 ; Raise nozzle\n")
+        self.file_handle.write("; End sequence\n")
+        self.file_handle.write("G1 Z10 F600 ; Raise nozzle to high travel height\n")
         self.file_handle.write("G28 X Y ; Home X and Y axes\n")
 
-        # Cool down heaters
-        self.file_handle.write(
-            f"M104 S{cooldown_temp} ; Cool nozzle to {cooldown_temp}°C\n"
-        )
-        self.file_handle.write(
-            f"M140 S{cooldown_temp} ; Cool bed to {cooldown_temp}°C\n"
-        )
+        # Only cool down heaters if cooldown is enabled
+        if enable_cooldown:
+            self.file_handle.write(
+                f"M104 S{cooldown_temp} ; Cool nozzle to {cooldown_temp}°C\n"
+            )
+            self.file_handle.write(
+                f"M140 S{cooldown_temp} ; Cool bed to {cooldown_temp}°C\n"
+            )
 
         if use_chamber_heating:
             self.file_handle.write("M141 S0 ; Turn off chamber heating\n")
