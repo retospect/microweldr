@@ -72,15 +72,62 @@ class PrusaLinkClient:
         """Test connection to PrusaLink API.
 
         Returns:
-            True if connection successful, False otherwise.
+            True if connection successful.
+
+        Raises:
+            PrusaLinkConnectionError: If connection fails with detailed error info.
+            PrusaLinkAuthError: If authentication fails.
         """
         try:
             response = requests.get(
                 f"{self.base_url}/api/version", auth=self.auth, timeout=self.timeout
             )
-            return response.status_code == 200
-        except requests.exceptions.RequestException:
-            return False
+
+            if response.status_code == 401:
+                raise PrusaLinkAuthError(
+                    f"Authentication failed to {self.base_url}. "
+                    f"Check API key in secrets config. "
+                    f"Response: {response.status_code} {response.reason}"
+                )
+            elif response.status_code == 403:
+                raise PrusaLinkAuthError(
+                    f"Access forbidden to {self.base_url}. "
+                    f"API key may lack required permissions. "
+                    f"Response: {response.status_code} {response.reason}"
+                )
+            elif response.status_code != 200:
+                raise PrusaLinkConnectionError(
+                    f"Unexpected response from {self.base_url}/api/version. "
+                    f"Status: {response.status_code} {response.reason}. "
+                    f"Response body: {response.text[:200]}"
+                )
+
+            return True
+
+        except requests.exceptions.ConnectTimeout:
+            raise PrusaLinkConnectionError(
+                f"Connection timeout to {self.base_url}. "
+                f"Timeout: {self.timeout}s. "
+                f"Check if printer is powered on and network is reachable."
+            )
+        except requests.exceptions.ConnectionError as e:
+            raise PrusaLinkConnectionError(
+                f"Network connection failed to {self.base_url}. "
+                f"Error: {str(e)}. "
+                f"Check printer IP address, network connectivity, and PrusaLink service status."
+            )
+        except requests.exceptions.Timeout:
+            raise PrusaLinkConnectionError(
+                f"Request timeout to {self.base_url}. "
+                f"Timeout: {self.timeout}s. "
+                f"Printer may be busy or network is slow."
+            )
+        except requests.exceptions.RequestException as e:
+            raise PrusaLinkConnectionError(
+                f"HTTP request failed to {self.base_url}. "
+                f"Error: {str(e)}. "
+                f"Check printer configuration and network settings."
+            )
 
     def get_printer_info(self) -> Dict[str, Any]:
         """Get printer information.

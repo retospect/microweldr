@@ -1,0 +1,50 @@
+# MicroWeldr Configuration File
+# Optimized parameters for Prusa COREONE plastic welding
+# Based on testing with weld-dots.gcode: 0.5s dwell, 45°C bed, Z0.1/Z0.35 depths, 0.6mm travel
+
+[printer]
+bed_size_x = 250.0
+bed_size_y = 220.0
+max_z_height = 270.0
+enable_bed_leveling = false     # Disable bed leveling by default
+
+[nozzle]
+outer_diameter = 1.4
+inner_diameter = 0.2
+
+[temperatures]
+bed_temperature = 45        # Optimized: increased from 35°C for better thermal conditions
+nozzle_temperature = 160
+chamber_temperature = 35
+use_chamber_heating = false
+cooldown_temperature = 0
+enable_cooldown = false
+
+[movement]
+move_height = 5.0
+low_travel_height = 1.5     # Increased travel height for better clearance
+travel_speed = 3000
+z_speed = 3000              # Optimized: increased from 600 for faster Z movements
+weld_height = 0.02
+weld_move_height = 2.0
+weld_compression_offset = 0.0
+
+[normal_welds]
+weld_height = 0.1           # Optimized: increased from 0.01 for normal weld depth
+weld_temperature = 160
+weld_time = 0.5             # Optimized: increased from 0.2s for better weld quality
+dot_spacing = 0.8
+
+[frangible_welds]
+weld_height = 0.35          # Optimized: reduced from 0.6 for light weld depth
+weld_temperature = 160
+weld_time = 0.5             # Optimized: increased from 0.2s for consistency
+dot_spacing = 0.8
+
+[output]
+gcode_extension = ".gcode"
+animation_extension = "_animation.svg"
+
+[sequencing]
+skip_base_distance = 5
+passes = 4

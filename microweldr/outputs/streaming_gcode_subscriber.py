@@ -221,19 +221,13 @@ class StreamingGCodeSubscriber(EventSubscriber):
             self.is_first_weld_ever = False
             self.welding_started = True
         elif self.is_first_point_in_path:
-            # First point of a new path - ensure at low travel height, then move
-            self.file_handle.write(
-                f"G1 Z{low_travel_height} F{z_speed} ; Ensure at low travel height\n"
-            )
+            # First point of a new path - move directly (already at travel height)
             self.file_handle.write(
                 f"G1 X{centered_x:.3f} Y{centered_y:.3f} F{xy_speed} ; Move to start of path\n"
             )
             self.is_first_point_in_path = False
         else:
-            # Move to next point - ensure at low travel height first
-            self.file_handle.write(
-                f"G1 Z{low_travel_height} F{z_speed} ; Ensure at low travel height\n"
-            )
+            # Move to next point - already at travel height from previous weld
             self.file_handle.write(
                 f"G1 X{centered_x:.3f} Y{centered_y:.3f} F{xy_speed} ; Move to next point\n"
             )
@@ -246,19 +240,22 @@ class StreamingGCodeSubscriber(EventSubscriber):
         if not self.file_handle:
             return
 
-        # Get travel heights from config
+        # Get travel heights and speeds from config
         low_travel_height = self.config.get("movement", "low_travel_height", 0.2)
+        z_speed = self.config.get("movement", "z_speed", 3000)
 
         if weld_type == "normal":
             # Normal welding commands
             weld_height = self.config.get("normal_welds", "weld_height", 0.1)
             weld_time = self.config.get("normal_welds", "weld_time", 1.0)
-            self.file_handle.write(f"G1 Z{weld_height} F300 ; Lower to weld height\n")
+            self.file_handle.write(
+                f"G1 Z{weld_height} F{z_speed} ; Lower to weld height\n"
+            )
             self.file_handle.write(
                 f"G4 P{weld_time * 1000:.0f} ; Weld for {weld_time}s\n"
             )
             self.file_handle.write(
-                f"G1 Z{low_travel_height} F300 ; Raise to low travel height\n"
+                f"G1 Z{low_travel_height} F{z_speed} ; Raise to low travel height\n"
             )
 
         elif weld_type == "frangible":
@@ -266,13 +263,13 @@ class StreamingGCodeSubscriber(EventSubscriber):
             weld_height = self.config.get("frangible_welds", "weld_height", 0.15)
             weld_time = self.config.get("frangible_welds", "weld_time", 0.5)
             self.file_handle.write(
-                f"G1 Z{weld_height} F300 ; Lower to frangible weld height\n"
+                f"G1 Z{weld_height} F{z_speed} ; Lower to frangible weld height\n"
             )
             self.file_handle.write(
                 f"G4 P{weld_time * 1000:.0f} ; Frangible weld for {weld_time}s\n"
             )
             self.file_handle.write(
-                f"G1 Z{low_travel_height} F300 ; Raise to low travel height\n"
+                f"G1 Z{low_travel_height} F{z_speed} ; Raise to low travel height\n"
             )
 
         elif weld_type == "stop":
@@ -282,10 +279,10 @@ class StreamingGCodeSubscriber(EventSubscriber):
         elif weld_type == "pipette":
             # Pipette operation
             self.file_handle.write("; Pipette operation point\n")
-            self.file_handle.write("G1 Z0.05 F300 ; Lower for pipette\n")
+            self.file_handle.write(f"G1 Z0.05 F{z_speed} ; Lower for pipette\n")
             self.file_handle.write("G4 P500 ; Brief pause\n")
             self.file_handle.write(
-                f"G1 Z{low_travel_height} F300 ; Raise to low travel height\n"
+                f"G1 Z{low_travel_height} F{z_speed} ; Raise to low travel height\n"
             )
 
     def _finalize_gcode_file(self) -> None:
@@ -382,14 +379,21 @@ class StreamingGCodeSubscriber(EventSubscriber):
         self.file_handle.write("; Printer initialization\n")
         self.file_handle.write("G90 ; Absolute positioning\n")
         self.file_handle.write("M83 ; Relative extrusion\n")
-        self.file_handle.write("G28 ; Home all axes\n")
-        self.file_handle.write("G29 ; Auto bed leveling\n\n")
+        self.file_handle.write("G28 ; Home all axes\n\n")
 
-        # Wait for bed temperature and heat nozzle
-        self.file_handle.write(f"; Wait for bed temperature and heat nozzle\n")
+        # Heat bed and nozzle FIRST (like working calibrate-and-set.gcode)
+        self.file_handle.write(f"; Heat bed and nozzle before bed leveling\n")
         self.file_handle.write(f"M190 S{bed_temp} ; Wait for bed temperature\n")
         self.file_handle.write(f"M104 S{nozzle_temp} ; Set nozzle temperature\n")
         self.file_handle.write(f"M109 S{nozzle_temp} ; Wait for nozzle temperature\n\n")
+
+        # Bed leveling AFTER heating (correct Z=0 reference) - if enabled
+        enable_bed_leveling = self.config.get("printer", "enable_bed_leveling", False)
+        if enable_bed_leveling:
+            self.file_handle.write("; Bed leveling after thermal expansion\n")
+            self.file_handle.write("G29 ; Auto bed leveling\n\n")
+        else:
+            self.file_handle.write("; Bed leveling disabled\n\n")
 
         # Chamber heating if enabled (Core One)
         if use_chamber_heating:

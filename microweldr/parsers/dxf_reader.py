@@ -149,7 +149,9 @@ class DXFReader(FileReaderPublisher):
         elif entity_type == DXFEntities.CIRCLE:
             return self._parse_circle(entity, layer)
         elif entity_type in [DXFEntities.POLYLINE, DXFEntities.LWPOLYLINE]:
-            return self._parse_polyline(entity, layer)
+            # For polylines, we'll handle them directly in _entities_to_weld_paths to avoid duplicate points
+            # Return a special marker that indicates this is a polyline to be processed later
+            return {"type": "polyline", "entity": entity, "layer": layer}
         else:
             logger.debug(f"Unsupported entity type: {entity_type}")
             return None
@@ -192,7 +194,10 @@ class DXFReader(FileReaderPublisher):
         )
 
     def _parse_polyline(self, entity, layer: str) -> List[LineEntity]:
-        """Parse POLYLINE/LWPOLYLINE entities as connected line segments with proper arc support."""
+        """Parse POLYLINE/LWPOLYLINE entities as connected line segments with proper arc support.
+
+        DEPRECATED: This method creates overlapping endpoints. Use _parse_polyline_to_weld_path instead.
+        """
         import math
 
         line_entities = []
@@ -249,6 +254,84 @@ class DXFReader(FileReaderPublisher):
                 )
 
         return line_entities
+
+    def _parse_polyline_to_weld_path(
+        self, entity, layer: str, weld_type: WeldType
+    ) -> Optional[DataWeldPath]:
+        """Parse POLYLINE/LWPOLYLINE entities directly to weld path with continuous points.
+
+        This method generates points directly without creating intermediate LineEntity objects,
+        avoiding duplicate points at segment boundaries.
+        """
+        import math
+
+        points = []
+        bulges = []
+
+        if entity.dxftype() == DXFEntities.POLYLINE:
+            # POLYLINE - extract points and bulges
+            for vertex in entity.vertices():
+                if hasattr(vertex.dxf, "location"):
+                    loc = vertex.dxf.location
+                    points.append(Point(loc.x, loc.y))
+                    bulges.append(getattr(vertex.dxf, "bulge", 0.0))
+        else:
+            # LWPOLYLINE - extract points and bulges
+            for point in entity.lwpoints:
+                points.append(Point(point[0], point[1]))
+                # LWPOLYLINE format: [x, y, start_width, end_width, bulge]
+                bulges.append(point[4] if len(point) > 4 else 0.0)
+
+        if len(points) < 2:
+            return None
+
+        # Check if polyline is closed
+        is_closed = hasattr(entity.dxf, "flags") and (entity.dxf.flags & 1)
+
+        # Generate continuous weld points
+        weld_points = []
+
+        # Always add the first point
+        weld_points.append(points[0])
+
+        # Process each segment
+        num_segments = len(points) if is_closed else len(points) - 1
+
+        for i in range(num_segments):
+            start_point = points[i]
+            end_point = points[
+                (i + 1) % len(points)
+            ]  # Wrap around for closed polylines
+            bulge = bulges[i]
+
+            if abs(bulge) < 1e-10:  # Straight line segment
+                # Interpolate points along the line (excluding start point to avoid duplicates)
+                segment_length = start_point.distance_to(end_point)
+                if segment_length > self.dot_spacing:
+                    num_points = int(segment_length / self.dot_spacing)
+                    for j in range(1, num_points + 1):
+                        t = j / num_points
+                        x = start_point.x + t * (end_point.x - start_point.x)
+                        y = start_point.y + t * (end_point.y - start_point.y)
+                        weld_points.append(Point(x, y))
+                else:
+                    # Short segment - just add the end point
+                    weld_points.append(end_point)
+            else:  # Arc segment
+                # Generate points directly along the arc
+                arc_points = self._bulge_to_weld_points(start_point, end_point, bulge)
+                # Add arc points (excluding start point to avoid duplicates)
+                weld_points.extend(arc_points[1:])
+
+        # Close the path if needed
+        if is_closed and len(weld_points) > 1:
+            # Only close if we're not already at the start point
+            first_point = weld_points[0]
+            last_point = weld_points[-1]
+            if first_point.distance_to(last_point) > 1e-6:
+                weld_points.append(first_point)
+
+        return DataWeldPath(weld_points, weld_type, layer)
 
     def _bulge_to_line_segments(
         self, start: Point, end: Point, bulge: float
@@ -352,12 +435,134 @@ class DXFReader(FileReaderPublisher):
 
         return line_segments
 
+    def _bulge_to_weld_points(
+        self, start: Point, end: Point, bulge: float
+    ) -> List[Point]:
+        """Convert a bulge arc directly to weld points.
+
+        This method generates points directly along the arc without creating intermediate
+        line segments, avoiding duplicate points at segment boundaries.
+        """
+        import math
+
+        # Calculate chord length
+        chord_length = start.distance_to(end)
+        if chord_length < 1e-10:  # Degenerate case
+            return [start, end]
+
+        # Calculate the included angle from bulge
+        included_angle = 4 * math.atan(bulge)
+
+        # If angle is too small, treat as straight line
+        if abs(included_angle) < 1e-10:
+            return [start, end]
+
+        # Calculate radius using: R = chord_length / (2 * sin(|included_angle|/2))
+        half_angle = abs(included_angle) / 2
+        if abs(math.sin(half_angle)) < 1e-10:
+            return [start, end]
+
+        radius = chord_length / (2 * math.sin(half_angle))
+
+        # Calculate arc length and determine number of points based on dot spacing
+        arc_length = radius * abs(included_angle)
+        num_points = max(2, int(arc_length / self.dot_spacing) + 1)
+
+        # Calculate chord midpoint
+        chord_mid_x = (start.x + end.x) / 2
+        chord_mid_y = (start.y + end.y) / 2
+
+        # Calculate the distance from chord midpoint to arc center
+        h = radius * math.cos(half_angle)
+
+        # Unit vector along chord (start to end)
+        chord_dx = (end.x - start.x) / chord_length
+        chord_dy = (end.y - start.y) / chord_length
+
+        # Unit vector perpendicular to chord (90° counter-clockwise)
+        perp_dx = -chord_dy
+        perp_dy = chord_dx
+
+        # For positive bulge (counter-clockwise), center is on the left side of chord
+        # For negative bulge (clockwise), center is on the right side of chord
+        if bulge < 0:
+            perp_dx = -perp_dx
+            perp_dy = -perp_dy
+
+        # Calculate arc center
+        center_x = chord_mid_x + h * perp_dx
+        center_y = chord_mid_y + h * perp_dy
+
+        # Calculate start and end angles
+        start_angle = math.atan2(start.y - center_y, start.x - center_x)
+        sweep_angle = included_angle
+
+        # Generate points along the arc
+        weld_points = []
+        for i in range(num_points):
+            t = i / (num_points - 1) if num_points > 1 else 0
+
+            if i == 0:
+                # First point: use exact start point
+                weld_points.append(start)
+            elif i == num_points - 1:
+                # Last point: use exact end point
+                weld_points.append(end)
+            else:
+                # Intermediate points: calculate along arc
+                angle = start_angle + t * sweep_angle
+                x = center_x + radius * math.cos(angle)
+                y = center_y + radius * math.sin(angle)
+                weld_points.append(Point(x, y))
+
+        return weld_points
+
     def _entities_to_weld_paths(self, entities: List[CADEntity]) -> List[WeldPath]:
         """Convert CAD entities to weld paths."""
         weld_paths = []
         entity_counter = 0  # Add unique counter for each entity
 
         for entity in entities:
+            # Handle polyline markers (dict objects)
+            if isinstance(entity, dict) and entity.get("type") == "polyline":
+                # Process polyline directly to avoid duplicate points
+                layer = entity["layer"]
+                polyline_entity = entity["entity"]
+
+                # Skip construction entities
+                construction_patterns = [
+                    "construction",
+                    "const",
+                    "guide",
+                    "reference",
+                    "ref",
+                ]
+                if any(pattern in layer.lower() for pattern in construction_patterns):
+                    logger.debug(f"Skipping construction polyline on layer: {layer}")
+                    continue
+
+                # Determine weld type based on layer name
+                weld_type = self._determine_weld_type(layer)
+
+                try:
+                    # Use direct polyline-to-weld-path conversion
+                    data_path = self._parse_polyline_to_weld_path(
+                        polyline_entity, layer, weld_type
+                    )
+                    if data_path:
+                        # Convert data_models.WeldPath to models.WeldPath
+                        path = self._convert_to_models_weld_path(
+                            data_path, layer, entity_counter
+                        )
+                        weld_paths.append(path)
+                        entity_counter += 1
+                        logger.debug(
+                            f"Converted polyline on layer '{layer}' to {weld_type.value} weld path with {len(data_path.points)} points"
+                        )
+                except Exception as e:
+                    logger.error(f"Failed to convert polyline to weld path: {e}")
+                continue
+
             # Skip construction entities
             if entity.is_construction:
                 logger.debug(f"Skipping construction entity on layer: {entity.layer}")

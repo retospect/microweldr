@@ -25,24 +25,38 @@ def check_printer_available():
     try:
         print("🔍 Checking printer connection...")
         client = PrusaLinkClient()
-        if client.test_connection():
-            print("✅ Printer is available and ready for testing")
 
-            # Show basic printer info
-            status = client.get_printer_status()
-            printer_info = status.get("printer", {})
-            state = printer_info.get("state", "Unknown")
-            bed_temp = printer_info.get("temp_bed", 0)
-            nozzle_temp = printer_info.get("temp_nozzle", 0)
+        # Show connection details
+        print(f"   Target: {client.base_url}")
+        print(f"   Timeout: {client.timeout}s")
 
-            print(f"   State: {state}")
-            print(f"   Bed: {bed_temp}°C, Nozzle: {nozzle_temp}°C")
-            return True
-        else:
-            print("❌ Printer connection failed")
-            return False
+        # Test connection - now throws detailed exceptions
+        client.test_connection()
+        print("✅ Printer is available and ready for testing")
+
+        # Show basic printer info
+        status = client.get_printer_status()
+        printer_info = status.get("printer", {})
+        state = printer_info.get("state", "Unknown")
+        bed_temp = printer_info.get("temp_bed", 0)
+        nozzle_temp = printer_info.get("temp_nozzle", 0)
+
+        print(f"   State: {state}")
+        print(f"   Bed: {bed_temp}°C, Nozzle: {nozzle_temp}°C")
+        return True
+
     except Exception as e:
-        print(f"❌ Printer not available: {e}")
+        print(f"❌ Printer connection failed:")
+        print(f"   {str(e)}")
+
+        # Add troubleshooting hints
+        print("\n💡 Troubleshooting:")
+        print("   • Check if printer is powered on")
+        print("   • Verify network connectivity (ping printer IP)")
+        print("   • Confirm PrusaLink is enabled on printer")
+        print("   • Check API key in ~/.config/microweldr/microweldr_secrets.toml")
+        print("   • Verify printer IP address in config")
+
         return False
 
 
@@ -66,7 +80,7 @@ def run_integration_tests(fast_only=False):
         )
 
     try:
-        result = subprocess.run(cmd, cwd=project_root)
+        result = subprocess.run(cmd, cwd=project_root, shell=False)  # nosec B603
         return result.returncode == 0
     except Exception as e:
         print(f"❌ Error running tests: {e}")

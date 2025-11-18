@@ -275,16 +275,23 @@ class LineEntity:
         if length < 1e-10:  # Degenerate line
             return WeldPath([self.start], weld_type, self.layer)
 
-        # Calculate number of points based on dot spacing
-        num_points = max(2, int(length / dot_spacing) + 1)
+        # For very short lines, use only one point (the midpoint) to avoid duplicates
+        if length < dot_spacing * 0.5:
+            # Use midpoint for very short lines
+            mid_x = (self.start.x + self.end.x) / 2
+            mid_y = (self.start.y + self.end.y) / 2
+            points = [Point(mid_x, mid_y)]
+        else:
+            # Calculate number of points based on dot spacing
+            num_points = max(2, int(length / dot_spacing) + 1)
 
-        # Generate interpolated points along the line
-        points = []
-        for i in range(num_points):
-            t = i / (num_points - 1) if num_points > 1 else 0
-            x = self.start.x + t * (self.end.x - self.start.x)
-            y = self.start.y + t * (self.end.y - self.start.y)
-            points.append(Point(x, y))
+            # Generate interpolated points along the line
+            points = []
+            for i in range(num_points):
+                t = i / (num_points - 1) if num_points > 1 else 0
+                x = self.start.x + t * (self.end.x - self.start.x)
+                y = self.start.y + t * (self.end.y - self.start.y)
+                points.append(Point(x, y))
 
         return WeldPath(points, weld_type, self.layer)
 
