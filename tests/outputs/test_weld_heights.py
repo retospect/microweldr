@@ -61,15 +61,15 @@ class TestWeldHeights:
                 gcode_content = f.read()
 
             # Verify normal weld height (0.1mm)
-            assert "G1 Z0.1 F300 ; Lower to weld height" in gcode_content
-            assert "G4 P100 ; Weld for 0.1s" in gcode_content
+            assert "G1 Z0.1 F3000 ; Lower to weld height" in gcode_content
+            assert "G4 P500 ; Weld for 0.5s" in gcode_content
 
         finally:
             if tmp_path.exists():
                 tmp_path.unlink()
 
     def test_frangible_weld_height(self):
-        """Test that frangible welds use correct height (0.6mm)."""
+        """Test that frangible welds use correct height (0.35mm)."""
         config = Config()
 
         with tempfile.NamedTemporaryFile(suffix=".gcode", delete=False) as tmp:
@@ -116,9 +116,9 @@ class TestWeldHeights:
             with open(tmp_path, "r") as f:
                 gcode_content = f.read()
 
-            # Verify frangible weld height (0.6mm) and time (0.3s)
-            assert "G1 Z0.6 F300 ; Lower to frangible weld height" in gcode_content
-            assert "G4 P300 ; Frangible weld for 0.3s" in gcode_content
+            # Verify frangible weld height (0.35mm) and time (0.5s)
+            assert "G1 Z0.35 F3000 ; Lower to frangible weld height" in gcode_content
+            assert "G4 P500 ; Frangible weld for 0.5s" in gcode_content
 
         finally:
             if tmp_path.exists():
@@ -185,14 +185,14 @@ class TestWeldHeights:
                 gcode_content = f.read()
 
             # Verify both weld types have correct heights and times
-            assert "G1 Z0.1 F300 ; Lower to weld height" in gcode_content
-            assert "G4 P100 ; Weld for 0.1s" in gcode_content
-            assert "G1 Z0.6 F300 ; Lower to frangible weld height" in gcode_content
-            assert "G4 P300 ; Frangible weld for 0.3s" in gcode_content
+            assert "G1 Z0.1 F3000 ; Lower to weld height" in gcode_content
+            assert "G4 P500 ; Weld for 0.5s" in gcode_content
+            assert "G1 Z0.35 F3000 ; Lower to frangible weld height" in gcode_content
+            assert "G4 P500 ; Frangible weld for 0.5s" in gcode_content
 
             # Verify point counts
-            normal_count = gcode_content.count("G1 Z0.1 F300")
-            frangible_count = gcode_content.count("G1 Z0.6 F300")
+            normal_count = gcode_content.count("G1 Z0.1 F3000")
+            frangible_count = gcode_content.count("G1 Z0.35 F3000")
 
             assert normal_count == 1, f"Expected 1 normal weld, got {normal_count}"
             assert (
@@ -215,14 +215,14 @@ class TestWeldHeights:
             normal_height == 0.1
         ), f"Expected normal weld height 0.1mm, got {normal_height}mm"
         assert (
-            frangible_height == 0.6
-        ), f"Expected frangible weld height 0.6mm, got {frangible_height}mm"
+            frangible_height == 0.35
+        ), f"Expected frangible weld height 0.35mm, got {frangible_height}mm"
 
         # Verify weld times as well
         normal_time = config.get("normal_welds", "weld_time")
         frangible_time = config.get("frangible_welds", "weld_time")
 
-        assert normal_time == 0.1, f"Expected normal weld time 0.1s, got {normal_time}s"
+        assert normal_time == 0.5, f"Expected normal weld time 0.5s, got {normal_time}s"
         assert (
-            frangible_time == 0.3
-        ), f"Expected frangible weld time 0.3s, got {frangible_time}s"
+            frangible_time == 0.5
+        ), f"Expected frangible weld time 0.5s, got {frangible_time}s"
