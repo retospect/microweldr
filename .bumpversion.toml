@@ -41,8 +41,4 @@ replace = """## [Unreleased]
 
 ## [{new_version}] - {utcnow:%Y-%m-%d}"""
 
-# Documentation files with version references
-[[tool.bumpversion.files]]
-filename = "docs/version_bumping.md"
-search = 'current_version = "{current_version}"'
-replace = 'current_version = "{new_version}"'
+# Documentation files with version references (removed non-existent file)
