@@ -1,6 +1,6 @@
 """MicroWeldr - Convert SVG files to Prusa Core One G-code for plastic welding."""
 
-__version__ = "6.1.4"
+__version__ = "6.1.5"
 __author__ = "Reto Stamm"
 __email__ = "reto@retostamm.com"
 
