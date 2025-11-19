@@ -90,10 +90,10 @@ class PointIteratorFactory:
 
 
 def iterate_points_from_file(
-    file_path: Union[str, Path], config=None
+    file_path: Union[str, Path], config=None, enable_deduplication: bool = True
 ) -> Iterator[Dict[str, Any]]:
     """
-    Iterator that yields points from DXF/SVG files.
+    Iterator that yields points from DXF/SVG files with optional deduplication.
 
     This is used in both Phase 1 (analysis) and Phase 2 (generation)
     to avoid loading all points into memory at once.
@@ -101,6 +101,7 @@ def iterate_points_from_file(
     Args:
         file_path: Path to the file to process
         config: Configuration object to get dot_spacing from
+        enable_deduplication: If True, filters duplicate points at same coordinates
 
     Yields:
         Dict containing point data with keys:
@@ -114,8 +115,16 @@ def iterate_points_from_file(
         Exception: If file parsing fails
     """
     file_path = Path(file_path)
-    iterator = PointIteratorFactory.create_iterator(file_path, config=config)
-    yield from iterator.iterate_points(file_path)
+
+    if enable_deduplication:
+        # Use deduplicating iterator to filter duplicate points
+        from .deduplicating_point_iterator import iterate_points_from_file_deduplicated
+
+        yield from iterate_points_from_file_deduplicated(file_path, config=config)
+    else:
+        # Use original iterator without deduplication
+        iterator = PointIteratorFactory.create_iterator(file_path, config=config)
+        yield from iterator.iterate_points(file_path)
 
 
 def count_points_in_file(file_path: Union[str, Path], config=None) -> int:

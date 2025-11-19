@@ -33,7 +33,7 @@ M117 Insert plastic sheets...
 M0 ; Pause - Insert plastic sheets and press continue
 M117 Starting welding sequence...
 
-; Starting path: dxf_entity_0_0_249pts (normal)
+; Starting path: dxf_entity_0_0_5pts (normal)
 G1 Z5.0 F3000 ; Move to high travel height
 G1 X126.000 Y118.854 F3000 ; Move to start of welding
 G1 Z0.1 F3000 ; Lower to weld height
@@ -55,859 +55,77 @@ G1 X128.077 Y116.000 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X128.832 Y115.722 F3000 ; Move to next point
+; Completed path: dxf_entity_0_0_5pts
+
+; Starting path: dxf_entity_1_0_16pts (normal)
+G1 X126.000 Y118.854 F3000 ; Move to start of path
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X129.562 Y115.384 F3000 ; Move to next point
+G1 X126.000 Y119.664 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X130.263 Y114.988 F3000 ; Move to next point
+G1 X126.000 Y120.474 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X130.930 Y114.537 F3000 ; Move to next point
+G1 X126.000 Y121.284 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X131.558 Y114.034 F3000 ; Move to next point
+G1 X126.000 Y122.093 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X132.144 Y113.482 F3000 ; Move to next point
+G1 X126.000 Y122.903 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X132.684 Y112.885 F3000 ; Move to next point
+G1 X126.000 Y123.713 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X133.174 Y112.246 F3000 ; Move to next point
+G1 X126.000 Y124.522 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X133.610 Y111.571 F3000 ; Move to next point
+G1 X126.000 Y125.332 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X133.991 Y110.862 F3000 ; Move to next point
+G1 X126.000 Y126.142 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X134.314 Y110.124 F3000 ; Move to next point
+G1 X126.000 Y126.951 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X134.577 Y109.364 F3000 ; Move to next point
+G1 X126.000 Y127.761 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X134.777 Y108.584 F3000 ; Move to next point
+G1 X126.000 Y128.571 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X134.914 Y107.791 F3000 ; Move to next point
+G1 X126.000 Y129.381 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X134.987 Y106.990 F3000 ; Move to next point
+G1 X126.000 Y130.190 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X134.995 Y106.185 F3000 ; Move to next point
+G1 X126.000 Y131.000 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X134.939 Y105.382 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X134.818 Y104.586 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X134.634 Y103.803 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X134.387 Y103.037 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X134.079 Y102.293 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X133.712 Y101.577 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X133.289 Y100.892 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X132.813 Y100.243 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X132.286 Y99.635 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X131.711 Y99.072 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X131.093 Y98.556 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X130.436 Y98.092 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X129.743 Y97.682 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X129.020 Y97.329 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X128.271 Y97.035 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X127.500 Y96.803 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X127.715 Y95.972 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X127.929 Y95.141 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X128.144 Y94.310 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X128.358 Y93.479 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X128.573 Y92.648 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X128.787 Y91.817 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X129.002 Y90.986 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X129.216 Y90.155 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X129.431 Y89.324 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X129.646 Y88.493 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X129.860 Y87.662 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X130.075 Y86.831 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X130.289 Y86.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X131.231 Y86.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X132.174 Y86.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X133.116 Y86.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X134.058 Y86.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X135.000 Y86.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X135.000 Y85.125 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X135.000 Y84.250 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X135.000 Y83.375 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X135.000 Y82.500 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X135.000 Y81.625 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X135.000 Y80.750 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X135.000 Y79.875 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X135.000 Y79.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X134.200 Y79.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X133.400 Y79.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X132.600 Y79.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X131.800 Y79.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X131.000 Y79.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X130.200 Y79.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X129.400 Y79.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X128.600 Y79.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X127.800 Y79.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X127.000 Y79.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X126.200 Y79.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X125.400 Y79.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X124.600 Y79.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X123.800 Y79.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X123.000 Y79.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X122.200 Y79.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X121.400 Y79.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X120.600 Y79.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X119.800 Y79.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X119.000 Y79.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X118.200 Y79.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X117.400 Y79.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X116.600 Y79.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X115.800 Y79.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X115.000 Y79.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X115.000 Y79.875 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X115.000 Y80.750 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X115.000 Y81.625 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X115.000 Y82.500 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X115.000 Y83.375 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X115.000 Y84.250 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X115.000 Y85.125 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X115.000 Y86.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X115.942 Y86.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X116.884 Y86.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X117.826 Y86.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X118.769 Y86.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X119.711 Y86.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X119.925 Y86.831 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X120.140 Y87.662 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X120.354 Y88.493 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X120.569 Y89.324 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X120.784 Y90.155 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X120.998 Y90.986 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X121.213 Y91.817 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X121.427 Y92.648 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X121.642 Y93.479 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X121.856 Y94.310 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X122.071 Y95.141 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X122.285 Y95.972 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X122.500 Y96.803 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X121.729 Y97.035 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X120.980 Y97.329 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X120.257 Y97.682 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X119.564 Y98.092 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X118.907 Y98.556 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X118.289 Y99.072 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X117.714 Y99.635 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X117.187 Y100.243 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X116.711 Y100.892 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X116.288 Y101.577 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X115.921 Y102.293 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X115.613 Y103.037 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X115.366 Y103.803 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X115.182 Y104.586 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X115.061 Y105.382 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X115.005 Y106.185 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X115.013 Y106.990 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X115.086 Y107.791 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X115.223 Y108.584 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X115.423 Y109.364 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X115.686 Y110.124 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X116.009 Y110.862 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X116.390 Y111.571 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X116.826 Y112.246 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X117.316 Y112.885 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X117.856 Y113.482 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X118.442 Y114.034 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X119.070 Y114.537 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X119.737 Y114.988 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X120.438 Y115.384 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X121.168 Y115.722 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X121.923 Y116.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X122.761 Y116.426 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X123.426 Y117.089 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X123.853 Y117.926 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X124.000 Y118.854 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X124.000 Y119.664 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X124.000 Y120.474 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X124.000 Y121.284 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X124.000 Y122.093 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X124.000 Y122.903 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X124.000 Y123.713 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X124.000 Y124.522 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X124.000 Y125.332 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X124.000 Y126.142 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X124.000 Y126.951 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X124.000 Y127.761 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X124.000 Y128.571 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X124.000 Y129.381 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X124.000 Y130.190 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X124.000 Y131.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X123.978 Y131.809 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X123.913 Y132.616 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X123.804 Y133.419 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X123.652 Y134.214 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X123.457 Y135.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X123.220 Y135.774 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X122.942 Y136.535 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X122.623 Y137.279 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X122.264 Y138.005 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X121.867 Y138.710 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X121.432 Y139.393 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X120.961 Y140.052 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X120.455 Y140.684 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X119.916 Y141.288 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X119.345 Y141.862 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X118.724 Y142.453 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X118.103 Y143.044 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X117.483 Y143.635 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X116.862 Y144.227 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X116.241 Y144.818 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X115.621 Y145.409 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X115.000 Y146.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X115.800 Y146.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X116.600 Y146.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X117.400 Y146.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X118.200 Y146.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X119.000 Y146.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X119.800 Y146.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X120.600 Y146.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X121.400 Y146.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X122.200 Y146.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X123.000 Y146.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X123.800 Y146.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X124.600 Y146.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X125.400 Y146.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X126.200 Y146.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X127.000 Y146.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X127.800 Y146.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X128.600 Y146.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X129.400 Y146.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X130.200 Y146.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X131.000 Y146.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X131.800 Y146.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X132.600 Y146.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X133.400 Y146.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X134.200 Y146.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X135.000 Y146.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X134.379 Y145.409 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X133.759 Y144.818 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X133.138 Y144.227 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X132.517 Y143.635 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X131.897 Y143.044 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X131.276 Y142.453 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X130.655 Y141.862 F3000 ; Move to next point
+; Completed path: dxf_entity_1_0_16pts
+
+; Starting path: dxf_entity_2_0_16pts (normal)
+G1 X130.655 Y141.862 F3000 ; Move to start of path
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
@@ -971,195 +189,750 @@ G1 X126.000 Y131.000 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X126.000 Y130.190 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X126.000 Y129.381 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X126.000 Y128.571 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X126.000 Y127.761 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X126.000 Y126.951 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X126.000 Y126.142 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X126.000 Y125.332 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X126.000 Y124.522 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X126.000 Y123.713 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X126.000 Y122.903 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X126.000 Y122.093 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X126.000 Y121.284 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X126.000 Y120.474 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X126.000 Y119.664 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X126.000 Y118.854 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-; Completed path: dxf_entity_0_0_249pts
+; Completed path: dxf_entity_2_0_16pts
 
-; Starting path: dxf_entity_1_0_15pts (normal)
-G1 X131.875 Y99.223 F3000 ; Move to start of path
+; Starting path: dxf_entity_3_0_8pts (normal)
+G1 X130.655 Y141.862 F3000 ; Move to start of path
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X132.431 Y98.636 F3000 ; Move to next point
+G1 X131.276 Y142.453 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X132.987 Y98.049 F3000 ; Move to next point
+G1 X131.897 Y143.044 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X133.543 Y97.461 F3000 ; Move to next point
+G1 X132.517 Y143.635 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X134.099 Y96.874 F3000 ; Move to next point
+G1 X133.138 Y144.227 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X134.655 Y96.286 F3000 ; Move to next point
+G1 X133.759 Y144.818 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X135.212 Y95.699 F3000 ; Move to next point
+G1 X134.379 Y145.409 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X135.768 Y95.112 F3000 ; Move to next point
+G1 X135.000 Y146.000 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X136.324 Y94.524 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X136.880 Y93.937 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X137.436 Y93.350 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X137.992 Y92.762 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X138.548 Y92.175 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X139.104 Y91.587 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-G1 X139.660 Y91.000 F3000 ; Move to next point
-G1 Z0.1 F3000 ; Lower to weld height
-G4 P500 ; Weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-; Completed path: dxf_entity_1_0_15pts
+; Completed path: dxf_entity_3_0_8pts
 
-; Starting path: dxf_entity_2_0_15pts (normal)
-G1 X118.125 Y99.223 F3000 ; Move to start of path
+; Starting path: dxf_entity_4_0_26pts (normal)
+G1 X135.000 Y146.000 F3000 ; Move to start of path
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X117.569 Y98.636 F3000 ; Move to next point
+G1 X134.200 Y146.000 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X117.013 Y98.049 F3000 ; Move to next point
+G1 X133.400 Y146.000 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X116.457 Y97.461 F3000 ; Move to next point
+G1 X132.600 Y146.000 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X115.901 Y96.874 F3000 ; Move to next point
+G1 X131.800 Y146.000 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X115.345 Y96.286 F3000 ; Move to next point
+G1 X131.000 Y146.000 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X114.788 Y95.699 F3000 ; Move to next point
+G1 X130.200 Y146.000 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X114.232 Y95.112 F3000 ; Move to next point
+G1 X129.400 Y146.000 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X113.676 Y94.524 F3000 ; Move to next point
+G1 X128.600 Y146.000 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X113.120 Y93.937 F3000 ; Move to next point
+G1 X127.800 Y146.000 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X112.564 Y93.350 F3000 ; Move to next point
+G1 X127.000 Y146.000 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X112.008 Y92.762 F3000 ; Move to next point
+G1 X126.200 Y146.000 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X111.452 Y92.175 F3000 ; Move to next point
+G1 X125.400 Y146.000 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X110.896 Y91.587 F3000 ; Move to next point
+G1 X124.600 Y146.000 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X110.340 Y91.000 F3000 ; Move to next point
+G1 X123.800 Y146.000 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-; Completed path: dxf_entity_2_0_15pts
+G1 X123.000 Y146.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X122.200 Y146.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X121.400 Y146.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X120.600 Y146.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X119.800 Y146.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X119.000 Y146.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X118.200 Y146.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X117.400 Y146.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X116.600 Y146.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X115.800 Y146.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X115.000 Y146.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+; Completed path: dxf_entity_4_0_26pts
 
-; Starting path: dxf_entity_3_0_22pts (normal)
+; Starting path: dxf_entity_5_0_8pts (normal)
+G1 X115.000 Y146.000 F3000 ; Move to start of path
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X115.621 Y145.409 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X116.241 Y144.818 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X116.862 Y144.227 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X117.483 Y143.635 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X118.103 Y143.044 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X118.724 Y142.453 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X119.345 Y141.862 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+; Completed path: dxf_entity_5_0_8pts
+
+; Starting path: dxf_entity_6_0_5pts (normal)
+G1 X121.923 Y116.000 F3000 ; Move to start of path
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X122.761 Y116.426 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X123.426 Y117.089 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X123.853 Y117.926 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X124.000 Y118.854 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+; Completed path: dxf_entity_6_0_5pts
+
+; Starting path: dxf_entity_7_0_16pts (normal)
+G1 X124.000 Y131.000 F3000 ; Move to start of path
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X123.978 Y131.809 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X123.913 Y132.616 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X123.804 Y133.419 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X123.652 Y134.214 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X123.457 Y135.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X123.220 Y135.774 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X122.942 Y136.535 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X122.623 Y137.279 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X122.264 Y138.005 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X121.867 Y138.710 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X121.432 Y139.393 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X120.961 Y140.052 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X120.455 Y140.684 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X119.916 Y141.288 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X119.345 Y141.862 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+; Completed path: dxf_entity_7_0_16pts
+
+; Starting path: dxf_entity_8_0_16pts (normal)
+G1 X124.000 Y118.854 F3000 ; Move to start of path
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X124.000 Y119.664 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X124.000 Y120.474 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X124.000 Y121.284 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X124.000 Y122.093 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X124.000 Y122.903 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X124.000 Y123.713 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X124.000 Y124.522 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X124.000 Y125.332 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X124.000 Y126.142 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X124.000 Y126.951 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X124.000 Y127.761 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X124.000 Y128.571 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X124.000 Y129.381 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X124.000 Y130.190 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X124.000 Y131.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+; Completed path: dxf_entity_8_0_16pts
+
+; Starting path: dxf_entity_9_0_34pts (normal)
+G1 X121.923 Y116.000 F3000 ; Move to start of path
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X121.162 Y115.719 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X120.426 Y115.378 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X119.720 Y114.978 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X119.049 Y114.522 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X118.417 Y114.013 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X117.828 Y113.454 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X117.287 Y112.850 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X116.796 Y112.204 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X116.360 Y111.520 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X115.980 Y110.803 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X115.660 Y110.057 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X115.401 Y109.288 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X115.205 Y108.501 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X115.074 Y107.700 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X115.008 Y106.891 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X115.008 Y106.080 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X115.074 Y105.271 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X115.205 Y104.471 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X115.401 Y103.683 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X115.659 Y102.914 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X115.980 Y102.169 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X116.359 Y101.452 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X116.796 Y100.768 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X117.286 Y100.121 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X117.828 Y99.517 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X118.416 Y98.958 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X119.048 Y98.449 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X119.719 Y97.993 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X120.425 Y97.593 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X121.161 Y97.252 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X121.922 Y96.971 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X122.703 Y96.752 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X123.500 Y96.598 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+; Completed path: dxf_entity_9_0_34pts
+
+; Starting path: dxf_entity_10_0_34pts (normal)
+G1 X126.500 Y96.598 F3000 ; Move to start of path
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X127.297 Y96.752 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X128.078 Y96.971 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X128.839 Y97.252 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X129.575 Y97.593 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X130.281 Y97.993 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X130.952 Y98.449 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X131.584 Y98.958 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X132.172 Y99.517 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X132.714 Y100.121 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X133.204 Y100.768 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X133.641 Y101.452 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X134.020 Y102.169 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X134.341 Y102.914 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X134.599 Y103.683 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X134.795 Y104.471 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X134.926 Y105.271 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X134.992 Y106.080 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X134.992 Y106.891 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X134.926 Y107.700 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X134.795 Y108.501 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X134.599 Y109.288 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X134.340 Y110.057 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X134.020 Y110.803 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X133.640 Y111.520 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X133.204 Y112.204 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X132.713 Y112.850 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X132.172 Y113.454 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X131.583 Y114.013 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X130.951 Y114.522 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X130.280 Y114.978 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X129.574 Y115.378 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X128.838 Y115.719 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X128.077 Y116.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+; Completed path: dxf_entity_10_0_34pts
+
+; Starting path: dxf_entity_11_0_10pts (normal)
+G1 X129.365 Y97.488 F3000 ; Move to start of path
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X129.715 Y96.767 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X130.065 Y96.046 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X130.414 Y95.325 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X130.764 Y94.604 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X131.114 Y93.884 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X131.464 Y93.163 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X131.813 Y92.442 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X132.163 Y91.721 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X132.513 Y91.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+; Completed path: dxf_entity_11_0_10pts
+
+; Starting path: dxf_entity_12_0_10pts (normal)
+G1 X120.635 Y97.488 F3000 ; Move to start of path
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X120.285 Y96.767 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X119.935 Y96.046 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X119.586 Y95.325 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X119.236 Y94.604 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X118.886 Y93.884 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X118.536 Y93.163 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X118.187 Y92.442 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X117.837 Y91.721 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X117.487 Y91.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+; Completed path: dxf_entity_12_0_10pts
+
+; Starting path: dxf_entity_13_0_10pts (normal)
+G1 X132.513 Y91.000 F3000 ; Move to start of path
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X133.345 Y91.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X134.177 Y91.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X135.009 Y91.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X135.840 Y91.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X136.672 Y91.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X137.504 Y91.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X138.336 Y91.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X139.168 Y91.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X140.000 Y91.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+; Completed path: dxf_entity_13_0_10pts
+
+; Starting path: dxf_entity_14_0_22pts (normal)
 G1 X140.000 Y91.000 F3000 ; Move to start of path
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
@@ -1248,9 +1021,9 @@ G1 X140.000 Y74.000 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-; Completed path: dxf_entity_3_0_22pts
+; Completed path: dxf_entity_14_0_22pts
 
-; Starting path: dxf_entity_4_0_38pts (normal)
+; Starting path: dxf_entity_15_0_38pts (normal)
 G1 X140.000 Y74.000 F3000 ; Move to start of path
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
@@ -1403,9 +1176,9 @@ G1 X110.000 Y74.000 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-; Completed path: dxf_entity_4_0_38pts
+; Completed path: dxf_entity_15_0_38pts
 
-; Starting path: dxf_entity_5_0_22pts (normal)
+; Starting path: dxf_entity_16_0_22pts (normal)
 G1 X110.000 Y74.000 F3000 ; Move to start of path
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
@@ -1494,42 +1267,495 @@ G1 X110.000 Y91.000 F3000 ; Move to next point
 G1 Z0.1 F3000 ; Lower to weld height
 G4 P500 ; Weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-; Completed path: dxf_entity_5_0_22pts
+; Completed path: dxf_entity_16_0_22pts
 
-; Starting path: dxf_entity_0_0_7pts (frangible)
-G1 X122.500 Y96.803 F3000 ; Move to start of path
+; Starting path: dxf_entity_17_0_10pts (normal)
+G1 X110.000 Y91.000 F3000 ; Move to start of path
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X110.832 Y91.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X111.664 Y91.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X112.496 Y91.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X113.328 Y91.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X114.160 Y91.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X114.991 Y91.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X115.823 Y91.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X116.655 Y91.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X117.487 Y91.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+; Completed path: dxf_entity_17_0_10pts
+
+; Starting path: dxf_entity_18_0_12pts (normal)
+G1 X124.000 Y86.000 F3000 ; Move to start of path
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X123.182 Y86.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X122.364 Y86.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X121.545 Y86.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X120.727 Y86.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X119.909 Y86.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X119.091 Y86.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X118.273 Y86.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X117.455 Y86.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X116.636 Y86.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X115.818 Y86.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X115.000 Y86.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+; Completed path: dxf_entity_18_0_12pts
+
+; Starting path: dxf_entity_19_0_9pts (normal)
+G1 X115.000 Y86.000 F3000 ; Move to start of path
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X115.000 Y85.125 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X115.000 Y84.250 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X115.000 Y83.375 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X115.000 Y82.500 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X115.000 Y81.625 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X115.000 Y80.750 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X115.000 Y79.875 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X115.000 Y79.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+; Completed path: dxf_entity_19_0_9pts
+
+; Starting path: dxf_entity_20_0_26pts (normal)
+G1 X115.000 Y79.000 F3000 ; Move to start of path
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X115.800 Y79.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X116.600 Y79.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X117.400 Y79.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X118.200 Y79.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X119.000 Y79.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X119.800 Y79.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X120.600 Y79.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X121.400 Y79.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X122.200 Y79.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X123.000 Y79.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X123.800 Y79.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X124.600 Y79.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X125.400 Y79.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X126.200 Y79.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X127.000 Y79.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X127.800 Y79.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X128.600 Y79.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X129.400 Y79.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X130.200 Y79.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X131.000 Y79.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X131.800 Y79.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X132.600 Y79.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X133.400 Y79.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X134.200 Y79.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X135.000 Y79.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+; Completed path: dxf_entity_20_0_26pts
+
+; Starting path: dxf_entity_21_0_9pts (normal)
+G1 X135.000 Y79.000 F3000 ; Move to start of path
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X135.000 Y79.875 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X135.000 Y80.750 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X135.000 Y81.625 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X135.000 Y82.500 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X135.000 Y83.375 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X135.000 Y84.250 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X135.000 Y85.125 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X135.000 Y86.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+; Completed path: dxf_entity_21_0_9pts
+
+; Starting path: dxf_entity_22_0_12pts (normal)
+G1 X135.000 Y86.000 F3000 ; Move to start of path
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X134.182 Y86.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X133.364 Y86.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X132.545 Y86.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X131.727 Y86.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X130.909 Y86.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X130.091 Y86.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X129.273 Y86.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X128.455 Y86.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X127.636 Y86.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X126.818 Y86.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X126.000 Y86.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+; Completed path: dxf_entity_22_0_12pts
+
+; Starting path: dxf_entity_23_0_3pts (normal)
+G1 X123.500 Y96.598 F3000 ; Move to start of path
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X123.750 Y95.598 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X124.000 Y94.598 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+; Completed path: dxf_entity_23_0_3pts
+
+; Starting path: dxf_entity_24_0_11pts (normal)
+G1 X124.000 Y94.598 F3000 ; Move to start of path
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X124.000 Y93.738 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X124.000 Y92.879 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X124.000 Y92.019 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X124.000 Y91.159 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X124.000 Y90.299 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X124.000 Y89.439 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X124.000 Y88.579 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X124.000 Y87.720 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X124.000 Y86.860 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X124.000 Y86.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+; Completed path: dxf_entity_24_0_11pts
+
+; Starting path: dxf_entity_25_0_3pts (normal)
+G1 X126.500 Y96.598 F3000 ; Move to start of path
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X126.250 Y95.598 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X126.000 Y94.598 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+; Completed path: dxf_entity_25_0_3pts
+
+; Starting path: dxf_entity_26_0_11pts (normal)
+G1 X126.000 Y94.598 F3000 ; Move to start of path
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X126.000 Y93.738 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X126.000 Y92.879 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X126.000 Y92.019 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X126.000 Y91.159 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X126.000 Y90.299 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X126.000 Y89.439 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X126.000 Y88.579 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X126.000 Y87.720 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X126.000 Y86.860 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+G1 X126.000 Y86.000 F3000 ; Move to next point
+G1 Z0.1 F3000 ; Lower to weld height
+G4 P500 ; Weld for 0.5s
+G1 Z1.5 F3000 ; Raise to low travel height
+; Completed path: dxf_entity_26_0_11pts
+
+; Starting path: dxf_entity_0_0_3pts (frangible)
+G1 X123.500 Y96.598 F3000 ; Move to start of path
 G1 Z0.35 F3000 ; Lower to frangible weld height
 G4 P500 ; Frangible weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X123.323 Y96.627 F3000 ; Move to next point
+G1 X124.250 Y97.348 F3000 ; Move to next point
 G1 Z0.35 F3000 ; Lower to frangible weld height
 G4 P500 ; Frangible weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X124.159 Y96.521 F3000 ; Move to next point
+G1 X125.000 Y98.098 F3000 ; Move to next point
 G1 Z0.35 F3000 ; Lower to frangible weld height
 G4 P500 ; Frangible weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X125.000 Y96.485 F3000 ; Move to next point
+; Completed path: dxf_entity_0_0_3pts
+
+; Starting path: dxf_entity_1_0_3pts (frangible)
+G1 X125.000 Y98.098 F3000 ; Move to start of path
 G1 Z0.35 F3000 ; Lower to frangible weld height
 G4 P500 ; Frangible weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X125.841 Y96.521 F3000 ; Move to next point
+G1 X125.750 Y97.348 F3000 ; Move to next point
 G1 Z0.35 F3000 ; Lower to frangible weld height
 G4 P500 ; Frangible weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X126.677 Y96.627 F3000 ; Move to next point
+G1 X126.500 Y96.598 F3000 ; Move to next point
 G1 Z0.35 F3000 ; Lower to frangible weld height
 G4 P500 ; Frangible weld for 0.5s
 G1 Z1.5 F3000 ; Raise to low travel height
-G1 X127.500 Y96.803 F3000 ; Move to next point
-G1 Z0.35 F3000 ; Lower to frangible weld height
-G4 P500 ; Frangible weld for 0.5s
-G1 Z1.5 F3000 ; Raise to low travel height
-; Completed path: dxf_entity_0_0_7pts
+; Completed path: dxf_entity_1_0_3pts
 
 ; End of welding sequence
-; Total paths processed: 7
-; Total points processed: 368
+; Total paths processed: 29
+; Total points processed: 408
 
 ; End sequence
 G1 Z10 F600 ; Raise nozzle to high travel height

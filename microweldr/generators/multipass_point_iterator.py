@@ -9,26 +9,33 @@ logger = logging.getLogger(__name__)
 
 
 def iterate_multipass_points_from_file(
-    file_path: Path, config: Dict[str, Any]
+    file_path: Path, config: Dict[str, Any], enable_deduplication: bool = True
 ) -> Iterator[Dict[str, Any]]:
     """Iterate through welding points from a file (simplified, no multi-pass).
 
     This generates points directly from the parsed SVG/DXF without complex
     multi-pass spacing calculations. All generators receive the same simple points.
+
+    Args:
+        file_path: Path to the file to process
+        config: Configuration dictionary
+        enable_deduplication: If True, filters duplicate points at same coordinates
     """
     logger.debug(f"Starting simple point iteration from {file_path}")
 
-    # Get iterator for the file type (using default config for now)
-    iterator = PointIteratorFactory.create_iterator(str(file_path))
+    # Use the main iterate_points_from_file function with deduplication
+    from .point_iterator_factory import iterate_points_from_file
 
     total_points = 0
-    for point in iterator.iterate_points(file_path):
+    for point_data in iterate_points_from_file(
+        file_path, config=config, enable_deduplication=enable_deduplication
+    ):
         yield {
-            "x": point.x,
-            "y": point.y,
-            "weld_type": point.weld_type,
-            "path_id": getattr(point, "path_id", f"path_{total_points}"),
-            "path_weld_type": point.weld_type,
+            "x": point_data["x"],
+            "y": point_data["y"],
+            "weld_type": point_data["weld_type"],
+            "path_id": point_data.get("path_id", f"path_{total_points}"),
+            "path_weld_type": point_data["weld_type"],
         }
         total_points += 1
 

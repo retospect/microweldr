@@ -3,9 +3,13 @@
 import logging
 from pathlib import Path
 from typing import Dict, Any, Optional, List
-from ..generators.point_iterator_factory import PointIteratorFactory
+from ..generators.point_iterator_factory import (
+    PointIteratorFactory,
+    iterate_points_from_file,
+)
 from ..generators.multipass_point_iterator import iterate_multipass_points_from_file
 from ..core.config import Config
+from ..core.generator_factory import GeneratorFactory
 
 logger = logging.getLogger(__name__)
 
@@ -102,9 +106,9 @@ class TwoPhaseProcessor:
                     f"Phase 1 generators: {[g.__class__.__name__ for g in generators]}"
                 )
 
-            # Process all points through Phase 1 generators
+            # Process all points through Phase 1 generators (with deduplication)
             point_count = 0
-            for point in iterate_points_from_file(input_path):
+            for point in iterate_points_from_file(input_path, config=self.config):
                 for generator in generators:
                     generator.add_point(point)
                 point_count += 1
@@ -155,10 +159,10 @@ class TwoPhaseProcessor:
                     f"Phase 2 generators: {[g.__class__.__name__ for g in generators]}"
                 )
 
-            # Process all multipass points through Phase 2 generators
+            # Process all multipass points through Phase 2 generators (with deduplication)
             point_count = 0
             for point in iterate_multipass_points_from_file(
-                input_path, self.config._config
+                input_path, self.config._config, enable_deduplication=True
             ):
                 for generator in generators:
                     generator.add_point(point)
