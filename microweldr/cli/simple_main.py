@@ -169,9 +169,14 @@ def process_weld_file(
         f"📄 Processing {'frangible' if is_frangible else 'structural'} weld file: {file_path}"
     )
 
-    # Create iterator for the file type with config for consistent dot_spacing
-    iterator = PointIteratorFactory.create_iterator(file_path, config=config)
-    points = list(iterator.iterate_points(Path(file_path)))
+    # Use iterate_points_from_file with deduplication enabled
+    from ..generators.point_iterator_factory import iterate_points_from_file
+
+    points = list(
+        iterate_points_from_file(
+            Path(file_path), config=config, enable_deduplication=True
+        )
+    )
 
     print(f"✅ Loaded {len(points)} points from {Path(file_path).name}")
     return points

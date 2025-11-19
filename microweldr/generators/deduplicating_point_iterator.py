@@ -3,10 +3,40 @@
 import logging
 from pathlib import Path
 from typing import Iterator, Dict, Any, Set, Tuple
+from enum import IntEnum
 
 from .point_iterator_factory import PointIteratorFactory
 
 logger = logging.getLogger(__name__)
+
+
+class WeldTypeEnum(IntEnum):
+    """Memory-efficient enum for weld types used in deduplication hash keys."""
+
+    NORMAL = 0
+    FRANGIBLE = 1
+    STOP = 2
+    PIPETTE = 3
+
+    @classmethod
+    def from_string(cls, weld_type_str: str) -> "WeldTypeEnum":
+        """Convert string weld type to enum value."""
+        weld_type_lower = weld_type_str.lower()
+        if weld_type_lower == "normal":
+            return cls.NORMAL
+        elif weld_type_lower == "frangible":
+            return cls.FRANGIBLE
+        elif weld_type_lower == "stop":
+            return cls.STOP
+        elif weld_type_lower == "pipette":
+            return cls.PIPETTE
+        else:
+            # Default to normal for unknown types
+            return cls.NORMAL
+
+    def to_string(self) -> str:
+        """Convert enum value back to string for logging."""
+        return self.name.lower()
 
 
 class DeduplicatingPointIterator:
@@ -25,7 +55,7 @@ class DeduplicatingPointIterator:
                          Default 0.1mm means coordinates are rounded to nearest 0.1mm.
         """
         self.precision_mm = precision_mm
-        self.seen_coordinates: Set[Tuple[float, float, str]] = set()
+        self.seen_coordinates: Set[Tuple[float, float, WeldTypeEnum]] = set()
 
     def _round_coordinate(self, value: float) -> float:
         """Round coordinate to specified precision.
@@ -40,20 +70,21 @@ class DeduplicatingPointIterator:
 
     def _get_coordinate_key(
         self, x: float, y: float, weld_type: str
-    ) -> Tuple[float, float, str]:
+    ) -> Tuple[float, float, WeldTypeEnum]:
         """Get coordinate key for duplicate detection.
 
         Args:
             x: X coordinate
             y: Y coordinate
-            weld_type: Type of weld
+            weld_type: Type of weld as string
 
         Returns:
-            Tuple of (rounded_x, rounded_y, weld_type) for use as hash key
+            Tuple of (rounded_x, rounded_y, weld_type_enum) for use as hash key
         """
         rounded_x = self._round_coordinate(x)
         rounded_y = self._round_coordinate(y)
-        return (rounded_x, rounded_y, weld_type)
+        weld_type_enum = WeldTypeEnum.from_string(weld_type)
+        return (rounded_x, rounded_y, weld_type_enum)
 
     def iterate_points(self, file_path: Path, config=None) -> Iterator[Dict[str, Any]]:
         """Iterate through points, filtering duplicates.
@@ -93,7 +124,7 @@ class DeduplicatingPointIterator:
             if coord_key in self.seen_coordinates:
                 filtered_points += 1
                 logger.info(
-                    f"🚫 Filtered duplicate {weld_type} weld at "
+                    f"🚫 Filtered duplicate {coord_key[2].to_string()} weld at "
                     f"({coord_key[0]:.1f}, {coord_key[1]:.1f})"
                 )
                 continue
