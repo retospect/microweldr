@@ -250,32 +250,40 @@ class PrusaUSBTerminal:
         if not self.connection:
             return False
 
-        print("⏳ Waiting for printer to become idle...")
         start_time = time.time()
+        consecutive_ok_count = 0
+        required_ok_count = 2  # Need 2 consecutive "ok" responses to be sure
 
         while time.time() - start_time < max_wait:
             # Send M105 to check status
             self.connection.write(b"M105\n")
-            time.sleep(0.5)
+            time.sleep(0.3)
 
             # Read responses
             busy_detected = False
+            ok_received = False
+
             while self.connection.in_waiting > 0:
                 line = (
                     self.connection.readline().decode("utf-8", errors="ignore").strip()
                 )
                 if line:
-                    print(f"📊 Status: {line}")
                     if "echo:busy: processing" in line.lower():
                         busy_detected = True
+                        consecutive_ok_count = 0  # Reset counter
                     elif line.lower().startswith("ok"):
-                        if not busy_detected:
-                            print("✅ Printer is now idle")
-                            return True
+                        ok_received = True
 
-            time.sleep(1)
+            # Count consecutive OK responses without busy
+            if ok_received and not busy_detected:
+                consecutive_ok_count += 1
+                if consecutive_ok_count >= required_ok_count:
+                    return True
+            else:
+                consecutive_ok_count = 0
 
-        print("⚠️  Timeout waiting for printer to become idle")
+            time.sleep(0.5)
+
         return False
 
     def _start_keepalive(self, interval: float = 30.0):
@@ -647,7 +655,10 @@ class PrusaUSBTerminal:
                     if i % 50 == 0 or i == len(gcode_lines):
                         print(f"📈 Progress: {i}/{len(gcode_lines)} commands sent")
 
-                response = self.send_command(command, verbose=verbose)
+                # Send command with proper flow control
+                response = self.send_command(
+                    command, verbose=verbose, wait_for_idle=True
+                )
 
                 if "error" in response.lower():
                     error_count += 1
@@ -666,8 +677,13 @@ class PrusaUSBTerminal:
                 else:
                     success_count += 1
 
-                # Small delay to avoid overwhelming the printer
-                time.sleep(0.1)
+                # Adaptive delay based on command type
+                if command.startswith(("G1", "G0")):  # Movement commands
+                    time.sleep(0.5)  # Longer delay for movements
+                elif command.startswith("G4"):  # Dwell commands
+                    time.sleep(0.2)  # Medium delay for dwells
+                else:
+                    time.sleep(0.1)  # Short delay for other commands
 
             print(f"\n✅ G-code transmission complete!")
             print(f"   Successful: {success_count}")
