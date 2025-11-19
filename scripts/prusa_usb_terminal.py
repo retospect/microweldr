@@ -205,10 +205,25 @@ class PrusaUSBTerminal:
             if wait_for_idle:
                 self._wait_for_idle()
 
+            # Determine timeout based on command type
+            cmd_upper = command.strip().upper()
+            if cmd_upper.startswith("G29"):  # Bed leveling
+                timeout = 600.0  # 10 minutes for bed leveling
+            elif cmd_upper.startswith("G28"):  # Homing
+                timeout = 120.0  # 2 minutes for homing
+            elif cmd_upper.startswith(("M109", "M190")):  # Wait for temperature
+                timeout = 300.0  # 5 minutes for heating
+            elif cmd_upper.startswith(("G1", "G0")):  # Movement
+                timeout = 60.0  # 1 minute for movements
+            else:
+                timeout = self.timeout  # Default timeout
+
             # Send command
             cmd_line = command.strip() + "\n"
             if verbose:
                 print(f"📤 Sending: {command}")
+                if timeout > self.timeout:
+                    print(f"⏱️  Using extended timeout: {timeout:.0f}s for this command")
             self.connection.write(cmd_line.encode("utf-8"))
 
             # Read response with better busy state handling
@@ -216,7 +231,9 @@ class PrusaUSBTerminal:
             start_time = time.time()
             got_ok = False
 
-            while time.time() - start_time < self.timeout and not got_ok:
+            last_progress_time = start_time
+
+            while time.time() - start_time < timeout and not got_ok:
                 if self.connection.in_waiting > 0:
                     line = (
                         self.connection.readline()
@@ -240,12 +257,19 @@ class PrusaUSBTerminal:
                 else:
                     time.sleep(0.1)
 
+                # Show progress for long-running commands
+                if timeout > 60 and time.time() - last_progress_time > 10:
+                    elapsed = time.time() - start_time
+                    if verbose:
+                        print(f"⏳ Still processing... ({elapsed:.0f}s elapsed)")
+                    last_progress_time = time.time()
+
             return "\n".join(response_lines)
 
         except Exception as e:
             return f"❌ Communication error: {e}"
 
-    def _wait_for_idle(self, max_wait: float = 30.0) -> bool:
+    def _wait_for_idle(self, max_wait: float = 120.0) -> bool:
         """Wait for printer to become idle (not busy)."""
         if not self.connection:
             return False
