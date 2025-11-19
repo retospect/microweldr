@@ -452,6 +452,9 @@ class StreamingGCodeSubscriber(EventSubscriber):
 
         self.file_handle.write("; End sequence\n")
         self.file_handle.write("G1 Z10 F600 ; Raise nozzle to high travel height\n")
+        self.file_handle.write(
+            "G1 X0 Y220 F3000 ; Move to park position (front left)\n"
+        )
         self.file_handle.write("G28 X Y ; Home X and Y axes\n")
 
         # Only cool down heaters if cooldown is enabled
