@@ -16,7 +16,7 @@ This enables rapid **microfluidics prototyping** with a 3D printer by creating *
 
 *Complete welding process showing both normal welds (blue) and frangible welds (red) with 1mm spacing and 2mm diameter dots representing actual welding spots*
 
-## 🆕 Version 6.1.5
+## 🆕 Version 6.1.6
 
 - **Unified Configuration**: Consistent 1mm dot spacing across SVG and DXF formats
 - **Professional Examples**: Complete example collection with combined weld types
