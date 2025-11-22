@@ -28,6 +28,7 @@ dependencies = [
     "lxml>=5.0.0",
     "toml>=0.10.2",
     "requests>=2.25.0",
+    "pyserial>=3.5",
 ]
 
 [project.urls]
@@ -37,16 +38,18 @@ Documentation = "https://github.com/retospect/microweldr"
 
 [project.scripts]
 microweldr = "microweldr.__main__:main"
+microweldr-usb = "scripts.prusa_usb_terminal:main"
 
 [tool.poetry]
 name = "microweldr"
 version = "6.1.5"
 description = "Convert SVG and DXF files to Prusa Core One G-code for plastic welding"
 authors = ["Reto Stamm <reto@retostamm.com>"]
-packages = [{include = "microweldr"}]
+packages = [{include = "microweldr"}, {include = "scripts"}]
 
 [tool.poetry.scripts]
 microweldr = "microweldr.__main__:main"
+microweldr-usb = "scripts.prusa_usb_terminal:main"
 
 [tool.poetry.dependencies]
 python = ">=3.10"
@@ -55,6 +58,7 @@ ezdxf = ">=1.4.0"
 lxml = ">=5.0.0"
 toml = ">=0.10.2"
 requests = ">=2.25.0"
+pyserial = ">=3.5"
 
 
 [tool.poetry.group.dev.dependencies]

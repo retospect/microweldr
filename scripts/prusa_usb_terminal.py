@@ -133,11 +133,9 @@ class PrusaUSBTerminal:
                 write_timeout=self.timeout,
             )
 
-            # Wait for printer to initialize
-            time.sleep(2)
-
-            # Clear any startup messages
-            self._clear_buffer()
+            # Clear any startup messages and wait until the printer is quiet
+            # instead of sleeping for a fixed duration.
+            self._clear_buffer(max_wait=3.0, quiet_interval=0.5)
 
             # Test with M115 (get firmware info)
             response = self.send_command("M115")
@@ -164,22 +162,32 @@ class PrusaUSBTerminal:
                 self.connection = None
             return False
 
-    def _clear_buffer(self):
-        """Clear any pending data in the serial buffer."""
+    def _clear_buffer(self, max_wait: float = 3.0, quiet_interval: float = 0.5):
+        """Clear any pending data in the serial buffer.
+
+        This reads startup messages until there has been no new data for a
+        quiet_interval, or until max_wait is reached. This avoids a fixed
+        sleep while still giving the printer time to finish its banner.
+        """
         if not self.connection:
             return
 
-        # Read any startup messages
         start_time = time.time()
-        while time.time() - start_time < 1.0:  # Read for 1 second
+        last_data_time = start_time
+
+        while time.time() - start_time < max_wait:
             if self.connection.in_waiting > 0:
                 data = (
                     self.connection.readline().decode("utf-8", errors="ignore").strip()
                 )
                 if data:
                     print(f"   Startup: {data}")
+                    last_data_time = time.time()
             else:
-                time.sleep(0.1)
+                # If we've been quiet long enough, stop waiting early
+                if time.time() - last_data_time >= quiet_interval:
+                    break
+                time.sleep(0.05)
 
     def _parse_printer_info(self, response: str):
         """Parse printer information from M115 response."""
@@ -700,14 +708,6 @@ class PrusaUSBTerminal:
                             verbose = True
                 else:
                     success_count += 1
-
-                # Adaptive delay based on command type
-                if command.startswith(("G1", "G0")):  # Movement commands
-                    time.sleep(0.5)  # Longer delay for movements
-                elif command.startswith("G4"):  # Dwell commands
-                    time.sleep(0.2)  # Medium delay for dwells
-                else:
-                    time.sleep(0.1)  # Short delay for other commands
 
             print(f"\n✅ G-code transmission complete!")
             print(f"   Successful: {success_count}")

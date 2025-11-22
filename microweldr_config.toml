@@ -36,7 +36,7 @@ weld_time = 0.5             # Optimized: increased from 0.2s for better weld qua
 dot_spacing = 0.8
 
 [frangible_welds]
-weld_height = 0.35          # Optimized: reduced from 0.6 for light weld depth
+weld_height = 0.4           # Adjusted frangible weld height for current diluter tests
 weld_temperature = 160
 weld_time = 0.5             # Optimized: increased from 0.2s for consistency
 dot_spacing = 0.8

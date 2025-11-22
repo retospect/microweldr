@@ -176,7 +176,7 @@ class UnifiedConfig:
                 "inner_diameter": 0.2,
             },
             "temperatures": {
-                "bed_temperature": 35,
+                "bed_temperature": 45,
                 "nozzle_temperature": 160,
                 "chamber_temperature": 35,
                 "use_chamber_heating": False,
@@ -199,7 +199,7 @@ class UnifiedConfig:
                 "dot_spacing": 0.5,
             },
             "frangible_welds": {
-                "weld_height": 0.6,
+                "weld_height": 0.4,
                 "weld_temperature": 160,
                 "weld_time": 0.2,
                 "dot_spacing": 0.5,
