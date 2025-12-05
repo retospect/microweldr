@@ -128,6 +128,8 @@ class TestWeldTypeConfigFlow:
             output_gcode = tmp_path / "test_normal.gcode"
 
             class Args:
+                level_bed = False
+                stop_for_film = True
                 verbose = False
 
             success = generate_gcode(points, str(output_gcode), config, Args())
@@ -138,7 +140,7 @@ class TestWeldTypeConfigFlow:
 
             assert "G1 Z0.123 F3000 ; Lower to weld height" in gcode_content
             assert "G4 P456 ; Weld for 0.456s" in gcode_content
-            assert "M104 S165" in gcode_content or "M109 S165" in gcode_content
+            assert "M104 S160" in gcode_content or "M109 S160" in gcode_content
         finally:
             os.chdir(original_dir)
 
@@ -160,6 +162,8 @@ class TestWeldTypeConfigFlow:
             output_gcode = tmp_path / "test_frangible.gcode"
 
             class Args:
+                level_bed = False
+                stop_for_film = True
                 verbose = False
 
             success = generate_gcode(points, str(output_gcode), config, Args())
@@ -170,7 +174,7 @@ class TestWeldTypeConfigFlow:
 
             assert "G1 Z0.234 F3000 ; Lower to frangible weld height" in gcode_content
             assert "G4 P789 ; Frangible weld for 0.789s" in gcode_content
-            assert "M104 S170" in gcode_content or "M109 S170" in gcode_content
+            assert "M104 S160" in gcode_content or "M109 S160" in gcode_content
         finally:
             os.chdir(original_dir)
 
@@ -202,6 +206,8 @@ class TestWeldTypeConfigFlow:
             output_gcode = tmp_path / "test_mixed.gcode"
 
             class Args:
+                level_bed = False
+                stop_for_film = True
                 verbose = False
 
             success = generate_gcode(all_points, str(output_gcode), config, Args())
@@ -263,6 +269,8 @@ class TestWeldTypeConfigFlow:
             output_gcode = tmp_path / "test_precision.gcode"
 
             class Args:
+                level_bed = False
+                stop_for_film = True
                 verbose = False
 
             generate_gcode(normal_points, str(output_gcode), config, Args())
