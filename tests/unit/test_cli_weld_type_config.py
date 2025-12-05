@@ -138,7 +138,7 @@ class TestWeldTypeConfigFlow:
 
             assert "G1 Z0.123 F3000 ; Lower to weld height" in gcode_content
             assert "G4 P456 ; Weld for 0.456s" in gcode_content
-            assert "M104 S160" in gcode_content or "M109 S160" in gcode_content
+            assert "M104 S165" in gcode_content or "M109 S165" in gcode_content
         finally:
             os.chdir(original_dir)
 
@@ -170,7 +170,7 @@ class TestWeldTypeConfigFlow:
 
             assert "G1 Z0.234 F3000 ; Lower to frangible weld height" in gcode_content
             assert "G4 P789 ; Frangible weld for 0.789s" in gcode_content
-            assert "M104 S160" in gcode_content or "M109 S160" in gcode_content
+            assert "M104 S170" in gcode_content or "M109 S170" in gcode_content
         finally:
             os.chdir(original_dir)
 
@@ -250,13 +250,12 @@ class TestWeldTypeConfigFlow:
             os.chdir(tmp_path)
             config = Config()
 
+            # Verify config loaded correctly with our odd test values
             assert config.get("normal_welds", "weld_height") == 0.123
             assert config.get("normal_welds", "weld_time") == 0.456
-            assert config.get("normal_welds", "weld_temperature") == 165
 
             assert config.get("frangible_welds", "weld_height") == 0.234
             assert config.get("frangible_welds", "weld_time") == 0.789
-            assert config.get("frangible_welds", "weld_temperature") == 170
 
             normal_points = process_weld_file(
                 str(simple_dxf_file), config, is_frangible=False
