@@ -28,6 +28,7 @@ class StreamingGCodeSubscriber(EventSubscriber):
         config,
         coordinate_offset: Tuple[float, float] = (0.0, 0.0),
         include_user_pause: bool = True,
+        enable_bed_leveling: bool = False,
     ):
         """Initialize streaming G-code subscriber.
 
@@ -36,6 +37,7 @@ class StreamingGCodeSubscriber(EventSubscriber):
             config: Configuration object
             coordinate_offset: Tuple of (offset_x, offset_y) for coordinate centering
             include_user_pause: Whether to include user pause for plastic insertion
+            enable_bed_leveling: Whether to include bed leveling (G29) in G-code
         """
         self.output_path = Path(output_path)
         self.config = config
@@ -50,8 +52,9 @@ class StreamingGCodeSubscriber(EventSubscriber):
         # Store coordinate offset for centering
         self.offset_x, self.offset_y = coordinate_offset
 
-        # User interaction control
+        # User interaction and preprocessing control
         self.include_user_pause = include_user_pause
+        self.enable_bed_leveling = enable_bed_leveling
 
         # Travel height management
         self.welding_started = False  # Track if we've started welding
@@ -387,9 +390,8 @@ class StreamingGCodeSubscriber(EventSubscriber):
         self.file_handle.write(f"M104 S{nozzle_temp} ; Set nozzle temperature\n")
         self.file_handle.write(f"M109 S{nozzle_temp} ; Wait for nozzle temperature\n\n")
 
-        # Bed leveling AFTER heating (correct Z=0 reference) - if enabled
-        enable_bed_leveling = self.config.get("printer", "enable_bed_leveling", False)
-        if enable_bed_leveling:
+        # Bed leveling AFTER heating (correct Z=0 reference) - if enabled via CLI flag
+        if self.enable_bed_leveling:
             self.file_handle.write("; Bed leveling after thermal expansion\n")
             self.file_handle.write("G29 ; Auto bed leveling\n\n")
         else:
@@ -407,7 +409,16 @@ class StreamingGCodeSubscriber(EventSubscriber):
         if not self.file_handle:
             return
 
+        # Get film insertion height from config (default 150mm for easy access)
+        film_insertion_height = self.config.get(
+            "movement", "film_insertion_height", 150.0
+        )
+        z_speed = self.config.get("movement", "z_speed", 3000)
+
         self.file_handle.write("; Pause for user to insert plastic sheets\n")
+        self.file_handle.write(
+            f"G1 Z{film_insertion_height} F{z_speed} ; Raise Z for film insertion\n"
+        )
         self.file_handle.write("M117 Insert plastic sheets...\n")
         self.file_handle.write(
             "M0 ; Pause - Insert plastic sheets and press continue\n"

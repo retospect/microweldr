@@ -199,9 +199,19 @@ def generate_gcode(points: List[dict], output_path: str, config: Config, args) -
         bed_size_x = config.get("printer", "bed_size_x", 250.0)
         bed_size_y = config.get("printer", "bed_size_y", 220.0)
 
-        # Create two-pass processor (combined file includes user pause)
+        # Get CLI flags for bed leveling and film insertion
+        enable_bed_leveling = getattr(args, "level_bed", False)
+        include_user_pause = getattr(
+            args, "stop_for_film", True
+        )  # Default True for safety
+
+        # Create two-pass processor with proper flags
         processor = TwoPassProcessor(
-            config, bed_size_x, bed_size_y, include_user_pause=True
+            config,
+            bed_size_x,
+            bed_size_y,
+            include_user_pause=include_user_pause,
+            enable_bed_leveling=enable_bed_leveling,
         )
 
         # Convert points to events

@@ -71,6 +71,7 @@ class TwoPassProcessor:
         bed_size_x: float = 250.0,
         bed_size_y: float = 220.0,
         include_user_pause: bool = True,
+        enable_bed_leveling: bool = False,
     ):
         """Initialize two-pass processor.
 
@@ -79,11 +80,13 @@ class TwoPassProcessor:
             bed_size_x: Printer bed width in mm
             bed_size_y: Printer bed depth in mm
             include_user_pause: Whether to include user pause for plastic insertion
+            enable_bed_leveling: Whether to include bed leveling (G29) in G-code
         """
         self.config = config
         self.bed_size_x = bed_size_x
         self.bed_size_y = bed_size_y
         self.include_user_pause = include_user_pause
+        self.enable_bed_leveling = enable_bed_leveling
 
         # Event recording and replay
         self.event_recorder = EventRecorder()
@@ -173,6 +176,7 @@ class TwoPassProcessor:
                 self.config,
                 coordinate_offset=self.centering_offset,
                 include_user_pause=self.include_user_pause,
+                enable_bed_leveling=self.enable_bed_leveling,
             )
             pass_2_subscribers.append(gcode_subscriber)
 
