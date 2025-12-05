@@ -178,6 +178,11 @@ def process_weld_file(
         )
     )
 
+    # Override weld type if explicitly specified via -frange flag
+    if is_frangible:
+        for point in points:
+            point["weld_type"] = "frangible"
+
     print(f"✅ Loaded {len(points)} points from {Path(file_path).name}")
     return points
 
