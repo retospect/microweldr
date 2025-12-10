@@ -2,6 +2,7 @@
 
 import tempfile
 from pathlib import Path
+from unittest.mock import Mock
 import pytest
 
 from microweldr.core.config import Config
@@ -9,12 +10,51 @@ from microweldr.outputs.streaming_gcode_subscriber import StreamingGCodeSubscrib
 from microweldr.core.events import PathEvent, Event, EventType
 
 
+@pytest.fixture
+def mock_config():
+    """Create a mock config with test weld height values."""
+    config = Mock(spec=Config)
+
+    def config_get(section, key, default=None):
+        config_values = {
+            ("printer", "bed_size_x"): 250.0,
+            ("printer", "bed_size_y"): 220.0,
+            ("temperatures", "bed_temperature"): 45,
+            ("temperatures", "nozzle_temperature"): 160,
+            ("temperatures", "use_chamber_heating"): False,
+            ("temperatures", "chamber_temperature"): 35,
+            ("temperatures", "enable_cooldown"): False,
+            ("temperatures", "cooldown_temperature"): 0,
+            ("movement", "move_height"): 5.0,
+            ("movement", "low_travel_height"): 1.5,
+            ("movement", "travel_speed"): 3000,
+            ("movement", "z_speed"): 3000,
+            ("movement", "weld_compression_offset"): 0.0,
+            ("movement", "film_insertion_height"): 150.0,
+            # Test weld height values
+            ("normal_welds", "weld_height"): 0.1,
+            ("normal_welds", "weld_time"): 0.5,
+            ("normal_welds", "weld_temperature"): 160,
+            ("normal_welds", "dot_spacing"): 0.8,
+            ("frangible_welds", "weld_height"): 0.35,
+            ("frangible_welds", "weld_time"): 0.5,
+            ("frangible_welds", "weld_temperature"): 160,
+            ("frangible_welds", "dot_spacing"): 0.8,
+            ("output", "gcode_extension"): ".gcode",
+            ("sequencing", "passes"): 4,
+        }
+        return config_values.get((section, key), default)
+
+    config.get.side_effect = config_get
+    return config
+
+
 class TestWeldHeights:
     """Test weld height differentiation between normal and frangible welds."""
 
-    def test_normal_weld_height(self):
+    def test_normal_weld_height(self, mock_config):
         """Test that normal welds use correct height (0.1mm)."""
-        config = Config()
+        config = mock_config
 
         with tempfile.NamedTemporaryFile(suffix=".gcode", delete=False) as tmp:
             tmp_path = Path(tmp.name)
@@ -68,9 +108,9 @@ class TestWeldHeights:
             if tmp_path.exists():
                 tmp_path.unlink()
 
-    def test_frangible_weld_height(self):
+    def test_frangible_weld_height(self, mock_config):
         """Test that frangible welds use correct height (0.35mm)."""
-        config = Config()
+        config = mock_config
 
         with tempfile.NamedTemporaryFile(suffix=".gcode", delete=False) as tmp:
             tmp_path = Path(tmp.name)
@@ -124,9 +164,9 @@ class TestWeldHeights:
             if tmp_path.exists():
                 tmp_path.unlink()
 
-    def test_mixed_weld_types_heights(self):
+    def test_mixed_weld_types_heights(self, mock_config):
         """Test that mixed normal and frangible welds use correct heights."""
-        config = Config()
+        config = mock_config
 
         with tempfile.NamedTemporaryFile(suffix=".gcode", delete=False) as tmp:
             tmp_path = Path(tmp.name)
@@ -203,9 +243,9 @@ class TestWeldHeights:
             if tmp_path.exists():
                 tmp_path.unlink()
 
-    def test_weld_height_configuration_values(self):
+    def test_weld_height_configuration_values(self, mock_config):
         """Test that configuration values match expected weld heights."""
-        config = Config()
+        config = mock_config
 
         normal_height = config.get("normal_welds", "weld_height")
         frangible_height = config.get("frangible_welds", "weld_height")
