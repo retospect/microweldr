@@ -53,13 +53,11 @@ repos:
 #      - id: mypy
 #        additional_dependencies: [types-toml]
 
-# Integration tests temporarily disabled for commit - will be refined
-#  - repo: local
-#    hooks:
-#      - id: integration-tests
-#        name: integration-tests
-#        entry: python -m pytest tests/test_integration_full_pipeline.py
-#        language: system
-#        pass_filenames: false
-#        always_run: true
-#        args: [--tb=short, -v]
+  - repo: local
+    hooks:
+      - id: unit-tests
+        name: unit-tests
+        entry: python -m pytest tests/unit/ -v -k "not hardware" --tb=short
+        language: system
+        pass_filenames: false
+        always_run: true
