@@ -131,6 +131,64 @@ jobs:
           .coverage
         retention-days: 30
 
+  test-minimum-versions:
+    name: Test minimum versions (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v6
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v6
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install Poetry
+      run: |
+        curl -sSL https://install.python-poetry.org | POETRY_VERSION=1.8.3 python3 -
+        echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+    - name: Configure Poetry for minimum versions
+      run: |
+        poetry config virtualenvs.create true
+        poetry config virtualenvs.in-project false
+
+    - name: Install with minimum dependency versions
+      run: |
+        echo "Installing with minimum dependency versions..."
+        # Install the package with --no-deps first
+        poetry install --no-interaction --no-deps
+        # Then install minimum versions of all dependencies
+        poetry run pip install \
+          "Pillow==10.0.0" \
+          "ezdxf==1.4.0" \
+          "lxml==5.0.0" \
+          "toml==0.10.2" \
+          "requests==2.25.0" \
+          "pyserial==3.5" \
+          "pytest>=7.4.0" \
+          "pytest-cov>=4.1.0"
+
+    - name: Verify installation
+      run: |
+        poetry run python -c "import microweldr; print(f'MicroWeldr v{microweldr.__version__} with minimum deps')"
+        echo "Installed package versions:"
+        poetry run pip list | grep -E "(Pillow|ezdxf|lxml|toml|requests|urllib3|svgpathtools)"
+
+    - name: Run tests with minimum versions
+      run: |
+        echo "Running tests with minimum dependency versions on Python ${{ matrix.python-version }}"
+        poetry run pytest -v -m "not hardware" --tb=short
+
+    - name: Test CLI with minimum versions
+      run: |
+        poetry run microweldr --help
+        echo "✅ CLI works with minimum dependency versions"
+
   build-test:
     name: Test package build
     runs-on: ubuntu-latest
