@@ -1,6 +1,6 @@
 [project]
 name = "microweldr"
-version = "6.1.9"
+version = "6.1.10"
 description = "Convert SVG and DXF files to Prusa Core One G-code for plastic welding"
 authors = [
     {name = "Reto Stamm", email = "reto@retostamm.com"}
@@ -43,7 +43,7 @@ microweldr-usb = "scripts.prusa_usb_terminal:main"
 
 [tool.poetry]
 name = "microweldr"
-version = "6.1.9"
+version = "6.1.10"
 description = "Convert SVG and DXF files to Prusa Core One G-code for plastic welding"
 authors = ["Reto Stamm <reto@retostamm.com>"]
 packages = [{include = "microweldr"}, {include = "scripts"}]
