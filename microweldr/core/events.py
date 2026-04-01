@@ -1,6 +1,7 @@
 """Event system for publish-subscribe architecture."""
 
 from abc import ABC, abstractmethod
+from collections import deque
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
@@ -192,8 +193,8 @@ class EventPublisher:
     def __init__(self):
         """Initialize the event publisher."""
         self._subscribers: Dict[EventType, List[EventSubscriber]] = {}
-        self._event_history: List[Event] = []
         self._max_history = 1000
+        self._event_history: deque[Event] = deque(maxlen=self._max_history)
 
     def subscribe(self, subscriber: EventSubscriber) -> None:
         """Subscribe to events."""
@@ -218,10 +219,8 @@ class EventPublisher:
 
     def publish(self, event: Event) -> None:
         """Publish an event to all subscribers."""
-        # Add to history
+        # Add to history (deque auto-evicts oldest when full)
         self._event_history.append(event)
-        if len(self._event_history) > self._max_history:
-            self._event_history.pop(0)
 
         # Notify subscribers
         if event.event_type in self._subscribers:

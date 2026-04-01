@@ -233,7 +233,7 @@ class GIFAnimationSubscriber(EventSubscriber):
             # Draw title
             try:
                 font = ImageFont.truetype("Arial.ttf", 16)
-            except:
+            except (OSError, IOError):
                 font = ImageFont.load_default()
 
             title = f"MicroWeldr - Weld Progress ({frame_num + 1}/{len(self.weld_sequence)} points)"
@@ -287,7 +287,7 @@ class GIFAnimationSubscriber(EventSubscriber):
                 # Draw point number
                 try:
                     small_font = ImageFont.truetype("Arial.ttf", 10)
-                except:
+                except (OSError, IOError):
                     small_font = ImageFont.load_default()
 
                 draw.text(
@@ -362,7 +362,7 @@ class GIFAnimationSubscriber(EventSubscriber):
         """Draw legend showing weld types and colors."""
         try:
             font = ImageFont.truetype("Arial.ttf", 12)
-        except:
+        except (OSError, IOError):
             font = ImageFont.load_default()
 
         legend_x = self.width - 150

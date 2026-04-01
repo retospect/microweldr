@@ -36,7 +36,7 @@ class UnifiedConfig:
         self._secrets_config_path: Optional[Path] = None
 
     def _find_config_file(
-        self, filename: str, legacy_names: list = None
+        self, filename: str, legacy_names: Optional[list] = None
     ) -> Optional[Path]:
         """Find configuration file using standardized search order.
 
@@ -62,6 +62,17 @@ class UnifiedConfig:
             config_path = location / filename
             if config_path.exists() and config_path.is_file():
                 return config_path
+
+        # Fall back to legacy filenames
+        for legacy_name in legacy_names:
+            for location in search_locations:
+                config_path = location / legacy_name
+                if config_path.exists() and config_path.is_file():
+                    logger.warning(
+                        f"Using legacy config name '{legacy_name}'. "
+                        f"Please rename to '{filename}'."
+                    )
+                    return config_path
 
         return None
 

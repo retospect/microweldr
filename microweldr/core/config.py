@@ -12,6 +12,9 @@ class ConfigError(Exception):
     pass
 
 
+_MISSING = object()
+
+
 class Config:
     """Configuration manager for the SVG welder."""
 
@@ -34,12 +37,12 @@ class Config:
 
         self._config = get_main_config()
 
-    def get(self, section: str, key: str, default: Any = None) -> Any:
+    def get(self, section: str, key: str, default: Any = _MISSING) -> Any:
         """Get a configuration value."""
         try:
             return self._config[section][key]
         except KeyError:
-            if default is not None:
+            if default is not _MISSING:
                 return default
             raise ConfigError(f"Configuration key '{section}.{key}' not found")
 
