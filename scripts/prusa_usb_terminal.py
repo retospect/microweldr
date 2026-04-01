@@ -22,6 +22,7 @@ Developer Mode Features:
 """
 
 import argparse
+import contextlib
 import sys
 import threading
 import time
@@ -95,7 +96,7 @@ class PrusaUSBTerminal:
 
         return prusa_ports
 
-    def connect_to_printer(self, port: str = None) -> bool:
+    def connect_to_printer(self, port: str | None = None) -> bool:
         """Connect to Prusa printer on specified port or auto-detect."""
         if port:
             return self._try_connect_port(port)
@@ -154,10 +155,8 @@ class PrusaUSBTerminal:
         except Exception as e:
             print(f"   ❌ Failed to connect to {port}: {e}")
             if self.connection:
-                try:
+                with contextlib.suppress(BaseException):
                     self.connection.close()
-                except:
-                    pass
                 self.connection = None
             return False
 
@@ -754,10 +753,8 @@ class PrusaUSBTerminal:
         self._stop_keepalive()
 
         if self.connection:
-            try:
+            with contextlib.suppress(BaseException):
                 self.connection.close()
-            except:
-                pass
             self.connection = None
             print("🔌 Disconnected from printer")
 

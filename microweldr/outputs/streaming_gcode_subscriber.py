@@ -162,7 +162,7 @@ class StreamingGCodeSubscriber(EventSubscriber):
             self._validate_filename()
 
             # Open file and write complete initialization sequence
-            self.file_handle = open(self.output_path, "w", encoding="utf-8")
+            self.file_handle = open(self.output_path, "w", encoding="utf-8")  # noqa: SIM115
             self._write_gcode_header()
             self._write_calibration_and_heating()
             if self.include_user_pause:
@@ -209,7 +209,7 @@ class StreamingGCodeSubscriber(EventSubscriber):
 
         # Get movement settings from config
         high_travel_height = self.config.get("movement", "move_height", 0.2)
-        low_travel_height = self.config.get("movement", "low_travel_height", 0.2)
+        self.config.get("movement", "low_travel_height", 0.2)
         z_speed = self.config.get("movement", "z_speed", 300)
         xy_speed = self.config.get("movement", "xy_speed", 3000)
 

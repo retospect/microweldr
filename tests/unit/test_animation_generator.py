@@ -13,7 +13,9 @@ import pytest
 from microweldr.core.config import Config
 
 try:
-    from microweldr.outputs.png_animation_subscriber import PNGAnimationSubscriber
+    from microweldr.outputs.png_animation_subscriber import (
+        PNGAnimationSubscriber,  # noqa: F401
+    )
 
     ANIMATION_AVAILABLE = True
 except ImportError:

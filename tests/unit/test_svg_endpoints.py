@@ -19,48 +19,6 @@ class TestSVGEndpoints:
 
     def create_test_config(self) -> Config:
         """Create a test configuration."""
-        config_content = """
-[printer]
-bed_size_x = 250.0
-
-[nozzle]
-outer_diameter = 1.0
-inner_diameter = 0.2
-
-[temperatures]
-bed_temperature = 60
-nozzle_temperature = 200
-cooldown_temperature = 50
-
-[movement]
-move_height = 5.0
-travel_speed = 6000
-z_speed = 300
-
-[normal_welds]
-weld_height = 0.05
-weld_temperature = 200
-weld_time = 0.5
-dot_spacing = 2.0
-initial_dot_spacing = 8.0
-cooling_time_between_passes = 2.0
-
-[frangible_welds]
-weld_height = 0.05
-weld_temperature = 180
-weld_time = 0.3
-dot_spacing = 3.0
-initial_dot_spacing = 12.0
-cooling_time_between_passes = 1.5
-
-[output]
-gcode_extension = ".gcode"
-
-[animation]
-time_between_welds = 0.1
-pause_time = 3.0
-min_animation_duration = 10.0
-        """
         # Use default config instead of deprecated path-based constructor
         return Config()
 
@@ -406,7 +364,7 @@ min_animation_duration = 10.0
             # Remove the duplicate closing point for angle calculation
             points = path.points[:-1]  # Exclude last point (duplicate of first)
 
-            cx, cy, r = 50.0, 50.0, 20.0
+            cx, cy, _r = 50.0, 50.0, 20.0
 
             # Calculate angles for each point
             angles = []

@@ -3,7 +3,6 @@
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Union
 
 
 @dataclass
@@ -389,4 +388,4 @@ class CircleEntity:
 
 
 # Union type for all CAD entities
-CADEntity = Union[LineEntity, ArcEntity, CircleEntity]
+CADEntity = LineEntity | ArcEntity | CircleEntity

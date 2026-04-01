@@ -398,14 +398,14 @@ class DXFReader(FileReaderPublisher):
 
         # Calculate start and end angles
         start_angle = math.atan2(start.y - center_y, start.x - center_x)
-        end_angle = math.atan2(end.y - center_y, end.x - center_x)
+        math.atan2(end.y - center_y, end.x - center_x)
 
         # Calculate sweep angle - use the included_angle directly
         # The DXF bulge already encodes the correct direction and magnitude
         sweep_angle = included_angle
 
         # Adjust the end_angle to match the intended sweep
-        end_angle = start_angle + sweep_angle
+        start_angle + sweep_angle
 
         # Generate line segments along the arc
         line_segments = []

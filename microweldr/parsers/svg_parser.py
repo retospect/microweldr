@@ -104,9 +104,9 @@ class SVGParser:
                     element_radius = float(element.get("r", 1))
 
                 # Extract custom parameters for the path
-                custom_temp = self._get_float_attr(element, "data-temp")
-                custom_weld_time = self._get_float_attr(element, "data-weld-time")
-                custom_bed_temp = self._get_float_attr(element, "data-bed-temp")
+                self._get_float_attr(element, "data-temp")
+                self._get_float_attr(element, "data-weld-time")
+                self._get_float_attr(element, "data-bed-temp")
                 custom_weld_height = self._get_float_attr(element, "data-weld-height")
 
                 weld_path = WeldPath(
@@ -124,7 +124,7 @@ class SVGParser:
 
     def _get_sort_key(self, element_tuple: tuple[str, ET.Element]) -> float:
         """Get sort key for element ordering."""
-        element_type, element = element_tuple
+        _element_type, element = element_tuple
         element_id = element.get("id", "")
         # Try to extract numeric part for sorting
         match = re.search(r"(\d+)", element_id)
@@ -275,9 +275,9 @@ class SVGParser:
         y2 = float(line_element.get("y2", 0))
 
         # Extract custom parameters from line element
-        custom_temp = self._get_float_attr(line_element, "data-temp")
-        custom_weld_time = self._get_float_attr(line_element, "data-weld-time")
-        custom_bed_temp = self._get_float_attr(line_element, "data-bed-temp")
+        self._get_float_attr(line_element, "data-temp")
+        self._get_float_attr(line_element, "data-weld-time")
+        self._get_float_attr(line_element, "data-bed-temp")
         custom_weld_height = self._get_float_attr(line_element, "data-weld-height")
 
         points = [
@@ -471,10 +471,7 @@ class SVGParser:
         self, element: ET.Element, ancestor: ET.Element
     ) -> bool:
         """Check if element is a descendant of ancestor."""
-        for child in ancestor.iter():
-            if child is element:
-                return True
-        return False
+        return any(child is element for child in ancestor.iter())
 
     def _expand_use_element(
         self, use_element: ET.Element, defs_elements: dict, namespaces: dict

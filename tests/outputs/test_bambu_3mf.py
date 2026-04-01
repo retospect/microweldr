@@ -90,12 +90,12 @@ class TestComputeBounds:
 class TestCalculateTransform:
     def test_identity_on_empty_bounds(self):
         b = {"min_x": None, "min_y": None, "max_x": None, "max_y": None}
-        scale, ox, oy = calculate_transform(b, 800, 600, 50)
+        scale, _ox, _oy = calculate_transform(b, 800, 600, 50)
         assert scale == 1.0
 
     def test_positive_scale(self):
         b = {"min_x": 0, "max_x": 100, "min_y": 0, "max_y": 100}
-        scale, ox, oy = calculate_transform(b, 800, 600, 50)
+        scale, _ox, _oy = calculate_transform(b, 800, 600, 50)
         assert scale > 0
 
     def test_zero_range(self):

@@ -193,7 +193,7 @@ class GIFAnimationSubscriber(EventSubscriber):
             points_to_show = self.weld_sequence[: frame_num + 1]
 
             # Draw completed points (smaller, faded)
-            for i, point in enumerate(points_to_show[:-1]):  # All but the last
+            for _i, point in enumerate(points_to_show[:-1]):  # All but the last
                 x, y = transform_point(
                     point["x"], point["y"], scale, offset_x, offset_y
                 )

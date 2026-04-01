@@ -199,7 +199,7 @@ def temp_off(
                         import time
 
                         click.echo("⏱️  Monitoring cooldown...")
-                        for i in range(5):
+                        for _i in range(5):
                             time.sleep(1)
                             current_status = client.get_status()
                             click.echo(
@@ -459,7 +459,7 @@ def temp_on(
                             import time
 
                             click.echo("⏱️  Monitoring heating startup...")
-                            for i in range(3):
+                            for _i in range(3):
                                 time.sleep(2)
                                 current_status = client.get_status()
                                 click.echo(

@@ -829,9 +829,9 @@ class PrusaLinkClient:
 
     def move_to_position(
         self,
-        x: float = None,
-        y: float = None,
-        z: float = None,
+        x: float | None = None,
+        y: float | None = None,
+        z: float | None = None,
         feedrate: float = 3000,
         verify_movement: bool = True,
         **kwargs,

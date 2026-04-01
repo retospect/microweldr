@@ -21,7 +21,7 @@ class DXFPointIterator:
     # Class constants
     SUPPORTED_EXTENSIONS = [".dxf"]
 
-    def __init__(self, dot_spacing: float = None):
+    def __init__(self, dot_spacing: float | None = None):
         """Initialize DXF point iterator.
 
         Args:

@@ -146,13 +146,12 @@ def weld(
                 bar.update(1)
 
             # Check secrets file exists if printer submission is requested
-            if submit_to_printer:
-                if not Path(secrets).exists():
-                    click.echo(f"❌ Secrets file not found: {secrets}")
-                    click.echo(
-                        "Please create a secrets file with your printer configuration."
-                    )
-                    raise click.Abort()
+            if submit_to_printer and not Path(secrets).exists():
+                click.echo(f"❌ Secrets file not found: {secrets}")
+                click.echo(
+                    "Please create a secrets file with your printer configuration."
+                )
+                raise click.Abort()
 
             # Parse SVG with progress and caching
             click.echo(f"📄 Processing SVG: {svg_file}")
@@ -201,10 +200,7 @@ def weld(
                 return
 
             # Generate output file paths
-            if not output:
-                output = svg_file.with_suffix(".gcode")
-            else:
-                output = Path(output)
+            output = svg_file.with_suffix(".gcode") if not output else Path(output)
 
             if animation and not Path(animation).suffix:
                 animation = Path(animation).with_suffix(".svg")

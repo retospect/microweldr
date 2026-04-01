@@ -45,9 +45,7 @@ def create_parser() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
     # Test command
-    test_parser = subparsers.add_parser(
-        "test", help="Test PrusaLink connection and printer status"
-    )
+    subparsers.add_parser("test", help="Test PrusaLink connection and printer status")
 
     # Home command
     home_parser = subparsers.add_parser("home", help="Home printer axes")
@@ -226,12 +224,10 @@ def create_parser() -> argparse.ArgumentParser:
     )
 
     # Config show
-    config_show_parser = config_subparsers.add_parser(
-        "show", help="Show current configuration and sources"
-    )
+    config_subparsers.add_parser("show", help="Show current configuration and sources")
 
     # Config validate
-    config_validate_parser = config_subparsers.add_parser(
+    config_subparsers.add_parser(
         "validate", help="Validate configuration and test printer connection"
     )
 
@@ -367,7 +363,7 @@ def cmd_bed_level(args) -> bool:
 
     try:
         client = PrusaLinkClient()
-        printer_ops = PrinterOperations(client)
+        PrinterOperations(client)
 
         print("1. Connecting to printer...")
         if not client.test_connection():
@@ -828,7 +824,7 @@ def validate_welding_temperature(config):
         from microweldr.prusalink.client import PrusaLinkClient
 
         client = PrusaLinkClient()
-        printer_info = client.get_printer_info()
+        client.get_printer_info()
 
         # Get current nozzle temperature
         # Note: This is a simplified check - actual implementation may need different API calls
@@ -836,7 +832,7 @@ def validate_welding_temperature(config):
 
         # Get expected temperatures from config
         normal_weld_temp = config.get("normal_welds", "weld_temperature", 130)
-        frangible_weld_temp = config.get("frangible_welds", "weld_temperature", 180)
+        config.get("frangible_welds", "weld_temperature", 180)
         temp_tolerance = config.get("temperatures", "temp_tolerance", 10)
 
         # For now, we'll check against normal weld temperature

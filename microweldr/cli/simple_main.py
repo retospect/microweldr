@@ -221,7 +221,7 @@ def generate_gcode(points: list[dict], output_path: str, config: Config, args) -
 
         # Send points as path events with proper path management
         current_path_id = None
-        for i, point in enumerate(points):
+        for _i, point in enumerate(points):
             path_id = point.get("path_id", "default_path")
 
             # Send path start event if this is a new path
@@ -298,7 +298,7 @@ def generate_animation(points: list[dict], output_path: str, config: Config) -> 
         output_path_obj = Path(output_path)
 
         # Ensure .gif extension
-        if not output_path_obj.suffix.lower() == ".gif":
+        if output_path_obj.suffix.lower() != ".gif":
             output_path_obj = output_path_obj.with_suffix(".gif")
             print(f"ℹ️  Changed animation output to: {output_path_obj}")
             output_path = str(output_path_obj)  # Update the string path too
@@ -320,7 +320,7 @@ def generate_animation(points: list[dict], output_path: str, config: Config) -> 
 
         # Send points as path events with proper path management
         current_path_id = None
-        for i, point in enumerate(points):
+        for _i, point in enumerate(points):
             path_id = point.get("path_id", "default_path")
 
             # Send path start event if this is a new path
@@ -514,7 +514,7 @@ def main():
         if args.animation:
             # Ensure .gif extension for display
             animation_path = Path(args.animation)
-            if not animation_path.suffix.lower() == ".gif":
+            if animation_path.suffix.lower() != ".gif":
                 animation_output = str(animation_path.with_suffix(".gif"))
             else:
                 animation_output = args.animation

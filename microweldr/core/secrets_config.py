@@ -106,7 +106,7 @@ class SecretsConfig:
         hierarchy_configs = []
 
         # Walk up the directory tree
-        for parent in [current_path] + list(current_path.parents):
+        for parent in [current_path, *list(current_path.parents)]:
             config_file = parent / self.config_name
             if config_file.exists():
                 hierarchy_configs.append(config_file)

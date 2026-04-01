@@ -25,7 +25,7 @@ class FallbackMode:
         self.fallback_reason = ""
         self.manual_instructions: list[str] = []
 
-    def activate(self, reason: str, instructions: list[str] = None):
+    def activate(self, reason: str, instructions: list[str] | None = None):
         """Activate fallback mode.
 
         Args:
@@ -185,7 +185,7 @@ class ResilientPrusaLinkClient:
         retry_delay=2.0,
     )
     def upload_file(
-        self, file_path: str, filename: str = None, auto_start: bool = False
+        self, file_path: str, filename: str | None = None, auto_start: bool = False
     ) -> dict:
         """Upload file with fallback to manual instructions.
 
@@ -203,7 +203,9 @@ class ResilientPrusaLinkClient:
 
         return client.upload_file(file_path, filename, auto_start=auto_start)
 
-    def _manual_upload_fallback(self, file_path: str, filename: str = None) -> dict:
+    def _manual_upload_fallback(
+        self, file_path: str, filename: str | None = None
+    ) -> dict:
         """Provide manual upload instructions as fallback."""
         file_path = Path(file_path)
         target_name = filename or file_path.name

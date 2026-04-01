@@ -1,5 +1,6 @@
 """Caching and optimization utilities for SVG parsing and other operations."""
 
+import contextlib
 import hashlib
 import logging
 import pickle  # nosec B403 - Used for internal caching only, not user data
@@ -17,7 +18,9 @@ logger = logging.getLogger(__name__)
 class FileCache:
     """File-based cache for expensive operations with automatic invalidation."""
 
-    def __init__(self, cache_dir: str | Path = None, max_age_seconds: int = 3600):
+    def __init__(
+        self, cache_dir: str | Path | None = None, max_age_seconds: int = 3600
+    ):
         """Initialize file cache.
 
         Args:
@@ -72,10 +75,8 @@ class FileCache:
         except Exception as e:
             logger.warning(f"Failed to load cache {cache_key}: {e}")
             # Remove corrupted cache file
-            try:
+            with contextlib.suppress(OSError):
                 cache_path.unlink()
-            except OSError:
-                pass
             return None
 
     def set(self, content: str, result: Any, operation: str = "default") -> None:
@@ -199,7 +200,7 @@ class OptimizedSVGParser:
             "total_parse_time": 0.0,
         }
 
-    @lru_cache(maxsize=128)
+    @lru_cache(maxsize=128)  # noqa: B019
     def _parse_element_cached(
         self, element_str: str, element_type: str
     ) -> list[tuple[float, float]] | None:

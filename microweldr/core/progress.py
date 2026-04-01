@@ -56,7 +56,7 @@ class ProgressReporter:
             and sys.platform != "win32"
         )
 
-    def update(self, increment: int = 1, message: str = None) -> None:
+    def update(self, increment: int = 1, message: str | None = None) -> None:
         """Update progress.
 
         Args:
@@ -80,7 +80,7 @@ class ProgressReporter:
             self.last_update = current_time
             self._render(message)
 
-    def set_progress(self, current: int, message: str = None) -> None:
+    def set_progress(self, current: int, message: str | None = None) -> None:
         """Set absolute progress.
 
         Args:
@@ -94,7 +94,7 @@ class ProgressReporter:
             self.current = min(max(current, 0), self.total)
             self._render(message)
 
-    def _render(self, message: str = None) -> None:
+    def _render(self, message: str | None = None) -> None:
         """Render progress bar."""
         if self.total == 0:
             return
@@ -246,7 +246,7 @@ class SimpleProgressReporter:
 
 @contextmanager
 def progress_context(
-    total: int, description: str = "Processing", use_fancy: bool = None, **kwargs
+    total: int, description: str = "Processing", use_fancy: bool | None = None, **kwargs
 ) -> Generator[ProgressReporter | SimpleProgressReporter, None, None]:
     """Context manager for progress reporting.
 
@@ -272,7 +272,7 @@ def progress_context(
 
 
 def progress_wrapper(
-    iterable, description: str = "Processing", total: int = None, **kwargs
+    iterable, description: str = "Processing", total: int | None = None, **kwargs
 ):
     """Wrap an iterable with progress reporting.
 
@@ -324,7 +324,7 @@ class BatchProgressReporter:
         self.start_time = time.time()
 
     def start_batch(
-        self, batch_size: int, batch_description: str = None
+        self, batch_size: int, batch_description: str | None = None
     ) -> ProgressReporter:
         """Start a new batch.
 
@@ -385,7 +385,7 @@ class BatchProgressReporter:
 
 def with_progress(
     description: str = "Processing",
-    show_progress: bool = None,
+    show_progress: bool | None = None,
     log_progress: bool = True,
 ):
     """Decorator to add progress reporting to functions that process sequences.

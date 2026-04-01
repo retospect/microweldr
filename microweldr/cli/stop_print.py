@@ -59,10 +59,9 @@ def stop_print(args):
             return True
 
         # Confirm stop unless forced
-        if not args.force:
-            if not confirm_stop():
-                print("🛑 Stop cancelled")
-                return False
+        if not args.force and not confirm_stop():
+            print("🛑 Stop cancelled")
+            return False
 
         if args.verbose:
             print("🛑 Sending stop command...")

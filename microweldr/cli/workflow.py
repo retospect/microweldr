@@ -443,14 +443,10 @@ Examples:
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
     # Calibrate command
-    calibrate_parser = subparsers.add_parser(
-        "calibrate", help="Perform XYZ calibration and store results"
-    )
+    subparsers.add_parser("calibrate", help="Perform XYZ calibration and store results")
 
     # Load command
-    load_parser = subparsers.add_parser(
-        "load", help="Lower table 10cm and set temperature (no wait)"
-    )
+    subparsers.add_parser("load", help="Lower table 10cm and set temperature (no wait)")
 
     # Frame command
     frame_parser = subparsers.add_parser(

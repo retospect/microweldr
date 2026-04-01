@@ -789,7 +789,7 @@ class EnhancedSVGParser:
     # Include all the existing helper methods from the original SVGParser
     def _get_sort_key(self, element_tuple: tuple[str, ET.Element]) -> float:
         """Get sort key for element ordering."""
-        element_type, element = element_tuple
+        _element_type, element = element_tuple
         element_id = element.get("id", "")
         # Try to extract numeric part for sorting
         match = re.search(r"(\d+)", element_id)
@@ -937,10 +937,7 @@ class EnhancedSVGParser:
         self, element: ET.Element, ancestor: ET.Element
     ) -> bool:
         """Check if element is a descendant of ancestor."""
-        for child in ancestor.iter():
-            if child is element:
-                return True
-        return False
+        return any(child is element for child in ancestor.iter())
 
     def _expand_use_element(
         self, use_element: ET.Element, defs_elements: dict, namespaces: dict

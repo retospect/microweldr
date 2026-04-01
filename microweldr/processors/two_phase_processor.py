@@ -119,7 +119,7 @@ class TwoPhaseProcessor:
             # Finalize Phase 1 generators
             bounds = None
             for generator in generators:
-                result = generator.finalize()
+                generator.finalize()
                 if hasattr(generator, "get_bounds"):
                     bounds = generator.get_bounds()
 

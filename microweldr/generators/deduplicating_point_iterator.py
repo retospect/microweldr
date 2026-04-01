@@ -23,7 +23,7 @@ class WeldTypeEnum(IntEnum):
     def from_string(cls, weld_type_str: str) -> "WeldTypeEnum":
         """Convert string weld type to enum value."""
         weld_type_lower = weld_type_str.lower()
-        if weld_type_lower == "normal":
+        if weld_type_lower == "normal":  # noqa: SIM116
             return cls.NORMAL
         elif weld_type_lower == "frangible":
             return cls.FRANGIBLE

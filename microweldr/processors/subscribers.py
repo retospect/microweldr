@@ -474,7 +474,7 @@ class StatisticsSubscriber(EventSubscriber):
         }
 
 
-class ValidationSubscriber(EventSubscriber):
+class ValidationSubscriber(EventSubscriber):  # noqa: F811
     """Validates weld data as events flow through the system.
 
     This subscriber validates all events in real-time, providing immediate

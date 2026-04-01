@@ -21,7 +21,7 @@ class SVGPointIterator:
     # Class constants
     SUPPORTED_EXTENSIONS = [".svg"]
 
-    def __init__(self, dot_spacing: float = None):
+    def __init__(self, dot_spacing: float | None = None):
         """Initialize SVG point iterator.
 
         Args:
