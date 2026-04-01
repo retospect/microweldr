@@ -182,6 +182,9 @@ tramp
 *.gcode
 *_animation.svg
 
+# Crud directory
+crud/
+
 # OS generated files
 .DS_Store
 .DS_Store?
