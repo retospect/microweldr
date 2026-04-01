@@ -1,4 +1,0 @@
-# file: /Users/reto/repos/PrusaWelder/microweldr/core/caching.py
-# hypothesis_version: 6.142.4
-
-[0.0, 0.001, 0.1, 1.0, 100, 128, 1800, 3600, '*.cache', '.cache', 'average_parse_time', 'average_time', 'cache_hit_rate', 'cache_hits', 'cache_misses', 'count', 'default', 'max_time', 'min_time', 'operation', 'rb', 'svg_parse', 'total_parse_time', 'total_time', 'utf-8', 'wb']

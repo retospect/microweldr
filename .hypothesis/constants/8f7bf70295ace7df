@@ -1,4 +1,0 @@
-# file: /Users/reto/repos/PrusaWelder/microweldr/monitoring/monitor.py
-# hypothesis_version: 6.142.4
-
-[3600, '\n🛑 Stop cancelled', '%H:%M:%S', '-', '=', 'Unknown', 'axis_z', 'cancelled', 'clear', 'cls', 'completed', 'completion', 'current_activity', 'display_name', 'done', 'elapsed_min', 'error', 'failed', 'file', 'file_name', 'finished', 'flow', 'layed-back', 'name', 'no_job', 'nt', 'operational', 'paused', 'pipetting', 'printer', 'printer_info', 'printing', 'progress', 'speed', 'standard', 'state', 'target_bed', 'target_nozzle', 'temp_bed', 'temp_nozzle', 'time_printing', 'welding', 'y', '⏸️', '⚡ Active welding', '✅', '❌', '❓', '🎯 Initial layers', '🏁 Final layers', '🏗️', '📊', '🔥', '🔥 High-layer welding', '🔥 Initial heating', '🔧 Welding', '🚀 Starting print', '🛋️', '🛑', '🛑 Stop cancelled', '🟢', '🧪']

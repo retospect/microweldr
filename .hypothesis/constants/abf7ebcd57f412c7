@@ -1,4 +1,0 @@
-# file: /Users/reto/repos/PrusaWelder/microweldr/core/config.py
-# hypothesis_version: 6.142.4
-
-[150, 300, 'animation', 'bed_temperature', 'cooldown_temperature', 'dot_spacing', 'initial_dot_spacing', 'inner_diameter', 'light_welds', 'move_height', 'movement', 'normal_welds', 'nozzle', 'nozzle_temperature', 'outer_diameter', 'output', 'pause_time', 'printer', 'r', 'sequencing', 'skip_base_distance', 'temperatures', 'time_between_welds', 'travel_speed', 'weld_height', 'weld_temperature', 'weld_time', 'z_speed']

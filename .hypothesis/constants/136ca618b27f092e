@@ -1,4 +1,0 @@
-# file: /Users/reto/repos/PrusaWelder/microweldr/core/graceful_degradation.py
-# hypothesis_version: 6.142.4
-
-[1.0, 2.0, '=', 'Disconnected', 'Unknown', 'components', 'degraded', 'errors', 'failed', 'fallback', 'file_path', 'filesystem', 'healthy', 'instructions', 'logging', 'overall', 'prusalink', 'started', 'state', 'stopped', 'success', 'target_name', 'temp_files', 'test', 'unhealthy', 'warnings']

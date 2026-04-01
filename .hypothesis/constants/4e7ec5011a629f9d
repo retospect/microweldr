@@ -1,4 +1,0 @@
-# file: /Users/reto/repos/PrusaWelder/microweldr/core/converter.py
-# hypothesis_version: 6.142.4
-
-[0.0, 'bed_size_x', 'bed_size_y', 'design_size', 'dot_spacing', 'front_back', 'left_right', 'normal_welds', 'printer']

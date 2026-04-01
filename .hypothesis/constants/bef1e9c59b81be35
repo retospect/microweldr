@@ -1,4 +1,0 @@
-# file: /Users/reto/repos/PrusaWelder/microweldr/prusalink/client.py
-# hypothesis_version: 6.142.4
-
-[200, 201, 204, 401, 404, 409, '?0', '?1', 'Content-Length', 'Content-Type', 'Overwrite', 'Print-After-Upload', 'api_key', 'auto_start_print', 'auto_started', 'default_storage', 'filename', 'host', 'idle', 'local', 'operational', 'password', 'printer', 'prusalink', 'r', 'rb', 'ready', 'response_code', 'secrets.toml', 'state', 'status', 'storage', 'success', 'timeout', 'username']

@@ -1,4 +1,0 @@
-# file: /Users/reto/repos/PrusaWelder/microweldr/core/security.py
-# hypothesis_version: 6.142.4
-
-[0.6, 255, 260, 300, 443, 8080, 8443, 65535, '!@#$%^&*()_+-=', '"', '*', '-', '.', '..', '/', '/bin', '/etc', '/home', '/root', '/sbin', '/usr', '1234', '123456', '127.0.0.1', ':', '::1', '<', '<>:"|?*\x00-\x1f', '<[^>]*>', '=', '>', '?', '\\', '^[a-zA-Z0-9_-]+$', '_', '_-', 'abc123', 'abcd', 'admin', 'api_key', 'asdf', 'changeme', 'default', 'dragon', 'guest', 'host', 'http', 'https', 'javascript', 'letmein', 'maker', 'master', 'michael', 'monkey', 'password', 'prusa', 'prusalink', 'qwer', 'qwerty', 'root', 'safe_', 'sanitized_file', 'script', 'shadow', 'superman', 'test', 'timeout', 'unnamed_file', 'user', 'username', 'welcome', 'y', 'yes', 'zxcv', '|']

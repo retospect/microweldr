@@ -1,4 +1,0 @@
-# file: /Users/reto/repos/PrusaWelder/microweldr/core/gcode_generator.py
-# hypothesis_version: 6.142.4
-
-[1000, '"', "'", ',', ';', '; Bed leveling\n', '; End of G-code\n', 'bed_temperature', 'chamber_temperature', 'cooldown_temperature', 'dot_spacing', 'initial_dot_spacing', 'layed_back_mode', 'move_height', 'movement', 'nozzle_temperature', 'pipette', 'printer', 'stop', 'temperatures', 'travel_speed', 'use_chamber_heating', 'w', 'weld_height', 'weld_temperature', 'weld_time', 'z_speed']
