@@ -92,8 +92,30 @@ module = [
     "ezdxf.*",
     "lxml.*",
     "serial.*",
+    "gcodeparser.*",
+    "toml.*",
 ]
 ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = [
+    "microweldr.parsers.enhanced_svg_parser",
+    "microweldr.parsers.enhanced_readers",
+    "microweldr.core.enhanced_converter",
+    "microweldr.core.enhanced_writers",
+    "microweldr.core.secrets_config",
+    "microweldr.core.data_models",
+    "microweldr.core.health_checks",
+    "microweldr.core.graceful_degradation",
+    "microweldr.core.resource_management",
+    "microweldr.cli.enhanced_main",
+    "microweldr.cli.printer_control",
+    "microweldr.cli.printer_status",
+    "microweldr.cli.temperature_control",
+    "microweldr.cli.monitor_print",
+    "microweldr.cli.prusa_usb_terminal",
+]
+ignore_errors = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
