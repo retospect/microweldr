@@ -1,15 +1,14 @@
 """Factory pattern for file readers and writers with publisher-subscriber architecture."""
 
+import logging
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Dict, List, Optional, Type, Union
-import logging
 
 from .data_models import WeldPath
+from .dxf_reader import DXFReader
 from .error_handling import FileProcessingError, handle_errors
 from .file_readers import FileReaderPublisher
 from .svg_reader import SVGReader
-from .dxf_reader import DXFReader
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +17,7 @@ class FileWriterSubscriber(ABC):
     """Abstract base class for file writers that subscribe to file readers."""
 
     @abstractmethod
-    def get_supported_extensions(self) -> List[str]:
+    def get_supported_extensions(self) -> list[str]:
         """Get list of supported file extensions."""
         pass
 
@@ -29,7 +28,7 @@ class FileWriterSubscriber(ABC):
 
     @abstractmethod
     def write_file(
-        self, weld_paths: List[WeldPath], output_path: Path, **kwargs
+        self, weld_paths: list[WeldPath], output_path: Path, **kwargs
     ) -> bool:
         """Write weld paths to file."""
         pass
@@ -41,7 +40,7 @@ class GCodeWriter(FileWriterSubscriber):
     def __init__(self, config):
         self.config = config
 
-    def get_supported_extensions(self) -> List[str]:
+    def get_supported_extensions(self) -> list[str]:
         """Get supported file extensions."""
         return [".gcode", ".g", ".nc"]
 
@@ -51,14 +50,14 @@ class GCodeWriter(FileWriterSubscriber):
 
     @handle_errors(default_error=FileProcessingError)
     def write_file(
-        self, weld_paths: List[WeldPath], output_path: Path, **kwargs
+        self, weld_paths: list[WeldPath], output_path: Path, **kwargs
     ) -> bool:
         """Write weld paths to G-code file."""
         logger.info(f"Writing G-code to: {output_path}")
 
         # Use streaming G-code subscriber for modern architecture
-        from ..outputs.streaming_gcode_subscriber import StreamingGCodeSubscriber
         from ..core.events import Event, EventType
+        from ..outputs.streaming_gcode_subscriber import StreamingGCodeSubscriber
 
         subscriber = StreamingGCodeSubscriber(output_path, self.config)
 
@@ -110,7 +109,7 @@ class AnimationWriter(FileWriterSubscriber):
     def __init__(self, config):
         self.config = config
 
-    def get_supported_extensions(self) -> List[str]:
+    def get_supported_extensions(self) -> list[str]:
         """Get supported file extensions."""
         return [".svg", ".png"]
 
@@ -120,7 +119,7 @@ class AnimationWriter(FileWriterSubscriber):
 
     @handle_errors(default_error=FileProcessingError)
     def write_file(
-        self, weld_paths: List[WeldPath], output_path: Path, **kwargs
+        self, weld_paths: list[WeldPath], output_path: Path, **kwargs
     ) -> bool:
         """Write weld paths to animation file."""
         from ..animation.generator import AnimationGenerator
@@ -143,18 +142,18 @@ class AnimationWriter(FileWriterSubscriber):
 class FileReaderFactory:
     """Factory for creating file readers based on file extension."""
 
-    _readers: Dict[str, Type[FileReaderPublisher]] = {}
+    _readers: dict[str, type[FileReaderPublisher]] = {}
 
     @classmethod
     def register_reader(
-        cls, extensions: List[str], reader_class: Type[FileReaderPublisher]
+        cls, extensions: list[str], reader_class: type[FileReaderPublisher]
     ):
         """Register a reader class for given file extensions."""
         for ext in extensions:
             cls._readers[ext.lower()] = reader_class
 
     @classmethod
-    def create_reader(cls, file_path: Path) -> Optional[FileReaderPublisher]:
+    def create_reader(cls, file_path: Path) -> FileReaderPublisher | None:
         """Create appropriate reader for the given file."""
         extension = file_path.suffix.lower()
 
@@ -168,7 +167,7 @@ class FileReaderFactory:
         return reader_class()
 
     @classmethod
-    def get_supported_extensions(cls) -> List[str]:
+    def get_supported_extensions(cls) -> list[str]:
         """Get all supported file extensions."""
         return list(cls._readers.keys())
 
@@ -176,18 +175,18 @@ class FileReaderFactory:
 class FileWriterFactory:
     """Factory for creating file writers based on file extension."""
 
-    _writers: Dict[str, Type[FileWriterSubscriber]] = {}
+    _writers: dict[str, type[FileWriterSubscriber]] = {}
 
     @classmethod
     def register_writer(
-        cls, extensions: List[str], writer_class: Type[FileWriterSubscriber]
+        cls, extensions: list[str], writer_class: type[FileWriterSubscriber]
     ):
         """Register a writer class for given file extensions."""
         for ext in extensions:
             cls._writers[ext.lower()] = writer_class
 
     @classmethod
-    def create_writer(cls, file_path: Path, config) -> Optional[FileWriterSubscriber]:
+    def create_writer(cls, file_path: Path, config) -> FileWriterSubscriber | None:
         """Create appropriate writer for the given file."""
         extension = file_path.suffix.lower()
 
@@ -201,7 +200,7 @@ class FileWriterFactory:
         return writer_class(config)
 
     @classmethod
-    def get_supported_extensions(cls) -> List[str]:
+    def get_supported_extensions(cls) -> list[str]:
         """Get all supported file extensions."""
         return list(cls._writers.keys())
 
@@ -226,9 +225,9 @@ class FileProcessor:
     @handle_errors(default_error=FileProcessingError)
     def process_file(
         self,
-        input_path: Union[str, Path],
-        output_path: Union[str, Path],
-        animation_path: Optional[Union[str, Path]] = None,
+        input_path: str | Path,
+        output_path: str | Path,
+        animation_path: str | Path | None = None,
         **kwargs,
     ) -> bool:
         """Process input file and generate outputs."""
@@ -282,11 +281,11 @@ class FileProcessor:
 
         return success
 
-    def get_supported_input_extensions(self) -> List[str]:
+    def get_supported_input_extensions(self) -> list[str]:
         """Get supported input file extensions."""
         return FileReaderFactory.get_supported_extensions()
 
-    def get_supported_output_extensions(self) -> List[str]:
+    def get_supported_output_extensions(self) -> list[str]:
         """Get supported output file extensions."""
         return FileWriterFactory.get_supported_extensions()
 

@@ -3,8 +3,9 @@
 import functools
 import logging
 import traceback
+from collections.abc import Callable
 from contextlib import contextmanager
-from typing import Any, Callable, Dict, Optional, Type, TypeVar, Union
+from typing import Any, TypeVar
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +16,7 @@ F = TypeVar("F", bound=Callable[..., Any])
 class MicroWeldrError(Exception):
     """Base exception for all MicroWeldr errors."""
 
-    def __init__(self, message: str, details: Optional[Dict[str, Any]] = None):
+    def __init__(self, message: str, details: dict[str, Any] | None = None):
         super().__init__(message)
         self.message = message
         self.details = details or {}
@@ -54,15 +55,15 @@ class ParsingError(MicroWeldrError):
 class ErrorContext:
     """Context information for error handling."""
 
-    def __init__(self, operation: str, file_path: Optional[str] = None, **kwargs):
+    def __init__(self, operation: str, file_path: str | None = None, **kwargs):
         self.operation = operation
         self.file_path = file_path
         self.context = kwargs
 
 
 def handle_errors(
-    error_types: Optional[Dict[Type[Exception], Type[MicroWeldrError]]] = None,
-    default_error: Type[MicroWeldrError] = MicroWeldrError,
+    error_types: dict[type[Exception], type[MicroWeldrError]] | None = None,
+    default_error: type[MicroWeldrError] = MicroWeldrError,
     log_errors: bool = True,
     reraise: bool = True,
 ) -> Callable[[F], F]:
@@ -135,7 +136,7 @@ def safe_execute(
     func: Callable,
     *args,
     default_return: Any = None,
-    error_message: Optional[str] = None,
+    error_message: str | None = None,
     log_errors: bool = True,
     **kwargs,
 ) -> Any:
@@ -169,7 +170,7 @@ class ErrorCollector:
         self.errors: list[MicroWeldrError] = []
         self.warnings: list[str] = []
 
-    def add_error(self, error: Union[str, MicroWeldrError], **details):
+    def add_error(self, error: str | MicroWeldrError, **details):
         """Add an error to the collection."""
         if isinstance(error, str):
             error = MicroWeldrError(error, details)

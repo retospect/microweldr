@@ -1,7 +1,5 @@
 """Basic tests for configuration management."""
 
-import tempfile
-
 from microweldr.core.config import Config
 
 

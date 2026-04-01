@@ -46,8 +46,8 @@ def check_printer_available():
         return True
 
     except Exception as e:
-        print(f"❌ Printer connection failed:")
-        print(f"   {str(e)}")
+        print("❌ Printer connection failed:")
+        print(f"   {e!s}")
 
         # Add troubleshooting hints
         print("\n💡 Troubleshooting:")

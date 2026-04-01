@@ -2,7 +2,6 @@
 
 import tempfile
 from pathlib import Path
-import pytest
 
 from microweldr.parsers.svg_parser import SVGParser
 
@@ -35,9 +34,9 @@ class TestBezierCurves:
             for path in weld_paths:
                 all_points.extend(path.points)
 
-            assert (
-                len(all_points) > 3
-            ), f"Quadratic Bézier should generate multiple points, got {len(all_points)}"
+            assert len(all_points) > 3, (
+                f"Quadratic Bézier should generate multiple points, got {len(all_points)}"
+            )
 
             # Check that we have points along the curve (not just endpoints)
             x_coords = [p.x for p in all_points]
@@ -48,9 +47,9 @@ class TestBezierCurves:
             assert max(x_coords) >= 85, "Should have points near end x"
 
             # Should have points that go up (curve peak) - y should vary
-            assert max(y_coords) > min(
-                y_coords
-            ), "Curve should have varying y coordinates"
+            assert max(y_coords) > min(y_coords), (
+                "Curve should have varying y coordinates"
+            )
 
         finally:
             svg_path.unlink()
@@ -74,9 +73,9 @@ class TestBezierCurves:
             for path in weld_paths:
                 all_points.extend(path.points)
 
-            assert (
-                len(all_points) > 3
-            ), f"Cubic Bézier should generate multiple points, got {len(all_points)}"
+            assert len(all_points) > 3, (
+                f"Cubic Bézier should generate multiple points, got {len(all_points)}"
+            )
 
         finally:
             svg_path.unlink()
@@ -151,14 +150,14 @@ class TestBezierCurves:
             max_y = max(y_coords)
 
             print(f"Max Y coordinate: {max_y}")
-            assert (
-                max_y >= 70
-            ), f"Should have points near bottom (y=75), max found: {max_y}"
+            assert max_y >= 70, (
+                f"Should have points near bottom (y=75), max found: {max_y}"
+            )
 
             # Should have a reasonable number of points for the curves
-            assert (
-                len(all_points) >= 20
-            ), f"Should have sufficient points for flask curves, got {len(all_points)}"
+            assert len(all_points) >= 20, (
+                f"Should have sufficient points for flask curves, got {len(all_points)}"
+            )
 
         finally:
             svg_path.unlink()

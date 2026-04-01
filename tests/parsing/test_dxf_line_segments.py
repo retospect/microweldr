@@ -2,6 +2,7 @@
 
 import tempfile
 from pathlib import Path
+
 import pytest
 
 from microweldr.generators.point_iterator_factory import PointIteratorFactory
@@ -64,9 +65,9 @@ EOF
                 print(f"  Point {i}: ({point['x']:.2f}, {point['y']:.2f})")
 
             # Should have ~20 points for 40mm line with 2mm spacing
-            assert (
-                len(points) >= 18
-            ), f"Expected at least 18 points for 40mm line with 2mm spacing, got {len(points)}"
+            assert len(points) >= 18, (
+                f"Expected at least 18 points for 40mm line with 2mm spacing, got {len(points)}"
+            )
 
             # Points should be evenly spaced along the line
             assert points[0]["x"] == pytest.approx(0.0, abs=0.1)
@@ -75,9 +76,9 @@ EOF
             # Check spacing between consecutive points
             if len(points) > 2:
                 spacing = points[1]["x"] - points[0]["x"]
-                assert spacing == pytest.approx(
-                    2.0, abs=0.5
-                ), f"Expected ~2mm spacing, got {spacing:.2f}mm"
+                assert spacing == pytest.approx(2.0, abs=0.5), (
+                    f"Expected ~2mm spacing, got {spacing:.2f}mm"
+                )
 
         finally:
             dxf_path.unlink()
@@ -149,9 +150,9 @@ EOF
 
             # Should have points for both segments: 20mm + 20mm = 40mm total
             # With 2mm spacing, expect ~20 points
-            assert (
-                len(points) >= 18
-            ), f"Expected at least 18 points for L-shaped polyline, got {len(points)}"
+            assert len(points) >= 18, (
+                f"Expected at least 18 points for L-shaped polyline, got {len(points)}"
+            )
 
             # Should start at origin and end at (20, 20)
             assert points[0]["x"] == pytest.approx(0.0, abs=0.1)
@@ -177,9 +178,9 @@ EOF
         print(f"Flask DXF generated {len(points)} points")
 
         # The flask should have both straight and curved segments
-        assert (
-            len(points) > 50
-        ), f"Expected substantial points for flask, got {len(points)}"
+        assert len(points) > 50, (
+            f"Expected substantial points for flask, got {len(points)}"
+        )
 
         # Check that we have points distributed across the flask shape
         x_coords = [p["x"] for p in points]
@@ -191,9 +192,9 @@ EOF
         print(f"Flask dimensions: {x_range:.1f}mm x {y_range:.1f}mm")
 
         # Flask should span a reasonable area
-        assert (
-            x_range > 15
-        ), f"Flask should span more than 15mm horizontally, got {x_range:.1f}mm"
-        assert (
-            y_range > 20
-        ), f"Flask should span more than 20mm vertically, got {y_range:.1f}mm"
+        assert x_range > 15, (
+            f"Flask should span more than 15mm horizontally, got {x_range:.1f}mm"
+        )
+        assert y_range > 20, (
+            f"Flask should span more than 20mm vertically, got {y_range:.1f}mm"
+        )

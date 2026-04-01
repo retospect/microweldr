@@ -1,16 +1,16 @@
 """Simple point iterator that generates welding points without multi-pass logic."""
 
 import logging
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Iterator, Dict, Any
-from .point_iterator_factory import PointIteratorFactory
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
 
 def iterate_multipass_points_from_file(
-    file_path: Path, config: Dict[str, Any], enable_deduplication: bool = True
-) -> Iterator[Dict[str, Any]]:
+    file_path: Path, config: dict[str, Any], enable_deduplication: bool = True
+) -> Iterator[dict[str, Any]]:
     """Iterate through welding points from a file (simplified, no multi-pass).
 
     This generates points directly from the parsed SVG/DXF without complex

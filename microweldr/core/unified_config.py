@@ -2,7 +2,7 @@
 
 import logging
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 import toml
 
@@ -30,14 +30,14 @@ class UnifiedConfig:
 
     def __init__(self):
         """Initialize unified configuration loader."""
-        self._main_config: Optional[Dict[str, Any]] = None
-        self._secrets_config: Optional[Dict[str, Any]] = None
-        self._main_config_path: Optional[Path] = None
-        self._secrets_config_path: Optional[Path] = None
+        self._main_config: dict[str, Any] | None = None
+        self._secrets_config: dict[str, Any] | None = None
+        self._main_config_path: Path | None = None
+        self._secrets_config_path: Path | None = None
 
     def _find_config_file(
-        self, filename: str, legacy_names: Optional[list] = None
-    ) -> Optional[Path]:
+        self, filename: str, legacy_names: list | None = None
+    ) -> Path | None:
         """Find configuration file using standardized search order.
 
         Args:
@@ -97,7 +97,7 @@ class UnifiedConfig:
         # For all other cases, use absolute path
         return str(config_path.resolve())
 
-    def get_main_config(self) -> Dict[str, Any]:
+    def get_main_config(self) -> dict[str, Any]:
         """Get main configuration (microweldr_config.toml)."""
         if self._main_config is not None:
             return self._main_config
@@ -108,11 +108,11 @@ class UnifiedConfig:
         if config_path is None:
             # Use default configuration
             self._main_config = self._get_default_main_config()
-            print(f"Using default main configuration (no microweldr_config.toml found)")
+            print("Using default main configuration (no microweldr_config.toml found)")
             return self._main_config
 
         try:
-            with open(config_path, "r") as f:
+            with open(config_path) as f:
                 loaded_config = toml.load(f)
 
             # Merge with defaults
@@ -129,7 +129,7 @@ class UnifiedConfig:
                 f"Failed to load main config from {config_path}: {e}"
             )
 
-    def get_secrets_config(self) -> Dict[str, Any]:
+    def get_secrets_config(self) -> dict[str, Any]:
         """Get secrets configuration (microweldr_secrets.toml)."""
         if self._secrets_config is not None:
             return self._secrets_config
@@ -149,7 +149,7 @@ class UnifiedConfig:
             )
 
         try:
-            with open(config_path, "r") as f:
+            with open(config_path) as f:
                 self._secrets_config = toml.load(f)
 
             self._secrets_config_path = config_path
@@ -162,7 +162,7 @@ class UnifiedConfig:
                 f"Failed to load secrets config from {config_path}: {e}"
             )
 
-    def get_prusalink_config(self) -> Dict[str, Any]:
+    def get_prusalink_config(self) -> dict[str, Any]:
         """Get PrusaLink configuration from secrets."""
         secrets = self.get_secrets_config()
 
@@ -174,7 +174,7 @@ class UnifiedConfig:
 
         return secrets["prusalink"]
 
-    def _get_default_main_config(self) -> Dict[str, Any]:
+    def _get_default_main_config(self) -> dict[str, Any]:
         """Get default main configuration."""
         return {
             "printer": {
@@ -226,7 +226,7 @@ class UnifiedConfig:
             # Animation parameters removed - not currently implemented
         }
 
-    def _merge_config(self, base: Dict[str, Any], override: Dict[str, Any]) -> None:
+    def _merge_config(self, base: dict[str, Any], override: dict[str, Any]) -> None:
         """Recursively merge override config into base config."""
         for key, value in override.items():
             if key in base and isinstance(base[key], dict) and isinstance(value, dict):
@@ -234,13 +234,13 @@ class UnifiedConfig:
             else:
                 base[key] = value
 
-    def get_main_config_path(self) -> Optional[Path]:
+    def get_main_config_path(self) -> Path | None:
         """Get path to main config file."""
         if self._main_config is None:
             self.get_main_config()
         return self._main_config_path
 
-    def get_secrets_config_path(self) -> Optional[Path]:
+    def get_secrets_config_path(self) -> Path | None:
         """Get path to secrets config file."""
         if self._secrets_config is None:
             self.get_secrets_config()
@@ -248,7 +248,7 @@ class UnifiedConfig:
 
 
 # Global instance for consistent access
-_unified_config: Optional[UnifiedConfig] = None
+_unified_config: UnifiedConfig | None = None
 
 
 def get_unified_config() -> UnifiedConfig:
@@ -266,16 +266,16 @@ def reset_unified_config():
 
 
 # Convenience functions for backward compatibility
-def get_main_config() -> Dict[str, Any]:
+def get_main_config() -> dict[str, Any]:
     """Get main configuration."""
     return get_unified_config().get_main_config()
 
 
-def get_secrets_config() -> Dict[str, Any]:
+def get_secrets_config() -> dict[str, Any]:
     """Get secrets configuration."""
     return get_unified_config().get_secrets_config()
 
 
-def get_prusalink_config() -> Dict[str, Any]:
+def get_prusalink_config() -> dict[str, Any]:
     """Get PrusaLink configuration."""
     return get_unified_config().get_prusalink_config()

@@ -1,0 +1,4 @@
+# file: /Users/reto/repos/PrusaWelder/microweldr/animation/generator.py
+# hypothesis_version: 6.142.4
+
+[0.0, 0.2, 0.4, 0.5, 2.0, 2.5, 3.0, 8.0, 120, 140, 200, 350, 360, '  </g>\n', '  </text>\n', '#4169E1', '#87CEEB', '#FF6347', '#FFB347', '&', '&amp;', '&gt;', '&lt;', '<', '</svg>\n', '>', 'animation', 'binary', 'black', 'blue', 'circle', 'farthest', 'inner_diameter', 'light', 'linear', 'nozzle', 'outer_diameter', 'pause_time', 'pipette', 'skip', 'skip_base_distance', 'stop', 'time_between_welds', 'w']

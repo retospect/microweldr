@@ -2,27 +2,22 @@
 
 import argparse
 import sys
-from datetime import datetime
 from pathlib import Path
 
 from microweldr.animation.generator import AnimationGenerator
 from microweldr.core.config import Config, ConfigError
 from microweldr.core.converter import SVGToGCodeConverter
 from microweldr.core.printer_operations import PrinterOperations
+from microweldr.core.secrets_config import SecretsConfig
 from microweldr.core.svg_parser import SVGParseError
-from microweldr.core.file_factory import FileProcessor
 
 # Enhanced weld command consolidated into main cmd_weld function
-
 # Monitoring system removed
 from microweldr.prusalink.client import PrusaLinkClient
 from microweldr.prusalink.exceptions import PrusaLinkError
 from microweldr.validation.validators import (
-    AnimationValidator,
-    GCodeValidator,
     SVGValidator,
 )
-from microweldr.core.secrets_config import SecretsConfig
 
 
 def get_version() -> str:
@@ -499,7 +494,7 @@ def cmd_calibrate_and_set(args) -> bool:
         bed_temp = config.get("temperatures", "bed_temperature")
         nozzle_temp = config.get("temperatures", "nozzle_temperature")
 
-        print(f"📋 Configuration loaded:")
+        print("📋 Configuration loaded:")
         print(f"   • Bed temperature: {bed_temp}°C")
         print(f"   • Nozzle temperature: {nozzle_temp}°C")
         print()
@@ -510,7 +505,7 @@ def cmd_calibrate_and_set(args) -> bool:
         status = client.get_printer_status()
         printer = status.get("printer", {})
         state = printer.get("state", "Unknown")
-        print(f"   ✓ Connected to printer")
+        print("   ✓ Connected to printer")
         print(f"   ✓ Printer state: {state}")
 
         if state.upper() == "PRINTING":
@@ -529,7 +524,7 @@ def cmd_calibrate_and_set(args) -> bool:
                 # Note: PrusaLink doesn't have a direct "wait for temperature" API
                 # The printer will heat up during calibration
         else:
-            print(f"   ✗ Failed to set bed temperature")
+            print("   ✗ Failed to set bed temperature")
             return False
 
         # Set nozzle temperature
@@ -542,7 +537,7 @@ def cmd_calibrate_and_set(args) -> bool:
                 # Note: PrusaLink doesn't have a direct "wait for temperature" API
                 # The printer will heat up during calibration
         else:
-            print(f"   ✗ Failed to set nozzle temperature")
+            print("   ✗ Failed to set nozzle temperature")
             return False
 
         # Run calibration
@@ -967,7 +962,7 @@ def cmd_weld(args):
                 client = PrusaLinkClient()
 
                 # Read G-code file and convert to command list
-                with open(output_path, "r") as f:
+                with open(output_path) as f:
                     gcode_lines = f.readlines()
 
                 # Clean up G-code lines (remove empty lines and comments)
@@ -1008,7 +1003,7 @@ def cmd_weld(args):
         print("\n🎉 Conversion complete!")
 
         if args.verbose:
-            print(f"Output files:")
+            print("Output files:")
             print(f"  G-code: {output_path}")
             if animation_path:
                 print(f"  Animation: {animation_path}")
@@ -1092,7 +1087,7 @@ def cmd_full_weld(args):
             # Generate animated PNG if requested
             if args.png:
                 output_png = output_animation.with_suffix(".png")
-                print(f"🎬 Generating animated PNG...")
+                print("🎬 Generating animated PNG...")
                 animation_generator.generate_png_file(weld_paths, output_png)
                 print(f"✅ Animated PNG written to {output_png}")
 
@@ -1105,7 +1100,7 @@ def cmd_full_weld(args):
                 client = PrusaLinkClient()
 
                 # Read G-code file and convert to command list
-                with open(output_path, "r") as f:
+                with open(output_path) as f:
                     gcode_lines = f.readlines()
 
                 # Clean up G-code lines (remove empty lines and comments)
@@ -1167,8 +1162,8 @@ def cmd_full_weld(args):
 
 def cmd_config(args) -> bool:
     """Handle config command."""
-    import shutil
     import json
+    import shutil
 
     if not hasattr(args, "config_command") or args.config_command is None:
         print(
@@ -1320,7 +1315,6 @@ def main():
     parser = create_parser()
 
     # Handle the argument parsing conflict between global and subcommand svg_file
-    import sys
 
     if (
         len(sys.argv) > 1
@@ -1333,8 +1327,7 @@ def main():
         if (
             args.command in ["frame", "weld", "full-weld"]
             and not hasattr(args, "svg_file")
-            or args.svg_file is None
-        ):
+        ) or args.svg_file is None:
             # Try to get the svg_file from the command line manually
             cmd_index = sys.argv.index(args.command)
             if cmd_index + 1 < len(sys.argv):

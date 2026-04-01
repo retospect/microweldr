@@ -1,10 +1,14 @@
-"""Output generators for G-code and animated GIF files."""
+"""Output generators for G-code, animated GIF, and Bambu 3MF files."""
 
-from .streaming_gcode_subscriber import StreamingGCodeSubscriber, FilenameError
+from .bambu_3mf_subscriber import Bambu3mfSubscriber
 from .gif_animation_subscriber import GIFAnimationSubscriber
+from .streaming_gcode_subscriber import FilenameError, StreamingGCodeSubscriber
+from .weld_renderer import render_weld_overview
 
 __all__ = [
-    "StreamingGCodeSubscriber",
-    "GIFAnimationSubscriber",
+    "Bambu3mfSubscriber",
     "FilenameError",
+    "GIFAnimationSubscriber",
+    "StreamingGCodeSubscriber",
+    "render_weld_overview",
 ]

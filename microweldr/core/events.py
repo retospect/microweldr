@@ -1,12 +1,12 @@
 """Event system for publish-subscribe architecture."""
 
+import logging
 from abc import ABC, abstractmethod
 from collections import deque
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
-import logging
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -30,8 +30,8 @@ class Event:
 
     event_type: EventType
     timestamp: float
-    data: Dict[str, Any]
-    source: Optional[str] = None
+    data: dict[str, Any]
+    source: str | None = None
 
     def __post_init__(self) -> None:
         """Validate event after initialization."""
@@ -43,7 +43,7 @@ class Event:
 class ParsingEvent(Event):
     """Event for file parsing operations."""
 
-    def __init__(self, action: str, file_path: Union[str, Path], **kwargs):
+    def __init__(self, action: str, file_path: str | Path, **kwargs):
         import time
 
         super().__init__(
@@ -73,7 +73,7 @@ class PathEvent(Event):
 class PointEvent(Event):
     """Event for point processing operations."""
 
-    def __init__(self, action: str, point_data: Dict[str, Any], **kwargs):
+    def __init__(self, action: str, point_data: dict[str, Any], **kwargs):
         import time
 
         super().__init__(
@@ -103,9 +103,7 @@ class CurveEvent(Event):
 class OutputEvent(Event):
     """Event for output generation operations."""
 
-    def __init__(
-        self, action: str, output_type: str, file_path: Union[str, Path], **kwargs
-    ):
+    def __init__(self, action: str, output_type: str, file_path: str | Path, **kwargs):
         import time
 
         super().__init__(
@@ -161,7 +159,7 @@ class ProgressEvent(Event):
     """Event for progress tracking."""
 
     def __init__(
-        self, stage: str, progress: float, total: Optional[float] = None, **kwargs
+        self, stage: str, progress: float, total: float | None = None, **kwargs
     ):
         import time
 
@@ -182,7 +180,7 @@ class EventSubscriber(ABC):
         pass
 
     @abstractmethod
-    def get_subscribed_events(self) -> List[EventType]:
+    def get_subscribed_events(self) -> list[EventType]:
         """Get list of event types this subscriber handles."""
         pass
 
@@ -192,7 +190,7 @@ class EventPublisher:
 
     def __init__(self):
         """Initialize the event publisher."""
-        self._subscribers: Dict[EventType, List[EventSubscriber]] = {}
+        self._subscribers: dict[EventType, list[EventSubscriber]] = {}
         self._max_history = 1000
         self._event_history: deque[Event] = deque(maxlen=self._max_history)
 
@@ -232,7 +230,7 @@ class EventPublisher:
                         f"Error in subscriber {subscriber.__class__.__name__}: {e}"
                     )
 
-    def get_event_history(self) -> List[Event]:
+    def get_event_history(self) -> list[Event]:
         """Get event history."""
         return self._event_history.copy()
 
@@ -240,13 +238,13 @@ class EventPublisher:
         """Clear event history."""
         self._event_history.clear()
 
-    def get_subscribers(self, event_type: EventType) -> List[EventSubscriber]:
+    def get_subscribers(self, event_type: EventType) -> list[EventSubscriber]:
         """Get subscribers for an event type."""
         return self._subscribers.get(event_type, []).copy()
 
 
 # Global event publisher instance
-_event_publisher: Optional[EventPublisher] = None
+_event_publisher: EventPublisher | None = None
 
 
 def get_event_publisher() -> EventPublisher:

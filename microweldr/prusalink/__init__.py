@@ -4,8 +4,8 @@ from .client import PrusaLinkClient
 from .exceptions import PrusaLinkAuthError, PrusaLinkConnectionError, PrusaLinkError
 
 __all__ = [
-    "PrusaLinkClient",
-    "PrusaLinkError",
-    "PrusaLinkConnectionError",
     "PrusaLinkAuthError",
+    "PrusaLinkClient",
+    "PrusaLinkConnectionError",
+    "PrusaLinkError",
 ]

@@ -1,7 +1,7 @@
 """Frame extent calculator for two-phase processing architecture."""
 
 import logging
-from typing import Optional, Dict, Any
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -11,13 +11,13 @@ class FrameExtentCalculator:
 
     def __init__(self):
         """Initialize frame extent calculator."""
-        self.min_x: Optional[float] = None
-        self.min_y: Optional[float] = None
-        self.max_x: Optional[float] = None
-        self.max_y: Optional[float] = None
+        self.min_x: float | None = None
+        self.min_y: float | None = None
+        self.max_x: float | None = None
+        self.max_y: float | None = None
         self.total_points: int = 0
 
-    def add_point(self, point: Dict[str, Any]) -> None:
+    def add_point(self, point: dict[str, Any]) -> None:
         """Add a point and update bounding box."""
         x = point.get("x")
         y = point.get("y")
@@ -40,7 +40,7 @@ class FrameExtentCalculator:
 
             self.total_points += 1
 
-    def finalize(self) -> Dict[str, Any]:
+    def finalize(self) -> dict[str, Any]:
         """Finalize calculation and return results."""
         if self.has_bounds():
             bounds = {
@@ -77,6 +77,6 @@ class FrameExtentCalculator:
             for bound in [self.min_x, self.min_y, self.max_x, self.max_y]
         )
 
-    def get_bounds(self) -> Dict[str, float]:
+    def get_bounds(self) -> dict[str, float]:
         """Get current bounds without finalizing."""
         return self.finalize()

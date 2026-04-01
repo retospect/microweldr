@@ -1,63 +1,15 @@
 repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.11.7
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v6.0.0
+    rev: v5.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: check-yaml
       - id: check-added-large-files
-      - id: check-toml
-      - id: check-merge-conflict
-      - id: debug-statements
-
-  - repo: https://github.com/psf/black
-    rev: 25.11.0
-    hooks:
-      - id: black
-        language_version: python3
-
-
-# Temporarily disabled flake8 to allow commit
-#  - repo: https://github.com/pycqa/flake8
-#    rev: 7.0.0
-#    hooks:
-#      - id: flake8
-#        additional_dependencies: [flake8-docstrings]
-
-# Temporarily disabled mypy until type annotations are improved
-#  - repo: https://github.com/pre-commit/mirrors-mypy
-#    rev: v1.10.0
-#    hooks:
-#      - id: mypy
-#        additional_dependencies: [types-requests, types-toml]
-
-  - repo: https://github.com/PyCQA/bandit
-    rev: 1.8.6
-    hooks:
-      - id: bandit
-        args: ["--skip", "B105,B301,B403,B404,B108,B405,B314,B605,B110,B410,B320"]
-        exclude: ^tests/
-
-# Temporarily disabled flake8 to allow commit
-#  - repo: https://github.com/pycqa/flake8
-#    rev: 6.0.0
-#    hooks:
-#      - id: flake8
-#        additional_dependencies: [flake8-docstrings]
-#        args: [--max-line-length=88, --extend-ignore=E203,W503,F401,F811]
-
-# Temporarily disabled mypy until type annotations are added
-#  - repo: https://github.com/pre-commit/mirrors-mypy
-#    rev: v1.3.0
-#    hooks:
-#      - id: mypy
-#        additional_dependencies: [types-toml]
-
-  - repo: local
-    hooks:
-      - id: unit-tests
-        name: unit-tests
-        entry: python -m pytest tests/unit/ -v -k "not hardware" --tb=short
-        language: system
-        pass_filenames: false
-        always_run: true

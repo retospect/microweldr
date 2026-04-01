@@ -3,7 +3,6 @@
 import math
 import re
 import xml.etree.ElementTree as ET  # nosec B405 - Parsing trusted SVG files only
-from typing import List, Optional, Tuple
 
 from microweldr.core.models import WeldPath, WeldPoint
 
@@ -21,7 +20,7 @@ class SVGParser:
         """Initialize SVG parser."""
         self.dot_spacing = dot_spacing
 
-    def parse_file(self, svg_path: str) -> List[WeldPath]:
+    def parse_file(self, svg_path: str) -> list[WeldPath]:
         """Parse SVG file and extract weld paths."""
         try:
             tree = ET.parse(svg_path)  # nosec B314 - Parsing trusted user SVG files
@@ -33,7 +32,7 @@ class SVGParser:
 
         return self._parse_elements(root)
 
-    def _parse_elements(self, root: ET.Element) -> List[WeldPath]:
+    def _parse_elements(self, root: ET.Element) -> list[WeldPath]:
         """Parse SVG elements and return weld paths."""
         # Define SVG namespace
         namespaces = {"svg": "http://www.w3.org/2000/svg"}
@@ -123,7 +122,7 @@ class SVGParser:
 
         return weld_paths
 
-    def _get_sort_key(self, element_tuple: Tuple[str, ET.Element]) -> float:
+    def _get_sort_key(self, element_tuple: tuple[str, ET.Element]) -> float:
         """Get sort key for element ordering."""
         element_type, element = element_tuple
         element_id = element.get("id", "")
@@ -131,13 +130,12 @@ class SVGParser:
         match = re.search(r"(\d+)", element_id)
         return int(match.group(1)) if match else float("inf")
 
-    def _determine_weld_type(self, element: ET.Element) -> Tuple[str, Optional[str]]:
+    def _determine_weld_type(self, element: ET.Element) -> tuple[str, str | None]:
         """Determine weld type based on element color and extract pause message."""
         from ..core.constants import (
             Colors,
             SVGAttributes,
             WeldType,
-            get_color_weld_type,
         )
 
         # Check stroke color
@@ -189,7 +187,7 @@ class SVGParser:
             # Fallback to normal if color parsing fails
             return WeldType.NORMAL.value, None
 
-    def _get_float_attr(self, element: ET.Element, attr_name: str) -> Optional[float]:
+    def _get_float_attr(self, element: ET.Element, attr_name: str) -> float | None:
         """Extract float attribute from element, return None if not found or invalid."""
         attr_value = element.get(attr_name)
         if attr_value:
@@ -199,7 +197,7 @@ class SVGParser:
                 pass
         return None
 
-    def _parse_element(self, element_type: str, element: ET.Element) -> List[WeldPoint]:
+    def _parse_element(self, element_type: str, element: ET.Element) -> list[WeldPoint]:
         """Parse individual SVG element."""
         if element_type == "path":
             return self._parse_path_element(element)
@@ -212,7 +210,7 @@ class SVGParser:
         else:
             return []
 
-    def _parse_path_element(self, path_element: ET.Element) -> List[WeldPoint]:
+    def _parse_path_element(self, path_element: ET.Element) -> list[WeldPoint]:
         """Parse SVG path element and return weld points."""
         d = path_element.get("d", "")
         if not d:
@@ -269,7 +267,7 @@ class SVGParser:
 
         return self._interpolate_points(points)
 
-    def _parse_line_element(self, line_element: ET.Element) -> List[WeldPoint]:
+    def _parse_line_element(self, line_element: ET.Element) -> list[WeldPoint]:
         """Parse SVG line element."""
         x1 = float(line_element.get("x1", 0))
         y1 = float(line_element.get("y1", 0))
@@ -289,7 +287,7 @@ class SVGParser:
 
         return self._interpolate_points(points)
 
-    def _parse_circle_element(self, circle_element: ET.Element) -> List[WeldPoint]:
+    def _parse_circle_element(self, circle_element: ET.Element) -> list[WeldPoint]:
         """Parse SVG circle element."""
         cx = float(circle_element.get("cx", 0))
         cy = float(circle_element.get("cy", 0))
@@ -314,7 +312,7 @@ class SVGParser:
 
         return self._interpolate_points(points)
 
-    def _parse_rect_element(self, rect_element: ET.Element) -> List[WeldPoint]:
+    def _parse_rect_element(self, rect_element: ET.Element) -> list[WeldPoint]:
         """Parse SVG rectangle element."""
         x = float(rect_element.get("x", 0))
         y = float(rect_element.get("y", 0))
@@ -332,7 +330,7 @@ class SVGParser:
 
         return self._interpolate_points(points)
 
-    def _interpolate_points(self, points: List[WeldPoint]) -> List[WeldPoint]:
+    def _interpolate_points(self, points: list[WeldPoint]) -> list[WeldPoint]:
         """Interpolate points along the path using simple dot spacing."""
         if len(points) < 2:
             return points
@@ -371,7 +369,7 @@ class SVGParser:
         control_y: float,
         end_x: float,
         end_y: float,
-    ) -> List[WeldPoint]:
+    ) -> list[WeldPoint]:
         """Generate points along a quadratic Bézier curve."""
         points = []
 
@@ -405,7 +403,7 @@ class SVGParser:
         control2_y: float,
         end_x: float,
         end_y: float,
-    ) -> List[WeldPoint]:
+    ) -> list[WeldPoint]:
         """Generate points along a cubic Bézier curve."""
         points = []
 
@@ -440,7 +438,7 @@ class SVGParser:
 
         return points
 
-    def _parse_coordinates(self, coords_str: str) -> List[float]:
+    def _parse_coordinates(self, coords_str: str) -> list[float]:
         """Parse coordinate string and return list of floats."""
         if not coords_str.strip():
             return []
@@ -480,7 +478,7 @@ class SVGParser:
 
     def _expand_use_element(
         self, use_element: ET.Element, defs_elements: dict, namespaces: dict
-    ) -> List[Tuple[str, ET.Element]]:
+    ) -> list[tuple[str, ET.Element]]:
         """Expand a <use> element by resolving its reference and applying transformations."""
         href = use_element.get("href") or use_element.get(
             "{http://www.w3.org/1999/xlink}href"
@@ -522,7 +520,7 @@ class SVGParser:
 
         return expanded_elements
 
-    def _parse_transform(self, transform_str: str) -> Tuple[float, float, float, float]:
+    def _parse_transform(self, transform_str: str) -> tuple[float, float, float, float]:
         """Parse SVG transform attribute and return scale_x, scale_y, translate_x, translate_y."""
         scale_x, scale_y = 1.0, 1.0
         translate_x, translate_y = 0.0, 0.0
@@ -557,7 +555,7 @@ class SVGParser:
     def _expand_group_elements(
         self,
         group: ET.Element,
-        elements: List[Tuple[str, ET.Element]],
+        elements: list[tuple[str, ET.Element]],
         namespaces: dict,
         scale_x: float,
         scale_y: float,

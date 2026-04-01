@@ -1,0 +1,4 @@
+# file: /Users/reto/repos/PrusaWelder/microweldr/core/safety.py
+# hypothesis_version: 6.142.4
+
+[0.001, 0.05, 0.5, 5.0, 50.0, 80.0, 120.0, 240, 255, 1000, 3000, '.', 'AUX', 'CON', 'NUL', 'PRN', '[^\\w\\-_\\.]', '_', 'bed_temperature', 'custom_temp', 'custom_weld_height', 'custom_weld_time', 'file_', 'light_welds', 'movement', 'normal_welds', 'nozzle_temperature', 'path custom_temp', 'temperature', 'temperatures', 'travel_speed', 'unnamed_file', 'weld_height', 'weld_temperature', 'weld_time', 'z_speed']

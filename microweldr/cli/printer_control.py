@@ -249,7 +249,7 @@ def cmd_status(args):
         try:
             job = client.get_job_status()
             if job:
-                print(f"\n📄 Current Job:")
+                print("\n📄 Current Job:")
                 file_info = job.get("file", {})
                 file_name = file_info.get("name", "Unknown")
                 print(f"  File: {file_name}")
@@ -271,7 +271,7 @@ def cmd_status(args):
                     progress = progress_data if progress_data else 0
                     print(f"  Progress: {progress:.1f}%")
             else:
-                print(f"\n📄 No job currently running")
+                print("\n📄 No job currently running")
         except Exception as e:
             if args.verbose:
                 print(f"\n⚠️ Could not get job info: {e}")
@@ -281,7 +281,7 @@ def cmd_status(args):
             try:
                 storage = client.get_storage_info()
                 if storage:
-                    print(f"\n💾 Storage:")
+                    print("\n💾 Storage:")
                     storage_name = storage.get("name", "Unknown")
                     print(f"  Available: {storage_name}")
             except Exception as e:

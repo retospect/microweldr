@@ -3,11 +3,10 @@
 import logging
 import platform
 import shutil
-import subprocess  # nosec B404 - Used for system health checks only
 import sys
 import time
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 from .graceful_degradation import ResilientPrusaLinkClient
 
@@ -23,7 +22,7 @@ class HealthChecker:
         self.warnings = []
         self.errors = []
 
-    def run_all_checks(self, secrets_path: Optional[str] = None) -> Dict[str, Any]:
+    def run_all_checks(self, secrets_path: str | None = None) -> dict[str, Any]:
         """Run all health checks.
 
         Args:
@@ -70,7 +69,7 @@ class HealthChecker:
             "recommendations": self._generate_recommendations(),
         }
 
-    def _check_python_version(self) -> Dict[str, Any]:
+    def _check_python_version(self) -> dict[str, Any]:
         """Check Python version compatibility."""
         version_info = sys.version_info
         version_str = f"{version_info.major}.{version_info.minor}.{version_info.micro}"
@@ -98,7 +97,7 @@ class HealthChecker:
                 "message": "Python version is compatible",
             }
 
-    def _check_dependencies(self) -> Dict[str, Any]:
+    def _check_dependencies(self) -> dict[str, Any]:
         """Check required dependencies."""
         required_packages = {
             "toml": "Configuration parsing",
@@ -161,7 +160,7 @@ class HealthChecker:
                 "message": "All dependencies available",
             }
 
-    def _check_filesystem_access(self) -> Dict[str, Any]:
+    def _check_filesystem_access(self) -> dict[str, Any]:
         """Check filesystem read/write access."""
         import tempfile
 
@@ -208,7 +207,7 @@ class HealthChecker:
                 "message": "Filesystem access is working",
             }
 
-    def _check_memory_usage(self) -> Dict[str, Any]:
+    def _check_memory_usage(self) -> dict[str, Any]:
         """Check memory usage."""
         try:
             import psutil
@@ -250,7 +249,7 @@ class HealthChecker:
         except Exception as e:
             return {"status": "error", "message": f"Memory check failed: {e}"}
 
-    def _check_disk_space(self) -> Dict[str, Any]:
+    def _check_disk_space(self) -> dict[str, Any]:
         """Check available disk space."""
         try:
             current_dir = Path.cwd()
@@ -286,7 +285,7 @@ class HealthChecker:
         except Exception as e:
             return {"status": "error", "message": f"Disk space check failed: {e}"}
 
-    def _check_configuration(self) -> Dict[str, Any]:
+    def _check_configuration(self) -> dict[str, Any]:
         """Check configuration file validity."""
         config_files = ["config.toml", "examples/config.toml"]
         config_issues = []
@@ -328,7 +327,7 @@ class HealthChecker:
                 "message": "Configuration files are valid",
             }
 
-    def _check_logging_system(self) -> Dict[str, Any]:
+    def _check_logging_system(self) -> dict[str, Any]:
         """Check logging system functionality."""
         try:
             # Test logging
@@ -348,7 +347,7 @@ class HealthChecker:
             self.warnings.append(f"Logging system issue: {e}")
             return {"status": "warning", "message": f"Logging issue: {e}"}
 
-    def _check_validation_tools(self) -> Dict[str, Any]:
+    def _check_validation_tools(self) -> dict[str, Any]:
         """Check validation tools availability."""
         validation_tools = {
             "lxml": "SVG validation",
@@ -392,7 +391,7 @@ class HealthChecker:
                 "message": "All validation tools available",
             }
 
-    def _check_printer_connectivity(self, secrets_path: str) -> Dict[str, Any]:
+    def _check_printer_connectivity(self, secrets_path: str) -> dict[str, Any]:
         """Check printer connectivity."""
         try:
             client = ResilientPrusaLinkClient(secrets_path)
@@ -421,7 +420,7 @@ class HealthChecker:
                 "message": f"Connection failed: {e}",
             }
 
-    def _get_system_info(self) -> Dict[str, Any]:
+    def _get_system_info(self) -> dict[str, Any]:
         """Get system information."""
         return {
             "platform": platform.platform(),
@@ -441,7 +440,7 @@ class HealthChecker:
         else:
             return "healthy"
 
-    def _generate_recommendations(self) -> List[str]:
+    def _generate_recommendations(self) -> list[str]:
         """Generate recommendations based on health check results."""
         recommendations = []
 
@@ -508,7 +507,7 @@ class HealthChecker:
         return recommendations
 
 
-def quick_health_check() -> Tuple[str, List[str]]:
+def quick_health_check() -> tuple[str, list[str]]:
     """Perform a quick health check.
 
     Returns:
@@ -580,7 +579,7 @@ def monitor_system_health(interval: int = 300, log_results: bool = True) -> None
         logger.error(f"Health monitoring failed: {e}")
 
 
-def generate_health_report(output_path: Optional[str] = None) -> str:
+def generate_health_report(output_path: str | None = None) -> str:
     """Generate a comprehensive health report.
 
     Args:

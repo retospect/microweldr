@@ -2,14 +2,14 @@
 
 import logging
 from pathlib import Path
-from typing import Dict, Any, Optional, List
-from ..generators.point_iterator_factory import (
-    PointIteratorFactory,
-    iterate_points_from_file,
-)
-from ..generators.multipass_point_iterator import iterate_multipass_points_from_file
+from typing import Any
+
 from ..core.config import Config
 from ..core.generator_factory import GeneratorFactory
+from ..generators.multipass_point_iterator import iterate_multipass_points_from_file
+from ..generators.point_iterator_factory import (
+    iterate_points_from_file,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -44,9 +44,9 @@ class TwoPhaseProcessor:
     def process_file(
         self,
         input_path: Path,
-        output_path: Optional[Path] = None,
-        animation_path: Optional[Path] = None,
-        png_path: Optional[Path] = None,
+        output_path: Path | None = None,
+        animation_path: Path | None = None,
+        png_path: Path | None = None,
         verbose: bool = False,
     ) -> bool:
         """
@@ -95,7 +95,7 @@ class TwoPhaseProcessor:
             logger.exception(f"❌ Two-phase processing failed: {e}")
             return False
 
-    def _run_phase1(self, input_path: Path) -> Optional[Dict[str, float]]:
+    def _run_phase1(self, input_path: Path) -> dict[str, float] | None:
         """Run Phase 1: Analysis."""
         try:
             # Create Phase 1 generators
@@ -133,11 +133,11 @@ class TwoPhaseProcessor:
     def _run_phase2(
         self,
         input_path: Path,
-        bounds: Dict[str, float],
-        output_path: Optional[Path],
-        animation_path: Optional[Path],
-        png_path: Optional[Path],
-    ) -> Optional[List[Dict[str, Any]]]:
+        bounds: dict[str, float],
+        output_path: Path | None,
+        animation_path: Path | None,
+        png_path: Path | None,
+    ) -> list[dict[str, Any]] | None:
         """Run Phase 2: Generation."""
         try:
             # Create Phase 2 generators
@@ -184,7 +184,7 @@ class TwoPhaseProcessor:
             logger.exception(f"Phase 2 error: {e}")
             return None
 
-    def _print_results(self, results: List[Dict[str, Any]]) -> None:
+    def _print_results(self, results: list[dict[str, Any]]) -> None:
         """Print processing results."""
         for result in results:
             if result.get("success"):
@@ -195,7 +195,7 @@ class TwoPhaseProcessor:
                 error = result.get("error", "Unknown error")
                 logger.error(f"❌ Generation failed: {error}")
 
-    def get_validation_results(self) -> Dict[str, Any]:
+    def get_validation_results(self) -> dict[str, Any]:
         """Get validation results (placeholder for compatibility)."""
         return {"errors": [], "warnings": []}
 

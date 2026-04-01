@@ -1,0 +1,4 @@
+# file: /Users/reto/repos/PrusaWelder/microweldr/core/progress.py
+# hypothesis_version: 6.142.4
+
+[0.1, 100, 3600, 'Complete', 'Failed', 'Processing', 'Processing batches', '__len__', 'data', 'files', 'isatty', 'items', 'paths', 'weld_paths', 'win32', '█', '░']

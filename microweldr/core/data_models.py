@@ -2,8 +2,8 @@
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Optional, Tuple, Union
 from pathlib import Path
+from typing import Union
 
 
 @dataclass
@@ -84,10 +84,10 @@ class WeldSettings:
 class WeldPath:
     """Represents a path to be welded."""
 
-    points: List[Point]
+    points: list[Point]
     weld_type: WeldType = field(default_factory=lambda: WeldType.NORMAL)
-    layer_name: Optional[str] = None
-    path_id: Optional[str] = None
+    layer_name: str | None = None
+    path_id: str | None = None
 
     def __post_init__(self):
         """Validate weld path."""
@@ -97,7 +97,7 @@ class WeldPath:
             raise ValueError("Weld path must have at least two points for welding")
 
     @property
-    def svg_id(self) -> Optional[str]:
+    def svg_id(self) -> str | None:
         """Backward compatibility property for svg_id."""
         return self.path_id
 
@@ -113,7 +113,7 @@ class WeldPath:
         return total
 
     @property
-    def bounds(self) -> Tuple[Point, Point]:
+    def bounds(self) -> tuple[Point, Point]:
         """Get bounding box of the path."""
         if not self.points:
             return Point(0, 0), Point(0, 0)
@@ -135,9 +135,9 @@ class PrinterStatus:
     bed_target: float
     nozzle_actual: float
     nozzle_target: float
-    axis_x: Optional[float] = None
-    axis_y: Optional[float] = None
-    axis_z: Optional[float] = None
+    axis_x: float | None = None
+    axis_y: float | None = None
+    axis_z: float | None = None
 
     @property
     def is_ready(self) -> bool:
@@ -158,9 +158,9 @@ class JobStatus:
 
     state: str
     progress: float
-    time_printing: Optional[float] = None
-    time_remaining: Optional[float] = None
-    file_name: Optional[str] = None
+    time_printing: float | None = None
+    time_remaining: float | None = None
+    file_name: str | None = None
 
     @property
     def is_printing(self) -> bool:
@@ -182,7 +182,7 @@ class FileInfo:
     size_bytes: int
     paths_count: int
     points_count: int
-    processing_time: Optional[float] = None
+    processing_time: float | None = None
 
     @property
     def size_mb(self) -> float:
@@ -196,9 +196,9 @@ class ValidationResult:
 
     is_valid: bool
     message: str
-    warnings: List[str] = field(default_factory=list)
-    errors: List[str] = field(default_factory=list)
-    details: Dict[str, any] = field(default_factory=dict)
+    warnings: list[str] = field(default_factory=list)
+    errors: list[str] = field(default_factory=list)
+    details: dict[str, any] = field(default_factory=dict)
 
     def add_warning(self, warning: str):
         """Add a warning to the result."""
@@ -220,10 +220,10 @@ class ProcessingStats:
     normal_welds: int = 0
     frangible_welds: int = 0
     processing_time: float = 0.0
-    errors: List[str] = field(default_factory=list)
-    warnings: List[str] = field(default_factory=list)
+    errors: list[str] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
 
-    def add_file_stats(self, file_info: FileInfo, paths: List[WeldPath]):
+    def add_file_stats(self, file_info: FileInfo, paths: list[WeldPath]):
         """Add statistics from a processed file."""
         self.files_processed += 1
         self.total_paths += len(paths)
@@ -268,7 +268,6 @@ class LineEntity:
         self, weld_type: WeldType = WeldType.NORMAL, dot_spacing: float = 2.0
     ) -> WeldPath:
         """Convert to weld path with interpolated points."""
-        import math
 
         # Calculate line length and number of segments
         length = self.length

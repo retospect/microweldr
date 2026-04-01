@@ -8,8 +8,6 @@ Tests ensure that:
 """
 
 import os
-import tempfile
-from pathlib import Path
 
 import pytest
 
@@ -203,9 +201,9 @@ class TestBedLevelingAndFilmInsertion:
             first_weld_pos = gcode_content.find("; Starting path:")
 
             # Verify sequence: bed leveling -> film pause -> welding
-            assert (
-                bed_leveling_pos < film_pause_pos < first_weld_pos
-            ), "Sequence should be: bed leveling -> film pause -> welding"
+            assert bed_leveling_pos < film_pause_pos < first_weld_pos, (
+                "Sequence should be: bed leveling -> film pause -> welding"
+            )
         finally:
             os.chdir(original_dir)
 
@@ -232,7 +230,8 @@ class TestBedLevelingAndFilmInsertion:
             gcode_content = output_gcode.read_text()
 
             # Verify Z is raised to film_insertion_height before pause
-            assert "G1 Z150.0 F3000 ; Raise Z for film insertion" in gcode_content
+            # z_speed defaults to 600 mm/min in unified_config defaults
+            assert "G1 Z150.0 F600 ; Raise Z for film insertion" in gcode_content
 
             # Verify pause message follows
             lines = gcode_content.split("\n")
@@ -333,6 +332,7 @@ class TestBedLevelingAndFilmInsertion:
 
             # Verify default Z height (150mm) is used
             # This ensures film insertion happens at a reasonable height for user access
-            assert "G1 Z150.0 F3000 ; Raise Z for film insertion" in gcode_content
+            # z_speed defaults to 600 mm/min in unified_config defaults
+            assert "G1 Z150.0 F600 ; Raise Z for film insertion" in gcode_content
         finally:
             os.chdir(original_dir)

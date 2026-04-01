@@ -4,9 +4,10 @@ import hashlib
 import logging
 import pickle  # nosec B403 - Used for internal caching only, not user data
 import time
+from collections.abc import Callable
 from functools import lru_cache, wraps
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 from ..core.models import WeldPath
 
@@ -16,7 +17,7 @@ logger = logging.getLogger(__name__)
 class FileCache:
     """File-based cache for expensive operations with automatic invalidation."""
 
-    def __init__(self, cache_dir: Union[str, Path] = None, max_age_seconds: int = 3600):
+    def __init__(self, cache_dir: str | Path = None, max_age_seconds: int = 3600):
         """Initialize file cache.
 
         Args:
@@ -47,7 +48,7 @@ class FileCache:
         except OSError:
             return False
 
-    def get(self, content: str, operation: str = "default") -> Optional[Any]:
+    def get(self, content: str, operation: str = "default") -> Any | None:
         """Get cached result for content and operation.
 
         Args:
@@ -95,7 +96,7 @@ class FileCache:
         except Exception as e:
             logger.warning(f"Failed to cache result {cache_key}: {e}")
 
-    def clear(self, operation: Optional[str] = None) -> int:
+    def clear(self, operation: str | None = None) -> int:
         """Clear cache entries.
 
         Args:
@@ -155,7 +156,7 @@ def cached_operation(operation: str = "default", max_age: int = 3600):
         @wraps(func)
         def wrapper(*args, **kwargs):
             # Generate cache key from function arguments
-            cache_content = f"{func.__name__}:{str(args)}:{str(sorted(kwargs.items()))}"
+            cache_content = f"{func.__name__}:{args!s}:{sorted(kwargs.items())!s}"
 
             # Try to get from cache first
             cache = FileCache(max_age_seconds=max_age)
@@ -201,14 +202,14 @@ class OptimizedSVGParser:
     @lru_cache(maxsize=128)
     def _parse_element_cached(
         self, element_str: str, element_type: str
-    ) -> Optional[List[Tuple[float, float]]]:
+    ) -> list[tuple[float, float]] | None:
         """Cache parsed element coordinates in memory."""
         # This would contain the actual parsing logic
         # Placeholder for demonstration
         logger.debug(f"Parsing {element_type} element (cached)")
         return None
 
-    def parse_svg_file(self, svg_path: Union[str, Path]) -> List[WeldPath]:
+    def parse_svg_file(self, svg_path: str | Path) -> list[WeldPath]:
         """Parse SVG file with caching and optimization.
 
         Args:
@@ -265,7 +266,7 @@ class OptimizedSVGParser:
             logger.error(f"SVG parsing failed for {svg_path}: {e}")
             raise
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """Get parsing statistics.
 
         Returns:
@@ -305,8 +306,8 @@ class PerformanceMonitor:
 
     def __init__(self):
         """Initialize performance monitor."""
-        self.metrics: Dict[str, List[float]] = {}
-        self._start_times: Dict[str, float] = {}
+        self.metrics: dict[str, list[float]] = {}
+        self._start_times: dict[str, float] = {}
 
     def start_operation(self, operation: str) -> None:
         """Start timing an operation.
@@ -343,7 +344,7 @@ class PerformanceMonitor:
 
         return duration
 
-    def get_stats(self, operation: Optional[str] = None) -> Dict[str, Any]:
+    def get_stats(self, operation: str | None = None) -> dict[str, Any]:
         """Get performance statistics.
 
         Args:
@@ -379,7 +380,7 @@ class PerformanceMonitor:
 
         return stats
 
-    def reset_stats(self, operation: Optional[str] = None) -> None:
+    def reset_stats(self, operation: str | None = None) -> None:
         """Reset performance statistics.
 
         Args:
@@ -424,7 +425,7 @@ def timed_operation(operation: str):
     return decorator
 
 
-def optimize_weld_paths(weld_paths: List[WeldPath]) -> List[WeldPath]:
+def optimize_weld_paths(weld_paths: list[WeldPath]) -> list[WeldPath]:
     """Optimize weld paths for better performance and quality.
 
     Args:
@@ -475,5 +476,5 @@ def optimize_weld_paths(weld_paths: List[WeldPath]) -> List[WeldPath]:
         else:
             optimized_paths.append(path)
 
-    logger.info(f"Path optimization completed")
+    logger.info("Path optimization completed")
     return optimized_paths

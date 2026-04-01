@@ -2,9 +2,10 @@
 
 import logging
 import time
+from collections.abc import Callable
 from functools import wraps
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import Any
 
 from ..prusalink.client import PrusaLinkClient
 from ..prusalink.exceptions import (
@@ -22,9 +23,9 @@ class FallbackMode:
     def __init__(self):
         self.fallback_active = False
         self.fallback_reason = ""
-        self.manual_instructions: List[str] = []
+        self.manual_instructions: list[str] = []
 
-    def activate(self, reason: str, instructions: List[str] = None):
+    def activate(self, reason: str, instructions: list[str] = None):
         """Activate fallback mode.
 
         Args:
@@ -48,7 +49,7 @@ class FallbackMode:
         """Check if fallback mode is active."""
         return self.fallback_active
 
-    def get_instructions(self) -> List[str]:
+    def get_instructions(self) -> list[str]:
         """Get manual instructions for current fallback."""
         return self.manual_instructions.copy()
 
@@ -58,7 +59,7 @@ fallback_mode = FallbackMode()
 
 
 def with_fallback(
-    fallback_func: Optional[Callable] = None,
+    fallback_func: Callable | None = None,
     fallback_value: Any = None,
     exceptions: tuple = (Exception,),
     max_retries: int = 3,
@@ -131,19 +132,19 @@ def with_fallback(
 class ResilientPrusaLinkClient:
     """PrusaLink client with graceful degradation capabilities."""
 
-    def __init__(self, config_path: Optional[str] = None):
+    def __init__(self, config_path: str | None = None):
         """Initialize resilient client.
 
         Args:
             config_path: Path to secrets configuration
         """
         self.config_path = config_path
-        self._client: Optional[PrusaLinkClient] = None
+        self._client: PrusaLinkClient | None = None
         self._connection_healthy = True
         self._last_health_check = 0
         self._health_check_interval = 30  # seconds
 
-    def _get_client(self) -> Optional[PrusaLinkClient]:
+    def _get_client(self) -> PrusaLinkClient | None:
         """Get PrusaLink client with health checking."""
         current_time = time.time()
 
@@ -185,7 +186,7 @@ class ResilientPrusaLinkClient:
     )
     def upload_file(
         self, file_path: str, filename: str = None, auto_start: bool = False
-    ) -> Dict:
+    ) -> dict:
         """Upload file with fallback to manual instructions.
 
         Args:
@@ -202,18 +203,18 @@ class ResilientPrusaLinkClient:
 
         return client.upload_file(file_path, filename, auto_start=auto_start)
 
-    def _manual_upload_fallback(self, file_path: str, filename: str = None) -> Dict:
+    def _manual_upload_fallback(self, file_path: str, filename: str = None) -> dict:
         """Provide manual upload instructions as fallback."""
         file_path = Path(file_path)
         target_name = filename or file_path.name
 
         instructions = [
-            f"PrusaLink connection failed. Please manually upload the file:",
-            f"1. Open your printer's web interface",
-            f"2. Navigate to the Files section",
+            "PrusaLink connection failed. Please manually upload the file:",
+            "1. Open your printer's web interface",
+            "2. Navigate to the Files section",
             f"3. Upload the file: {file_path.absolute()}",
             f"4. Rename it to: {target_name}",
-            f"5. Start the print manually when ready",
+            "5. Start the print manually when ready",
         ]
 
         fallback_mode.activate("PrusaLink upload failed", instructions)
@@ -239,7 +240,7 @@ class ResilientPrusaLinkClient:
         fallback_value={"state": "Unknown", "fallback": True},
         max_retries=1,
     )
-    def get_status(self) -> Dict:
+    def get_status(self) -> dict:
         """Get printer status with fallback."""
         client = self._get_client()
         if not client:
@@ -261,11 +262,11 @@ class ResilientPrusaLinkClient:
     def _manual_start_fallback(self, filename: str):
         """Provide manual print start instructions."""
         instructions = [
-            f"Cannot start print automatically. Please:",
-            f"1. Go to your printer's web interface",
-            f"2. Navigate to Files",
+            "Cannot start print automatically. Please:",
+            "1. Go to your printer's web interface",
+            "2. Navigate to Files",
             f"3. Find and select: {filename}",
-            f"4. Click 'Print' to start the job",
+            "4. Click 'Print' to start the job",
         ]
 
         print("\n" + "=" * 50)
@@ -339,7 +340,7 @@ def safe_file_operation(operation: str):
     return decorator
 
 
-def check_system_health() -> Dict[str, Any]:
+def check_system_health() -> dict[str, Any]:
     """Check overall system health and return status."""
     health_status = {
         "overall": "healthy",

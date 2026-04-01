@@ -7,11 +7,12 @@ Pass 2: Replay events with calculated centering offset applied to G-code generat
 
 import logging
 from pathlib import Path
-from typing import List, Optional, Union, Tuple, Dict, Any
-from ..core.events import Event, EventType, PathEvent, PointEvent, publish_event
-from ..processors.subscribers import EventSubscriber
-from ..processors.outline_subscriber import OutlineSubscriber
+from typing import Any
+
+from ..core.events import Event, EventType
 from ..outputs.streaming_gcode_subscriber import StreamingGCodeSubscriber
+from ..processors.outline_subscriber import OutlineSubscriber
+from ..processors.subscribers import EventSubscriber
 
 logger = logging.getLogger(__name__)
 
@@ -20,13 +21,13 @@ class EventRecorder:
     """Records events during first pass for replay in second pass."""
 
     def __init__(self):
-        self.recorded_events: List[Event] = []
+        self.recorded_events: list[Event] = []
 
     def record_event(self, event: Event) -> None:
         """Record an event for later replay."""
         self.recorded_events.append(event)
 
-    def replay_events(self, subscribers: List[EventSubscriber]) -> None:
+    def replay_events(self, subscribers: list[EventSubscriber]) -> None:
         """Replay recorded events to a list of subscribers."""
         logger.info(
             f"Replaying {len(self.recorded_events)} events to {len(subscribers)} subscribers"
@@ -41,7 +42,7 @@ class EventRecorder:
         """Clear recorded events."""
         self.recorded_events.clear()
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """Get recording statistics."""
         event_types = {}
         for event in self.recorded_events:
@@ -95,13 +96,13 @@ class TwoPassProcessor:
         self.outline_subscriber = OutlineSubscriber(bed_size_x, bed_size_y)
 
         # Centering offset (calculated after pass 1)
-        self.centering_offset: Tuple[float, float] = (0.0, 0.0)
+        self.centering_offset: tuple[float, float] = (0.0, 0.0)
 
     def process_with_centering(
         self,
-        events: List[Event],
+        events: list[Event],
         output_path: Path,
-        animation_path: Optional[Path] = None,
+        animation_path: Path | None = None,
         verbose: bool = False,
     ) -> bool:
         """Process events with two-pass coordinate centering.
@@ -136,7 +137,7 @@ class TwoPassProcessor:
             logger.exception(f"Two-pass processing failed: {e}")
             return False
 
-    def _execute_pass_1(self, events: List[Event]) -> None:
+    def _execute_pass_1(self, events: list[Event]) -> None:
         """Execute first pass: record events and collect coordinates."""
         # Clear previous state
         self.event_recorder.clear()
@@ -162,7 +163,7 @@ class TwoPassProcessor:
     def _execute_pass_2(
         self,
         output_path: Path,
-        animation_path: Optional[Path] = None,
+        animation_path: Path | None = None,
         verbose: bool = False,
     ) -> bool:
         """Execute second pass: replay events with centering applied."""
@@ -217,7 +218,7 @@ class TwoPassProcessor:
             logger.exception(f"Pass 2 execution failed: {e}")
             return False
 
-    def get_centering_statistics(self) -> Dict[str, Any]:
+    def get_centering_statistics(self) -> dict[str, Any]:
         """Get comprehensive centering statistics."""
         stats = {
             "centering_offset": {
@@ -243,7 +244,7 @@ class TwoPassProcessor:
         return stats
 
 
-def create_events_from_weld_paths(weld_paths: List) -> List[Event]:
+def create_events_from_weld_paths(weld_paths: list) -> list[Event]:
     """Convert weld paths to events for two-pass processing.
 
     Args:
@@ -269,7 +270,7 @@ def create_events_from_weld_paths(weld_paths: List) -> List[Event]:
                 "path_data": {
                     "id": getattr(path, "path_id", None)
                     or getattr(path, "svg_id", None)
-                    or f"path_{i+1}",
+                    or f"path_{i + 1}",
                     "weld_type": weld_type_str,
                 },
             },
@@ -302,7 +303,7 @@ def create_events_from_weld_paths(weld_paths: List) -> List[Event]:
                 "action": "path_complete",
                 "path_id": getattr(path, "path_id", None)
                 or getattr(path, "svg_id", None)
-                or f"path_{i+1}",
+                or f"path_{i + 1}",
             },
             source="weld_path_converter",
         )

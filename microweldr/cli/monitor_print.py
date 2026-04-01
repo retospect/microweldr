@@ -138,7 +138,7 @@ def monitor_print(args):
                     # Check for completion or failure
                     if state.lower() in ["finished", "completed", "done"]:
                         emoji = get_mode_emoji(args.mode)
-                        print(f"\n🎉 Print completed successfully!")
+                        print("\n🎉 Print completed successfully!")
                         print(
                             f"✅ Your {args.mode.replace('-', ' ')} print finished! {emoji}"
                         )

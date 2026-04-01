@@ -4,7 +4,6 @@ import pytest
 
 from microweldr.prusalink.client import PrusaLinkClient
 from microweldr.prusalink.exceptions import (
-    PrusaLinkConnectionError,
     PrusaLinkOperationError,
     PrusaLinkValidationError,
 )

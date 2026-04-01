@@ -4,7 +4,6 @@ Provides automatic centering of welding patterns on the printer bed.
 """
 
 import logging
-from typing import Dict, List, Tuple, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -25,16 +24,16 @@ class CoordinateCentering:
         self.bed_center_y = bed_size_y / 2
 
         # Coordinate tracking
-        self.coordinates: List[Tuple[float, float]] = []
-        self.offset_x: Optional[float] = None
-        self.offset_y: Optional[float] = None
+        self.coordinates: list[tuple[float, float]] = []
+        self.offset_x: float | None = None
+        self.offset_y: float | None = None
         self.bounds_calculated = False
 
     def add_coordinate(self, x: float, y: float) -> None:
         """Add a coordinate to the tracking list."""
         self.coordinates.append((x, y))
 
-    def calculate_centering_offset(self) -> Tuple[float, float]:
+    def calculate_centering_offset(self) -> tuple[float, float]:
         """Calculate the offset needed to center all coordinates on the bed.
 
         Returns:
@@ -102,7 +101,7 @@ class CoordinateCentering:
 
         return self.offset_x, self.offset_y
 
-    def apply_centering(self, x: float, y: float) -> Tuple[float, float]:
+    def apply_centering(self, x: float, y: float) -> tuple[float, float]:
         """Apply centering offset to coordinates.
 
         Args:
@@ -125,7 +124,7 @@ class CoordinateCentering:
 
         return x + self.offset_x, y + self.offset_y
 
-    def get_statistics(self) -> Dict:
+    def get_statistics(self) -> dict:
         """Get centering statistics."""
         if not self.coordinates:
             return {"status": "no_coordinates"}
@@ -192,7 +191,7 @@ class StreamingCoordinateCentering:
         self.offset_calculated = False
 
     def set_offset_from_coordinates(
-        self, coordinates: List[Tuple[float, float]]
+        self, coordinates: list[tuple[float, float]]
     ) -> None:
         """Calculate and set centering offset from a list of coordinates.
 
@@ -258,7 +257,7 @@ class StreamingCoordinateCentering:
             if new_y_max > self.bed_size_y:
                 logger.warning(f"   Y overflow: {new_y_max - self.bed_size_y:.3f}mm")
 
-    def apply_centering(self, x: float, y: float) -> Tuple[float, float]:
+    def apply_centering(self, x: float, y: float) -> tuple[float, float]:
         """Apply centering offset to coordinates.
 
         Args:
@@ -276,7 +275,7 @@ class StreamingCoordinateCentering:
 
         return x + self.offset_x, y + self.offset_y
 
-    def get_statistics(self) -> Dict:
+    def get_statistics(self) -> dict:
         """Get centering statistics."""
         return {
             "bed_size": {"width": self.bed_size_x, "height": self.bed_size_y},
@@ -303,7 +302,7 @@ class TwoPassCoordinateCentering:
         self.pass_number = 1
         self.coordinates_collected = False
 
-    def process_coordinate(self, x: float, y: float) -> Tuple[float, float]:
+    def process_coordinate(self, x: float, y: float) -> tuple[float, float]:
         """Process coordinate based on current pass.
 
         Pass 1: Collect coordinate for bounds calculation
@@ -338,7 +337,7 @@ class TwoPassCoordinateCentering:
             logger.warning("Starting pass 2 without completing pass 1")
         self.pass_number = 2
 
-    def get_statistics(self) -> Dict:
+    def get_statistics(self) -> dict:
         """Get centering statistics."""
         stats = self.centering.get_statistics()
         stats["pass_number"] = self.pass_number

@@ -2,7 +2,7 @@
 
 import os
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import toml
 
@@ -33,10 +33,10 @@ class SecretsConfig:
         """
         self.config_name = config_name
         self.legacy_name = "secrets.toml"
-        self._config: Optional[Dict[str, Any]] = None
-        self._config_sources: List[Path] = []
+        self._config: dict[str, Any] | None = None
+        self._config_sources: list[Path] = []
 
-    def load(self) -> Dict[str, Any]:
+    def load(self) -> dict[str, Any]:
         """Load and merge configuration files from the hierarchy.
 
         Returns:
@@ -68,7 +68,7 @@ class SecretsConfig:
             config_file
         ) in config_files:  # Files are already ordered from global to local
             try:
-                with open(config_file, "r") as f:
+                with open(config_file) as f:
                     file_config = toml.load(f)
                 # Merge this file's config into the accumulated config
                 for key, value in file_config.items():
@@ -83,7 +83,7 @@ class SecretsConfig:
 
         return self._config
 
-    def _find_config_files(self) -> List[Path]:
+    def _find_config_files(self) -> list[Path]:
         """Find all configuration files in the hierarchy.
 
         Returns:
@@ -134,7 +134,7 @@ class SecretsConfig:
         except Exception:
             return default
 
-    def get_prusalink_config(self) -> Dict[str, Any]:
+    def get_prusalink_config(self) -> dict[str, Any]:
         """Get PrusaLink configuration section.
 
         Returns:
@@ -155,7 +155,7 @@ class SecretsConfig:
         prusalink_config = self._config["prusalink"]
         return dict(prusalink_config)
 
-    def list_sources(self) -> List[Path]:
+    def list_sources(self) -> list[Path]:
         """List all configuration sources that were loaded.
 
         Returns:
@@ -165,7 +165,7 @@ class SecretsConfig:
             self.load()
         return self._config_sources.copy()
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert the merged configuration to a dictionary.
 
         Returns:
@@ -177,7 +177,7 @@ class SecretsConfig:
 
 
 # Global instance for easy access
-_secrets_config: Optional[SecretsConfig] = None
+_secrets_config: SecretsConfig | None = None
 
 
 def get_secrets_config() -> SecretsConfig:
@@ -192,7 +192,7 @@ def get_secrets_config() -> SecretsConfig:
     return _secrets_config
 
 
-def load_prusalink_config(config_path: Optional[str] = None) -> Dict[str, Any]:
+def load_prusalink_config(config_path: str | None = None) -> dict[str, Any]:
     """Load PrusaLink configuration with hierarchical support.
 
     Args:
@@ -212,7 +212,7 @@ def load_prusalink_config(config_path: Optional[str] = None) -> Dict[str, Any]:
         if not os.path.exists(config_path):
             raise FileNotFoundError(f"Configuration file not found: {config_path}")
 
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             config = toml.load(f)
 
         if "prusalink" not in config:

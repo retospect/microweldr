@@ -2,14 +2,16 @@
 
 import tempfile
 from pathlib import Path
+
 import pytest
 
 from microweldr.core.config import Config
 from microweldr.core.events import Event, EventType, PathEvent
 
 try:
-    from microweldr.outputs.gif_animation_subscriber import GIFAnimationSubscriber
     from PIL import Image
+
+    from microweldr.outputs.gif_animation_subscriber import GIFAnimationSubscriber
 
     GIF_AVAILABLE = True
 except ImportError:
@@ -118,9 +120,9 @@ class TestGIFAnimation:
             # Verify it's a valid animated GIF
             with Image.open(output_path) as img:
                 assert img.format == "GIF", "Should be a valid GIF file"
-                assert (
-                    img.size[0] > 0 and img.size[1] > 0
-                ), "Should have valid dimensions"
+                assert img.size[0] > 0 and img.size[1] > 0, (
+                    "Should have valid dimensions"
+                )
                 frames = getattr(img, "n_frames", 1)
                 assert frames > 1, f"Should be animated (multiple frames), got {frames}"
 
@@ -134,11 +136,12 @@ class TestGIFAnimation:
 
         # Verify new GIF animation subscriber can be imported and created
         if GIF_AVAILABLE:
+            import tempfile
+            from pathlib import Path
+
             from microweldr.outputs.gif_animation_subscriber import (
                 GIFAnimationSubscriber,
             )
-            from pathlib import Path
-            import tempfile
 
             with tempfile.NamedTemporaryFile(suffix=".gif") as f:
                 subscriber = GIFAnimationSubscriber(Path(f.name), config)

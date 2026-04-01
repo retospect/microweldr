@@ -1,9 +1,7 @@
 """Configuration management for the SVG welder."""
 
 from pathlib import Path
-from typing import Any, Dict
-
-import toml
+from typing import Any
 
 
 class ConfigError(Exception):
@@ -46,7 +44,7 @@ class Config:
                 return default
             raise ConfigError(f"Configuration key '{section}.{key}' not found")
 
-    def get_section(self, section: str) -> Dict[str, Any]:
+    def get_section(self, section: str) -> dict[str, Any]:
         """Get an entire configuration section."""
         try:
             return self._config[section]
@@ -54,47 +52,47 @@ class Config:
             raise ConfigError(f"Configuration section '{section}' not found")
 
     @property
-    def printer(self) -> Dict[str, Any]:
+    def printer(self) -> dict[str, Any]:
         """Get printer configuration."""
         return self.get_section("printer")
 
     @property
-    def temperatures(self) -> Dict[str, Any]:
+    def temperatures(self) -> dict[str, Any]:
         """Get temperature configuration."""
         return self.get_section("temperatures")
 
     @property
-    def movement(self) -> Dict[str, Any]:
+    def movement(self) -> dict[str, Any]:
         """Get movement configuration."""
         return self.get_section("movement")
 
     @property
-    def normal_welds(self) -> Dict[str, Any]:
+    def normal_welds(self) -> dict[str, Any]:
         """Get normal welds configuration."""
         return self.get_section("normal_welds")
 
     @property
-    def frangible_welds(self) -> Dict[str, Any]:
+    def frangible_welds(self) -> dict[str, Any]:
         """Get frangible welds configuration."""
         return self.get_section("frangible_welds")
 
     @property
-    def output(self) -> Dict[str, Any]:
+    def output(self) -> dict[str, Any]:
         """Get output configuration."""
         return self.get_section("output")
 
     @property
-    def animation(self) -> Dict[str, Any]:
+    def animation(self) -> dict[str, Any]:
         """Get animation configuration."""
         return self.get_section("animation")
 
     @property
-    def nozzle(self) -> Dict[str, Any]:
+    def nozzle(self) -> dict[str, Any]:
         """Get nozzle configuration."""
         return self.get_section("nozzle")
 
     @property
-    def sequencing(self) -> Dict[str, Any]:
+    def sequencing(self) -> dict[str, Any]:
         """Get sequencing configuration."""
         try:
             return self.get_section("sequencing")
@@ -103,7 +101,7 @@ class Config:
             return {"skip_base_distance": 5}
 
     @property
-    def config(self) -> Dict[str, Any]:
+    def config(self) -> dict[str, Any]:
         """Get the full configuration dictionary."""
         return self._config
 

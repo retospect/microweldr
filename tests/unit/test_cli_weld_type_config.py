@@ -4,9 +4,7 @@ Tests that config values (heights, times, temps) correctly flow through
 process_weld_file() to final G-code output for both normal and frangible welds.
 """
 
-import os
-from pathlib import Path
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 
 import pytest
 

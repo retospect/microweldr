@@ -1,6 +1,5 @@
 """Simple tests for configuration management."""
 
-import pytest
 from microweldr.core.config import Config
 
 

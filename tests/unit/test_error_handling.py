@@ -1,17 +1,16 @@
 """Tests for error handling framework."""
 
 import pytest
-import logging
 
 from microweldr.core.error_handling import (
+    ConfigurationError,
+    ErrorCollector,
+    FileProcessingError,
     MicroWeldrError,
     ValidationError,
-    ConfigurationError,
-    FileProcessingError,
-    handle_errors,
     error_context,
+    handle_errors,
     safe_execute,
-    ErrorCollector,
 )
 
 

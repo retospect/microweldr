@@ -4,8 +4,8 @@ import logging
 import sys
 import threading
 import time
+from collections.abc import Callable, Generator
 from contextlib import contextmanager
-from typing import Any, Callable, Generator, Optional, Union
 
 logger = logging.getLogger(__name__)
 
@@ -120,16 +120,16 @@ class ProgressReporter:
             if rate > 1:
                 status_parts.append(f"{rate:.1f}/s")
             else:
-                status_parts.append(f"{1/rate:.1f}s/item")
+                status_parts.append(f"{1 / rate:.1f}s/item")
 
         if self.show_eta and self.current > 0 and self.current < self.total:
             remaining = (self.total - self.current) * elapsed / self.current
             if remaining < 60:
                 status_parts.append(f"ETA: {remaining:.0f}s")
             elif remaining < 3600:
-                status_parts.append(f"ETA: {remaining/60:.1f}m")
+                status_parts.append(f"ETA: {remaining / 60:.1f}m")
             else:
-                status_parts.append(f"ETA: {remaining/3600:.1f}h")
+                status_parts.append(f"ETA: {remaining / 3600:.1f}h")
 
         if message:
             status_parts.append(f"| {message}")
@@ -247,7 +247,7 @@ class SimpleProgressReporter:
 @contextmanager
 def progress_context(
     total: int, description: str = "Processing", use_fancy: bool = None, **kwargs
-) -> Generator[Union[ProgressReporter, SimpleProgressReporter], None, None]:
+) -> Generator[ProgressReporter | SimpleProgressReporter, None, None]:
     """Context manager for progress reporting.
 
     Args:
@@ -320,7 +320,7 @@ class BatchProgressReporter:
         self.batches = batches
         self.description = description
         self.current_batch = 0
-        self.current_reporter: Optional[ProgressReporter] = None
+        self.current_reporter: ProgressReporter | None = None
         self.start_time = time.time()
 
     def start_batch(

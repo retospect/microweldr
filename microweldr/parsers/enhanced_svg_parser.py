@@ -4,7 +4,6 @@ import math
 import re
 import time
 import xml.etree.ElementTree as ET  # nosec B405 - Parsing trusted SVG files only
-from typing import List, Optional, Tuple
 from pathlib import Path
 
 from .models import WeldPath, WeldPoint
@@ -25,7 +24,7 @@ class EnhancedSVGParser:
         """Initialize enhanced SVG parser."""
         self.dot_spacing = dot_spacing
 
-    def parse_file(self, svg_path: str) -> List[WeldPath]:
+    def parse_file(self, svg_path: str) -> list[WeldPath]:
         """Parse SVG file and extract weld paths with event publishing."""
         svg_path_obj = Path(svg_path)
 
@@ -78,7 +77,7 @@ class EnhancedSVGParser:
 
         return weld_paths
 
-    def _parse_elements(self, root: ET.Element) -> List[WeldPath]:
+    def _parse_elements(self, root: ET.Element) -> list[WeldPath]:
         """Parse SVG elements and return weld paths with progress events."""
         # Define SVG namespace
         namespaces = {"svg": "http://www.w3.org/2000/svg"}
@@ -219,7 +218,7 @@ class EnhancedSVGParser:
 
     def _parse_element(
         self, element_type: str, element: ET.Element, path_id: str
-    ) -> List[WeldPoint]:
+    ) -> list[WeldPoint]:
         """Parse individual SVG element with event publishing."""
         if element_type == "path":
             return self._parse_path_element(element, path_id)
@@ -234,7 +233,7 @@ class EnhancedSVGParser:
 
     def _parse_path_element(
         self, path_element: ET.Element, path_id: str
-    ) -> List[WeldPoint]:
+    ) -> list[WeldPoint]:
         """Parse SVG path element with full curve support."""
         d = path_element.get("d", "")
         if not d:
@@ -502,7 +501,7 @@ class EnhancedSVGParser:
 
     def _approximate_quadratic_bezier(
         self, x0: float, y0: float, x1: float, y1: float, x2: float, y2: float
-    ) -> List[WeldPoint]:
+    ) -> list[WeldPoint]:
         """Approximate quadratic Bézier curve with length-based point spacing."""
         # Estimate curve length using control polygon approximation
         # This is more accurate than chord length for most curves
@@ -533,7 +532,7 @@ class EnhancedSVGParser:
         y2: float,
         x3: float,
         y3: float,
-    ) -> List[WeldPoint]:
+    ) -> list[WeldPoint]:
         """Approximate cubic Bézier curve with length-based point spacing."""
         # Estimate curve length using control polygon approximation
         leg1 = math.sqrt((x1 - x0) ** 2 + (y1 - y0) ** 2)
@@ -575,7 +574,7 @@ class EnhancedSVGParser:
         fs: float,
         x2: float,
         y2: float,
-    ) -> List[WeldPoint]:
+    ) -> list[WeldPoint]:
         """Approximate elliptical arc with proper geometry and length calculation."""
         # If radii are zero, just draw a line
         if rx == 0 or ry == 0:
@@ -631,7 +630,7 @@ class EnhancedSVGParser:
         phi: float,
         fa: float,
         fs: float,
-    ) -> Optional[Tuple[float, float, float, float, float, float]]:
+    ) -> tuple[float, float, float, float, float, float] | None:
         """Convert SVG arc parameters to center parameterization.
 
         Returns: (cx, cy, rx, ry, theta1, delta_theta) or None if invalid
@@ -736,8 +735,8 @@ class EnhancedSVGParser:
         return arc_length
 
     def _interpolate_points(
-        self, points: List[WeldPoint], path_id: str
-    ) -> List[WeldPoint]:
+        self, points: list[WeldPoint], path_id: str
+    ) -> list[WeldPoint]:
         """Interpolate points along the path with event publishing."""
         if len(points) < 2:
             return points
@@ -788,7 +787,7 @@ class EnhancedSVGParser:
         return interpolated
 
     # Include all the existing helper methods from the original SVGParser
-    def _get_sort_key(self, element_tuple: Tuple[str, ET.Element]) -> float:
+    def _get_sort_key(self, element_tuple: tuple[str, ET.Element]) -> float:
         """Get sort key for element ordering."""
         element_type, element = element_tuple
         element_id = element.get("id", "")
@@ -796,9 +795,9 @@ class EnhancedSVGParser:
         match = re.search(r"(\d+)", element_id)
         return int(match.group(1)) if match else float("inf")
 
-    def _determine_weld_type(self, element: ET.Element) -> Tuple[str, Optional[str]]:
+    def _determine_weld_type(self, element: ET.Element) -> tuple[str, str | None]:
         """Determine weld type based on element color and extract pause message."""
-        from .constants import Colors, SVGAttributes, WeldType, get_color_weld_type
+        from .constants import Colors, SVGAttributes, WeldType
 
         # Check stroke color
         stroke = element.get(SVGAttributes.STROKE, "").lower()
@@ -849,7 +848,7 @@ class EnhancedSVGParser:
             # Fallback to normal if color parsing fails
             return WeldType.NORMAL.value, None
 
-    def _get_float_attr(self, element: ET.Element, attr_name: str) -> Optional[float]:
+    def _get_float_attr(self, element: ET.Element, attr_name: str) -> float | None:
         """Extract float attribute from element, return None if not found or invalid."""
         attr_value = element.get(attr_name)
         if attr_value:
@@ -861,7 +860,7 @@ class EnhancedSVGParser:
 
     def _parse_line_element(
         self, line_element: ET.Element, path_id: str
-    ) -> List[WeldPoint]:
+    ) -> list[WeldPoint]:
         """Parse SVG line element."""
         x1 = float(line_element.get("x1", 0))
         y1 = float(line_element.get("y1", 0))
@@ -877,7 +876,7 @@ class EnhancedSVGParser:
 
     def _parse_circle_element(
         self, circle_element: ET.Element, path_id: str
-    ) -> List[WeldPoint]:
+    ) -> list[WeldPoint]:
         """Parse SVG circle element."""
         cx = float(circle_element.get("cx", 0))
         cy = float(circle_element.get("cy", 0))
@@ -904,7 +903,7 @@ class EnhancedSVGParser:
 
     def _parse_rect_element(
         self, rect_element: ET.Element, path_id: str
-    ) -> List[WeldPoint]:
+    ) -> list[WeldPoint]:
         """Parse SVG rectangle element."""
         x = float(rect_element.get("x", 0))
         y = float(rect_element.get("y", 0))
@@ -945,7 +944,7 @@ class EnhancedSVGParser:
 
     def _expand_use_element(
         self, use_element: ET.Element, defs_elements: dict, namespaces: dict
-    ) -> List[Tuple[str, ET.Element]]:
+    ) -> list[tuple[str, ET.Element]]:
         """Expand a <use> element by resolving its reference and applying transformations."""
         href = use_element.get("href") or use_element.get(
             "{http://www.w3.org/1999/xlink}href"
@@ -987,7 +986,7 @@ class EnhancedSVGParser:
 
         return expanded_elements
 
-    def _parse_transform(self, transform_str: str) -> Tuple[float, float, float, float]:
+    def _parse_transform(self, transform_str: str) -> tuple[float, float, float, float]:
         """Parse SVG transform attribute and return scale_x, scale_y, translate_x, translate_y."""
         scale_x, scale_y = 1.0, 1.0
         translate_x, translate_y = 0.0, 0.0
@@ -1022,7 +1021,7 @@ class EnhancedSVGParser:
     def _expand_group_elements(
         self,
         group: ET.Element,
-        elements: List[Tuple[str, ET.Element]],
+        elements: list[tuple[str, ET.Element]],
         namespaces: dict,
         scale_x: float,
         scale_y: float,

@@ -2,8 +2,6 @@
 
 from unittest.mock import Mock, patch
 
-import pytest
-
 from microweldr.core.printer_operations import PrinterOperations
 from microweldr.prusalink.client import PrusaLinkClient
 

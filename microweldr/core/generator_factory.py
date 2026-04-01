@@ -2,8 +2,9 @@
 
 import logging
 from pathlib import Path
-from typing import List, Dict, Any, Optional
-from .unified_generators import GCodeGenerator, SVGGenerator, PNGGenerator
+from typing import Any
+
+from .unified_generators import GCodeGenerator, PNGGenerator, SVGGenerator
 
 logger = logging.getLogger(__name__)
 
@@ -11,11 +12,11 @@ logger = logging.getLogger(__name__)
 class GeneratorFactory:
     """Factory for creating generators based on command line arguments."""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         """Initialize factory with configuration."""
         self.config = config
 
-    def create_phase1_generators(self) -> List[Any]:
+    def create_phase1_generators(self) -> list[Any]:
         """Create generators for Phase 1 (analysis)."""
         from .frame_extent_calculator import FrameExtentCalculator
 
@@ -30,12 +31,12 @@ class GeneratorFactory:
 
     def create_phase2_generators(
         self,
-        bounds: Dict[str, float],
-        output_path: Optional[Path] = None,
-        animation_path: Optional[Path] = None,
-        png_path: Optional[Path] = None,
+        bounds: dict[str, float],
+        output_path: Path | None = None,
+        animation_path: Path | None = None,
+        png_path: Path | None = None,
         **kwargs,
-    ) -> List[Any]:
+    ) -> list[Any]:
         """Create generators for Phase 2 (generation)."""
         generators = []
 

@@ -1,0 +1,4 @@
+# file: /Users/reto/repos/PrusaWelder/microweldr/core/svg_parser.py
+# hypothesis_version: 6.142.4
+
+[0.0, 2.0, '(\\d+)', '-?\\d+\\.?\\d*', './/svg:circle', './/svg:line', './/svg:path', './/svg:rect', 'L', 'M', 'Z', '[MLZ][^MLZ]*', 'aria-label', 'circle', 'cx', 'cy', 'd', 'data-bed-temp', 'data-message', 'data-temp', 'data-weld-height', 'data-weld-time', 'desc', 'height', 'id', 'inf', 'line', 'normal', 'path', 'r', 'rect', 'style', 'svg', 'title', 'width', 'x', 'x1', 'x2', 'y', 'y1', 'y2']

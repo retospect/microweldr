@@ -4,11 +4,9 @@ Tests for the streaming G-code subscriber functionality.
 
 import tempfile
 from pathlib import Path
-import pytest
 
 from microweldr.core.config import Config
 from microweldr.outputs.streaming_gcode_subscriber import StreamingGCodeSubscriber
-from microweldr.generators.models import WeldPath, WeldPoint
 
 
 class TestStreamingGCodeSubscriber:

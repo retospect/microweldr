@@ -1,9 +1,9 @@
 """Unit tests for DeduplicatingPointIterator."""
 
-import pytest
 from pathlib import Path
 from unittest.mock import Mock, patch
-from typing import Iterator, Dict, Any
+
+import pytest
 
 from microweldr.generators.deduplicating_point_iterator import (
     DeduplicatingPointIterator,

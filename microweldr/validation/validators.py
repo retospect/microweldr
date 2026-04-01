@@ -1,7 +1,6 @@
 """Validation functionality for SVG and G-code files."""
 
 from pathlib import Path
-from typing import List, Optional
 
 # Optional validation libraries
 try:
@@ -28,9 +27,7 @@ class ValidationError(Exception):
 class ValidationResult:
     """Result of a validation operation."""
 
-    def __init__(
-        self, is_valid: bool, message: str, warnings: Optional[List[str]] = None
-    ):
+    def __init__(self, is_valid: bool, message: str, warnings: list[str] | None = None):
         self.is_valid = is_valid
         self.message = message
         self.warnings = warnings or []
@@ -109,7 +106,7 @@ class GCodeValidator:
             )
 
         try:
-            with open(gcode_path, "r") as f:
+            with open(gcode_path) as f:
                 gcode_content = f.read()
 
             # Parse with gcodeparser
@@ -288,9 +285,7 @@ class AnimationValidator:
 
         try:
             # Parse animation content
-            doc = etree.fromstring(
-                animation_content.encode()
-            )  # nosec B320 - Parsing trusted animation content
+            doc = etree.fromstring(animation_content.encode())  # nosec B320 - Parsing trusted animation content
 
             # Check for animation elements
             animations = doc.xpath(

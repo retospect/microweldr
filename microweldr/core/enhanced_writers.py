@@ -1,11 +1,9 @@
 """Enhanced file writers using event-driven architecture."""
 
-from pathlib import Path
-from typing import List
 import logging
+from pathlib import Path
 
 from .processing_events import FileWriterSubscriber
-from .data_models import WeldPath
 
 logger = logging.getLogger(__name__)
 
@@ -19,8 +17,8 @@ class GCodeWriterSubscriber(FileWriterSubscriber):
 
     def write_output(self, output_path: Path, **kwargs) -> bool:
         """Write G-code file using weld paths from events."""
-        from ..outputs.streaming_gcode_subscriber import StreamingGCodeSubscriber
         from ..core.events import Event, EventType
+        from ..outputs.streaming_gcode_subscriber import StreamingGCodeSubscriber
 
         logger.info(f"Writing G-code to: {output_path}")
 
@@ -41,7 +39,7 @@ class GCodeWriterSubscriber(FileWriterSubscriber):
                 data={
                     "action": "path_start",
                     "path_data": {
-                        "id": path.path_id or f"path_{i+1}",
+                        "id": path.path_id or f"path_{i + 1}",
                         "weld_type": weld_type_str,
                     },
                 },
@@ -88,7 +86,8 @@ class AnimationWriterSubscriber(FileWriterSubscriber):
     def write_output(self, output_path: Path, **kwargs) -> bool:
         """Write animation file using weld paths from events."""
         from ..animation.generator import AnimationGenerator
-        from ..core.models import WeldPath as OldWeldPath, WeldPoint
+        from ..core.models import WeldPath as OldWeldPath
+        from ..core.models import WeldPoint
 
         logger.info(f"Writing animation to: {output_path}")
 
@@ -114,7 +113,7 @@ class AnimationWriterSubscriber(FileWriterSubscriber):
             old_path = OldWeldPath(
                 points=weld_points,
                 weld_type=weld_type_str,
-                svg_id=path.path_id or f"path_{i+1}",
+                svg_id=path.path_id or f"path_{i + 1}",
             )
             old_paths.append(old_path)
 

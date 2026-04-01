@@ -3,7 +3,6 @@
 import logging
 import re
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
 
 from ..core.models import WeldPath, WeldPoint
 
@@ -32,8 +31,8 @@ class SafetyValidator:
 
     def __init__(self):
         """Initialize safety validator."""
-        self.warnings: List[str] = []
-        self.errors: List[str] = []
+        self.warnings: list[str] = []
+        self.errors: list[str] = []
 
     def validate_temperature(
         self, temp: float, param_name: str = "temperature"
@@ -200,7 +199,7 @@ class SafetyValidator:
             f"Weld path validation passed: {path.name} ({len(path.points)} points)"
         )
 
-    def validate_config(self, config: Dict) -> Tuple[List[str], List[str]]:
+    def validate_config(self, config: dict) -> tuple[list[str], list[str]]:
         """Validate configuration parameters for safety.
 
         Args:
@@ -338,8 +337,8 @@ class SafetyValidator:
 
 
 def validate_weld_operation(
-    weld_paths: List[WeldPath], config: Dict
-) -> Tuple[List[str], List[str]]:
+    weld_paths: list[WeldPath], config: dict
+) -> tuple[list[str], list[str]]:
     """Validate complete weld operation for safety.
 
     Args:

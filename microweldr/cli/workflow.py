@@ -9,7 +9,6 @@ import json
 import sys
 import time
 from pathlib import Path
-from typing import Any, Dict
 
 from microweldr.core.config import Config, ConfigError
 from microweldr.core.converter import SVGToGCodeConverter

@@ -1,28 +1,21 @@
 """Event-driven processor for file conversion with publish-subscribe architecture."""
 
-import time
-from pathlib import Path
-from typing import Dict, List, Optional, Set, Union
 import logging
+from pathlib import Path
 
 from ..core.config import Config
 from ..core.events import (
-    Event,
-    EventType,
+    ErrorEvent,
+    OutputEvent,
     ParsingEvent,
     PathEvent,
     PointEvent,
-    OutputEvent,
-    ErrorEvent,
     ProgressEvent,
-    EventSubscriber,
     publish_event,
-    subscribe_to_events,
-    unsubscribe_from_events,
 )
+from ..generators.models import WeldPath
 from .subscriber_factory import SubscriberFactory
 from .two_phase_processor import TwoPhaseProcessor
-from ..generators.models import WeldPath, WeldPoint
 
 logger = logging.getLogger(__name__)
 
@@ -66,20 +59,20 @@ class EventDrivenProcessor:
         if self.subscriber_factory:
             self.subscriber_factory.cleanup_all_subscribers()
 
-    def get_supported_input_extensions(self) -> List[str]:
+    def get_supported_input_extensions(self) -> list[str]:
         """Get supported input file extensions."""
         return [".svg", ".dxf"]
 
-    def get_supported_output_types(self) -> List[str]:
+    def get_supported_output_types(self) -> list[str]:
         """Get supported output types."""
         return ["gcode", "animation", "png"]
 
     def process_file(
         self,
-        input_path: Union[str, Path],
-        output_path: Union[str, Path],
-        animation_path: Optional[Union[str, Path]] = None,
-        png_path: Optional[Union[str, Path]] = None,
+        input_path: str | Path,
+        output_path: str | Path,
+        animation_path: str | Path | None = None,
+        png_path: str | Path | None = None,
         verbose: bool = False,
     ) -> bool:
         """Process input file and generate outputs."""
@@ -159,7 +152,7 @@ class EventDrivenProcessor:
                 logger.exception("Error during file processing")
             raise FileProcessingError(f"Failed to process {input_path}: {e}")
 
-    def _parse_input_file(self, input_path: Path) -> List[WeldPath]:
+    def _parse_input_file(self, input_path: Path) -> list[WeldPath]:
         """Parse input file based on extension."""
         extension = input_path.suffix.lower()
 
@@ -170,7 +163,7 @@ class EventDrivenProcessor:
         else:
             raise FileProcessingError(f"Unsupported file type: {extension}")
 
-    def _parse_svg_file(self, svg_path: Path) -> List[WeldPath]:
+    def _parse_svg_file(self, svg_path: Path) -> list[WeldPath]:
         """Parse SVG file."""
         from .svg_parser import SVGParser
 
@@ -182,7 +175,7 @@ class EventDrivenProcessor:
 
         return weld_paths
 
-    def _parse_dxf_file(self, dxf_path: Path) -> List[WeldPath]:
+    def _parse_dxf_file(self, dxf_path: Path) -> list[WeldPath]:
         """Parse DXF file."""
         from .dxf_reader import DXFReader
 
@@ -194,7 +187,7 @@ class EventDrivenProcessor:
         weld_paths = reader.parse_file(dxf_path)
         return weld_paths
 
-    def _process_weld_paths_via_events(self, weld_paths: List[WeldPath]) -> None:
+    def _process_weld_paths_via_events(self, weld_paths: list[WeldPath]) -> None:
         """Process weld paths by publishing events."""
         publish_event(
             PathEvent("start_processing", "all_paths", total_paths=len(weld_paths))
@@ -256,12 +249,12 @@ class EventDrivenProcessor:
                 )
             )
 
-    def get_statistics(self) -> Dict:
+    def get_statistics(self) -> dict:
         """Get processing statistics."""
         stats_subscriber = self.subscriber_factory.get_statistics_subscriber()
         return stats_subscriber.get_statistics() if stats_subscriber else {}
 
-    def get_validation_results(self) -> Dict:
+    def get_validation_results(self) -> dict:
         """Get validation results."""
         if self.use_two_phase:
             return self.two_phase_processor.get_validation_results()

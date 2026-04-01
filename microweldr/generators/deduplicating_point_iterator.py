@@ -1,9 +1,10 @@
 """Deduplicating point iterator wrapper that filters duplicate weld points."""
 
 import logging
-from pathlib import Path
-from typing import Iterator, Dict, Any, Set, Tuple
+from collections.abc import Iterator
 from enum import IntEnum
+from pathlib import Path
+from typing import Any
 
 from .point_iterator_factory import PointIteratorFactory
 
@@ -55,7 +56,7 @@ class DeduplicatingPointIterator:
                          Default 0.1mm means coordinates are rounded to nearest 0.1mm.
         """
         self.precision_mm = precision_mm
-        self.seen_coordinates: Set[Tuple[float, float, WeldTypeEnum]] = set()
+        self.seen_coordinates: set[tuple[float, float, WeldTypeEnum]] = set()
 
     def _round_coordinate(self, value: float) -> float:
         """Round coordinate to specified precision.
@@ -70,7 +71,7 @@ class DeduplicatingPointIterator:
 
     def _get_coordinate_key(
         self, x: float, y: float, weld_type: str
-    ) -> Tuple[float, float, WeldTypeEnum]:
+    ) -> tuple[float, float, WeldTypeEnum]:
         """Get coordinate key for duplicate detection.
 
         Args:
@@ -86,7 +87,7 @@ class DeduplicatingPointIterator:
         weld_type_enum = WeldTypeEnum.from_string(weld_type)
         return (rounded_x, rounded_y, weld_type_enum)
 
-    def iterate_points(self, file_path: Path, config=None) -> Iterator[Dict[str, Any]]:
+    def iterate_points(self, file_path: Path, config=None) -> Iterator[dict[str, Any]]:
         """Iterate through points, filtering duplicates.
 
         Args:
@@ -156,7 +157,7 @@ class DeduplicatingPointIterator:
 
 def iterate_points_from_file_deduplicated(
     file_path: Path, config=None, precision_mm: float = 0.1
-) -> Iterator[Dict[str, Any]]:
+) -> Iterator[dict[str, Any]]:
     """Iterate through points from a file with duplicate filtering.
 
     Args:

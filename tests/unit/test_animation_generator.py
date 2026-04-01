@@ -9,6 +9,7 @@ See tests/outputs/test_animation_generation.py for current tests.
 """
 
 import pytest
+
 from microweldr.core.config import Config
 
 try:
@@ -30,9 +31,10 @@ class TestAnimationGenerator:
         config = Config()
 
         # Verify new PNG animation subscriber can be imported and created
-        from microweldr.outputs.png_animation_subscriber import PNGAnimationSubscriber
-        from pathlib import Path
         import tempfile
+        from pathlib import Path
+
+        from microweldr.outputs.png_animation_subscriber import PNGAnimationSubscriber
 
         with tempfile.NamedTemporaryFile(suffix=".png") as f:
             subscriber = PNGAnimationSubscriber(Path(f.name), config)

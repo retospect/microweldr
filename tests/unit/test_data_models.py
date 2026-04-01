@@ -1,17 +1,16 @@
 """Tests for data models."""
 
 import pytest
-import math
 
 from microweldr.core.data_models import (
-    Point,
-    WeldType,
-    WeldPath,
-    LineEntity,
     ArcEntity,
     CircleEntity,
-    ValidationResult,
+    LineEntity,
+    Point,
     ProcessingStats,
+    ValidationResult,
+    WeldPath,
+    WeldType,
 )
 
 
@@ -105,12 +104,12 @@ class TestCADEntities:
 
         weld_path = line.to_weld_path()
         # Line length is 5mm, with default 2mm spacing should generate 3 points: 0, 2.5, 5mm
-        assert (
-            len(weld_path.points) >= 2
-        ), f"Expected at least 2 points, got {len(weld_path.points)}"
-        assert (
-            len(weld_path.points) == 3
-        ), f"5mm line with 2mm spacing should generate 3 points, got {len(weld_path.points)}"
+        assert len(weld_path.points) >= 2, (
+            f"Expected at least 2 points, got {len(weld_path.points)}"
+        )
+        assert len(weld_path.points) == 3, (
+            f"5mm line with 2mm spacing should generate 3 points, got {len(weld_path.points)}"
+        )
         assert weld_path.weld_type == WeldType.NORMAL
 
         # Verify interpolated points are correct

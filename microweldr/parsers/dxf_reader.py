@@ -3,20 +3,22 @@
 import logging
 import math
 from pathlib import Path
-from typing import List, Optional, Dict, Any
+from typing import Any
 
-from ..core.app_constants import DXFEntities, LayerTypes
+from ..core.app_constants import DXFEntities
 from ..core.data_models import (
+    ArcEntity,
+    CADEntity,
+    CircleEntity,
+    LineEntity,
     Point,
     WeldType,
-    WeldPath as DataWeldPath,
-    LineEntity,
-    ArcEntity,
-    CircleEntity,
-    CADEntity,
 )
-from ..core.models import WeldPath, WeldPoint
+from ..core.data_models import (
+    WeldPath as DataWeldPath,
+)
 from ..core.error_handling import FileProcessingError, ParsingError, handle_errors
+from ..core.models import WeldPath, WeldPoint
 from .file_readers import FileReaderPublisher
 
 logger = logging.getLogger(__name__)
@@ -41,7 +43,7 @@ class DXFReader(FileReaderPublisher):
             )
         self.dot_spacing = dot_spacing  # Distance between points in mm
 
-    def get_supported_extensions(self) -> List[str]:
+    def get_supported_extensions(self) -> list[str]:
         """Get supported file extensions."""
         return [".dxf", ".DXF"]
 
@@ -63,7 +65,7 @@ class DXFReader(FileReaderPublisher):
         },
         default_error=FileProcessingError,
     )
-    def _parse_file_internal(self, file_path: Path) -> List[WeldPath]:
+    def _parse_file_internal(self, file_path: Path) -> list[WeldPath]:
         """Parse DXF file and extract weld paths."""
         logger.info(f"Parsing DXF file: {file_path}")
 
@@ -118,7 +120,7 @@ class DXFReader(FileReaderPublisher):
                 f"Please convert your DXF file to use millimeter units."
             )
 
-    def _parse_entities(self, msp) -> List[CADEntity]:
+    def _parse_entities(self, msp) -> list[CADEntity]:
         """Parse entities from model space."""
         entities = []
 
@@ -193,12 +195,11 @@ class DXFReader(FileReaderPublisher):
             radius=radius,
         )
 
-    def _parse_polyline(self, entity, layer: str) -> List[LineEntity]:
+    def _parse_polyline(self, entity, layer: str) -> list[LineEntity]:
         """Parse POLYLINE/LWPOLYLINE entities as connected line segments with proper arc support.
 
         DEPRECATED: This method creates overlapping endpoints. Use _parse_polyline_to_weld_path instead.
         """
-        import math
 
         line_entities = []
         points = []
@@ -257,13 +258,12 @@ class DXFReader(FileReaderPublisher):
 
     def _parse_polyline_to_weld_path(
         self, entity, layer: str, weld_type: WeldType
-    ) -> Optional[DataWeldPath]:
+    ) -> DataWeldPath | None:
         """Parse POLYLINE/LWPOLYLINE entities directly to weld path with continuous points.
 
         This method generates points directly without creating intermediate LineEntity objects,
         avoiding duplicate points at segment boundaries.
         """
-        import math
 
         points = []
         bulges = []
@@ -335,7 +335,7 @@ class DXFReader(FileReaderPublisher):
 
     def _bulge_to_line_segments(
         self, start: Point, end: Point, bulge: float
-    ) -> List[tuple]:
+    ) -> list[tuple]:
         """Convert a bulge arc to multiple line segments.
 
         DXF Bulge specification (Autodesk DXF Reference):
@@ -437,7 +437,7 @@ class DXFReader(FileReaderPublisher):
 
     def _bulge_to_weld_points(
         self, start: Point, end: Point, bulge: float
-    ) -> List[Point]:
+    ) -> list[Point]:
         """Convert a bulge arc directly to weld points.
 
         This method generates points directly along the arc without creating intermediate
@@ -517,7 +517,7 @@ class DXFReader(FileReaderPublisher):
 
         return weld_points
 
-    def _entities_to_weld_paths(self, entities: List[CADEntity]) -> List[WeldPath]:
+    def _entities_to_weld_paths(self, entities: list[CADEntity]) -> list[WeldPath]:
         """Convert CAD entities to weld paths."""
         weld_paths = []
         entity_counter = 0  # Add unique counter for each entity
@@ -663,7 +663,7 @@ class DXFReader(FileReaderPublisher):
         # Default to normal welds
         return WeldType.NORMAL
 
-    def get_layer_info(self, file_path: Path) -> Dict[str, Any]:
+    def get_layer_info(self, file_path: Path) -> dict[str, Any]:
         """Get information about layers in the DXF file."""
         if not DXF_AVAILABLE:
             return {}
@@ -697,7 +697,7 @@ class DXFReader(FileReaderPublisher):
 
 
 # Factory function for easy instantiation
-def create_dxf_reader() -> Optional[DXFReader]:
+def create_dxf_reader() -> DXFReader | None:
     """Create a DXF reader if ezdxf is available."""
     try:
         return DXFReader()

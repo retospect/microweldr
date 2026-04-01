@@ -5,7 +5,7 @@ This file provides backward compatibility imports.
 """
 
 # Backward compatibility imports
-from ..generators.models import WeldPoint, WeldPath
+from ..generators.models import WeldPath, WeldPoint
 
 # Re-export for backward compatibility
-__all__ = ["WeldPoint", "WeldPath"]
+__all__ = ["WeldPath", "WeldPoint"]

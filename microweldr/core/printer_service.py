@@ -3,10 +3,9 @@
 import logging
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 from ..prusalink.client import PrusaLinkClient
-from ..prusalink.exceptions import PrusaLinkError
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +26,7 @@ class PrinterState(Enum):
 class PrinterStatus:
     """Standardized printer status representation."""
 
-    def __init__(self, raw_status: Dict[str, Any]):
+    def __init__(self, raw_status: dict[str, Any]):
         """Initialize from raw status data."""
         self.raw_status = raw_status
         self._parse_status()
@@ -118,7 +117,7 @@ class PrinterService:
                 raise
         return self._client
 
-    def _create_client_from_config(self, config: Dict[str, Any]) -> PrusaLinkClient:
+    def _create_client_from_config(self, config: dict[str, Any]) -> PrusaLinkClient:
         """Create PrusaLink client from configuration dictionary."""
         # Validate required fields
         required_fields = ["host", "username"]
@@ -219,7 +218,7 @@ class PrinterService:
         if not status.is_printing:
             return True
 
-        print(f"⚠️  WARNING: Printer is currently printing!")
+        print("⚠️  WARNING: Printer is currently printing!")
         if status.current_file:
             print(f"   Current file: {status.current_file}")
             print(f"   Progress: {status.progress:.1f}%")
@@ -239,8 +238,8 @@ class PrinterService:
 
     def upload_gcode(
         self,
-        gcode_path: Union[str, Path],
-        remote_filename: Optional[str] = None,
+        gcode_path: str | Path,
+        remote_filename: str | None = None,
         auto_start: bool = False,
         overwrite: bool = True,
     ) -> bool:
@@ -289,7 +288,7 @@ class PrinterService:
             logger.error(f"Failed to set nozzle temperature: {e}")
             return False
 
-    def get_printer_info(self) -> Dict[str, Any]:
+    def get_printer_info(self) -> dict[str, Any]:
         """Get printer information."""
         try:
             return self.client.get_printer_info()
@@ -297,7 +296,7 @@ class PrinterService:
             logger.error(f"Failed to get printer info: {e}")
             return {}
 
-    def get_storage_info(self) -> Dict[str, Any]:
+    def get_storage_info(self) -> dict[str, Any]:
         """Get storage information."""
         try:
             return self.client.get_storage_info()
@@ -305,7 +304,7 @@ class PrinterService:
             logger.error(f"Failed to get storage info: {e}")
             return {}
 
-    def get_job_status(self) -> Optional[Dict[str, Any]]:
+    def get_job_status(self) -> dict[str, Any] | None:
         """Get current job status."""
         try:
             return self.client.get_job_status()
@@ -315,7 +314,7 @@ class PrinterService:
 
 
 # Global printer service instance for reuse
-_printer_service: Optional[PrinterService] = None
+_printer_service: PrinterService | None = None
 
 
 def get_printer_service() -> PrinterService:

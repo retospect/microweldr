@@ -3,9 +3,10 @@
 import logging
 import tempfile
 import threading
+from collections.abc import Generator
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Dict, Generator, List, Optional, Union
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +16,7 @@ class ManagedFile:
 
     def __init__(
         self,
-        file_path: Union[str, Path],
+        file_path: str | Path,
         mode: str = "r",
         encoding: str = "utf-8",
         cleanup_on_error: bool = True,
@@ -123,7 +124,7 @@ class TemporaryFileManager:
     """Context manager for temporary files with automatic cleanup."""
 
     def __init__(
-        self, suffix: str = "", prefix: str = "microweldr_", dir: Optional[str] = None
+        self, suffix: str = "", prefix: str = "microweldr_", dir: str | None = None
     ):
         """Initialize temporary file manager.
 
@@ -135,7 +136,7 @@ class TemporaryFileManager:
         self.suffix = suffix
         self.prefix = prefix
         self.dir = dir
-        self.temp_files: List[Path] = []
+        self.temp_files: list[Path] = []
         self._lock = threading.Lock()
 
     def __enter__(self):
@@ -217,8 +218,8 @@ class ResourcePool:
             max_size: Maximum number of resources in pool
         """
         self.max_size = max_size
-        self.resources: List[Any] = []
-        self.in_use: Dict[int, Any] = {}
+        self.resources: list[Any] = []
+        self.in_use: dict[int, Any] = {}
         self._lock = threading.Lock()
         self._resource_id = 0
 
@@ -329,7 +330,7 @@ class ResourceContext:
 
 @contextmanager
 def safe_gcode_generation(
-    output_path: Union[str, Path], backup: bool = True
+    output_path: str | Path, backup: bool = True
 ) -> Generator[Path, None, None]:
     """Context manager for safe G-code generation with backup and cleanup.
 
@@ -392,7 +393,7 @@ def safe_gcode_generation(
 @contextmanager
 def managed_printer_operation(
     operation_name: str,
-) -> Generator[Dict[str, Any], None, None]:
+) -> Generator[dict[str, Any], None, None]:
     """Context manager for printer operations with status tracking.
 
     Args:

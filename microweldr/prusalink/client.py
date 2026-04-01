@@ -1,13 +1,11 @@
 """PrusaLink API client for G-code submission."""
 
 import logging
-import os
-from pathlib import Path
 import time
-from typing import Any, Dict, List, Optional, Tuple
+from pathlib import Path
+from typing import Any
 
 import requests
-import toml
 from requests.auth import HTTPDigestAuth
 
 from ..core.secrets_config import load_prusalink_config
@@ -16,8 +14,6 @@ from .exceptions import (
     PrusaLinkConfigError,
     PrusaLinkConnectionError,
     PrusaLinkError,
-    PrusaLinkFileError,
-    PrusaLinkJobError,
     PrusaLinkOperationError,
     PrusaLinkUploadError,
     PrusaLinkValidationError,
@@ -29,7 +25,7 @@ logger = logging.getLogger(__name__)
 class PrusaLinkClient:
     """Client for interacting with PrusaLink API."""
 
-    def __init__(self, config_path: Optional[str] = None):
+    def __init__(self, config_path: str | None = None):
         """Initialize PrusaLink client.
 
         Args:
@@ -43,7 +39,7 @@ class PrusaLinkClient:
         self.auth = HTTPDigestAuth(self.config["username"], password)
         self.timeout = self.config.get("timeout", 30)
 
-    def _load_config(self, config_path: Optional[str] = None) -> Dict[str, Any]:
+    def _load_config(self, config_path: str | None = None) -> dict[str, Any]:
         """Load configuration using hierarchical config loading or specific file."""
         try:
             prusalink_config = load_prusalink_config(config_path)
@@ -91,7 +87,7 @@ class PrusaLinkClient:
             # Return False for any connection issues
             return False
 
-    def get_printer_info(self) -> Dict[str, Any]:
+    def get_printer_info(self) -> dict[str, Any]:
         """Get printer information.
 
         Returns:
@@ -120,7 +116,7 @@ class PrusaLinkClient:
         except requests.exceptions.RequestException as e:
             raise PrusaLinkConnectionError(f"Connection failed: {e}")
 
-    def get_storage_info(self) -> Dict[str, Any]:
+    def get_storage_info(self) -> dict[str, Any]:
         """Get available storage information.
 
         Returns:
@@ -148,11 +144,11 @@ class PrusaLinkClient:
     def upload_gcode(
         self,
         gcode_path: str,
-        storage: Optional[str] = None,
-        remote_filename: Optional[str] = None,
-        auto_start: Optional[bool] = None,
+        storage: str | None = None,
+        remote_filename: str | None = None,
+        auto_start: bool | None = None,
         overwrite: bool = False,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Upload G-code file to printer.
 
         Args:
@@ -255,7 +251,7 @@ class PrusaLinkClient:
         except requests.exceptions.RequestException as e:
             raise PrusaLinkConnectionError(f"Connection failed during upload: {e}")
 
-    def get_printer_status(self) -> Dict[str, Any]:
+    def get_printer_status(self) -> dict[str, Any]:
         """Get printer status including readiness for printing.
 
         Returns:
@@ -297,7 +293,7 @@ class PrusaLinkClient:
         except PrusaLinkError:
             return False
 
-    def get_job_status(self) -> Optional[Dict[str, Any]]:
+    def get_job_status(self) -> dict[str, Any] | None:
         """Get current job status.
 
         Returns:
@@ -355,7 +351,6 @@ class PrusaLinkClient:
         Returns:
             True if printer is ready, False if timeout
         """
-        import time
 
         start_time = time.time()
 

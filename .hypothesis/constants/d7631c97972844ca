@@ -1,0 +1,4 @@
+# file: /Users/reto/repos/PrusaWelder/microweldr/monitoring/__init__.py
+# hypothesis_version: 6.142.4
+
+['MonitorMode', 'PrintMonitor']

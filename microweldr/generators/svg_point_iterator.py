@@ -1,8 +1,9 @@
 """SVG point iterator for streaming point generation."""
 
 import logging
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Iterator, Dict, Any
+from typing import Any
 
 from ..core.unified_config import UnifiedConfig
 
@@ -36,7 +37,7 @@ class SVGPointIterator:
         else:
             self.dot_spacing = dot_spacing
 
-    def iterate_points(self, file_path: Path) -> Iterator[Dict[str, Any]]:
+    def iterate_points(self, file_path: Path) -> Iterator[dict[str, Any]]:
         """Iterate through points in an SVG file.
 
         Args:

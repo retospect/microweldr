@@ -3,7 +3,6 @@
 import logging
 import sys
 from pathlib import Path
-from typing import Optional
 
 import click
 
@@ -12,7 +11,6 @@ from ..core.constants import (
     ConfigKeys,
     ConfigSections,
     DefaultValues,
-    ErrorMessages,
     GCodeCommands,
 )
 from ..prusalink.client import PrusaLinkClient
@@ -73,7 +71,7 @@ def temp_off(
     bed_only: bool,
     nozzle_only: bool,
     chamber_only: bool,
-    cooldown_temp: Optional[int],
+    cooldown_temp: int | None,
     force: bool,
 ):
     """Turn off printer temperatures for safe handling.
@@ -121,7 +119,7 @@ def temp_off(
         if turn_off_chamber:
             targets.append("Chamber → OFF")
 
-        click.echo(f"🌡️  Temperature Control: Cooling Down")
+        click.echo("🌡️  Temperature Control: Cooling Down")
         click.echo(f"Targets: {', '.join(targets)}")
 
         # Confirmation
@@ -287,9 +285,9 @@ def temp_off(
 def temp_on(
     secrets_config: Path,
     config: Path,
-    bed_temp: Optional[int],
-    nozzle_temp: Optional[int],
-    chamber_temp: Optional[int],
+    bed_temp: int | None,
+    nozzle_temp: int | None,
+    chamber_temp: int | None,
     wait: bool,
     force: bool,
 ):
@@ -338,7 +336,7 @@ def temp_on(
             sys.exit(1)
 
         # Show heating targets
-        click.echo(f"🌡️  Temperature Control: Heating Up")
+        click.echo("🌡️  Temperature Control: Heating Up")
         click.echo(
             f"Targets: Bed → {bed_temp}°C, Nozzle → {nozzle_temp}°C, Chamber → {chamber_temp}°C"
         )

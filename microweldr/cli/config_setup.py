@@ -2,7 +2,6 @@
 
 import shutil
 from pathlib import Path
-from typing import Optional
 
 import click
 
@@ -150,7 +149,7 @@ def validate():
 @config.command()
 @click.argument("key")
 @click.argument("value", required=False)
-def get(key: str, value: Optional[str]):
+def get(key: str, value: str | None):
     """Get or set a configuration value."""
     try:
         secrets_config = SecretsConfig()

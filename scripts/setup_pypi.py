@@ -13,9 +13,7 @@ from pathlib import Path
 def run_command(cmd: str, check: bool = True) -> subprocess.CompletedProcess:
     """Run a shell command and return the result."""
     print(f"🔧 Running: {cmd}")
-    result = subprocess.run(
-        shlex.split(cmd), capture_output=True, text=True
-    )  # nosec B603
+    result = subprocess.run(shlex.split(cmd), capture_output=True, text=True)  # nosec B603
 
     if check and result.returncode != 0:
         print(f"❌ Command failed: {cmd}")

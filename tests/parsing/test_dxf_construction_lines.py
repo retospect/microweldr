@@ -80,8 +80,8 @@ EOF
             iterator = PointIteratorFactory.create_iterator(str(dxf_path))
             points = list(iterator.iterate_points(dxf_path))
 
-            assert (
-                len(points) == 0
-            ), f"Expected no points from construction layers, got {len(points)}"
+            assert len(points) == 0, (
+                f"Expected no points from construction layers, got {len(points)}"
+            )
         finally:
             dxf_path.unlink()

@@ -4,10 +4,7 @@ import math
 import tempfile
 from pathlib import Path
 
-import pytest
-
 from microweldr.core.config import Config
-from microweldr.core.models import WeldPoint
 from microweldr.parsers.svg_parser import SVGParser
 
 
@@ -191,9 +188,9 @@ min_animation_duration = 10.0
                     ):
                         found_corner = True
                         break
-                assert (
-                    found_corner
-                ), f"Corner ({expected_x}, {expected_y}) not found in rectangle points"
+                assert found_corner, (
+                    f"Corner ({expected_x}, {expected_y}) not found in rectangle points"
+                )
 
         finally:
             svg_path.unlink()
@@ -240,9 +237,9 @@ min_animation_duration = 10.0
                     ):
                         found_point = True
                         break
-                assert (
-                    found_point
-                ), f"Expected point ({expected_x}, {expected_y}) not found in path"
+                assert found_point, (
+                    f"Expected point ({expected_x}, {expected_y}) not found in path"
+                )
 
         finally:
             svg_path.unlink()
@@ -312,15 +309,15 @@ min_animation_duration = 10.0
                 first_point = path.points[0]
                 last_point = path.points[-1]
 
-                assert (
-                    abs(first_point.x - last_point.x) < 0.001
-                ), f"Circle {i} not closed in X"
-                assert (
-                    abs(first_point.y - last_point.y) < 0.001
-                ), f"Circle {i} not closed in Y"
-                assert (
-                    first_point.weld_type == last_point.weld_type
-                ), f"Circle {i} weld types don't match"
+                assert abs(first_point.x - last_point.x) < 0.001, (
+                    f"Circle {i} not closed in X"
+                )
+                assert abs(first_point.y - last_point.y) < 0.001, (
+                    f"Circle {i} not closed in Y"
+                )
+                assert first_point.weld_type == last_point.weld_type, (
+                    f"Circle {i} weld types don't match"
+                )
 
         finally:
             svg_path.unlink()
@@ -364,9 +361,9 @@ min_animation_duration = 10.0
                     open_paths.append(path)
 
             # We should have 3 closed paths (circle, rectangle, path with Z) and 1 open (line)
-            assert (
-                len(closed_paths) == 3
-            ), f"Expected 3 closed paths, got {len(closed_paths)}"
+            assert len(closed_paths) == 3, (
+                f"Expected 3 closed paths, got {len(closed_paths)}"
+            )
             assert len(open_paths) == 1, f"Expected 1 open path, got {len(open_paths)}"
 
             # The open path should be the line
@@ -377,12 +374,12 @@ min_animation_duration = 10.0
             for i, path in enumerate(closed_paths):
                 first_point = path.points[0]
                 last_point = path.points[-1]
-                assert (
-                    abs(first_point.x - last_point.x) < 0.001
-                ), f"Closed path {i} not closed in X"
-                assert (
-                    abs(first_point.y - last_point.y) < 0.001
-                ), f"Closed path {i} not closed in Y"
+                assert abs(first_point.x - last_point.x) < 0.001, (
+                    f"Closed path {i} not closed in X"
+                )
+                assert abs(first_point.y - last_point.y) < 0.001, (
+                    f"Closed path {i} not closed in Y"
+                )
 
         finally:
             svg_path.unlink()
@@ -438,9 +435,9 @@ min_animation_duration = 10.0
                         good_angles += 1
 
                 # Most angles should be reasonably distributed
-                assert (
-                    good_angles >= len(angles) * 0.5
-                ), f"Only {good_angles}/{len(angles)-1} angles well distributed"
+                assert good_angles >= len(angles) * 0.5, (
+                    f"Only {good_angles}/{len(angles) - 1} angles well distributed"
+                )
 
         finally:
             svg_path.unlink()

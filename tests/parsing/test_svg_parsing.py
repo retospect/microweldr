@@ -1,8 +1,8 @@
 """Tests for SVG file parsing to points."""
 
-import pytest
 from pathlib import Path
-from typing import List
+
+import pytest
 
 from microweldr.generators.models import WeldPoint
 from microweldr.generators.point_iterator_factory import PointIteratorFactory
@@ -16,7 +16,7 @@ class TestSVGParsing:
         """Get the fixtures directory path."""
         return Path(__file__).parent.parent / "fixtures" / "svg"
 
-    def parse_svg_to_points(self, filename: str) -> List[WeldPoint]:
+    def parse_svg_to_points(self, filename: str) -> list[WeldPoint]:
         """Parse an SVG file to points using the point iterator."""
         svg_path = self.fixtures_dir / filename
         assert svg_path.exists(), f"Test fixture {filename} not found"
@@ -31,9 +31,9 @@ class TestSVGParsing:
 
         # Should generate points along 40mm line at default spacing
         assert len(points) > 0, "Should generate at least some points"
-        assert (
-            len(points) >= 15
-        ), f"Expected at least 15 points for 40mm line, got {len(points)}"
+        assert len(points) >= 15, (
+            f"Expected at least 15 points for 40mm line, got {len(points)}"
+        )
 
         # First and last points should be at line endpoints
         assert points[0]["x"] == pytest.approx(10.0, abs=0.1)
@@ -50,9 +50,9 @@ class TestSVGParsing:
 
         # Circle with 15mm radius: circumference ~94.2mm
         assert len(points) > 0, "Should generate points for circle"
-        assert (
-            len(points) >= 30
-        ), f"Expected at least 30 points for circle, got {len(points)}"
+        assert len(points) >= 30, (
+            f"Expected at least 30 points for circle, got {len(points)}"
+        )
 
         # All points should be normal weld type
         assert all(p["weld_type"] == "normal" for p in points)
@@ -65,9 +65,9 @@ class TestSVGParsing:
             distance = (
                 (point["x"] - center_x) ** 2 + (point["y"] - center_y) ** 2
             ) ** 0.5
-            assert distance == pytest.approx(
-                radius, abs=1.0
-            ), f"Point {point} not on circle"
+            assert distance == pytest.approx(radius, abs=1.0), (
+                f"Point {point} not on circle"
+            )
 
     def test_rectangle_parsing(self):
         """Test parsing a rectangle element."""
@@ -75,9 +75,9 @@ class TestSVGParsing:
 
         # Rectangle 40x20mm: perimeter 120mm
         assert len(points) > 0, "Should generate points for rectangle"
-        assert (
-            len(points) >= 40
-        ), f"Expected at least 40 points for rectangle perimeter, got {len(points)}"
+        assert len(points) >= 40, (
+            f"Expected at least 40 points for rectangle perimeter, got {len(points)}"
+        )
 
         # All points should be normal weld type
         assert all(p["weld_type"] == "normal" for p in points)
@@ -87,21 +87,21 @@ class TestSVGParsing:
         min_y, max_y = 20.0, 40.0  # y: 20 to 20+20
 
         for point in points:
-            assert (
-                min_x <= point["x"] <= max_x
-            ), f"Point x={point['x']} outside rectangle bounds"
-            assert (
-                min_y <= point["y"] <= max_y
-            ), f"Point y={point['y']} outside rectangle bounds"
+            assert min_x <= point["x"] <= max_x, (
+                f"Point x={point['x']} outside rectangle bounds"
+            )
+            assert min_y <= point["y"] <= max_y, (
+                f"Point y={point['y']} outside rectangle bounds"
+            )
 
     def test_path_complex_parsing(self):
         """Test parsing a complex path with curves."""
         points = self.parse_svg_to_points("path_complex.svg")
 
         assert len(points) > 0, "Should generate points for complex path"
-        assert (
-            len(points) >= 20
-        ), f"Expected at least 20 points for complex path, got {len(points)}"
+        assert len(points) >= 20, (
+            f"Expected at least 20 points for complex path, got {len(points)}"
+        )
 
         # All points should be normal weld type
         assert all(p["weld_type"] == "normal" for p in points)
@@ -118,9 +118,9 @@ class TestSVGParsing:
         points = self.parse_svg_to_points("arc_quarter_circle.svg")
 
         assert len(points) > 0, "Should generate points for arc"
-        assert (
-            len(points) >= 1
-        ), f"Expected at least 1 point for quarter circle arc, got {len(points)}"
+        assert len(points) >= 1, (
+            f"Expected at least 1 point for quarter circle arc, got {len(points)}"
+        )
 
         # All points should be normal weld type
         assert all(p["weld_type"] == "normal" for p in points)
@@ -183,15 +183,15 @@ class TestSVGParsing:
 
         # This is our comprehensive test - we just verify it parses and generates reasonable point count
         assert len(points) > 0, "Should generate points for comprehensive file"
-        assert (
-            len(points) >= 50
-        ), f"Expected at least 50 points for comprehensive file, got {len(points)}"
+        assert len(points) >= 50, (
+            f"Expected at least 50 points for comprehensive file, got {len(points)}"
+        )
 
         # Should have multiple weld types
         weld_types = {p["weld_type"] for p in points}
-        assert (
-            len(weld_types) >= 1
-        ), f"Expected at least one weld type, got {weld_types}"
+        assert len(weld_types) >= 1, (
+            f"Expected at least one weld type, got {weld_types}"
+        )
 
         print(
             f"Comprehensive SVG file generated {len(points)} points with weld types: {weld_types}"

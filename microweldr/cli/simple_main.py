@@ -2,24 +2,18 @@
 
 import argparse
 import sys
-import logging
+import time
 from pathlib import Path
-from typing import Optional, List
 
 from ..core.config import Config
-from ..core.logging_config import setup_logging
-from ..generators.point_iterator_factory import PointIteratorFactory
-from ..outputs.streaming_gcode_subscriber import StreamingGCodeSubscriber
-from ..outputs.gif_animation_subscriber import GIFAnimationSubscriber
 from ..core.events import (
     Event,
     EventType,
     PathEvent,
-    PointEvent,
-    OutputEvent,
-    publish_event,
 )
-import time
+from ..core.logging_config import setup_logging
+from ..outputs.bambu_3mf_subscriber import Bambu3mfSubscriber
+from ..outputs.gif_animation_subscriber import GIFAnimationSubscriber
 
 
 def get_version() -> str:
@@ -124,6 +118,13 @@ File Type Detection:
         help="Cool bed after welding (default: not included, if option is present bed is cooled to 0°C)",
     )
 
+    parser.add_argument(
+        "--bambu",
+        dest="bambu",
+        action="store_true",
+        help="Also generate a Bambu .gcode.3mf file (plate 1) with weld pattern thumbnail",
+    )
+
     # Configuration and Logging
     parser.add_argument(
         "-quiet",
@@ -160,7 +161,7 @@ def auto_generate_output_filename(input_file: str) -> str:
 
 def process_weld_file(
     file_path: str, config: Config, is_frangible: bool = False
-) -> List[dict]:
+) -> list[dict]:
     """Process a weld file and return points."""
     if not Path(file_path).exists():
         raise FileNotFoundError(f"File not found: {file_path}")
@@ -187,7 +188,7 @@ def process_weld_file(
     return points
 
 
-def generate_gcode(points: List[dict], output_path: str, config: Config, args) -> bool:
+def generate_gcode(points: list[dict], output_path: str, config: Config, args) -> bool:
     """Generate G-code using two-pass coordinate centering."""
     try:
         print(f"⚙️  Generating G-code: {output_path}")
@@ -291,7 +292,7 @@ def generate_gcode(points: List[dict], output_path: str, config: Config, args) -
         return False
 
 
-def generate_animation(points: List[dict], output_path: str, config: Config) -> bool:
+def generate_animation(points: list[dict], output_path: str, config: Config) -> bool:
     """Generate animated GIF showing weld sequence progression."""
     try:
         output_path_obj = Path(output_path)
@@ -374,6 +375,67 @@ def generate_animation(points: List[dict], output_path: str, config: Config) -> 
         return False
 
 
+def generate_bambu_3mf(
+    points: list[dict], gcode_path: str, output_3mf_path: str, config: Config
+) -> bool:
+    """Package generated G-code into a Bambu .gcode.3mf with weld pattern thumbnail."""
+    try:
+        print(f"📦 Generating Bambu 3MF: {output_3mf_path}")
+
+        weld_spot_diameter = config.get("nozzle", "outer_diameter", 2.0)
+
+        subscriber = Bambu3mfSubscriber(
+            gcode_path=Path(gcode_path),
+            output_3mf_path=Path(output_3mf_path),
+            weld_spot_diameter=weld_spot_diameter,
+        )
+
+        # Feed weld points so the subscriber can render the thumbnail
+        timestamp = time.time()
+        current_path_id = None
+        for point in points:
+            path_id = point.get("path_id", "default_path")
+
+            if path_id != current_path_id:
+                if current_path_id is not None:
+                    subscriber.handle_event(
+                        PathEvent(action="path_complete", path_id=current_path_id)
+                    )
+                subscriber.handle_event(PathEvent(action="path_start", path_id=path_id))
+                current_path_id = path_id
+
+            subscriber.handle_event(
+                PathEvent(action="point_added", path_id=path_id, point=point)
+            )
+
+        if current_path_id is not None:
+            subscriber.handle_event(
+                PathEvent(action="path_complete", path_id=current_path_id)
+            )
+
+        # Trigger 3MF generation
+        subscriber.handle_event(
+            Event(
+                event_type=EventType.OUTPUT_GENERATION,
+                timestamp=timestamp,
+                data={"action": "processing_complete"},
+                source="microweldr_cli",
+            )
+        )
+
+        if Path(output_3mf_path).exists():
+            file_size = Path(output_3mf_path).stat().st_size
+            print(f"✅ Bambu 3MF generated: {output_3mf_path} ({file_size:,} bytes)")
+            return True
+        else:
+            print(f"❌ Failed to generate Bambu 3MF: {output_3mf_path}")
+            return False
+
+    except Exception as e:
+        print(f"❌ Bambu 3MF generation failed: {e}")
+        return False
+
+
 def main():
     """Main entry point for simplified CLI."""
     parser = create_parser()
@@ -437,6 +499,16 @@ def main():
         if not generate_gcode(all_points, gcode_output, config, args):
             return 1
 
+        # Generate Bambu .gcode.3mf if requested
+        bambu_output = None
+        if getattr(args, "bambu", False):
+            gcode_path = Path(gcode_output)
+            bambu_output = str(gcode_path.with_suffix(".gcode.3mf"))
+            if not generate_bambu_3mf(all_points, gcode_output, bambu_output, config):
+                print(
+                    "⚠️  Bambu 3MF generation failed, but G-code was created successfully"
+                )
+
         # Generate animation if requested
         animation_output = None
         if args.animation:
@@ -453,8 +525,10 @@ def main():
                 )
 
         print("\n🎉 Welding preparation completed successfully!")
-        print(f"📁 Output files:")
+        print("📁 Output files:")
         print(f"   • G-code: {gcode_output}")
+        if bambu_output:
+            print(f"   • Bambu 3MF: {bambu_output}")
         if animation_output:
             print(f"   • Animation: {animation_output}")
 

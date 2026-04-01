@@ -3,7 +3,8 @@ Streaming outline subscriber that calculates bounding rectangle for coordinate c
 """
 
 import logging
-from typing import List, Optional, Tuple, Dict, Any
+from typing import Any
+
 from ..core.events import Event, EventType
 from ..processors.subscribers import EventSubscriber
 
@@ -30,24 +31,24 @@ class OutlineSubscriber(EventSubscriber):
         self.bed_center_y = bed_size_y / 2
 
         # Coordinate tracking
-        self.x_coords: List[float] = []
-        self.y_coords: List[float] = []
+        self.x_coords: list[float] = []
+        self.y_coords: list[float] = []
         self.total_points = 0
 
         # Calculated bounds and offset
         self._bounds_calculated = False
-        self._x_min: Optional[float] = None
-        self._x_max: Optional[float] = None
-        self._y_min: Optional[float] = None
-        self._y_max: Optional[float] = None
-        self._offset_x: Optional[float] = None
-        self._offset_y: Optional[float] = None
+        self._x_min: float | None = None
+        self._x_max: float | None = None
+        self._y_min: float | None = None
+        self._y_max: float | None = None
+        self._offset_x: float | None = None
+        self._offset_y: float | None = None
 
     def get_priority(self) -> int:
         """Get subscriber priority (lower number = higher priority)."""
         return 10  # High priority - needs to run before G-code generation
 
-    def get_subscribed_events(self) -> List[EventType]:
+    def get_subscribed_events(self) -> list[EventType]:
         """Get subscribed event types."""
         return [
             EventType.POINT_PROCESSING,
@@ -105,7 +106,7 @@ class OutlineSubscriber(EventSubscriber):
                 self.total_points += 1
                 logger.debug(f"OutlineSubscriber: Collected path point ({x}, {y})")
 
-    def calculate_bounds_and_offset(self) -> Tuple[float, float]:
+    def calculate_bounds_and_offset(self) -> tuple[float, float]:
         """Calculate bounding box and centering offset.
 
         Returns:
@@ -135,7 +136,7 @@ class OutlineSubscriber(EventSubscriber):
         width = self._x_max - self._x_min
         height = self._y_max - self._y_min
 
-        logger.info(f"Outline Analysis Complete:")
+        logger.info("Outline Analysis Complete:")
         logger.info(f"  Points collected: {self.total_points}")
         logger.info(
             f"  Pattern bounds: X({self._x_min:.3f} to {self._x_max:.3f}), Y({self._y_min:.3f} to {self._y_max:.3f})"
@@ -180,7 +181,7 @@ class OutlineSubscriber(EventSubscriber):
 
         return self._offset_x, self._offset_y
 
-    def get_centering_offset(self) -> Tuple[float, float]:
+    def get_centering_offset(self) -> tuple[float, float]:
         """Get the calculated centering offset.
 
         Returns:
@@ -191,7 +192,7 @@ class OutlineSubscriber(EventSubscriber):
 
         return self._offset_x or 0.0, self._offset_y or 0.0
 
-    def get_bounds(self) -> Dict[str, float]:
+    def get_bounds(self) -> dict[str, float]:
         """Get the calculated bounding box.
 
         Returns:
@@ -207,7 +208,7 @@ class OutlineSubscriber(EventSubscriber):
             "y_max": self._y_max or 0.0,
         }
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """Get outline analysis statistics."""
         stats = {
             "total_points": self.total_points,

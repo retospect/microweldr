@@ -23,10 +23,9 @@ Developer Mode Features:
 
 import argparse
 import sys
-import time
 import threading
+import time
 from pathlib import Path
-from typing import List, Optional, Tuple
 
 try:
     import serial
@@ -56,14 +55,14 @@ class PrusaUSBTerminal:
     def __init__(self, baudrate: int = 115200, timeout: float = 2.0):
         self.baudrate = baudrate
         self.timeout = timeout
-        self.connection: Optional[serial.Serial] = None
+        self.connection: serial.Serial | None = None
         self.printer_info = {}
-        self.keepalive_thread: Optional[threading.Thread] = None
+        self.keepalive_thread: threading.Thread | None = None
         self.keepalive_stop = threading.Event()
         self.last_user_activity = time.time()
         self.last_line_was_keepalive = False
 
-    def scan_usb_ports(self) -> List[Tuple[str, str, str]]:
+    def scan_usb_ports(self) -> list[tuple[str, str, str]]:
         """Scan for potential Prusa printers on USB ports."""
         print("🔍 Scanning USB ports for Prusa printers...")
 
@@ -663,7 +662,7 @@ class PrusaUSBTerminal:
                 return False
 
             print(f"📁 Reading G-code file: {filename}")
-            with open(filepath, "r", encoding="utf-8") as f:
+            with open(filepath, encoding="utf-8") as f:
                 lines = f.readlines()
 
             # Filter out comments and empty lines for cleaner output
@@ -674,7 +673,7 @@ class PrusaUSBTerminal:
                     gcode_lines.append(line)
 
             print(f"📊 Found {len(gcode_lines)} G-code commands to send")
-            print(f"📡 Starting transmission...")
+            print("📡 Starting transmission...")
 
             success_count = 0
             error_count = 0
@@ -709,7 +708,7 @@ class PrusaUSBTerminal:
                 else:
                     success_count += 1
 
-            print(f"\n✅ G-code transmission complete!")
+            print("\n✅ G-code transmission complete!")
             print(f"   Successful: {success_count}")
             print(f"   Errors: {error_count}")
             print(f"   Total: {len(gcode_lines)}")
@@ -834,7 +833,7 @@ def main():
         # Show printer info
         info = terminal.get_printer_info()
         if info:
-            print(f"\n🖨️  Printer Information:")
+            print("\n🖨️  Printer Information:")
             for key, value in info.items():
                 print(f"   {key}: {value}")
 

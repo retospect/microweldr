@@ -4,7 +4,6 @@ import logging
 import logging.handlers
 import sys
 from pathlib import Path
-from typing import Optional
 
 
 class WeldFormatter(logging.Formatter):
@@ -57,7 +56,7 @@ class WeldFormatter(logging.Formatter):
 
 def setup_logging(
     level: str = "INFO",
-    log_file: Optional[str] = None,
+    log_file: str | None = None,
     console: bool = True,
     max_bytes: int = 10 * 1024 * 1024,  # 10MB
     backup_count: int = 5,
@@ -151,7 +150,7 @@ def get_logger(name: str, operation: str = "general") -> logging.Logger:
 class LogContext:
     """Context manager for operation-specific logging."""
 
-    def __init__(self, operation: str, logger: Optional[logging.Logger] = None):
+    def __init__(self, operation: str, logger: logging.Logger | None = None):
         """Initialize log context.
 
         Args:

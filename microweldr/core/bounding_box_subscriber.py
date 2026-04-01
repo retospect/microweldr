@@ -1,7 +1,7 @@
 """Bounding box subscriber for real-time extent measurement in streaming architecture."""
 
 import logging
-from typing import List, Dict, Any, Optional
+
 from .events import Event, EventType
 from .subscribers import EventSubscriber
 
@@ -17,17 +17,17 @@ class BoundingBoxSubscriber(EventSubscriber):
     def __init__(self):
         """Initialize bounding box subscriber."""
         # Overall bounding box - just track the extents
-        self.min_x: Optional[float] = None
-        self.min_y: Optional[float] = None
-        self.max_x: Optional[float] = None
-        self.max_y: Optional[float] = None
+        self.min_x: float | None = None
+        self.min_y: float | None = None
+        self.max_x: float | None = None
+        self.max_y: float | None = None
         self.total_points: int = 0
 
     def get_priority(self) -> int:
         """Get subscriber priority (lower number = higher priority)."""
         return 10  # Medium priority - after validation but before output generation
 
-    def get_subscribed_events(self) -> List[EventType]:
+    def get_subscribed_events(self) -> list[EventType]:
         """Get subscribed event types."""
         return [EventType.POINT_PROCESSING]
 
@@ -73,7 +73,7 @@ class BoundingBoxSubscriber(EventSubscriber):
             for bound in [self.min_x, self.min_y, self.max_x, self.max_y]
         )
 
-    def get_bounds(self) -> Dict[str, float]:
+    def get_bounds(self) -> dict[str, float]:
         """Get the bounding box extents."""
         if not self.has_bounds():
             return {

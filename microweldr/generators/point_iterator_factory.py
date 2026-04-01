@@ -1,11 +1,12 @@
 """Factory for creating appropriate point iterators based on file type."""
 
 import logging
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Iterator, Dict, Any, Union, Protocol
+from typing import Any, Protocol
 
-from .svg_point_iterator import SVGPointIterator
 from .dxf_point_iterator import DXFPointIterator
+from .svg_point_iterator import SVGPointIterator
 
 logger = logging.getLogger(__name__)
 
@@ -13,7 +14,7 @@ logger = logging.getLogger(__name__)
 class PointIterator(Protocol):
     """Protocol for point iterators."""
 
-    def iterate_points(self, file_path: Path) -> Iterator[Dict[str, Any]]:
+    def iterate_points(self, file_path: Path) -> Iterator[dict[str, Any]]:
         """Iterate through points in a file."""
         ...
 
@@ -36,7 +37,7 @@ class PointIteratorFactory:
     ]
 
     @classmethod
-    def create_iterator(cls, file_path: Union[str, Path], config=None) -> PointIterator:
+    def create_iterator(cls, file_path: str | Path, config=None) -> PointIterator:
         """Create appropriate point iterator for the given file.
 
         Args:
@@ -65,9 +66,10 @@ class PointIteratorFactory:
                     f"Using {iterator_class.__name__} for {file_path} with {dot_spacing}mm spacing"
                 )
                 # Pass dot_spacing to iterators that support it
-                if iterator_class.__name__ == "DXFPointIterator":
-                    return iterator_class(dot_spacing=dot_spacing)
-                elif iterator_class.__name__ == "SVGPointIterator":
+                if (
+                    iterator_class.__name__ == "DXFPointIterator"
+                    or iterator_class.__name__ == "SVGPointIterator"
+                ):
                     return iterator_class(dot_spacing=dot_spacing)
                 else:
                     return iterator_class()
@@ -90,8 +92,8 @@ class PointIteratorFactory:
 
 
 def iterate_points_from_file(
-    file_path: Union[str, Path], config=None, enable_deduplication: bool = True
-) -> Iterator[Dict[str, Any]]:
+    file_path: str | Path, config=None, enable_deduplication: bool = True
+) -> Iterator[dict[str, Any]]:
     """
     Iterator that yields points from DXF/SVG files with optional deduplication.
 
@@ -127,7 +129,7 @@ def iterate_points_from_file(
         yield from iterator.iterate_points(file_path)
 
 
-def count_points_in_file(file_path: Union[str, Path], config=None) -> int:
+def count_points_in_file(file_path: str | Path, config=None) -> int:
     """Count total points in a file without storing them.
 
     Args:

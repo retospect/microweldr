@@ -3,11 +3,12 @@
 import tempfile
 from pathlib import Path
 from unittest.mock import Mock
+
 import pytest
 
 from microweldr.core.config import Config
+from microweldr.core.events import Event, EventType, PathEvent
 from microweldr.outputs.streaming_gcode_subscriber import StreamingGCodeSubscriber
-from microweldr.core.events import PathEvent, Event, EventType
 
 
 @pytest.fixture
@@ -97,7 +98,7 @@ class TestWeldHeights:
             subscriber.handle_event(end_event)
 
             # Check G-code content
-            with open(tmp_path, "r") as f:
+            with open(tmp_path) as f:
                 gcode_content = f.read()
 
             # Verify normal weld height (0.1mm)
@@ -153,7 +154,7 @@ class TestWeldHeights:
             subscriber.handle_event(end_event)
 
             # Check G-code content
-            with open(tmp_path, "r") as f:
+            with open(tmp_path) as f:
                 gcode_content = f.read()
 
             # Verify frangible weld height (0.35mm) and time (0.5s)
@@ -221,7 +222,7 @@ class TestWeldHeights:
             subscriber.handle_event(end_event)
 
             # Check G-code content
-            with open(tmp_path, "r") as f:
+            with open(tmp_path) as f:
                 gcode_content = f.read()
 
             # Verify both weld types have correct heights and times
@@ -235,9 +236,9 @@ class TestWeldHeights:
             frangible_count = gcode_content.count("G1 Z0.35 F3000")
 
             assert normal_count == 1, f"Expected 1 normal weld, got {normal_count}"
-            assert (
-                frangible_count == 1
-            ), f"Expected 1 frangible weld, got {frangible_count}"
+            assert frangible_count == 1, (
+                f"Expected 1 frangible weld, got {frangible_count}"
+            )
 
         finally:
             if tmp_path.exists():
@@ -251,18 +252,18 @@ class TestWeldHeights:
         frangible_height = config.get("frangible_welds", "weld_height")
 
         # Verify configuration values
-        assert (
-            normal_height == 0.1
-        ), f"Expected normal weld height 0.1mm, got {normal_height}mm"
-        assert (
-            frangible_height == 0.35
-        ), f"Expected frangible weld height 0.35mm, got {frangible_height}mm"
+        assert normal_height == 0.1, (
+            f"Expected normal weld height 0.1mm, got {normal_height}mm"
+        )
+        assert frangible_height == 0.35, (
+            f"Expected frangible weld height 0.35mm, got {frangible_height}mm"
+        )
 
         # Verify weld times as well
         normal_time = config.get("normal_welds", "weld_time")
         frangible_time = config.get("frangible_welds", "weld_time")
 
         assert normal_time == 0.5, f"Expected normal weld time 0.5s, got {normal_time}s"
-        assert (
-            frangible_time == 0.5
-        ), f"Expected frangible weld time 0.5s, got {frangible_time}s"
+        assert frangible_time == 0.5, (
+            f"Expected frangible weld time 0.5s, got {frangible_time}s"
+        )

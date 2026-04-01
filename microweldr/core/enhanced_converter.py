@@ -1,12 +1,11 @@
 """Enhanced converter with event-driven architecture and curve support."""
 
-from pathlib import Path
-from typing import List, Optional, Set
 import time
+from pathlib import Path
 
 from .config import Config
-from .models import WeldPath
 from .enhanced_svg_parser import EnhancedSVGParser
+from .models import WeldPath
 
 # Simplified converter without event system
 
@@ -28,15 +27,15 @@ class EnhancedSVGToGCodeConverter:
         self.svg_parser = EnhancedSVGParser(dot_spacing=dot_spacing)
 
         # Store parsed paths and coordinate transformation
-        self.weld_paths: List[WeldPath] = []
+        self.weld_paths: list[WeldPath] = []
         self.offset_x = 0.0
         self.offset_y = 0.0
         self.margin_info = None
 
         # Subscribers
-        self.subscribers: List[EventSubscriber] = []
-        self.progress_tracker: Optional[ProgressTracker] = None
-        self.statistics_collector: Optional[StatisticsSubscriber] = None
+        self.subscribers: list[EventSubscriber] = []
+        self.progress_tracker: ProgressTracker | None = None
+        self.statistics_collector: StatisticsSubscriber | None = None
 
     def add_subscriber(self, subscriber: EventSubscriber) -> None:
         """Add a subscriber to the event system."""
@@ -51,8 +50,8 @@ class EnhancedSVGToGCodeConverter:
 
     def setup_default_subscribers(
         self,
-        gcode_path: Optional[Path] = None,
-        animation_path: Optional[Path] = None,
+        gcode_path: Path | None = None,
+        animation_path: Path | None = None,
         enable_statistics: bool = True,
     ) -> None:
         """Set up default subscribers for common outputs."""
@@ -80,10 +79,10 @@ class EnhancedSVGToGCodeConverter:
     def convert_with_events(
         self,
         svg_path: str | Path,
-        gcode_path: Optional[str | Path] = None,
-        animation_path: Optional[str | Path] = None,
+        gcode_path: str | Path | None = None,
+        animation_path: str | Path | None = None,
         enable_statistics: bool = True,
-    ) -> List[WeldPath]:
+    ) -> list[WeldPath]:
         """Convert SVG to outputs using event-driven architecture."""
 
         svg_path = Path(svg_path)
@@ -142,8 +141,8 @@ class EnhancedSVGToGCodeConverter:
                 self.remove_subscriber(subscriber)
 
     def convert_streaming(
-        self, svg_path: str | Path, output_subscribers: List[EventSubscriber]
-    ) -> List[WeldPath]:
+        self, svg_path: str | Path, output_subscribers: list[EventSubscriber]
+    ) -> list[WeldPath]:
         """Convert with custom subscribers for streaming/real-time processing."""
 
         svg_path = Path(svg_path)
@@ -176,7 +175,7 @@ class EnhancedSVGToGCodeConverter:
             for subscriber in self.subscribers.copy():
                 self.remove_subscriber(subscriber)
 
-    def get_supported_curve_types(self) -> Set[str]:
+    def get_supported_curve_types(self) -> set[str]:
         """Get the set of supported SVG curve types."""
         return {
             "quadratic_bezier",  # Q command
@@ -186,7 +185,7 @@ class EnhancedSVGToGCodeConverter:
             "elliptical_arc",  # A command
         }
 
-    def get_event_history(self) -> List[Event]:
+    def get_event_history(self) -> list[Event]:
         """Get the event history from the last conversion."""
         return event_publisher.get_event_history()
 
@@ -247,13 +246,13 @@ class EnhancedSVGToGCodeConverter:
                 f"🎯 Centered position: ({final_min_x:.1f}, {final_min_y:.1f}) to ({final_max_x:.1f}, {final_max_y:.1f})"
             )
             print(
-                f"📏 Bed margins: Front/Back: {margin_front/10:.1f}/{margin_back/10:.1f}cm, Left/Right: {margin_left/10:.1f}/{margin_right/10:.1f}cm"
+                f"📏 Bed margins: Front/Back: {margin_front / 10:.1f}/{margin_back / 10:.1f}cm, Left/Right: {margin_left / 10:.1f}/{margin_right / 10:.1f}cm"
             )
 
         # Store margin info for use in G-code generation
         self.margin_info = {
-            "front_back": f"{margin_front/10:.1f}/{margin_back/10:.1f}cm",
-            "left_right": f"{margin_left/10:.1f}/{margin_right/10:.1f}cm",
+            "front_back": f"{margin_front / 10:.1f}/{margin_back / 10:.1f}cm",
+            "left_right": f"{margin_left / 10:.1f}/{margin_right / 10:.1f}cm",
             "design_size": f"{design_width:.0f}×{design_height:.0f}mm",
         }
 
@@ -298,7 +297,7 @@ class RealTimeMonitorSubscriber(EventSubscriber):
         self.callback_func = callback_func
         self.current_status = "idle"
 
-    def get_subscribed_events(self) -> Set[EventType]:
+    def get_subscribed_events(self) -> set[EventType]:
         """Subscribe to all events for real-time monitoring."""
         return set(EventType)  # Subscribe to all event types
 
@@ -329,7 +328,7 @@ class JSONExportSubscriber(EventSubscriber):
         self.output_path = Path(output_path)
         self.data = {"paths": [], "statistics": {}, "events": []}
 
-    def get_subscribed_events(self) -> Set[EventType]:
+    def get_subscribed_events(self) -> set[EventType]:
         """Subscribe to path and curve events."""
         return {
             EventType.PATH_COMPLETED,

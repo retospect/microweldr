@@ -1,10 +1,8 @@
 """Shared printer operations for CLI and UI consistency."""
 
 import logging
-from typing import Any, Dict, Optional, Tuple
 
 from ..prusalink.client import PrusaLinkClient
-from ..prusalink.exceptions import PrusaLinkError
 from .constants import GCodeCommands
 
 logger = logging.getLogger(__name__)
@@ -145,9 +143,9 @@ class PrinterOperations:
 
     def move_to_position(
         self,
-        x: Optional[float] = None,
-        y: Optional[float] = None,
-        z: Optional[float] = None,
+        x: float | None = None,
+        y: float | None = None,
+        z: float | None = None,
         speed: int = 3000,
     ) -> bool:
         """Move printer to specified position.

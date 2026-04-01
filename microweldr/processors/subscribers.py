@@ -1,27 +1,20 @@
 """Event subscribers for different output generators."""
 
+import logging
 import time
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, TextIO
-from abc import ABC, abstractmethod
-import logging
+from typing import Any
 
+from ..core.constants import get_valid_weld_types
 from ..core.events import (
     Event,
-    EventType,
     EventSubscriber,
-    ParsingEvent,
-    PathEvent,
-    PointEvent,
-    CurveEvent,
+    EventType,
     OutputEvent,
-    ErrorEvent,
-    ProgressEvent,
     ValidationEvent,
     publish_event,
 )
 from ..core.models import WeldPath, WeldPoint
-from ..core.constants import get_valid_weld_types
 
 logger = logging.getLogger(__name__)
 
@@ -32,11 +25,11 @@ class ProgressTracker(EventSubscriber):
     def __init__(self, verbose: bool = False):
         """Initialize progress tracker."""
         self.verbose = verbose
-        self.current_stage: Optional[str] = None
-        self.stage_progress: Dict[str, float] = {}
-        self.start_times: Dict[str, float] = {}
+        self.current_stage: str | None = None
+        self.stage_progress: dict[str, float] = {}
+        self.start_times: dict[str, float] = {}
 
-    def get_subscribed_events(self) -> List[EventType]:
+    def get_subscribed_events(self) -> list[EventType]:
         """Get subscribed event types."""
         return [
             EventType.PARSING,
@@ -113,7 +106,7 @@ class ProgressTracker(EventSubscriber):
                         f"   ✓ {output_type} generated in {duration:.2f}s: {file_path}"
                     )
 
-    def get_progress_summary(self) -> Dict[str, float]:
+    def get_progress_summary(self) -> dict[str, float]:
         """Get progress summary."""
         return self.stage_progress.copy()
 
@@ -126,7 +119,7 @@ class LoggingSubscriber(EventSubscriber):
         self.logger = logging.getLogger(f"{__name__}.LoggingSubscriber")
         self.logger.setLevel(log_level)
 
-    def get_subscribed_events(self) -> List[EventType]:
+    def get_subscribed_events(self) -> list[EventType]:
         """Get subscribed event types."""
         return list(EventType)  # Subscribe to all events
 
@@ -140,10 +133,10 @@ class ValidationSubscriber(EventSubscriber):
 
     def __init__(self):
         """Initialize validation subscriber."""
-        self.validation_errors: List[str] = []
-        self.validation_warnings: List[str] = []
+        self.validation_errors: list[str] = []
+        self.validation_warnings: list[str] = []
 
-    def get_subscribed_events(self) -> List[EventType]:
+    def get_subscribed_events(self) -> list[EventType]:
         """Get subscribed event types."""
         return [
             EventType.PATH_PROCESSING,
@@ -197,11 +190,11 @@ class ValidationSubscriber(EventSubscriber):
         """Check if there are validation warnings."""
         return len(self.validation_warnings) > 0
 
-    def get_errors(self) -> List[str]:
+    def get_errors(self) -> list[str]:
         """Get validation errors."""
         return self.validation_errors.copy()
 
-    def get_warnings(self) -> List[str]:
+    def get_warnings(self) -> list[str]:
         """Get validation warnings."""
         return self.validation_warnings.copy()
 
@@ -224,7 +217,7 @@ class GCodeSubscriber(EventSubscriber):
         self.is_first_point_in_path = True
         self.total_paths_processed = 0
 
-    def get_subscribed_events(self) -> List[EventType]:
+    def get_subscribed_events(self) -> list[EventType]:
         """Get subscribed event types."""
         return [EventType.PATH_PROCESSING, EventType.OUTPUT_GENERATION]
 
@@ -269,8 +262,8 @@ class GCodeSubscriber(EventSubscriber):
 
     def _generate_gcode(self) -> None:
         """Generate G-code file."""
-        from ..outputs.streaming_gcode_subscriber import StreamingGCodeSubscriber
         from ..core.events import Event, EventType
+        from ..outputs.streaming_gcode_subscriber import StreamingGCodeSubscriber
 
         subscriber = StreamingGCodeSubscriber(self.output_path, self.config)
 
@@ -327,12 +320,12 @@ class AnimationSubscriber(EventSubscriber):
         """Initialize animation subscriber."""
         self.output_path = Path(output_path)
         self.config = config
-        self.weld_paths: List[WeldPath] = []
-        self.current_path: Optional[WeldPath] = None
-        self.current_path_data: Optional[dict] = None
-        self.current_points: List[WeldPoint] = []
+        self.weld_paths: list[WeldPath] = []
+        self.current_path: WeldPath | None = None
+        self.current_path_data: dict | None = None
+        self.current_points: list[WeldPoint] = []
 
-    def get_subscribed_events(self) -> List[EventType]:
+    def get_subscribed_events(self) -> list[EventType]:
         """Get subscribed event types."""
         return [EventType.PATH_PROCESSING, EventType.OUTPUT_GENERATION]
 
@@ -407,7 +400,7 @@ class StatisticsSubscriber(EventSubscriber):
 
     def __init__(self):
         """Initialize statistics subscriber."""
-        self.stats: Dict[str, Any] = {
+        self.stats: dict[str, Any] = {
             "paths_processed": 0,
             "points_processed": 0,
             "curves_processed": 0,
@@ -416,7 +409,7 @@ class StatisticsSubscriber(EventSubscriber):
             "start_time": None,
         }
 
-    def get_subscribed_events(self) -> List[EventType]:
+    def get_subscribed_events(self) -> list[EventType]:
         """Get subscribed event types."""
         return [
             EventType.PARSING,
@@ -465,7 +458,7 @@ class StatisticsSubscriber(EventSubscriber):
         """Handle error event."""
         self.stats["errors_encountered"] += 1
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """Get processing statistics."""
         return self.stats.copy()
 
@@ -490,19 +483,19 @@ class ValidationSubscriber(EventSubscriber):
 
     def __init__(self):
         """Initialize validation subscriber."""
-        self.validation_errors: List[str] = []
-        self.validation_warnings: List[str] = []
+        self.validation_errors: list[str] = []
+        self.validation_warnings: list[str] = []
         self.current_path_id: str = ""
         self.current_path_has_points: bool = False
         self.current_path_point_count: int = 0
         self.valid_weld_types: set = set(get_valid_weld_types())
-        self.path_stats: Dict[str, Dict[str, Any]] = {}
+        self.path_stats: dict[str, dict[str, Any]] = {}
 
     def get_priority(self) -> int:
         """Get subscriber priority (lower number = higher priority)."""
         return 0  # Highest priority - validate first
 
-    def get_subscribed_events(self) -> List[EventType]:
+    def get_subscribed_events(self) -> list[EventType]:
         """Get subscribed event types."""
         return [
             EventType.PATH_PROCESSING,
@@ -534,7 +527,7 @@ class ValidationSubscriber(EventSubscriber):
 
             # Validate svg_id
             if not path_id or not path_id.strip():
-                self._add_error(f"Path missing or empty svg_id")
+                self._add_error("Path missing or empty svg_id")
                 path_id = f"unknown_path_{len(self.path_stats)}"
 
             # Validate weld_type
@@ -592,9 +585,9 @@ class ValidationSubscriber(EventSubscriber):
 
             # Update path stats
             if self.current_path_id in self.path_stats:
-                self.path_stats[self.current_path_id][
-                    "point_count"
-                ] = self.current_path_point_count
+                self.path_stats[self.current_path_id]["point_count"] = (
+                    self.current_path_point_count
+                )
 
     def _validate_parsing_event(self, event: Event) -> None:
         """Validate parsing events."""
@@ -624,7 +617,7 @@ class ValidationSubscriber(EventSubscriber):
             )
         )
 
-    def get_validation_results(self) -> Dict[str, Any]:
+    def get_validation_results(self) -> dict[str, Any]:
         """Get comprehensive validation results."""
         return {
             "has_errors": len(self.validation_errors) > 0,

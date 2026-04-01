@@ -1,0 +1,4 @@
+# file: /Users/reto/repos/PrusaWelder/microweldr/core/security.py
+# hypothesis_version: 6.142.4
+
+[0.6, 260, 300, 443, 8080, 8443, 65535, '!@#$%^&*()_+-=', '"', '*', '..', '/bin', '/etc', '/home', '/root', '/sbin', '/usr', '123', '123456', '127.0.0.1', ':', '::1', '<', '=', '>', '?', '^[a-zA-Z0-9_-]+$', '_-', 'abc', 'abc123', 'admin', 'api_key', 'asd', 'changeme', 'default', 'dragon', 'guest', 'host', 'http', 'https', 'letmein', 'maker', 'master', 'michael', 'monkey', 'password', 'prusa', 'prusalink', 'qwe', 'qwerty', 'root', 'shadow', 'superman', 'test', 'timeout', 'user', 'username', 'welcome', 'y', 'yes', 'zxc', '|']

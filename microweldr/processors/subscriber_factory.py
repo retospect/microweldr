@@ -1,12 +1,12 @@
 """Subscriber factory for centralized subscriber creation and management."""
 
 import logging
-from pathlib import Path
-from typing import List, Dict, Any, Optional, Type
 from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
 
-from ..core.events import EventSubscriber
 from ..core.config import Config
+from ..core.events import EventSubscriber
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +18,7 @@ class SubscriberConfig:
     subscriber_type: str
     priority: int
     enabled: bool = True
-    parameters: Dict[str, Any] = None
+    parameters: dict[str, Any] = None
 
     def __post_init__(self):
         if self.parameters is None:
@@ -31,22 +31,22 @@ class SubscriberFactory:
     def __init__(self, config: Config):
         """Initialize subscriber factory."""
         self.config = config
-        self.registered_types: Dict[str, Type[EventSubscriber]] = {}
-        self.active_subscribers: List[EventSubscriber] = []
+        self.registered_types: dict[str, type[EventSubscriber]] = {}
+        self.active_subscribers: list[EventSubscriber] = []
         self._register_builtin_subscribers()
 
     def _register_builtin_subscribers(self):
         """Register built-in subscriber types."""
         # Import here to avoid circular imports
+        from .bounding_box_subscriber import BoundingBoxSubscriber
+        from .streaming_animation_subscriber import StreamingAnimationSubscriber
+        from .streaming_gcode_subscriber import StreamingGCodeSubscriber
         from .subscribers import (
-            ProgressTracker,
             LoggingSubscriber,
+            ProgressTracker,
             StatisticsSubscriber,
             ValidationSubscriber,
         )
-        from .bounding_box_subscriber import BoundingBoxSubscriber
-        from .streaming_gcode_subscriber import StreamingGCodeSubscriber
-        from .streaming_animation_subscriber import StreamingAnimationSubscriber
 
         self.registered_types.update(
             {
@@ -61,7 +61,7 @@ class SubscriberFactory:
         )
 
     def register_subscriber_type(
-        self, name: str, subscriber_class: Type[EventSubscriber]
+        self, name: str, subscriber_class: type[EventSubscriber]
     ):
         """Register a new subscriber type."""
         self.registered_types[name] = subscriber_class
@@ -70,10 +70,10 @@ class SubscriberFactory:
     def create_processing_subscribers(
         self,
         output_path: Path,
-        animation_path: Optional[Path] = None,
-        png_path: Optional[Path] = None,
+        animation_path: Path | None = None,
+        png_path: Path | None = None,
         verbose: bool = False,
-    ) -> List[EventSubscriber]:
+    ) -> list[EventSubscriber]:
         """Create subscribers for a processing session with proper priority ordering."""
 
         # Define subscriber configurations with priorities
@@ -130,8 +130,8 @@ class SubscriberFactory:
         return subscribers
 
     def _create_subscribers_from_configs(
-        self, configs: List[SubscriberConfig]
-    ) -> List[EventSubscriber]:
+        self, configs: list[SubscriberConfig]
+    ) -> list[EventSubscriber]:
         """Create subscriber instances from configurations."""
         subscribers = []
 
@@ -154,7 +154,7 @@ class SubscriberFactory:
 
         return subscribers
 
-    def _create_subscriber(self, config: SubscriberConfig) -> Optional[EventSubscriber]:
+    def _create_subscriber(self, config: SubscriberConfig) -> EventSubscriber | None:
         """Create a single subscriber instance."""
         subscriber_class = self.registered_types[config.subscriber_type]
 
@@ -183,7 +183,7 @@ class SubscriberFactory:
             # Subscribers with no parameters
             return subscriber_class()
 
-    def create_global_subscribers(self, verbose: bool = False) -> List[EventSubscriber]:
+    def create_global_subscribers(self, verbose: bool = False) -> list[EventSubscriber]:
         """Create global subscribers that persist across processing sessions."""
         configs = [
             SubscriberConfig("validation", priority=0),
@@ -204,7 +204,7 @@ class SubscriberFactory:
 
         return subscribers
 
-    def cleanup_session_subscribers(self, session_subscribers: List[EventSubscriber]):
+    def cleanup_session_subscribers(self, session_subscribers: list[EventSubscriber]):
         """Clean up subscribers from a processing session."""
         for subscriber in session_subscribers:
             try:
@@ -224,11 +224,11 @@ class SubscriberFactory:
 
         self.active_subscribers.clear()
 
-    def get_active_subscribers(self) -> List[EventSubscriber]:
+    def get_active_subscribers(self) -> list[EventSubscriber]:
         """Get list of currently active subscribers."""
         return self.active_subscribers.copy()
 
-    def get_subscriber_by_type(self, subscriber_type: str) -> Optional[EventSubscriber]:
+    def get_subscriber_by_type(self, subscriber_type: str) -> EventSubscriber | None:
         """Get active subscriber by type."""
         target_class = self.registered_types.get(subscriber_type)
         if not target_class:

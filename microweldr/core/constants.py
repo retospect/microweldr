@@ -1,7 +1,6 @@
 """Constants and enums for MicroWeldr to eliminate magic strings and values."""
 
 from enum import Enum
-from typing import List
 
 
 class WeldType(Enum):
@@ -123,9 +122,7 @@ class ConfigKeys:
     # PrusaLink settings
     HOST = "host"
     USERNAME = "username"
-    PASSWORD = (
-        "password"  # nosec B105 - This is a config key name, not a hardcoded password
-    )
+    PASSWORD = "password"  # nosec B105 - This is a config key name, not a hardcoded password
     API_KEY = "api_key"
     TIMEOUT = "timeout"
 
@@ -338,7 +335,7 @@ class LogMessages:
 
 
 # Utility functions for working with constants
-def get_valid_weld_types() -> List[str]:
+def get_valid_weld_types() -> list[str]:
     """Get list of valid weld type strings."""
     return [wt.value for wt in WeldType]
 

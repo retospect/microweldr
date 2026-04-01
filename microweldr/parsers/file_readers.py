@@ -3,10 +3,10 @@
 import logging
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import List, Optional, Protocol, Set
+from typing import Protocol
 
-from ..core.data_models import WeldPath, WeldType, ProcessingStats
-from ..core.error_handling import FileProcessingError, handle_errors, error_context
+from ..core.data_models import ProcessingStats, WeldPath, WeldType
+from ..core.error_handling import FileProcessingError, error_context, handle_errors
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +23,7 @@ class FileReaderSubscriber(Protocol):
         ...
 
     def on_file_completed(
-        self, file_path: Path, paths: List[WeldPath], stats: ProcessingStats
+        self, file_path: Path, paths: list[WeldPath], stats: ProcessingStats
     ) -> None:
         """Called when file processing completes."""
         ...
@@ -37,7 +37,7 @@ class FileReaderPublisher(ABC):
     """Abstract base class for file readers with publisher functionality."""
 
     def __init__(self):
-        self._subscribers: Set[FileReaderSubscriber] = set()
+        self._subscribers: set[FileReaderSubscriber] = set()
         self.stats = ProcessingStats()
 
     def subscribe(self, subscriber: FileReaderSubscriber) -> None:
@@ -75,7 +75,7 @@ class FileReaderPublisher(ABC):
                 )
 
     def _notify_file_completed(
-        self, file_path: Path, paths: List[WeldPath], stats: ProcessingStats
+        self, file_path: Path, paths: list[WeldPath], stats: ProcessingStats
     ) -> None:
         """Notify subscribers that file processing completed."""
         for subscriber in self._subscribers:
@@ -97,7 +97,7 @@ class FileReaderPublisher(ABC):
                 )
 
     @abstractmethod
-    def get_supported_extensions(self) -> List[str]:
+    def get_supported_extensions(self) -> list[str]:
         """Get list of supported file extensions."""
         pass
 
@@ -107,7 +107,7 @@ class FileReaderPublisher(ABC):
         pass
 
     @abstractmethod
-    def _parse_file_internal(self, file_path: Path) -> List[WeldPath]:
+    def _parse_file_internal(self, file_path: Path) -> list[WeldPath]:
         """Internal method to parse the file. Must be implemented by subclasses."""
         pass
 
@@ -118,7 +118,7 @@ class FileReaderPublisher(ABC):
         },
         default_error=FileProcessingError,
     )
-    def parse_file(self, file_path: Path) -> List[WeldPath]:
+    def parse_file(self, file_path: Path) -> list[WeldPath]:
         """
         Parse a file and return weld paths.
 
@@ -180,8 +180,8 @@ class MultiFileReader:
     """Manages multiple file readers and routes files to appropriate readers."""
 
     def __init__(self):
-        self._readers: List[FileReaderPublisher] = []
-        self._subscribers: Set[FileReaderSubscriber] = set()
+        self._readers: list[FileReaderPublisher] = []
+        self._subscribers: set[FileReaderSubscriber] = set()
 
     def register_reader(self, reader: FileReaderPublisher) -> None:
         """Register a file reader."""
@@ -211,21 +211,21 @@ class MultiFileReader:
         for reader in self._readers:
             reader.unsubscribe(subscriber)
 
-    def get_reader_for_file(self, file_path: Path) -> Optional[FileReaderPublisher]:
+    def get_reader_for_file(self, file_path: Path) -> FileReaderPublisher | None:
         """Get the appropriate reader for a file."""
         for reader in self._readers:
             if reader.can_read_file(file_path):
                 return reader
         return None
 
-    def get_supported_extensions(self) -> List[str]:
+    def get_supported_extensions(self) -> list[str]:
         """Get all supported file extensions."""
         extensions = []
         for reader in self._readers:
             extensions.extend(reader.get_supported_extensions())
         return list(set(extensions))  # Remove duplicates
 
-    def parse_file(self, file_path: Path) -> List[WeldPath]:
+    def parse_file(self, file_path: Path) -> list[WeldPath]:
         """Parse a file using the appropriate reader."""
         reader = self.get_reader_for_file(file_path)
         if not reader:
@@ -233,7 +233,7 @@ class MultiFileReader:
 
         return reader.parse_file(file_path)
 
-    def parse_files(self, file_paths: List[Path]) -> List[WeldPath]:
+    def parse_files(self, file_paths: list[Path]) -> list[WeldPath]:
         """Parse multiple files and combine results."""
         all_paths = []
 
@@ -266,7 +266,7 @@ class LoggingSubscriber:
             )
 
     def on_file_completed(
-        self, file_path: Path, paths: List[WeldPath], stats: ProcessingStats
+        self, file_path: Path, paths: list[WeldPath], stats: ProcessingStats
     ) -> None:
         logger.info(
             f"Completed {file_path}: {len(paths)} paths, {stats.total_points} points"
@@ -290,7 +290,7 @@ class StatsCollector:
         pass
 
     def on_file_completed(
-        self, file_path: Path, paths: List[WeldPath], stats: ProcessingStats
+        self, file_path: Path, paths: list[WeldPath], stats: ProcessingStats
     ) -> None:
         self.file_stats[str(file_path)] = stats
 

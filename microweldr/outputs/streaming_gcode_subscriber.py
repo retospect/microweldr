@@ -2,7 +2,8 @@
 
 import logging
 from pathlib import Path
-from typing import List, Optional, TextIO, Tuple
+from typing import TextIO
+
 from ..core.events import Event, EventType, OutputEvent, publish_event
 from ..processors.subscribers import EventSubscriber
 
@@ -26,7 +27,7 @@ class StreamingGCodeSubscriber(EventSubscriber):
         self,
         output_path: Path,
         config,
-        coordinate_offset: Tuple[float, float] = (0.0, 0.0),
+        coordinate_offset: tuple[float, float] = (0.0, 0.0),
         include_user_pause: bool = True,
         enable_bed_leveling: bool = False,
     ):
@@ -41,7 +42,7 @@ class StreamingGCodeSubscriber(EventSubscriber):
         """
         self.output_path = Path(output_path)
         self.config = config
-        self.file_handle: Optional[TextIO] = None
+        self.file_handle: TextIO | None = None
         self.current_path_id = ""
         self.current_weld_type = "normal"
         self.is_first_point_in_path = True
@@ -68,7 +69,7 @@ class StreamingGCodeSubscriber(EventSubscriber):
         """Get subscriber priority (lower number = higher priority)."""
         return 20  # Lower priority - after validation and bounding box
 
-    def get_subscribed_events(self) -> List[EventType]:
+    def get_subscribed_events(self) -> list[EventType]:
         """Get subscribed event types."""
         return [
             EventType.PATH_PROCESSING,
@@ -385,7 +386,7 @@ class StreamingGCodeSubscriber(EventSubscriber):
         self.file_handle.write("G28 ; Home all axes\n\n")
 
         # Heat bed and nozzle FIRST (like working calibrate-and-set.gcode)
-        self.file_handle.write(f"; Heat bed and nozzle before bed leveling\n")
+        self.file_handle.write("; Heat bed and nozzle before bed leveling\n")
         self.file_handle.write(f"M190 S{bed_temp} ; Wait for bed temperature\n")
         self.file_handle.write(f"M104 S{nozzle_temp} ; Set nozzle temperature\n")
         self.file_handle.write(f"M109 S{nozzle_temp} ; Wait for nozzle temperature\n\n")
@@ -399,7 +400,7 @@ class StreamingGCodeSubscriber(EventSubscriber):
 
         # Chamber heating if enabled (Core One)
         if use_chamber_heating:
-            self.file_handle.write(f"; Chamber heating (Core One)\n")
+            self.file_handle.write("; Chamber heating (Core One)\n")
             self.file_handle.write(
                 f"M141 S{chamber_temp} ; Set chamber temperature\n\n"
             )

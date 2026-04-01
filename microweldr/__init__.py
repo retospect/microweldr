@@ -1,14 +1,14 @@
 """MicroWeldr - Convert SVG files to Prusa Core One G-code for plastic welding."""
 
-__version__ = "6.1.10"
-__author__ = "Reto Stamm"
-__email__ = "reto@retostamm.com"
+from importlib.metadata import version
+
+__version__ = version("microweldr")
 
 from microweldr.core.config import Config
 from microweldr.generators.models import WeldPath, WeldPoint
 
 __all__ = [
-    "WeldPoint",
-    "WeldPath",
     "Config",
+    "WeldPath",
+    "WeldPoint",
 ]

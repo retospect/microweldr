@@ -8,7 +8,6 @@ import click
 
 from ..core.caching import OptimizedSVGParser
 from ..core.config import Config
-from ..outputs.streaming_gcode_subscriber import StreamingGCodeSubscriber
 from ..core.graceful_degradation import ResilientPrusaLinkClient, check_system_health
 from ..core.logging_config import LogContext, setup_logging
 from ..core.progress import progress_context
@@ -342,7 +341,7 @@ def validate(ctx, svg_file, verbose, quiet, config, log_file):
 
         # Summary
         total_points = sum(len(path.points) for path in weld_paths)
-        click.echo(f"\n📊 Summary:")
+        click.echo("\n📊 Summary:")
         click.echo(f"   • Paths: {len(weld_paths)}")
         click.echo(f"   • Points: {total_points}")
         click.echo(f"   • Errors: {len(errors)}")
@@ -409,7 +408,9 @@ def status(ctx, secrets, verbose, quiet, config, log_file):
                     else (
                         "🔥"
                         if state == "Printing"
-                        else "⏸️" if state == "Paused" else "❌"
+                        else "⏸️"
+                        if state == "Paused"
+                        else "❌"
                     )
                 )
                 click.echo(f"\n🖨️  Printer: {emoji} {state}")
@@ -492,9 +493,9 @@ def _estimate_print_time(weld_paths, config):
     if total_time < 60:
         return f"{total_time:.0f}s"
     elif total_time < 3600:
-        return f"{total_time/60:.1f}m"
+        return f"{total_time / 60:.1f}m"
     else:
-        return f"{total_time/3600:.1f}h"
+        return f"{total_time / 3600:.1f}h"
 
 
 def _submit_to_printer(gcode_path, secrets_path, auto_start, storage):
@@ -641,7 +642,7 @@ def temp_off(
         if turn_off_chamber:
             targets.append("Chamber → OFF")
 
-        click.echo(f"🌡️  Temperature Control: Cooling Down")
+        click.echo("🌡️  Temperature Control: Cooling Down")
         click.echo(f"Targets: {', '.join(targets)}")
 
         # Confirmation
@@ -830,7 +831,7 @@ def temp_on(
             return
 
         # Show heating targets
-        click.echo(f"🌡️  Temperature Control: Heating Up")
+        click.echo("🌡️  Temperature Control: Heating Up")
         click.echo(
             f"Targets: Bed → {bed_temp}°C, Nozzle → {nozzle_temp}°C, Chamber → {chamber_temp}°C"
         )
@@ -1009,7 +1010,7 @@ def calibrate_and_set(ctx, home_only, wait, log_file, config, quiet, verbose):
         bed_temp = config_obj.get("temperatures", "bed_temperature")
         nozzle_temp = config_obj.get("temperatures", "nozzle_temperature")
 
-        click.echo(f"📋 Configuration loaded:")
+        click.echo("📋 Configuration loaded:")
         click.echo(f"   • Bed temperature: {bed_temp}°C")
         click.echo(f"   • Nozzle temperature: {nozzle_temp}°C")
         click.echo()
@@ -1023,7 +1024,7 @@ def calibrate_and_set(ctx, home_only, wait, log_file, config, quiet, verbose):
         status = client.get_printer_status()
         printer = status.get("printer", {})
         state = printer.get("state", "Unknown")
-        click.echo(f"   ✓ Connected to printer")
+        click.echo("   ✓ Connected to printer")
         click.echo(f"   ✓ Printer state: {state}")
 
         if state.upper() == "PRINTING":
@@ -1040,7 +1041,7 @@ def calibrate_and_set(ctx, home_only, wait, log_file, config, quiet, verbose):
             if wait:
                 click.echo("   • Waiting for bed to reach target temperature...")
         else:
-            click.echo(f"   ✗ Failed to set bed temperature")
+            click.echo("   ✗ Failed to set bed temperature")
             raise click.Abort()
 
         # Set nozzle temperature
@@ -1051,7 +1052,7 @@ def calibrate_and_set(ctx, home_only, wait, log_file, config, quiet, verbose):
             if wait:
                 click.echo("   • Waiting for nozzle to reach target temperature...")
         else:
-            click.echo(f"   ✗ Failed to set nozzle temperature")
+            click.echo("   ✗ Failed to set nozzle temperature")
             raise click.Abort()
 
         # Run calibration

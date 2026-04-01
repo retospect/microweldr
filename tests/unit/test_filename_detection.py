@@ -1,12 +1,11 @@
 """Test filename-based weld type detection."""
 
-import pytest
 from pathlib import Path
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 
+from microweldr.core.data_models import WeldType
 from microweldr.parsers.dxf_reader import DXFReader
 from microweldr.parsers.svg_reader import SVGReader
-from microweldr.core.data_models import WeldType
 
 
 class TestFilenameDetection:

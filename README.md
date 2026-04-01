@@ -1,8 +1,11 @@
 # MicroWeldr
 
 [![PyPI version](https://badge.fury.io/py/microweldr.svg)](https://badge.fury.io/py/microweldr)
-[![Test Suite](https://github.com/retospect/microweldr/actions/workflows/test.yml/badge.svg)](https://github.com/retospect/microweldr/actions/workflows/test.yml)
+[![Python 3.11+](https://img.shields.io/pypi/pyversions/microweldr.svg)](https://pypi.org/project/microweldr/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![check](https://github.com/retospect/microweldr/actions/workflows/check.yml/badge.svg)](https://github.com/retospect/microweldr/actions/workflows/check.yml)
 [![CodeQL](https://github.com/retospect/microweldr/actions/workflows/codeql.yml/badge.svg)](https://github.com/retospect/microweldr/actions/workflows/codeql.yml)
+[![Downloads](https://img.shields.io/pypi/dm/microweldr.svg)](https://pypi.org/project/microweldr/)
 
 A Python package that converts **SVG and DXF files** to Prusa Core One G-code for **continuous plastic line welding**. The package processes vector graphics and generates G-code that creates **waterproof welded lines** by placing many precise weld "dots" in sequence along the paths, without extruding any plastic material.
 
@@ -326,6 +329,65 @@ microweldr -weld structural_welds.dxf -frange breakaway_seals.dxf -g_out device.
 ## License
 
 MIT License - see LICENSE file for details.
+
+## Installation
+
+### Using uv (recommended)
+
+[uv](https://docs.astral.sh/uv/) is a fast Python package manager that works on macOS, Linux, and Windows.
+
+```bash
+# Install uv (macOS / Linux)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Install uv (Windows PowerShell)
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+
+# Create a project and install microweldr
+uv init my-welds && cd my-welds
+uv add microweldr
+
+# Run microweldr
+uv run microweldr -weld design.svg
+```
+
+### Using pip
+
+```bash
+pip install microweldr
+microweldr -weld design.svg
+```
+
+### Windows notes
+
+MicroWeldr works on Windows with Python 3.11+. If you encounter issues with `pyserial`, install it separately:
+
+```powershell
+pip install pyserial
+```
+
+USB serial access to Prusa printers requires the appropriate driver (typically installed with PrusaSlicer). The COM port can be specified with `-port COM3` (adjust the number to match your system).
+
+## Quick start (development)
+
+```bash
+git clone https://github.com/retospect/microweldr.git
+cd microweldr
+uv run pytest              # run tests
+uv run ruff check .        # lint
+uv run ruff format .       # format
+uv run mypy microweldr     # type check
+uv run microweldr --help   # run the CLI
+```
+
+## Security practices
+
+- All GitHub Actions **pinned by commit SHA** to prevent supply chain attacks
+- PyPI publishing via **trusted publishing** (OIDC) — no long-lived API tokens
+- **Build provenance attestations** on every release ([actions/attest-build-provenance](https://github.com/actions/attest-build-provenance))
+- **Dependabot** monitors pip + GitHub Actions dependencies weekly; minor/patch PRs auto-merged after CI passes
+- **Least-privilege permissions** — workflows default to `contents: read`
+- See [SECURITY.md](SECURITY.md) for the vulnerability disclosure policy
 
 ## Changelog
 

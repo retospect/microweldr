@@ -5,7 +5,6 @@ import math
 import re
 import xml.etree.ElementTree as ET  # nosec B405 - Parsing trusted SVG files only
 from pathlib import Path
-from typing import List, Optional, Tuple
 
 from ..core.app_constants import SVGNamespace
 from ..core.data_models import Point, WeldPath, WeldType
@@ -22,7 +21,7 @@ class SVGReader(FileReaderPublisher):
         super().__init__()
         self.dot_spacing = dot_spacing
 
-    def get_supported_extensions(self) -> List[str]:
+    def get_supported_extensions(self) -> list[str]:
         """Get supported file extensions."""
         return [".svg", ".SVG"]
 
@@ -37,7 +36,7 @@ class SVGReader(FileReaderPublisher):
         },
         default_error=FileProcessingError,
     )
-    def _parse_file_internal(self, file_path: Path) -> List[WeldPath]:
+    def _parse_file_internal(self, file_path: Path) -> list[WeldPath]:
         """Parse SVG file and extract weld paths."""
         logger.info(f"Parsing SVG file: {file_path}")
 
@@ -45,9 +44,7 @@ class SVGReader(FileReaderPublisher):
         self._current_filename = file_path.stem
 
         try:
-            tree = ET.parse(
-                str(file_path)
-            )  # nosec B314 - Parsing trusted user SVG files
+            tree = ET.parse(str(file_path))  # nosec B314 - Parsing trusted user SVG files
             root = tree.getroot()
         except ET.ParseError as e:
             raise ParsingError(f"Invalid SVG file: {e}")
@@ -58,7 +55,7 @@ class SVGReader(FileReaderPublisher):
         logger.info(f"Parsed {len(weld_paths)} weld paths from SVG")
         return weld_paths
 
-    def _parse_elements(self, root: ET.Element) -> List[WeldPath]:
+    def _parse_elements(self, root: ET.Element) -> list[WeldPath]:
         """Parse SVG elements and return weld paths."""
         # Define SVG namespace
         namespaces = {"svg": SVGNamespace.URI}
@@ -117,7 +114,7 @@ class SVGReader(FileReaderPublisher):
 
     def _parse_element(
         self, elem: ET.Element, defs_elements: dict, namespaces: dict
-    ) -> List[WeldPath]:
+    ) -> list[WeldPath]:
         """Parse a single SVG element."""
         tag = elem.tag.split("}")[-1] if "}" in elem.tag else elem.tag
 
@@ -137,7 +134,7 @@ class SVGReader(FileReaderPublisher):
             logger.debug(f"Unsupported SVG element: {tag}")
             return []
 
-    def _parse_path(self, elem: ET.Element) -> List[WeldPath]:
+    def _parse_path(self, elem: ET.Element) -> list[WeldPath]:
         """Parse SVG path element."""
         d = elem.get("d", "")
         if not d:
@@ -152,7 +149,7 @@ class SVGReader(FileReaderPublisher):
         path_id = elem.get("id")
         return [WeldPath(points, weld_type, path_id=path_id)]
 
-    def _parse_line(self, elem: ET.Element) -> List[WeldPath]:
+    def _parse_line(self, elem: ET.Element) -> list[WeldPath]:
         """Parse SVG line element."""
         try:
             x1 = float(elem.get("x1", 0))
@@ -169,7 +166,7 @@ class SVGReader(FileReaderPublisher):
             logger.warning(f"Invalid line coordinates: {e}")
             return []
 
-    def _parse_circle(self, elem: ET.Element) -> List[WeldPath]:
+    def _parse_circle(self, elem: ET.Element) -> list[WeldPath]:
         """Parse SVG circle element."""
         try:
             cx = float(elem.get("cx", 0))
@@ -188,7 +185,7 @@ class SVGReader(FileReaderPublisher):
             logger.warning(f"Invalid circle parameters: {e}")
             return []
 
-    def _parse_rect(self, elem: ET.Element) -> List[WeldPath]:
+    def _parse_rect(self, elem: ET.Element) -> list[WeldPath]:
         """Parse SVG rectangle element."""
         try:
             x = float(elem.get("x", 0))
@@ -218,7 +215,7 @@ class SVGReader(FileReaderPublisher):
 
     def _parse_group(
         self, elem: ET.Element, defs_elements: dict, namespaces: dict
-    ) -> List[WeldPath]:
+    ) -> list[WeldPath]:
         """Parse SVG group element."""
         weld_paths = []
 
@@ -234,7 +231,7 @@ class SVGReader(FileReaderPublisher):
 
     def _parse_use(
         self, elem: ET.Element, defs_elements: dict, namespaces: dict
-    ) -> List[WeldPath]:
+    ) -> list[WeldPath]:
         """Parse SVG use element."""
         href = elem.get("href") or elem.get("{http://www.w3.org/1999/xlink}href", "")
         if not href.startswith("#"):
@@ -276,7 +273,7 @@ class SVGReader(FileReaderPublisher):
         # Default to normal welds (black stroke)
         return WeldType.NORMAL
 
-    def _parse_path_data(self, d: str) -> List[Point]:
+    def _parse_path_data(self, d: str) -> list[Point]:
         """Parse SVG path data string."""
         points = []
 
@@ -342,7 +339,7 @@ class SVGReader(FileReaderPublisher):
 
     def _circle_to_points(
         self, cx: float, cy: float, r: float, segments: int = 36
-    ) -> List[Point]:
+    ) -> list[Point]:
         """Convert circle to points."""
         points = []
         for i in range(segments):

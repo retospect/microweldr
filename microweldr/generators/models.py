@@ -1,7 +1,6 @@
 """Data models for point generation and welding operations."""
 
 from dataclasses import dataclass
-from typing import List, Optional
 
 from ..core.constants import (
     ErrorMessages,
@@ -24,7 +23,7 @@ class WeldPoint:
     weld_type: (
         str  # Use WeldType enum values: 'normal', 'frangible', 'stop', or 'pipette'
     )
-    weld_height: Optional[float] = None  # Weld height (compression depth) in mm
+    weld_height: float | None = None  # Weld height (compression depth) in mm
 
     def __post_init__(self) -> None:
         """Validate weld point data."""
@@ -50,13 +49,13 @@ class WeldPath:
     temperature and timing are managed at the execution level.
     """
 
-    points: List[WeldPoint]
+    points: list[WeldPoint]
     weld_type: str
     svg_id: str
-    pause_message: Optional[str] = None  # Custom message for stop points
-    element_type: Optional[str] = None  # Original SVG element type (circle, rect, etc.)
-    element_radius: Optional[float] = None  # Original radius for circles
-    default_weld_height: Optional[float] = (
+    pause_message: str | None = None  # Custom message for stop points
+    element_type: str | None = None  # Original SVG element type (circle, rect, etc.)
+    element_radius: float | None = None  # Original radius for circles
+    default_weld_height: float | None = (
         None  # Default weld height for points in this path
     )
 
