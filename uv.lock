@@ -5,7 +5,11 @@ requires-python = ">=3.11"
 [[package]]
 name = "bambuuzle"
 version = "0.1.0"
-source = { editable = "../bambuuzle" }
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/8e/ee/10ff24faaec9fba8755b16b91c261129157ad778f6abc5b8ada4dc9aa242/bambuuzle-0.1.0.tar.gz", hash = "sha256:c455a8209189e520ce37e8cb11af70e1a2ccd71c1667263c3b874aa8b8b8e59e", size = 44829, upload-time = "2026-04-01T22:48:46.936Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ce/6f/d3517b102159dc31be392b037129f2dfcafef2dabda76f32c2a3f860b19b/bambuuzle-0.1.0-py3-none-any.whl", hash = "sha256:dd3a6c2beb3c6c0cba028bd06807f512645c5f72ee335654484c9f364e83406e", size = 8809, upload-time = "2026-04-01T22:48:45.74Z" },
+]
 
 [[package]]
 name = "certifi"
@@ -433,7 +437,7 @@ wheels = [
 
 [[package]]
 name = "microweldr"
-version = "6.1.10"
+version = "6.1.11"
 source = { editable = "." }
 dependencies = [
     { name = "bambuuzle" },
@@ -456,7 +460,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "bambuuzle", editable = "../bambuuzle" },
+    { name = "bambuuzle", specifier = ">=0.1.0" },
     { name = "ezdxf", specifier = ">=1.4.0" },
     { name = "lxml", specifier = ">=5.0.0" },
     { name = "pillow", specifier = ">=10.0.0" },

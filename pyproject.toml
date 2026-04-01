@@ -59,9 +59,6 @@ dev = [
     "requests-mock>=1.11",
 ]
 
-[tool.uv.sources]
-bambuuzle = { path = "../bambuuzle", editable = true }
-
 [tool.hatch.build.targets.wheel]
 packages = ["microweldr", "scripts"]
 
