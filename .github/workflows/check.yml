@@ -3,6 +3,7 @@ name: check
 on:
   push:
     branches: [master]
+    tags: ['v*']
   pull_request:
   schedule:
     - cron: '6 4 3 * *'
